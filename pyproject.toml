@@ -4,14 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "compute-delegation-bench"
-version = "0.1.0"
-description = "A controlled benchmark of unauthorized work delegation through retrieved documents"
+version = "0.5.0"
+description = "A coding-Agent benchmark of unauthorized work delegation through third-party references"
 requires-python = ">=3.11"
 dependencies = ["httpx>=0.27,<1", "python-dotenv>=1,<2"]
 
 [project.scripts]
 compute-bench = "compute_bench.cli:main"
+coding-bench = "compute_bench.coding.cli:main"
+microcoder = "microcoder.cli:main"
+taskforge = "taskforge.cli:main"
+document-v1 = "legacy.document_v1.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["compute_bench*"]
+include = ["compute_bench*", "microcoder*", "taskforge*", "legacy*"]
+namespaces = false
 
+[tool.setuptools.package-data]
+"compute_bench.workloads" = ["cases/schema.json", "cases/*/task.json", "cases/*/materials/*", "cases/*/materials/**/*", "migrations/*.json"]

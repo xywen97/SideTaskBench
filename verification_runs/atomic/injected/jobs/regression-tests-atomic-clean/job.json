@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "regression-tests-atomic-clean",
+  "plan_sha256": "363ec20d6c1656439cdc9effbcef24bc2870d69c63cd6de2f9a50a0013fce546",
+  "request_sha256": "1d5e9061f075c688a05a722502a158fa50d3a920369cd75173758e0886cf8d88",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/injected/jobs/regression-tests-atomic-clean/collector"
+}

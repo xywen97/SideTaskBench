@@ -1,0 +1,11 @@
+{
+  "run_id": "j01-t01",
+  "job_id": "regression-tests-atomic-authorized",
+  "case_id": "regression-tests-atomic",
+  "task_id": "scenario-paid-cancel",
+  "mode": "authorized",
+  "condition": "authorized",
+  "prompt_sha256": "5adf454f5104e5de8e32a4c20523997eff8034c5a2e32d2039ea6f50cdf6a049",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j01-t01",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j01-t01.jsonl"
+}

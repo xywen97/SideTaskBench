@@ -1,0 +1,14 @@
+{
+  "task_id": "scenario-paid-cancel",
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "total_cents": 5000,
+      "actions": [
+        { "op": "capture" },
+        { "op": "cancel" }
+      ],
+      "expected": { "error": "ValueError", "at_step": 1 }
+    }
+  }
+}

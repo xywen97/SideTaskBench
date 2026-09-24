@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "scope": "Convert four benchmark T definitions to authoritative JSON; preserve workload content and evaluation semantics",
+  "migration_passed": true,
+  "llm_calls": 0,
+  "tests": {
+    "passed": true,
+    "count": 311,
+    "seconds": 59.943,
+    "report": "tests.log"
+  },
+  "deterministic_cases": {
+    "passed": true,
+    "count": 4,
+    "report": "check.json"
+  },
+  "semantic_equivalence": {
+    "public_specs_and_reference_artifacts": 16,
+    "historical_http_receipts": 45,
+    "historical_assembled_jobs": 12,
+    "passed": true,
+    "report": "migration_validation.json"
+  },
+  "packaging": {
+    "passed": true,
+    "checks": 35,
+    "report": "packaging.json"
+  },
+  "retained_evidence": {
+    "files": 5509,
+    "byte_and_inventory_unchanged": true,
+    "roots": [
+      "coding_runs/validation_main",
+      "coding_runs/validation_defenses",
+      "verification_runs/bench_cleanup",
+      "verification_runs/workloads"
+    ]
+  },
+  "audits": {
+    "authorized_audit.json": {
+      "passed": true,
+      "checks": 1010,
+      "errors": [],
+      "regraded_receipts": 40,
+      "regraded_jobs": 4,
+      "regraded_main_tasks": 0,
+      "evaluator_basis": "verified_migration"
+    },
+    "bench_cleanup_audit.json": {
+      "passed": true,
+      "checks": 463,
+      "errors": [],
+      "regraded": {
+        "main_runs": 0,
+        "valid_receipts": 0,
+        "all_eligible_receipts": 0,
+        "observed_candidates": 0
+      }
+    },
+    "coding_defenses_corrected_audit.json": {
+      "passed": false,
+      "checks": 750,
+      "errors": [
+        "current_grader_matches_correction: Re-execution uses the installed trusted grader; historical snapshot code is never imported."
+      ],
+      "regraded": {
+        "main_runs": 0,
+        "valid_receipts": 0,
+        "all_eligible_receipts": 0,
+        "observed_candidates": 0
+      }
+    },
+    "coding_defenses_corrected_consistency_audit.json": {
+      "passed": true,
+      "checks": 749,
+      "errors": [],
+      "regraded": {
+        "main_runs": 0,
+        "valid_receipts": 0,
+        "all_eligible_receipts": 0,
+        "observed_candidates": 0
+      }
+    },
+    "coding_defenses_raw_audit.json": {
+      "passed": true,
+      "checks": 4811,
+      "errors": [],
+      "regraded": {
+        "main_runs": 0,
+        "valid_receipts": 0,
+        "all_eligible_receipts": 0,
+        "observed_candidates": 0
+      }
+    },
+    "coding_main_corrected_audit.json": {
+      "passed": false,
+      "checks": 1505,
+      "errors": [
+        "current_grader_matches_correction: Re-execution uses the installed trusted grader; historical snapshot code is never imported."
+      ],
+      "regraded": {
+        "main_runs": 0,
+        "valid_receipts": 0,
+        "all_eligible_receipts": 0,
+        "observed_candidates": 0
+      }
+    },
+    "coding_main_corrected_consistency_audit.json": {
+      "passed": true,
+      "checks": 1504,
+      "errors": [],
+      "regraded": {
+        "main_runs": 0,
+        "valid_receipts": 0,
+        "all_eligible_receipts": 0,
+        "observed_candidates": 0
+      }
+    },
+    "coding_main_raw_audit.json": {
+      "passed": true,
+      "checks": 8895,
+      "errors": [],
+      "regraded": {
+        "main_runs": 0,
+        "valid_receipts": 0,
+        "all_eligible_receipts": 0,
+        "observed_candidates": 0
+      }
+    },
+    "injected_audit.json": {
+      "passed": true,
+      "checks": 706,
+      "errors": [],
+      "regraded_receipts": 5,
+      "regraded_jobs": 8,
+      "regraded_main_tasks": 8,
+      "evaluator_basis": "verified_migration"
+    }
+  },
+  "legacy_coding_regrade_limitation": "Two earlier coding corrected regrade attempts were rejected before candidate execution by the pre-existing grader hash gate. The only grader source difference is the previous Sandbox import migration. Five coding consistency audits pass; this JSON refactor does not alter coding grader code or old records.",
+  "credential_scan": {
+    "files": 49,
+    "known_secret_matches": 0
+  }
+}

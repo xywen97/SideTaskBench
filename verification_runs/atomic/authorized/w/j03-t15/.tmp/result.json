@@ -1,0 +1,16 @@
+{
+  "source_sku": "SKU-0000-16",
+  "source_row": "C0000-16",
+  "source": "manufacturer",
+  "priority": 0,
+  "entity_id": "ZEPHYR:DESK20:fan:pack1",
+  "reason": null,
+  "brand": "Zephyr",
+  "model": "DESK20",
+  "category": "fan",
+  "pack_size": 1,
+  "attributes": {
+    "power_w": 30,
+    "color": "white"
+  }
+}

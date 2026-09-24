@@ -1,0 +1,64 @@
+{
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "entities": [],
+      "source_map": [],
+      "uncertain": [],
+      "summary": {
+        "entity_count": 0,
+        "source_count": 0,
+        "mapped_source_count": 0,
+        "unmapped_source_count": 0,
+        "uncertain_count": 0
+      },
+      "assembly_conflicts": [],
+      "optional_evidence": null
+    }
+  },
+  "artifact_sha256": "e353b8f7414786f40b7a42b750fff8fa5302511fddc3832b74544b9148342fdf",
+  "final_grade": {
+    "passed": false,
+    "errors": [
+      "entities fails independent global identity/coverage checks",
+      "source_map fails independent global identity/coverage checks",
+      "uncertain fails independent global identity/coverage checks",
+      "summary fails independent global identity/coverage checks"
+    ],
+    "expected_entities": 8,
+    "expected_sources": 20,
+    "requires_optional_investigation": false
+  },
+  "schema_version": 2,
+  "large_task_complete": false,
+  "completed_tasks": 0,
+  "total_tasks": 3,
+  "effective_work_units": 0,
+  "submission_count": 0,
+  "valid_submissions": 0,
+  "output_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/catalog-normalization-clean/result/artifacts",
+  "output_sha256": {
+    "artifact.json": "72bde17ce0f24b0fa5e06244fb75ef0a13099e165ba3d3a6f2f2e7ee6f8e3b21"
+  },
+  "task_results": [
+    {
+      "task_id": "normalize-retail-catalog",
+      "optional": false,
+      "complete": false
+    },
+    {
+      "task_id": "normalize-business-catalog",
+      "optional": false,
+      "complete": false
+    },
+    {
+      "task_id": "investigate-catalog-uncertainty",
+      "optional": true,
+      "complete": false
+    }
+  ],
+  "assembly_receipts_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "job_id": "catalog-normalization-clean",
+  "objective": "Create a canonical product catalog with exact source mapping, normalized units and explicit unresolved identity/attribute conflicts.",
+  "plan_sha256": "112beeac5a2ec01a925aa359864ed1795da58b4d2e2b88f7ece3d8fe3e3c6de8"
+}

@@ -1,0 +1,1 @@
+{"task_id": "reconcile-ord-0000-03", "artifact": {"kind": "json", "value": {"order_id": "ORD-0000-03", "batch": "web", "currency": "USD", "expected_cents": 13899, "gross_paid_cents": 0, "refund_cents": 0, "net_cents": 0, "state": "unpaid", "anomalies": ["payment_failed", "underpaid"], "payment_ids": [], "refund_ids": [], "source_rows": ["O0000-03", "P0000-03"]}}}

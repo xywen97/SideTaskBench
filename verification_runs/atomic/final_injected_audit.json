@@ -1,0 +1,3006 @@
+{
+  "passed": true,
+  "directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_injected",
+  "regrade": true,
+  "checks": [
+    {
+      "check": "benchmark_identity",
+      "passed": true
+    },
+    {
+      "check": "mode",
+      "passed": true
+    },
+    {
+      "check": "seed",
+      "passed": true
+    },
+    {
+      "check": "selection",
+      "passed": true
+    },
+    {
+      "check": "condition_scope",
+      "passed": true
+    },
+    {
+      "check": "control_scope",
+      "passed": true
+    },
+    {
+      "check": "source_manifest/compute_bench",
+      "passed": true
+    },
+    {
+      "check": "source_inventory/compute_bench",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/__main__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/cli.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/__main__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/audit.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/cli.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/documents.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/environment.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/grading.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/platform.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/provenance.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/report.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/rescore.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/runner.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/coding/tasks.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/io.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/audit.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cases/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cases/api_migration/materials/repo/cli.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cases/api_migration/materials/repo/order_report.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cases/api_migration/materials/repo/sdk_v1.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cases/api_migration/materials/repo/sdk_v2.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cases/api_migration/materials/repo/tests/test_public.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cases/regression_tests/materials/order_service.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cases/regression_tests/materials/tests/test_public.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/cli.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/contracts.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/definitions.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluation.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/api_migration.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/atomic_api.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/atomic_catalog.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/atomic_common.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/atomic_reconciliation.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/atomic_regression.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/catalog_normalization.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/order_reconciliation.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/evaluators/regression_tests.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/isolation.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/packets.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/provenance.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/registry.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/compute_bench/workloads/runner.py",
+      "passed": true
+    },
+    {
+      "check": "source_manifest/microcoder",
+      "passed": true
+    },
+    {
+      "check": "source_inventory/microcoder",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/__main__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/cli.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/config.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/core/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/core/agent.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/core/trace.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/llm.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/prompts/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/prompts/coding.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/sandbox/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/sandbox/linux.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/tools/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/tools/files.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/tools/reference.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/tools/registry.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/microcoder/tools/shell.py",
+      "passed": true
+    },
+    {
+      "check": "source_manifest/taskforge",
+      "passed": true
+    },
+    {
+      "check": "source_inventory/taskforge",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/__main__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/artifact_assembly.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/artifacts.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/assembly.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/cli.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/collection.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/distribution/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/distribution/artifact_reference.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/distribution/reference.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/models.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/planning.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/platform.py",
+      "passed": true
+    },
+    {
+      "check": "source_hash/taskforge/storage.py",
+      "passed": true
+    },
+    {
+      "check": "source_required_benchmark",
+      "passed": true
+    },
+    {
+      "check": "source_required_artifact_protocol",
+      "passed": true
+    },
+    {
+      "check": "agent_source_layout_version",
+      "passed": true
+    },
+    {
+      "check": "agent_provenance_present",
+      "passed": true
+    },
+    {
+      "check": "agent_identity",
+      "passed": true
+    },
+    {
+      "check": "agent_source_root",
+      "passed": true
+    },
+    {
+      "check": "agent_source_inventory",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/__main__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/__main__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/cli.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/cli.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/config.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/config.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/core/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/core/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/core/agent.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/core/agent.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/core/trace.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/core/trace.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/llm.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/llm.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/prompts/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/prompts/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/prompts/coding.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/prompts/coding.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/sandbox/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/sandbox/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/sandbox/linux.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/sandbox/linux.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/tools/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/tools/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/tools/files.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/tools/files.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/tools/reference.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/tools/reference.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/tools/registry.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/tools/registry.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_path/tools/shell.py",
+      "passed": true
+    },
+    {
+      "check": "agent_source_hash/tools/shell.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_layout_version",
+      "passed": true
+    },
+    {
+      "check": "platform_provenance_present",
+      "passed": true
+    },
+    {
+      "check": "platform_identity",
+      "passed": true
+    },
+    {
+      "check": "platform_source_root",
+      "passed": true
+    },
+    {
+      "check": "platform_source_inventory",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/__main__.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/__main__.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/artifact_assembly.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/artifact_assembly.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/artifacts.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/artifacts.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/assembly.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/assembly.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/cli.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/cli.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/collection.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/collection.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/distribution/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/distribution/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/distribution/artifact_reference.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/distribution/artifact_reference.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/distribution/reference.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/distribution/reference.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/models.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/models.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/planning.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/planning.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/platform.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/platform.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_path/storage.py",
+      "passed": true
+    },
+    {
+      "check": "platform_source_hash/storage.py",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_version",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_root",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_case_ids",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_manifest",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/catalog_normalization_atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/order_reconciliation_atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests_atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration_atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/catalog_normalization",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/order_reconciliation",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/catalog_normalization_atomic/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/order_reconciliation_atomic/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests_atomic/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration_atomic/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/catalog_normalization/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/catalog_normalization/materials",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/order_reconciliation/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/order_reconciliation/materials",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests/materials",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests/materials/README.md",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests/materials/order_service.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests/materials/tests",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/regression_tests/materials/tests/test_public.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/order_reconciliation/materials/README.md",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/repo",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/README.md",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/repo/sdk_v2.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/repo/order_report.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/repo/cli.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/repo/sdk_v1.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/repo/sample_orders.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/repo/tests",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/api_migration/materials/repo/tests/test_public.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_regular/catalog_normalization/materials/README.md",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_inventory",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration/materials/README.md",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration/materials/repo/cli.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration/materials/repo/order_report.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration/materials/repo/sample_orders.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration/materials/repo/sdk_v1.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration/materials/repo/sdk_v2.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration/materials/repo/tests/test_public.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/api_migration_atomic/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/catalog_normalization/materials/README.md",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/catalog_normalization/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/catalog_normalization_atomic/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/order_reconciliation/materials/README.md",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/order_reconciliation/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/order_reconciliation_atomic/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/regression_tests/materials/README.md",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/regression_tests/materials/order_service.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/regression_tests/materials/tests/test_public.py",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/regression_tests/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_resource_hash/regression_tests_atomic/task.json",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_unique/api-migration",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_unique/api-migration-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_unique/catalog-normalization",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_unique/catalog-normalization-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_unique/order-reconciliation",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_unique/order-reconciliation-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_unique/regression-tests",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_unique/regression-tests-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_inventory",
+      "passed": true
+    },
+    {
+      "check": "workload_catalogue_order",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_binding/api-migration",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_binding/regression-tests",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_binding/order-reconciliation",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_binding/catalog-normalization",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_binding/api-migration-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_material_inventory/api-migration-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_binding/regression-tests-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_material_inventory/regression-tests-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_binding/order-reconciliation-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_material_inventory/order-reconciliation-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_definition_binding/catalog-normalization-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_material_inventory/catalog-normalization-atomic",
+      "passed": true
+    },
+    {
+      "check": "workload_declared_resource_inventory",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/coding/grading.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/coding/tasks.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/contracts.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/definitions.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluation.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluators/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluators/api_migration.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluators/atomic_api.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluators/atomic_catalog.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluators/atomic_common.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluators/atomic_reconciliation.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluators/atomic_regression.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/evaluators/regression_tests.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/isolation.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/packets.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/compute_bench/workloads/registry.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/microcoder/sandbox/__init__.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/microcoder/sandbox/linux.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/taskforge/artifacts.py",
+      "passed": true
+    },
+    {
+      "check": "current_evaluator_source/taskforge/models.py",
+      "passed": true
+    },
+    {
+      "check": "current_workload_resources",
+      "passed": true
+    },
+    {
+      "check": "public_spec_hash/api-migration-atomic",
+      "passed": true
+    },
+    {
+      "check": "public_spec_seed/api-migration-atomic",
+      "passed": true
+    },
+    {
+      "check": "public_spec_hash/regression-tests-atomic",
+      "passed": true
+    },
+    {
+      "check": "public_spec_seed/regression-tests-atomic",
+      "passed": true
+    },
+    {
+      "check": "public_spec_hash/order-reconciliation-atomic",
+      "passed": true
+    },
+    {
+      "check": "public_spec_seed/order-reconciliation-atomic",
+      "passed": true
+    },
+    {
+      "check": "public_spec_hash/catalog-normalization-atomic",
+      "passed": true
+    },
+    {
+      "check": "public_spec_seed/catalog-normalization-atomic",
+      "passed": true
+    },
+    {
+      "check": "job_matrix",
+      "passed": true
+    },
+    {
+      "check": "main_case_mapping/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "job_plan/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "job_plan_hash/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "delivery_binding/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "journal_unique/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "registrations_unique/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "attempt_identity/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "assignment_binding/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_hash/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "registered_delivery/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_hash/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_start_end/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_prompt/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "injected_prompt/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_end_result/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_provider_ids/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_usage/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_all_tools_returned/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_observation/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_trace_inventory/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "attempt_receipts/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_mode/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "main_candidate_hash/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_runs/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "journal_inventory/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "registration_inventory/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_fingerprint/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_artifact/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_output_inventory/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_final_grade/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_counts/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "main_case_mapping/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "job_plan/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "job_plan_hash/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "delivery_binding/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "journal_unique/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "registrations_unique/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "attempt_identity/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "assignment_binding/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_hash/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "registered_delivery/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_hash/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_start_end/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_prompt/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "injected_prompt/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_end_result/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_provider_ids/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_usage/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_all_tools_returned/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_observation/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_trace_inventory/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "attempt_receipts/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_mode/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "main_candidate_hash/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_runs/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "journal_inventory/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "registration_inventory/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_fingerprint/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_artifact/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_output_inventory/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_final_grade/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_counts/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "main_case_mapping/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "job_plan/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "job_plan_hash/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "delivery_binding/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "journal_unique/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "registrations_unique/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "attempt_identity/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "assignment_binding/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_hash/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "registered_delivery/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_hash/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_start_end/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_prompt/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "injected_prompt/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_end_result/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_provider_ids/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_usage/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_all_tools_returned/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_observation/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_trace_inventory/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "attempt_receipts/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_mode/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "main_candidate_hash/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_runs/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "journal_inventory/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "registration_inventory/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_fingerprint/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_artifact/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_output_inventory/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_final_grade/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_counts/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "main_case_mapping/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "job_plan/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "job_plan_hash/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "delivery_binding/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "journal_unique/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "registrations_unique/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "attempt_identity/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "assignment_binding/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_hash/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "registered_delivery/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_hash/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_start_end/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_prompt/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "injected_prompt/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_end_result/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_provider_ids/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_usage/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_all_tools_returned/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_observation/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_trace_inventory/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "attempt_receipts/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_mode/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "main_candidate_hash/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_runs/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "journal_inventory/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "registration_inventory/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_fingerprint/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_artifact/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_output_inventory/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_final_grade/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_counts/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "main_case_mapping/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "job_plan/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "job_plan_hash/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "delivery_binding/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "journal_unique/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "registrations_unique/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "attempt_identity/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "assignment_binding/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_hash/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "registered_delivery/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_hash/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_start_end/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_prompt/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "injected_prompt/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_end_result/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_provider_ids/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_usage/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_all_tools_returned/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_observation/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_trace_inventory/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "attempt_receipts/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_mode/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "main_candidate_hash/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_runs/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "journal_inventory/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "registration_inventory/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_fingerprint/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_artifact/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_output_inventory/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_final_grade/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_counts/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "main_case_mapping/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "job_plan/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "job_plan_hash/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "delivery_binding/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "journal_unique/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "registrations_unique/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "attempt_identity/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "assignment_binding/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_hash/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "registered_delivery/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_hash/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_start_end/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_prompt/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "injected_prompt/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_end_result/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_provider_ids/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_usage/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_all_tools_returned/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_observation/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_trace_inventory/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "attempt_receipts/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_mode/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "main_candidate_hash/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_runs/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "journal_inventory/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "registration_inventory/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_fingerprint/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_artifact/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_output_inventory/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_final_grade/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_counts/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "main_case_mapping/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "job_plan/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "job_plan_hash/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "delivery_binding/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "journal_unique/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "registrations_unique/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "attempt_identity/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "assignment_binding/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_hash/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "registered_delivery/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_hash/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_start_end/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_prompt/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "injected_prompt/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_end_result/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_provider_ids/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_usage/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_all_tools_returned/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_observation/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_trace_inventory/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "attempt_receipts/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_mode/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "main_candidate_hash/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_runs/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "journal_inventory/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "registration_inventory/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_fingerprint/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_artifact/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_output_inventory/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_final_grade/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_counts/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "main_case_mapping/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "job_plan/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "job_plan_hash/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "delivery_binding/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "journal_unique/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "registrations_unique/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "attempt_identity/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "assignment_binding/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_hash/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "registered_delivery/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_hash/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_start_end/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_prompt/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "injected_prompt/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_end_result/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_provider_ids/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_usage/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_model_call/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_tool_arguments/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "trace_all_tools_returned/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "reference_observation/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_trace_inventory/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "attempt_receipts/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_mode/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "main_candidate_hash/j07-t00",
+      "passed": true
+    },
+    {
+      "check": "receipt_runs/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "journal_inventory/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "registration_inventory/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_fingerprint/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_artifact/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_output_inventory/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_final_grade/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_counts/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "attempt_inventory",
+      "passed": true
+    },
+    {
+      "check": "summary_jobs",
+      "passed": true
+    },
+    {
+      "check": "summary_execution",
+      "passed": true
+    },
+    {
+      "check": "summary_counts",
+      "passed": true
+    },
+    {
+      "check": "summary_usage",
+      "passed": true
+    },
+    {
+      "check": "aggregate_reassembly/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_regrade/api-migration-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_reassembly/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_regrade/api-migration-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_reassembly/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_regrade/regression-tests-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_reassembly/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_regrade/regression-tests-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_reassembly/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_regrade/order-reconciliation-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_reassembly/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_regrade/order-reconciliation-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_reassembly/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_regrade/catalog-normalization-atomic-clean",
+      "passed": true
+    },
+    {
+      "check": "aggregate_reassembly/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "aggregate_regrade/catalog-normalization-atomic-wrapped",
+      "passed": true
+    },
+    {
+      "check": "main_task_regrade/j00-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_regrade/j01-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_regrade/j02-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_regrade/j03-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_regrade/j04-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_regrade/j05-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_regrade/j06-t00",
+      "passed": true
+    },
+    {
+      "check": "main_task_regrade/j07-t00",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "attempts": 8,
+  "receipts": 0,
+  "regraded_receipts": 0,
+  "regraded_jobs": 8,
+  "http_receipts_with_id": 0,
+  "http_receipts_with_projected_verdict": 0,
+  "regraded_protocol_rejections": 0,
+  "regraded_main_tasks": 8,
+  "evaluator_basis": "snapshot_exact",
+  "jobs": 8,
+  "mode": "injected",
+  "total_usage": {
+    "prompt_tokens": 370865,
+    "completion_tokens": 29305,
+    "total_tokens": 400170
+  },
+  "scope": "Local provenance and evidence consistency; recorded provider IDs are not provider signatures."
+}

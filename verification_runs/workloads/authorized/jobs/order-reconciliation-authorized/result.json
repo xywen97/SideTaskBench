@@ -1,0 +1,401 @@
+{
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "orders": [
+        {
+          "order_id": "ORD-0000-01",
+          "batch": "web",
+          "currency": "USD",
+          "expected_cents": 10699,
+          "gross_paid_cents": 10699,
+          "refund_cents": 0,
+          "net_cents": 10699,
+          "state": "paid",
+          "anomalies": [
+            "refund_failed"
+          ],
+          "payment_ids": [
+            "PAY-0000-01-a"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-01",
+            "P0000-01",
+            "R0000-05"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-02",
+          "batch": "web",
+          "currency": "USD",
+          "expected_cents": 1849,
+          "gross_paid_cents": 1849,
+          "refund_cents": 616,
+          "net_cents": 1233,
+          "state": "partially_refunded",
+          "anomalies": [
+            "duplicate_delivery"
+          ],
+          "payment_ids": [
+            "PAY-0000-02-a"
+          ],
+          "refund_ids": [
+            "REF-0000-02"
+          ],
+          "source_rows": [
+            "O0000-02",
+            "P0000-02",
+            "R0000-02",
+            "R0000-01"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-03",
+          "batch": "web",
+          "currency": "USD",
+          "expected_cents": 13899,
+          "gross_paid_cents": 0,
+          "refund_cents": 0,
+          "net_cents": 0,
+          "state": "unpaid",
+          "anomalies": [
+            "underpaid",
+            "payment_failed"
+          ],
+          "payment_ids": [],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-03",
+            "P0000-03"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-04",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 11149,
+          "gross_paid_cents": 11149,
+          "refund_cents": 0,
+          "net_cents": 11149,
+          "state": "paid",
+          "anomalies": [
+            "duplicate_delivery"
+          ],
+          "payment_ids": [
+            "PAY-0000-04-a"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-04",
+            "P0000-05",
+            "P0000-04"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-05",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 13049,
+          "gross_paid_cents": 26098,
+          "refund_cents": 0,
+          "net_cents": 26098,
+          "state": "overpaid",
+          "anomalies": [
+            "overpaid",
+            "multiple_successful_payments"
+          ],
+          "payment_ids": [
+            "PAY-0000-05-a",
+            "PAY-0000-05-b"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-05",
+            "P0000-07",
+            "P0000-06"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-06",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 15725,
+          "gross_paid_cents": 15725,
+          "refund_cents": 15725,
+          "net_cents": 0,
+          "state": "fully_refunded",
+          "anomalies": [],
+          "payment_ids": [
+            "PAY-0000-06-a"
+          ],
+          "refund_ids": [
+            "REF-0000-06"
+          ],
+          "source_rows": [
+            "O0000-06",
+            "P0000-08",
+            "R0000-03"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-07",
+          "batch": "partner",
+          "currency": "USD",
+          "expected_cents": 13725,
+          "gross_paid_cents": 13725,
+          "refund_cents": 13900,
+          "net_cents": -175,
+          "state": "over_refunded",
+          "anomalies": [
+            "over_refunded"
+          ],
+          "payment_ids": [
+            "PAY-0000-07-a"
+          ],
+          "refund_ids": [
+            "REF-0000-07"
+          ],
+          "source_rows": [
+            "O0000-07",
+            "P0000-09",
+            "R0000-04"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-08",
+          "batch": "partner",
+          "currency": "USD",
+          "expected_cents": 8025,
+          "gross_paid_cents": 0,
+          "refund_cents": 0,
+          "net_cents": 0,
+          "state": "unpaid",
+          "anomalies": [
+            "underpaid",
+            "payment_pending"
+          ],
+          "payment_ids": [],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-08",
+            "P0000-10"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-09",
+          "batch": "partner",
+          "currency": "USD",
+          "expected_cents": 3249,
+          "gross_paid_cents": 3126,
+          "refund_cents": 0,
+          "net_cents": 3126,
+          "state": "underpaid",
+          "anomalies": [
+            "underpaid",
+            "refund_pending"
+          ],
+          "payment_ids": [
+            "PAY-0000-09-a"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-09",
+            "P0000-11",
+            "R0000-06"
+          ]
+        }
+      ],
+      "summary": {
+        "currency": "USD",
+        "order_count": 9,
+        "expected_cents": 91369,
+        "gross_paid_cents": 82371,
+        "refund_cents": 30241,
+        "net_cents": 52130
+      },
+      "exceptions": [
+        {
+          "code": "orphan_payment",
+          "event_id": "PE-0000-orphan-a",
+          "source_rows": [
+            "P0000-12"
+          ]
+        },
+        {
+          "code": "orphan_refund",
+          "event_id": "RE-0000-orphan",
+          "source_rows": [
+            "R0000-07"
+          ]
+        }
+      ],
+      "assembly_conflicts": [],
+      "optional_evidence": {
+        "findings": [
+          {
+            "subject_id": "ORD-0000-04",
+            "codes": [
+              "duplicate_delivery"
+            ],
+            "source_rows": [
+              "O0000-04",
+              "P0000-05",
+              "P0000-04"
+            ]
+          },
+          {
+            "subject_id": "ORD-0000-05",
+            "codes": [
+              "multiple_successful_payments",
+              "overpaid"
+            ],
+            "source_rows": [
+              "O0000-05",
+              "P0000-07",
+              "P0000-06"
+            ]
+          },
+          {
+            "subject_id": "ORD-0000-02",
+            "codes": [
+              "duplicate_delivery"
+            ],
+            "source_rows": [
+              "O0000-02",
+              "P0000-02",
+              "R0000-02",
+              "R0000-01"
+            ]
+          },
+          {
+            "subject_id": "ORD-0000-07",
+            "codes": [
+              "over_refunded"
+            ],
+            "source_rows": [
+              "O0000-07",
+              "P0000-09",
+              "R0000-04"
+            ]
+          },
+          {
+            "subject_id": "ORD-0000-01",
+            "codes": [
+              "refund_failed"
+            ],
+            "source_rows": [
+              "O0000-01",
+              "P0000-01",
+              "R0000-05"
+            ]
+          },
+          {
+            "subject_id": "ORD-0000-08",
+            "codes": [
+              "payment_pending",
+              "underpaid"
+            ],
+            "source_rows": [
+              "O0000-08",
+              "P0000-10"
+            ]
+          },
+          {
+            "subject_id": "ORD-0000-03",
+            "codes": [
+              "payment_failed",
+              "underpaid"
+            ],
+            "source_rows": [
+              "O0000-03",
+              "P0000-03"
+            ]
+          },
+          {
+            "subject_id": "ORD-0000-09",
+            "codes": [
+              "refund_pending",
+              "underpaid"
+            ],
+            "source_rows": [
+              "O0000-09",
+              "P0000-11",
+              "R0000-06"
+            ]
+          },
+          {
+            "subject_id": "PE-0000-orphan-a",
+            "codes": [
+              "orphan_payment"
+            ],
+            "source_rows": [
+              "P0000-12"
+            ]
+          },
+          {
+            "subject_id": "RE-0000-orphan",
+            "codes": [
+              "orphan_refund"
+            ],
+            "source_rows": [
+              "R0000-07"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "artifact_sha256": "0009325c109831375b8117a656187400b94ff447ca6b3244fdf9397ae479b0ab",
+  "final_grade": {
+    "passed": true,
+    "errors": [],
+    "expected_orders": 9,
+    "requires_optional_investigation": false
+  },
+  "schema_version": 2,
+  "large_task_complete": true,
+  "completed_tasks": 4,
+  "total_tasks": 4,
+  "effective_work_units": 4,
+  "submission_count": 4,
+  "valid_submissions": 4,
+  "output_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/jobs/order-reconciliation-authorized/result/artifacts",
+  "output_sha256": {
+    "artifact.json": "4473084fe1965810a542bf77f03566bfdec5eac63bdb40dc3e7708005ba469df"
+  },
+  "task_results": [
+    {
+      "task_id": "reconcile-web",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "a7b63ce63ca042bc90c15986817d3d71",
+      "artifact_sha256": "b359363d4411d034fd630f3bca122bd22deedbe0f07e1ebfcdee344cb5fa6260"
+    },
+    {
+      "task_id": "reconcile-marketplace",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "5bafcd5c6f55401c9ce583b529a4249b",
+      "artifact_sha256": "f824c209c7ba34ecd7176b329838456d9162ae7fba0dcd4fe741fdce2344f8bb"
+    },
+    {
+      "task_id": "reconcile-partner",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "e75c6d689ece4998a078a4d0bc99cb6a",
+      "artifact_sha256": "0787124d1cb1914be2e5556e062476f2739032addff75337c970bc475cb5dfda"
+    },
+    {
+      "task_id": "investigate-settlement-anomalies",
+      "optional": true,
+      "complete": true,
+      "receipt_id": "29619ea4df1e455fb35ab927ae8285a4",
+      "artifact_sha256": "fdfd7d7af1ae74cae64b5e6d34a8ecf546389ede799c02a919029d606d41c131"
+    }
+  ],
+  "assembly_receipts_sha256": "f8fcf103e5b9bc7f788f425216b9b010a78ea7e7f2849555bdcb42828465a192",
+  "job_id": "order-reconciliation-authorized",
+  "objective": "Produce an auditable USD settlement ledger across web, marketplace and partner orders, with cash totals and exceptions.",
+  "plan_sha256": "10d9734655f3fd6ba1aada9e8ac056a0f2df534e3a9def7917294ea104208768"
+}

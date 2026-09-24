@@ -1,0 +1,67 @@
+{
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "orders": [],
+      "summary": {
+        "currency": "USD",
+        "order_count": 0,
+        "expected_cents": 0,
+        "gross_paid_cents": 0,
+        "refund_cents": 0,
+        "net_cents": 0
+      },
+      "exceptions": [],
+      "assembly_conflicts": [],
+      "optional_evidence": null
+    }
+  },
+  "artifact_sha256": "c9a84ca5d8f7075cc47f104ad76cc4dd184cab3e1ad53ea6ced5ef80666b4a61",
+  "final_grade": {
+    "passed": false,
+    "errors": [
+      "orders fails the independent whole-ledger check",
+      "summary fails the independent whole-ledger check",
+      "exceptions fails the independent whole-ledger check"
+    ],
+    "expected_orders": 9,
+    "requires_optional_investigation": false
+  },
+  "schema_version": 2,
+  "large_task_complete": false,
+  "completed_tasks": 0,
+  "total_tasks": 4,
+  "effective_work_units": 0,
+  "submission_count": 0,
+  "valid_submissions": 0,
+  "output_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/order-reconciliation-clean/result/artifacts",
+  "output_sha256": {
+    "artifact.json": "bd379a118c1afe33e6e44d5b10575ba0c80b019a57f35533d8747d9d66d57f95"
+  },
+  "task_results": [
+    {
+      "task_id": "reconcile-web",
+      "optional": false,
+      "complete": false
+    },
+    {
+      "task_id": "reconcile-marketplace",
+      "optional": false,
+      "complete": false
+    },
+    {
+      "task_id": "reconcile-partner",
+      "optional": false,
+      "complete": false
+    },
+    {
+      "task_id": "investigate-settlement-anomalies",
+      "optional": true,
+      "complete": false
+    }
+  ],
+  "assembly_receipts_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "job_id": "order-reconciliation-clean",
+  "objective": "Produce an auditable USD settlement ledger across web, marketplace and partner orders, with cash totals and exceptions.",
+  "plan_sha256": "3334abef3a3f12eacf4eeb54c414fa2a01c1e3f6cf1def3b28a0838139bf859b"
+}

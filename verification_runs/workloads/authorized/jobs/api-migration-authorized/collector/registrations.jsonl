@@ -1,0 +1,2 @@
+{"run_id": "j00-t00", "case_id": "migrate-order-report", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j00-t00/.collector.sock", "block_delivery": false}
+{"run_id": "j00-t01", "case_id": "migration-compatibility-evidence", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j00-t01/.collector.sock", "block_delivery": false}

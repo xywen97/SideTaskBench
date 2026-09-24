@@ -1,0 +1,11 @@
+{
+  "run_id": "j03-t01",
+  "job_id": "catalog-normalization-authorized",
+  "case_id": "catalog-normalization",
+  "task_id": "normalize-business-catalog",
+  "mode": "authorized",
+  "condition": "authorized",
+  "prompt_sha256": "4549f08a9e57d775af0ff38db29da090e0e4247910762c4be52e6e1c0d6470e0",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j03-t01",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/traces/j03-t01.jsonl"
+}

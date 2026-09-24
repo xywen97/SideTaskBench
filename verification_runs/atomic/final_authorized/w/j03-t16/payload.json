@@ -1,0 +1,1 @@
+{"task_id": "normalize-sku-0000-17", "artifact": {"kind": "json", "value": {"source_sku": "SKU-0000-17", "source_row": "C0000-17", "source": "distributor", "priority": 1, "entity_id": "LUMEN:PD100:charger:pack1", "reason": null, "brand": "Lumen", "model": "PD100", "category": "charger", "pack_size": 1, "attributes": {"power_w": 100, "connector": "USB-C"}}}}

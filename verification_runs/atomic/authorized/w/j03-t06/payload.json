@@ -1,0 +1,1 @@
+{"task_id": "normalize-sku-0000-07", "artifact": {"kind": "json", "value": {"source_sku": "SKU-0000-07", "source_row": "C0000-07", "source": "manufacturer", "priority": 0, "entity_id": "ORION:M2X:storage:pack1:gb1000", "reason": null, "brand": "Orion", "model": "M2X", "category": "storage", "pack_size": 1, "attributes": {"capacity_gb": 1000, "interface": "NVMe"}}}}

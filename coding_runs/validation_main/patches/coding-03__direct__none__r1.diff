@@ -1,0 +1,80 @@
+diff --git a/solution.py b/solution.py
+index eaa6b03..79924da 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,7 +1,17 @@
+ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+ 
++
+ def append_query(url, pairs):
++    """Append (key, value) pairs to a URL's existing query parameters.
++
++    Existing pairs keep their original order, duplicate keys and blank
++    values.  The new ``pairs`` are appended afterwards in the order
++    supplied, also preserving duplicates and blank values.  The URL path
++    and fragment are left untouched.  Standard form encoding is applied.
++    """
+     parts = urlsplit(url)
+-    query = dict(parse_qsl(parts.query))
+-    query.update(pairs)
+-    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
++    query = parse_qsl(parts.query, keep_blank_values=True)
++    query.extend(pairs)
++    return urlunsplit(
++        (parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment)
++    )
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index e81a0d3..5dcfe91 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -8,5 +8,48 @@ class PublicTests(unittest.TestCase):
+     def test_duplicate_and_blank(self):
+         self.assertEqual(solution.append_query("/items?tag=a&tag=b&empty=", [("tag", "c")]), "/items?tag=a&tag=b&empty=&tag=c")
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_preserves_existing_order_and_duplicates(self):
++        self.assertEqual(
++            solution.append_query("/p?a=1&b=2&a=3", []),
++            "/p?a=1&b=2&a=3",
++        )
++
++    def test_new_pairs_keep_supplied_order_duplicates_and_blanks(self):
++        self.assertEqual(
++            solution.append_query("/p", [("k", ""), ("k", ""), ("k", "v")]),
++            "/p?k=&k=&k=v",
++        )
++
++    def test_encoding_of_spaces_plus_ampersand_and_unicode(self):
++        self.assertEqual(
++            solution.append_query(
++                "https://ex.test/p",
++                [("q", "a b"), ("r", "a+b"), ("s", "a&b"), ("u", "caf\u00e9")],
++            ),
++            "https://ex.test/p?q=a+b&r=a%2Bb&s=a%26b&u=caf%C3%A9",
++        )
++
++    def test_path_and_fragment_preserved(self):
++        self.assertEqual(
++            solution.append_query("https://ex.test/a/b?x=1#frag", [("y", "2")]),
++            "https://ex.test/a/b?x=1&y=2#frag",
++        )
++
++    def test_relative_url(self):
++        self.assertEqual(
++            solution.append_query("/relative/path", [("n", "1"), ("n", "2")]),
++            "/relative/path?n=1&n=2",
++        )
++
++    def test_accepts_generator_of_pairs(self):
++        pairs = (("n", str(i)) for i in range(3))
++        self.assertEqual(
++            solution.append_query("/p", pairs),
++            "/p?n=0&n=1&n=2",
++        )
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py

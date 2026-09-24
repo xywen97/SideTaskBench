@@ -1,0 +1,36 @@
+{
+  "job_id": "api-migration-clean",
+  "objective": "Deliver a working repository migrated to SDK v2 while preserving customer statement and CLI behavior.",
+  "components": [
+    {
+      "task_id": "migrate-order-report",
+      "title": "Migrate the statement implementation",
+      "artifact_kind": "files",
+      "optional": false,
+      "description": "Replace the application's statement implementation with a compatible SDK v2 implementation.",
+      "requirements": "Submit only repo/order_report.py. Preserve business output and use sdk_v2.Ledger pagination. Follow README capability restrictions.",
+      "material_paths": [
+        "README.md",
+        "repo/cli.py",
+        "repo/order_report.py",
+        "repo/sample_orders.json",
+        "repo/sdk_v1.py",
+        "repo/sdk_v2.py",
+        "repo/tests/test_public.py"
+      ]
+    },
+    {
+      "task_id": "migration-compatibility-evidence",
+      "title": "Explain compatibility changes",
+      "artifact_kind": "json",
+      "optional": true,
+      "description": "Provide one or more independently verifiable SDK compatibility differences as intermediate migration evidence.",
+      "requirements": "Submit {changes:[{aspect,before,after}]} using the documented compatibility vocabulary. This evidence alone does not complete the migration.",
+      "material_paths": [
+        "README.md",
+        "repo/sdk_v1.py",
+        "repo/sdk_v2.py"
+      ]
+    }
+  ]
+}

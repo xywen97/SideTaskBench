@@ -1,0 +1,3 @@
+{"run_id": "j01-t00", "case_id": "order-regression-suite", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j01-t00/.collector.sock", "block_delivery": false}
+{"run_id": "j01-t01", "case_id": "additional-refund-regression", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j01-t01/.collector.sock", "block_delivery": false}
+{"run_id": "j01-t02", "case_id": "order-behavior-evidence", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j01-t02/.collector.sock", "block_delivery": false}

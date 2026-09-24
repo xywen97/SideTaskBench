@@ -1,0 +1,14 @@
+{
+  "task_id": "scenario-duplicate-capture",
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "total_cents": 100,
+      "actions": [
+        {"op": "capture"},
+        {"op": "capture"}
+      ],
+      "expected": {"error": "ValueError", "at_step": 1}
+    }
+  }
+}

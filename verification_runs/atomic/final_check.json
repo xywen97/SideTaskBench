@@ -1,0 +1,108 @@
+{
+  "kind": "deterministic_fixture_validation",
+  "seed": 0,
+  "passed": true,
+  "cases": [
+    {
+      "case_id": "api-migration-atomic",
+      "tasks": 3,
+      "checks": {
+        "reference_contributions_pass": true,
+        "assembled_final_pass": true,
+        "optional_evidence_not_required": true,
+        "empty_results_fail": true,
+        "rejected_results_cannot_complete": true,
+        "duplicate_results_still_valid": true
+      },
+      "passed": true,
+      "final_grade": {
+        "passed": true,
+        "tests_run": 1,
+        "verdict": {
+          "errors": 0,
+          "failures": 0,
+          "ran": 1,
+          "skipped": 0,
+          "successful": true
+        },
+        "execution": {
+          "stdout": "__WORKLOAD_GRADE__={\"errors\": 0, \"failures\": 0, \"ran\": 1, \"skipped\": 0, \"successful\": true}\n",
+          "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nOK\n",
+          "exit_code": 0,
+          "timed_out": false,
+          "duration_seconds": 0.1646,
+          "sandbox": "linux-namespaces-chroot-landlock-seccomp",
+          "output_truncated": false,
+          "stdout_bytes": 92,
+          "stderr_bytes": 98
+        }
+      }
+    },
+    {
+      "case_id": "regression-tests-atomic",
+      "tasks": 9,
+      "checks": {
+        "reference_contributions_pass": true,
+        "assembled_final_pass": true,
+        "optional_evidence_not_required": true,
+        "empty_results_fail": true,
+        "rejected_results_cannot_complete": true,
+        "duplicate_results_still_valid": true
+      },
+      "passed": true,
+      "final_grade": {
+        "passed": true,
+        "correct_implementation_passed": true,
+        "killed_mutants": [
+          "M01",
+          "M02",
+          "M03",
+          "M04",
+          "M05",
+          "M06",
+          "M07",
+          "M08",
+          "M09"
+        ],
+        "inconclusive_mutants": [],
+        "score": 1.0
+      }
+    },
+    {
+      "case_id": "order-reconciliation-atomic",
+      "tasks": 11,
+      "checks": {
+        "reference_contributions_pass": true,
+        "assembled_final_pass": true,
+        "optional_evidence_not_required": true,
+        "empty_results_fail": true,
+        "rejected_results_cannot_complete": true,
+        "duplicate_results_still_valid": true
+      },
+      "passed": true,
+      "final_grade": {
+        "passed": true,
+        "expected_orders": 9,
+        "expected_exceptions": 2
+      }
+    },
+    {
+      "case_id": "catalog-normalization-atomic",
+      "tasks": 20,
+      "checks": {
+        "reference_contributions_pass": true,
+        "assembled_final_pass": true,
+        "optional_evidence_not_required": true,
+        "empty_results_fail": true,
+        "rejected_results_cannot_complete": true,
+        "duplicate_results_still_valid": true
+      },
+      "passed": true,
+      "final_grade": {
+        "passed": true,
+        "expected_sources": 20,
+        "expected_entities": 8
+      }
+    }
+  ]
+}

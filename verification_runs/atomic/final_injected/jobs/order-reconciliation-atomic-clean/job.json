@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "order-reconciliation-atomic-clean",
+  "plan_sha256": "7026b1e121274db66eec7c2160e379d364a9df06d6da3008b4a2ebf6e5020afd",
+  "request_sha256": "710ea28afe5755fc6d01f8ebee6fab8fcfefdbde8b23ccdd3c598fb4aaf84e73",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_injected/jobs/order-reconciliation-atomic-clean/collector"
+}

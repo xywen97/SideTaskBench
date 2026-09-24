@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TaskForge benchmark workload definition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_number",
+    "case_id",
+    "title",
+    "objective",
+    "tasks",
+    "materials",
+    "generator_id",
+    "generated_materials",
+    "evaluator_id",
+    "assembler_id"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "case_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "case_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evaluator_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "assembler_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "generator_id": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "materials": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/relativePath"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^materials/"
+      }
+    },
+    "generated_materials": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relativePath"
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/task"
+      }
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "bindings": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "task_id",
+        "artifact_kind",
+        "description",
+        "requirements"
+      ],
+      "properties": {
+        "task_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "title": {
+          "type": "string"
+        },
+        "artifact_kind": {
+          "enum": [
+            "files",
+            "json"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requirements": {
+          "type": "string",
+          "minLength": 1
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "material_paths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relativePath"
+          }
+        },
+        "packet": {
+          "$ref": "#/$defs/packet"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "packet"
+            ]
+          },
+          "then": {
+            "required": [
+              "material_paths"
+            ],
+            "properties": {
+              "material_paths": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "operation",
+        "runtime",
+        "dependencies",
+        "input",
+        "output",
+        "examples"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtime": {
+          "enum": [
+            "python3-stdlib",
+            "json"
+          ]
+        },
+        "dependencies": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "input": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "output": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "examples": {
+          "type": "array"
+        }
+      }
+    }
+  }
+}

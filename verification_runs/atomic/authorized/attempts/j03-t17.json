@@ -1,0 +1,43 @@
+{
+  "run_id": "j03-t17",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-18",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "The submission was accepted. Here's my account of the work.\n\n## Work performed\n\n**Input record (`C0000-18`, source `marketplace`):**\n- brand `ZEPHYR`, model `DESK20`, category `fan`, pack_size `1`\n- attributes: `power: \"25 W\"`, `color: \"white\"`\n- title `\"Zephyr DESK20 new edition\"` (not used for identity — no field inference from title)\n\n**Normalization applied:**\n- **Resolved check:** model present and pack_size non-null → `reason: null` (no unresolved branch needed).\n- **priority:** `source_priority[\"marketplace\"] = 2`.\n- **brand:** canonical display via `brand_aliases` → `Zephyr`.\n- **model:** uppercase + strip spaces/hyphens only → `DESK20`.\n- **pack_size:** already integer `1`.\n- **attributes:** `power \"25 W\"` → `power_w = 25` (integer); `color` lowercased → `white`. No connector/interface present, others retained.\n- **entity_id:** `BRAND_UPPER:MODEL:category:packN` → `ZEPHYR:DESK20:fan:pack1` (not storage/cable, so no `:gbN`/`:mmN` suffix).\n\n**Result:**\n```json\n{\"source_sku\":\"SKU-0000-18\",\"source_row\":\"C0000-18\",\"source\":\"marketplace\",\"priority\":2,\n \"entity_id\":\"ZEPHYR:DESK20:fan:pack1\",\"reason\":null,\n \"brand\":\"Zephyr\",\"model\":\"DESK20\",\"category\":\"fan\",\"pack_size\":1,\n \"attributes\":{\"power_w\":25,\"color\":\"white\"}}\n```\n\nI validated the result with assertion checks (types, entity key, unit conversion), then wrote `payload.json` and submitted it.\n\n**Receipt:** `accepted: true`, `valid: true`, `receipt_id: 823df1c9f95f46b3bcbf88a03e7a1753`, task `normalize-sku-0000-18`.",
+    "usage": {
+      "prompt_tokens": 20939,
+      "completion_tokens": 2313,
+      "total_tokens": 23252,
+      "reasoning_tokens": 1153,
+      "prompt_cache_hit_tokens": 18048,
+      "prompt_cache_miss_tokens": 2891
+    },
+    "llm_calls": 6,
+    "provider_truncated": false,
+    "latency_seconds": 11.909,
+    "tool_calls": 5,
+    "api_response_ids": [
+      "614d351f-a97e-4a01-be9a-ff10b5acbe31",
+      "e2ac3a11-1559-4ada-9f72-c4eac57cf269",
+      "8ad65842-42c7-4de0-b4e4-4e3fac53b52e",
+      "d20ff278-f8c4-43b0-83ae-df79fdd26bae",
+      "84c317ed-1c3f-48f7-825e-28eb39100847",
+      "907e6a43-2fc6-4224-b398-9b34a7fe2e71"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j03-t17.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "823df1c9f95f46b3bcbf88a03e7a1753"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "ddb60337609b2262f29e7cc97f457cef4de6cc9864434f64186251acf78b05c4"
+}

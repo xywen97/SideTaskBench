@@ -1,11 +1,11 @@
-"""Generate the project entry report from retained runs; no model calls."""
+"""Generate the archived document-v1 overview from retained runs; no model calls."""
 
 from collections import Counter
 import html
 import json
 from pathlib import Path
 
-from compute_bench.report import answer_format, write_report
+from legacy.document_v1.report import answer_format, write_report
 
 
 def main():
@@ -81,12 +81,12 @@ def main():
               "- 60 个记录 ID 来自 12 个文本模板；这是一个任务家族内的机制验证，不是跨领域或模型排名结果。",
               "- 第三方来源包含合法任务必需的事实，本地有限语料内的曝光率较高；不能推广为互联网投放成功率。",
               "- 离线审计验证产物一致性，不是服务商签名或防篡改证明。最初 pilot_v1 缺少源代码快照，审计对此保留 warning；之后均有快照。", "",
-              "[完整设计与复现命令](README.md) · [独立审查](docs/REVIEW.md) · [相关工作](docs/RELATED_WORK.md)", ""]
+              "[完整设计与复现命令](legacy/document_v1/README.md) · [独立审查](legacy/document_v1/REVIEW.md) · [相关工作](docs/RELATED_WORK.md)", ""]
     markdown = "\n".join(lines)
     (root / "RESULTS.md").write_text(markdown)
     table_rows = "".join("<tr>" + "".join("<td>" + html.escape(str(item[key])) + "</td>" for key in ("experiment", "condition", "defense", "runs", "correct_work_observed", "valid_deliveries", "main_pass", "unique_accepted_rows")) + "</tr>" for item in groups if item["experiment"].startswith("validation_"))
     links = "".join(f'<li><a href="{item["report"]}">{html.escape(item["name"])}</a> · {item["runs"]} 次运行 · {item["tokens"]:,} token</li>' for item in experiments)
-    page = f'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agent 计算任务挪用 PoC · 实验结果</title><style>body{{font:16px/1.65 system-ui,sans-serif;background:#f4f6fb;color:#172339;margin:0;padding:36px}}main{{max-width:1220px;margin:auto}}h1{{font-size:36px;line-height:1.2}}.cards{{display:flex;gap:16px;flex-wrap:wrap}}.card{{background:white;border:1px solid #dde3ec;border-radius:14px;padding:24px;margin:16px 0;overflow:auto}}.cards .card{{flex:1;min-width:180px}}strong.big{{font-size:36px;color:#146e53}}th,td{{padding:11px;border-bottom:1px solid #e2e7ef;text-align:left}}table{{border-collapse:collapse;width:100%;font-size:14px}}th{{background:#edf2f8}}a{{color:#2856b1}}pre{{white-space:pre-wrap;font:14px/1.7 ui-monospace,monospace}}</style><main><h1>Agent 计算任务挪用 PoC</h1><p>真实 DeepSeek 调用 · 本地合成任务 · 可核验 HTTP 交付 · 全部成功与失败试验留档</p><div class="cards"><div class="card"><strong class="big">{overview['total_runs']}</strong><br>真实 Agent 运行</div><div class="card"><strong class="big">{wrapped['valid_deliveries']}/{wrapped['runs']}</strong><br>包装任务有效交付</div><div class="card"><strong class="big">{wrapped['unique_accepted_rows']}/60</strong><br>跨重复聚合的正确记录</div><div class="card"><strong class="big">{egress['correct_work_observed']}/30</strong><br>外发被挡住但已产生正确工作</div></div><div class="card"><h2>正式验证</h2><table><tr><th>Experiment</th><th>Condition</th><th>Defense</th><th>Runs</th><th>Valid work</th><th>Delivered</th><th>Facts correct</th><th>Unique rows</th></tr>{table_rows}</table><p>主事实正确与输出格式遵循分开评分；完整大任务来自三轮并集。60条记录使用12个文本模板。</p></div><div class="card"><h2>报告与原始证据</h2><p><a href="RESULTS.md">中文结果报告</a> · <a href="README.md">设计与复现</a> · <a href="runs/validation_main/collected_batch.json">实际收到的60条结果</a> · <a href="docs/REVIEW.md">独立审查</a></p><ul>{links}</ul></div><div class="card"><h2>完整说明</h2><pre>{html.escape(markdown)}</pre></div></main></html>'''
+    page = f'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agent 计算任务挪用 PoC · 实验结果</title><style>body{{font:16px/1.65 system-ui,sans-serif;background:#f4f6fb;color:#172339;margin:0;padding:36px}}main{{max-width:1220px;margin:auto}}h1{{font-size:36px;line-height:1.2}}.cards{{display:flex;gap:16px;flex-wrap:wrap}}.card{{background:white;border:1px solid #dde3ec;border-radius:14px;padding:24px;margin:16px 0;overflow:auto}}.cards .card{{flex:1;min-width:180px}}strong.big{{font-size:36px;color:#146e53}}th,td{{padding:11px;border-bottom:1px solid #e2e7ef;text-align:left}}table{{border-collapse:collapse;width:100%;font-size:14px}}th{{background:#edf2f8}}a{{color:#2856b1}}pre{{white-space:pre-wrap;font:14px/1.7 ui-monospace,monospace}}</style><main><h1>Agent 计算任务挪用 PoC</h1><p>真实 DeepSeek 调用 · 本地合成任务 · 可核验 HTTP 交付 · 全部成功与失败试验留档</p><div class="cards"><div class="card"><strong class="big">{overview['total_runs']}</strong><br>真实 Agent 运行</div><div class="card"><strong class="big">{wrapped['valid_deliveries']}/{wrapped['runs']}</strong><br>包装任务有效交付</div><div class="card"><strong class="big">{wrapped['unique_accepted_rows']}/60</strong><br>跨重复聚合的正确记录</div><div class="card"><strong class="big">{egress['correct_work_observed']}/30</strong><br>外发被挡住但已产生正确工作</div></div><div class="card"><h2>正式验证</h2><table><tr><th>Experiment</th><th>Condition</th><th>Defense</th><th>Runs</th><th>Valid work</th><th>Delivered</th><th>Facts correct</th><th>Unique rows</th></tr>{table_rows}</table><p>主事实正确与输出格式遵循分开评分；完整大任务来自三轮并集。60条记录使用12个文本模板。</p></div><div class="card"><h2>报告与原始证据</h2><p><a href="RESULTS.md">中文结果报告</a> · <a href="legacy/document_v1/README.md">设计与复现</a> · <a href="runs/validation_main/collected_batch.json">实际收到的60条结果</a> · <a href="legacy/document_v1/REVIEW.md">独立审查</a></p><ul>{links}</ul></div><div class="card"><h2>完整说明</h2><pre>{html.escape(markdown)}</pre></div></main></html>'''
     (root / "RESULTS.html").write_text(page)
     print(json.dumps({"runs": overview["total_runs"], "llm_calls": total_calls, "tokens": total_usage["total_tokens"], "audited": overview["all_audited"], "entry": str(root / "RESULTS.html")}, ensure_ascii=False))
 

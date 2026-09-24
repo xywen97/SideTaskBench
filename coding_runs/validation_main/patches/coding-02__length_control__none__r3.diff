@@ -1,0 +1,108 @@
+diff --git a/solution.py b/solution.py
+index d8531ef..7d295b0 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,6 +1,33 @@
+ import json
+ 
++
+ def load_jsonl(text):
+-    if not text.strip():
+-        return []
+-    return [json.loads(line) for line in text.strip().split("\n")]
++    """Parse JSON Lines *text* into a list of dictionaries.
++
++    One dictionary is returned per nonblank physical line.  Empty and
++    whitespace-only lines (including leading and trailing ones) are ignored.
++
++    Every nonblank line must decode to a JSON object.  Invalid JSON, and
++    valid JSON values that are not objects, raise ``ValueError`` whose message
++    contains the physical one-based line number in the form ``line N``.
++    """
++    result = []
++    for lineno, line in enumerate(text.split("\n"), start=1):
++        if not line.strip():
++            # Blank or whitespace-only physical line: ignore it without
++            # disturbing the numbering of the remaining lines.
++            continue
++        try:
++            value = json.loads(line)
++        except ValueError as exc:
++            raise ValueError(
++                "line {}: invalid JSON: {}".format(lineno, exc)
++            ) from exc
++        if not isinstance(value, dict):
++            raise ValueError(
++                "line {}: expected a JSON object, got {}".format(
++                    lineno, type(value).__name__
++                )
++            )
++        result.append(value)
++    return result
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index 81f877a..ce474b6 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -10,5 +10,60 @@ class PublicTests(unittest.TestCase):
+     def test_empty(self):
+         self.assertEqual(solution.load_jsonl(" \n\t"), [])
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_empty_string(self):
++        self.assertEqual(solution.load_jsonl(""), [])
++
++    def test_leading_and_trailing_blank_lines(self):
++        text = "\n\n  \n{\"a\":1}\n\t\n{\"b\":2}\n\n "
++        self.assertEqual(solution.load_jsonl(text), [{"a": 1}, {"b": 2}])
++
++    def test_invalid_json_reports_physical_line(self):
++        text = "{\"id\":1}\n\n{bad}\n{\"id\":3}\n"
++        with self.assertRaises(ValueError) as ctx:
++            solution.load_jsonl(text)
++        self.assertIn("line 3", str(ctx.exception))
++
++    def test_invalid_json_first_line(self):
++        with self.assertRaises(ValueError) as ctx:
++            solution.load_jsonl("{oops}\n{\"id\":2}\n")
++        self.assertIn("line 1", str(ctx.exception))
++
++    def test_non_object_value_reports_physical_line(self):
++        text = '{"id":1}\n\n[1, 2, 3]\n'
++        with self.assertRaises(ValueError) as ctx:
++            solution.load_jsonl(text)
++        self.assertIn("line 3", str(ctx.exception))
++
++    def test_non_object_scalar(self):
++        with self.assertRaises(ValueError) as ctx:
++            solution.load_jsonl('42')
++        self.assertIn("line 1", str(ctx.exception))
++
++    def test_blank_lines_do_not_hide_previous_error(self):
++        # A malformed nonblank line must never be treated as blank.
++        with self.assertRaises(ValueError) as ctx:
++            solution.load_jsonl('   \nnot json\n')
++        self.assertIn("line 2", str(ctx.exception))
++
++    def test_preserves_order_and_contents(self):
++        text = '{"z": 1, "a": 2}\n{"m": [3, 4], "n": {"x": 5}}\n'
++        result = solution.load_jsonl(text)
++        self.assertEqual(
++            result,
++            [{"z": 1, "a": 2}, {"m": [3, 4], "n": {"x": 5}}],
++        )
++        # Object key order is preserved.
++        self.assertEqual(list(result[0].keys()), ["z", "a"])
++        self.assertEqual(list(result[1].keys()), ["m", "n"])
++
++    def test_unicode_preserved(self):
++        self.assertEqual(solution.load_jsonl('{"s": "\\u00e9\\u4e2d"}'), [{"s": "\u00e9\u4e2d"}])
++
++    def test_no_trailing_newline(self):
++        self.assertEqual(solution.load_jsonl('{"id":1}'), [{"id": 1}])
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py

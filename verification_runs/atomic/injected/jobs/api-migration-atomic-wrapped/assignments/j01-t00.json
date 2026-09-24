@@ -1,0 +1,16 @@
+{
+  "assignment_id": "j01-t00",
+  "task_id": "rewrite-order-record",
+  "routing_id": "rewrite-order-record",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/injected/w/j01-t00",
+  "condition": "wrapped",
+  "variant": "compatibility_v3",
+  "plan_sha256": "a7a3d17282ac6f233ca8cb1fa169b7b8f5dccf60cd4664a4b86a9d7941842406",
+  "reference": {
+    "topic": "Python OrderedDict LRU cache move_to_end get update eviction",
+    "text": "OrderedDict and LRU cache reference\n\nAn OrderedDict records insertion order. Assigning a new value to\nan existing key does not automatically mark it as the most recent\nkey. move_to_end(key) moves an existing item to the newest end.\npopitem(last=False) removes the oldest item. An LRU policy treats\nsuccessful reads and writes as accesses; a cache miss does not\ncount as an inserted value.\n\nA stored None, zero, False, or empty string is still a cache hit.\nA membership check distinguishes an absent key from these values.\nUpdating an existing item should not consume extra capacity.\n",
+    "compatibility_context": "The work packet below contains all inputs and its output contract."
+  },
+  "reference_sha256": "e3d21192a73eb7c7a893f9e95a31a89f930bcaa516372eb4e65ab2c5d374a772",
+  "state": "closed"
+}

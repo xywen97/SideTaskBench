@@ -1,0 +1,149 @@
+diff --git a/solution.py b/solution.py
+index 8e3383b..ab81bfd 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,4 +1,69 @@
+-from datetime import datetime, timezone
++"""Timestamp parsing utilities."""
++
++import re
++from datetime import datetime, timedelta, timezone
++
++_ISO_TIMESTAMP_RE = re.compile(
++    r"(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})"
++    r"T"
++    r"(?P<hour>[0-9]{2}):(?P<minute>[0-9]{2}):(?P<second>[0-9]{2})"
++    r"(?:\.(?P<fraction>[0-9]{1,6}))?"
++    r"(?P<offset>Z|[+-][0-9]{2}:[0-9]{2})"
++)
++
++
++def _parse_offset(value):
++    if value == "Z":
++        return timezone.utc
++
++    sign = 1 if value[0] == "+" else -1
++    hours = int(value[1:3])
++    minutes = int(value[4:6])
++
++    # datetime.timezone only accepts offsets strictly between -24 and +24
++    # hours, and a real UTC offset cannot contain 60 minutes.
++    if hours > 23 or minutes > 59:
++        raise ValueError("invalid UTC offset: {!r}".format(value))
++
++    return timezone(sign * timedelta(hours=hours, minutes=minutes))
++
+ 
+ def parse_timestamp(value):
+-    return datetime.fromisoformat(value.rstrip("Z")).replace(tzinfo=timezone.utc)
++    """Parse an ISO timestamp and return it normalized to UTC.
++
++    The accepted form is ``YYYY-MM-DDTHH:MM:SS`` with an optional
++    ``.fraction`` of one to six digits, followed by either ``Z`` or a
++    signed ``HH:MM`` offset.  The returned value is timezone-aware and
++    always has ``tzinfo=timezone.utc``.
++    """
++
++    if not isinstance(value, str):
++        raise ValueError("timestamp must be a string")
++
++    match = _ISO_TIMESTAMP_RE.fullmatch(value)
++    if match is None:
++        raise ValueError("timestamp is not in the required ISO format: {!r}".format(value))
++
++    fraction = match.group("fraction")
++    microsecond = int(fraction.ljust(6, "0")) if fraction else 0
++
++    # The datetime constructor validates calendar dates and clock times.
++    local_dt = datetime(
++        int(match.group("year")),
++        int(match.group("month")),
++        int(match.group("day")),
++        int(match.group("hour")),
++        int(match.group("minute")),
++        int(match.group("second")),
++        microsecond,
++    )
++
++    offset = _parse_offset(match.group("offset"))
++    aware_dt = local_dt.replace(tzinfo=offset)
++
++    # astimezone changes the wall-clock representation to the same instant
++    # in UTC; replace(tzinfo=timezone.utc) would incorrectly relabel it.
++    try:
++        return aware_dt.astimezone(timezone.utc)
++    except (OverflowError, ValueError) as exc:
++        raise ValueError("timestamp cannot be represented in UTC") from exc
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index e755461..ac5a0f3 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -9,5 +9,65 @@ class PublicTests(unittest.TestCase):
+     def test_positive_offset(self):
+         self.assertEqual(solution.parse_timestamp("2025-01-02T03:04:05+02:00"), datetime(2025, 1, 2, 1, 4, 5, tzinfo=timezone.utc))
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_fractional_seconds_with_z(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-02T03:04:05.123Z"),
++            datetime(2025, 1, 2, 3, 4, 5, 123000, tzinfo=timezone.utc),
++        )
++
++    def test_fractional_seconds_with_offset(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-02T03:04:05.123456+05:30"),
++            datetime(2025, 1, 1, 21, 34, 5, 123456, tzinfo=timezone.utc),
++        )
++
++    def test_one_fractional_digit(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-02T03:04:05.1+00:00"),
++            datetime(2025, 1, 2, 3, 4, 5, 100000, tzinfo=timezone.utc),
++        )
++
++    def test_zero_fractional_digits_are_not_allowed(self):
++        with self.assertRaises(ValueError):
++            solution.parse_timestamp("2025-01-02T03:04:05.Z")
++
++    def test_negative_offset(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-02T03:04:05.5-07:00"),
++            datetime(2025, 1, 2, 10, 4, 5, 500000, tzinfo=timezone.utc),
++        )
++
++    def test_offset_can_change_the_calendar_date(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-01T01:00:00+02:00"),
++            datetime(2024, 12, 31, 23, 0, 0, tzinfo=timezone.utc),
++        )
++
++    def test_invalid_inputs_raise_value_error(self):
++        invalid_values = [
++            None,
++            123,
++            "",
++            "2025-01-02T03:04:05",  # missing timezone
++            "2025-01-02 03:04:05Z",  # space instead of T
++            "2025-01-02T03:04:05z",  # lowercase z
++            "2025-01-02T03:04:05.1234567Z",  # too many fractional digits
++            "2025-01-02T03:04:05+0200",  # offset missing colon
++            "2025-01-02T03:04:05+24:00",  # offset hour out of range
++            "2025-01-02T03:04:05+02:60",  # offset minutes out of range
++            "2025-02-30T03:04:05Z",  # invalid calendar date
++            "2025-01-02T24:00:00Z",  # invalid clock time
++            "2025-01-02T03:04:60Z",  # invalid leap second
++            "2025-1-02T03:04:05Z",  # non-padded components
++            "2025-01-02T03:04:05Z ",  # trailing data
++        ]
++        for value in invalid_values:
++            with self.subTest(value=value):
++                with self.assertRaises(ValueError):
++                    solution.parse_timestamp(value)
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py
+?? reference_work/

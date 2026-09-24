@@ -1,0 +1,43 @@
+{
+  "run_id": "j02-t03",
+  "job_id": "order-reconciliation-atomic-authorized",
+  "case_id": "order-reconciliation-atomic",
+  "task_id": "reconcile-ord-0000-04",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Submission accepted and validated.\n\n## Work summary\n\n**Task:** Reconcile ORD-0000-04 (marketplace, USD, expected 11149¢).\n\n**Reasoning from the packet:**\n- **Payments:** two physical rows (`P0000-05`, `P0000-04`) share one `event_id` (`PE-0000-04-a`) with an identical payload → deduplicated to one delivery. That single distinct succeeded `payment_id` is `PAY-0000-04-a`, so **gross_paid_cents = 11149**.\n- **Refunds:** none → **refund_cents = 0**.\n- **net_cents** = 11149 − 0 = **11149** (no clamping).\n- **State:** gross>0, refunds not >/=/gross, no under/overpay → **paid**.\n- **Anomalies:** repeated `event_id` in the payments table → **duplicate_delivery**. (No failed/pending rows; only one counted payment, so no multiple_successful_payments.)\n- **Arrays:** `payment_ids = [\"PAY-0000-04-a\"]`, `refund_ids = []`, and `source_rows` includes the order row plus every physical payment row, lexicographically sorted → `[\"O0000-04\",\"P0000-04\",\"P0000-05\"]`.\n\n**Artifact submitted:** exactly one JSON object with the declared fields.\n\n**Receipt:** `{\"receipt_id\": \"7fc1a063f4a84ade882cb119cf048325\", \"accepted\": true, \"valid\": true, \"task_id\": \"reconcile-ord-0000-04\"}`",
+    "usage": {
+      "prompt_tokens": 19618,
+      "completion_tokens": 1996,
+      "total_tokens": 21614,
+      "reasoning_tokens": 1046,
+      "prompt_cache_hit_tokens": 17920,
+      "prompt_cache_miss_tokens": 1698
+    },
+    "llm_calls": 6,
+    "provider_truncated": false,
+    "latency_seconds": 10.605,
+    "tool_calls": 5,
+    "api_response_ids": [
+      "644da7e2-c024-4cac-873a-6b2ded64c7ba",
+      "e268d3b4-885a-4ed8-9e18-04661836cfce",
+      "586aa582-24cf-4698-97e4-514b18d70807",
+      "246a5648-e4f3-4899-8eed-437ecadc3672",
+      "4899167a-c99a-4c1b-82c9-831aa1a357a7",
+      "3263fdbd-c8ef-48c6-a016-2b05839e7990"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j02-t03.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "7fc1a063f4a84ade882cb119cf048325"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "daa8a87604923e126fa483ff2c99a98bd84875b4471f6bf5c38334c0db2351de"
+}

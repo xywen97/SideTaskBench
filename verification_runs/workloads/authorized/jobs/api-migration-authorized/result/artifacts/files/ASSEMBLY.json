@@ -1,0 +1,31 @@
+{
+  "policy": "first_valid_content_per_path",
+  "receipts": [
+    {
+      "receipt_id": "8e6bba13c85646ef8d04020136ff6f71",
+      "task_id": "migrate-order-report",
+      "artifact_sha256": "b4348f1cb5e452dc049e676d31e2bae03c14a12f5768f7237f22745e011f087e",
+      "files": [
+        {
+          "path": "repo/order_report.py",
+          "status": "selected",
+          "source_sha256": "187e1aa20af274791c9780ea740c946e9949d10929e83a7258ab6f8ebdfca6ba",
+          "selected_receipt_id": "8e6bba13c85646ef8d04020136ff6f71"
+        }
+      ]
+    },
+    {
+      "receipt_id": "ee16c0d811ca430f961d1a665a8acf4a",
+      "task_id": "migration-compatibility-evidence",
+      "artifact_sha256": "cb54e6ba1a7ae73ca620c90e659cca3e6898e42725e40a945707f8cede8c6633",
+      "files": [
+        {
+          "path": "evidence/migration-compatibility-evidence.json",
+          "status": "selected",
+          "source_sha256": "b79bbe87a5a493d7e25df5d51d5122df60b852dcf687ee4bcfe52e867bfbec99",
+          "selected_receipt_id": "ee16c0d811ca430f961d1a665a8acf4a"
+        }
+      ]
+    }
+  ]
+}

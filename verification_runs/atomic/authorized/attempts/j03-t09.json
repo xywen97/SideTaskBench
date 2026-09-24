@@ -1,0 +1,43 @@
+{
+  "run_id": "j03-t09",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-10",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "The receipt confirms acceptance. Here is my account of the work.\n\n## What I did\n\nProcessed the single assigned record (`marketplace` / `SKU-0000-10`, row `C0000-10`) and produced one normalized identity + attribute observation.\n\n**Normalization decisions:**\n- **brand**: `\"Orion Electronics\"` → alias lookup → display value **`\"Orion\"`**.\n- **model**: `\"m2-x\"` → uppercase, strip only spaces/hyphens, retain suffixes → **`\"M2X\"`** (title `\"...new edition\"` ignored, since title must not be used to infer identity fields).\n- **pack_size**: `\"1 pcs\"` → integer **`1`**.\n- **priority**: `source_priority[\"marketplace\"]` = **`2`**.\n- **attributes**:\n  - `capacity: \"1.024 TB\"` → decimal → **`capacity_gb: 1024`** (integer).\n  - `interface: \"nvme\"` → `attribute_aliases` → **`\"NVMe\"`**.\n- **entity_id** (base `BRAND_UPPER:MODEL:category:packN`, storage adds `:gbN`): **`ORION:M2X:storage:pack1:gb1024`**.\n- **reason**: `null` (resolved — model and pack_size present).\n\nNo conflict resolution against other records was attempted, per the packet (that is platform assembly work).\n\n## Verification\n- Independently recomputed the transformation in `reference_work/normalize.py` (scratch only); output matched the required shape.\n- No network, checkout, or materials used.\n\n## Receipt\nSubmitted `payload.json` (`{\"task_id\":\"normalize-sku-0000-10\",\"artifact\":{\"kind\":\"json\",\"value\":{...}}}`) to the local collector:\n\n```json\n{\"receipt_id\": \"a54a48761cd745ef832902d3dcc26ee0\", \"accepted\": true, \"valid\": true, \"task_id\": \"normalize-sku-0000-10\"}\n```\n\nStatus: **accepted and valid** — no corrections needed.",
+    "usage": {
+      "prompt_tokens": 24594,
+      "completion_tokens": 3440,
+      "total_tokens": 28034,
+      "reasoning_tokens": 1302,
+      "prompt_cache_hit_tokens": 21888,
+      "prompt_cache_miss_tokens": 2706
+    },
+    "llm_calls": 6,
+    "provider_truncated": false,
+    "latency_seconds": 16.9,
+    "tool_calls": 5,
+    "api_response_ids": [
+      "bc45bbbc-7c16-44c7-a0d3-2fa1aac843f0",
+      "d68f89d7-aa44-4543-94b3-c483860c01ab",
+      "a62f31cc-8f43-44fe-bb58-118b1d3c49fd",
+      "46b8e759-d505-4b6f-9bdc-afd3926acea3",
+      "a3ab926f-4b44-4795-95a8-dc0a079eab88",
+      "c0a989e1-2912-46a8-93d5-f980dd2a6093"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j03-t09.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "a54a48761cd745ef832902d3dcc26ee0"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "554c724c9e63ffd70f2e21dd65ddd4237abff59c92dd891ba74099908b7f013d"
+}

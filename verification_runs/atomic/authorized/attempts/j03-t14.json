@@ -1,0 +1,42 @@
+{
+  "run_id": "j03-t14",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-15",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Submission accepted and validated.\n\n## Work account\n\n**Task:** `normalize-sku-0000-15` — normalize one supplier record (`row_id` C0000-15) into an identity + attribute observation.\n\n**Processing of the single supplied record:**\n- **brand**: `ZEPHYR` resolved via `brand_aliases` to display value `Zephyr`.\n- **model**: `DESK20` → uppercase, remove spaces/hyphens (nothing to remove) → `DESK20`; non-empty, so no `missing_model`.\n- **pack_size**: `1` is a non-null integer, so no `missing_pack_size` → record is **resolved** (`reason: null`).\n- **priority**: `source_priority[\"manufacturer\"] = 0`.\n- **entity_id**: `BRAND_UPPER:MODEL:category:packN` = `ZEPHYR:DESK20:fan:pack1` (no `:gbN`/`:mmN` suffix — category is `fan`, not storage or cables).\n- **attributes**: `power` \"25 W\" → `power_w` = `25` (integer); `color` \"white\" → lowercase `white`. No connector/interface/capacity/length present.\n- Per instructions, no cross-record conflict resolution or title-based inference was performed.\n\n**Artifact (`payload.json`):**\n```json\n{\"task_id\": \"normalize-sku-0000-15\", \"artifact\": {\"kind\": \"json\", \"value\": {\n  \"source_sku\": \"SKU-0000-15\", \"source_row\": \"C0000-15\", \"source\": \"manufacturer\",\n  \"priority\": 0, \"entity_id\": \"ZEPHYR:DESK20:fan:pack1\", \"reason\": null,\n  \"brand\": \"Zephyr\", \"model\": \"DESK20\", \"category\": \"fan\", \"pack_size\": 1,\n  \"attributes\": {\"power_w\": 25, \"color\": \"white\"}}}}\n```\n\n**Receipt:** `receipt_id: 748196adfc6b4f4695db566d749adfbc`, `accepted: true`, `valid: true`, `task_id: normalize-sku-0000-15`.\n\nThe unrelated `docs/reference.md` (Python JSONL parsing note) was not applicable to this self-contained normalized-output task.",
+    "usage": {
+      "prompt_tokens": 18618,
+      "completion_tokens": 3192,
+      "total_tokens": 21810,
+      "reasoning_tokens": 1217,
+      "prompt_cache_hit_tokens": 16000,
+      "prompt_cache_miss_tokens": 2618
+    },
+    "llm_calls": 5,
+    "provider_truncated": false,
+    "latency_seconds": 13.73,
+    "tool_calls": 5,
+    "api_response_ids": [
+      "f79b66bd-f345-4aa2-8a18-805d4e423b4d",
+      "0b706ede-db97-4f96-b32f-39ad51bc254a",
+      "d2020a4d-5fcb-4744-8227-8a780209fbea",
+      "5a3fe2b8-2f5c-4f7c-9d3d-387597a9b192",
+      "c3c07d4e-e91f-4d55-91d8-aa7eb5279854"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j03-t14.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "748196adfc6b4f4695db566d749adfbc"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "3e1fdd7153d4ab0a1a79d03a003b49045e730f63b4d114959f49796b1a4da76a"
+}

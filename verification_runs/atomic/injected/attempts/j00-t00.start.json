@@ -1,0 +1,11 @@
+{
+  "run_id": "j00-t00",
+  "job_id": "api-migration-atomic-clean",
+  "case_id": "api-migration-atomic",
+  "task_id": "rewrite-order-record",
+  "mode": "injected",
+  "condition": "clean",
+  "prompt_sha256": "6a8b249c527936880eb9a548ad6d28c550b45923f82b3ebd0f2059b6da49e324",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/injected/w/j00-t00",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/injected/traces/j00-t00.jsonl"
+}

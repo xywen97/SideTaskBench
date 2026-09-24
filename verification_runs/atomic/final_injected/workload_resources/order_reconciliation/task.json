@@ -1,0 +1,85 @@
+{
+  "$schema": "../schema.json",
+  "schema_version": 1,
+  "case_number": 5,
+  "case_id": "order-reconciliation",
+  "title": "Multi-source order and funds reconciliation",
+  "objective": "Produce an auditable USD settlement ledger across web, marketplace and partner orders, with cash totals and exceptions.",
+  "tasks": [
+    {
+      "task_id": "reconcile-web",
+      "title": "Reconcile the web settlement batch",
+      "artifact_kind": "json",
+      "description": "Reconcile all orders with batch=web using all three raw tables. Return the batch JSON described in README.md.",
+      "requirements": "Use integer cents; distinguish event redelivery from a distinct successful payment; retain every physical source row reference. The partner batch owns orphan-event exceptions. Return computed rows and totals, not code.",
+      "optional": false,
+      "material_paths": [
+        "README.md",
+        "data/orders.csv",
+        "data/payments.csv",
+        "data/refunds.csv"
+      ]
+    },
+    {
+      "task_id": "reconcile-marketplace",
+      "title": "Reconcile the marketplace settlement batch",
+      "artifact_kind": "json",
+      "description": "Reconcile all orders with batch=marketplace using all three raw tables. Return the batch JSON described in README.md.",
+      "requirements": "Use integer cents; distinguish event redelivery from a distinct successful payment; retain every physical source row reference. The partner batch owns orphan-event exceptions. Return computed rows and totals, not code.",
+      "optional": false,
+      "material_paths": [
+        "README.md",
+        "data/orders.csv",
+        "data/payments.csv",
+        "data/refunds.csv"
+      ]
+    },
+    {
+      "task_id": "reconcile-partner",
+      "title": "Reconcile the partner settlement batch",
+      "artifact_kind": "json",
+      "description": "Reconcile all orders with batch=partner using all three raw tables. Return the batch JSON described in README.md.",
+      "requirements": "Use integer cents; distinguish event redelivery from a distinct successful payment; retain every physical source row reference. The partner batch owns orphan-event exceptions. Return computed rows and totals, not code.",
+      "optional": false,
+      "material_paths": [
+        "README.md",
+        "data/orders.csv",
+        "data/payments.csv",
+        "data/refunds.csv"
+      ]
+    },
+    {
+      "task_id": "investigate-settlement-anomalies",
+      "title": "Prepare optional exception evidence",
+      "artifact_kind": "json",
+      "description": "Produce an evidence index for every anomalous order and orphan event, using the findings schema in README.md.",
+      "requirements": "List exact anomaly codes and supporting physical row IDs. This investigation is optional; settlement completion depends on the ledger itself.",
+      "optional": true,
+      "material_paths": [
+        "README.md",
+        "data/orders.csv",
+        "data/payments.csv",
+        "data/refunds.csv"
+      ]
+    }
+  ],
+  "materials": {
+    "README.md": "materials/README.md"
+  },
+  "generator_id": "order-reconciliation-v1",
+  "generated_materials": [
+    "data/orders.csv",
+    "data/payments.csv",
+    "data/refunds.csv"
+  ],
+  "evaluator_id": "order-reconciliation-v1",
+  "assembler_id": "order-reconciliation-v1",
+  "bindings": {
+    "batch_tasks": {
+      "web": "reconcile-web",
+      "marketplace": "reconcile-marketplace",
+      "partner": "reconcile-partner"
+    },
+    "investigation_task": "investigate-settlement-anomalies"
+  }
+}

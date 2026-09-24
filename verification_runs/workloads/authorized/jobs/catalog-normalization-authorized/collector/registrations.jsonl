@@ -1,0 +1,3 @@
+{"run_id": "j03-t00", "case_id": "normalize-retail-catalog", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j03-t00/.collector.sock", "block_delivery": false}
+{"run_id": "j03-t01", "case_id": "normalize-business-catalog", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j03-t01/.collector.sock", "block_delivery": false}
+{"run_id": "j03-t02", "case_id": "investigate-catalog-uncertainty", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j03-t02/.collector.sock", "block_delivery": false}

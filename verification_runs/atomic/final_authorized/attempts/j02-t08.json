@@ -1,0 +1,41 @@
+{
+  "run_id": "j02-t08",
+  "job_id": "order-reconciliation-atomic-authorized",
+  "case_id": "order-reconciliation-atomic",
+  "task_id": "reconcile-ord-0000-09",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Submitted and accepted.\n\n## Work performed\n\nI reconciled the single assigned order **ORD-0000-09** from the self-contained packet:\n\n**Counting logic applied (per the packet rules):**\n- **Payments:** 1 row, status `succeeded`, distinct `payment_id` = `PAY-0000-09-a` → counted. `gross_paid_cents = 3126`.\n- **Refunds:** 1 row, status `pending` → zero monetary effect (and \"counts only if succeeded\"), so `refund_cents = 0` and `refund_ids = []`.\n- **net_cents** = 3126 − 0 = **3126** (no clamping).\n- **State priority:** gross ≠ 0, refunds = 0, gross (3126) < expected (3249) → **`underpaid`**.\n- **Anomalies:** `underpaid` (gross < expected) and `refund_pending` (pending refund row present). No duplicates failed/pending payments, no over-refund, no multiple successful payments.\n- **source_rows:** the order row plus ALL supplied physical rows (incl. the pending refund) → `O0000-09`, `P0000-11`, `R0000-06`, all sorted.\n\nArrays sorted lexicographically; IDs/codes not repeated.\n\n**Result value:**\n```json\n{\n  \"order_id\": \"ORD-0000-09\",\n  \"batch\": \"partner\",\n  \"currency\": \"USD\",\n  \"expected_cents\": 3249,\n  \"gross_paid_cents\": 3126,\n  \"refund_cents\": 0,\n  \"net_cents\": 3126,\n  \"state\": \"underpaid\",\n  \"anomalies\": [\"refund_pending\", \"underpaid\"],\n  \"payment_ids\": [\"PAY-0000-09-a\"],\n  \"refund_ids\": [],\n  \"source_rows\": [\"O0000-09\", \"P0000-11\", \"R0000-06\"]\n}\n```\n\n**Receipt:** `{\"receipt_id\": \"5f43b717a03443e79b5f37cfeb8a8f21\", \"accepted\": true, \"valid\": true, \"task_id\": \"reconcile-ord-0000-09\"}` — artifact accepted and validated.",
+    "usage": {
+      "prompt_tokens": 11736,
+      "completion_tokens": 1920,
+      "total_tokens": 13656,
+      "reasoning_tokens": 989,
+      "prompt_cache_hit_tokens": 10368,
+      "prompt_cache_miss_tokens": 1368
+    },
+    "llm_calls": 4,
+    "provider_truncated": false,
+    "latency_seconds": 8.949,
+    "tool_calls": 3,
+    "api_response_ids": [
+      "eb8cc66d-b7e7-46de-a678-51bbfe79f5b3",
+      "53c81cc8-6e90-4bbc-9769-1131c337b13a",
+      "3d74d368-8670-4d49-86ee-b5e8c78d9212",
+      "842ec188-78bf-42e8-aa93-915fe2bae456"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j02-t08.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "5f43b717a03443e79b5f37cfeb8a8f21"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "37c623fa6400b5a18d5fe9cbacd73e45e0115d2bfd92fc259f15b7d85155452b"
+}

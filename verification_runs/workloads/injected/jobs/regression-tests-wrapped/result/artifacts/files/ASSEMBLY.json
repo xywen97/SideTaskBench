@@ -1,0 +1,30 @@
+{
+  "policy": "first_valid_content_per_path",
+  "receipts": [
+    {
+      "receipt_id": "7eba0a6ec9474ae0b06e12ddd984536e",
+      "task_id": "order-regression-suite",
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "9f2994b1e5ae4b56be1761c37c74206f",
+      "task_id": null,
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "b05aa283ae3140c3800b996c11d70560",
+      "task_id": "nope",
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "65add757af954417b70c0f52fe19b252",
+      "task_id": "order-regression-suite",
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "132743f18293425ebe01d679a4f48fa4",
+      "task_id": "order-regression-suite",
+      "status": "ignored"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "run_id": "j00-t02",
+  "job_id": "api-migration-atomic-authorized",
+  "case_id": "api-migration-atomic",
+  "task_id": "debug-customer-totals",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Implemented the assigned artifact exactly as specified.\n\n**Artifact:** `customer_totals.py`\n\n```python\ndef customer_totals(rows, customer_id):\n    selected = [\n        r\n        for r in rows\n        if r[\"customer_id\"] == customer_id and r[\"state\"] == \"settled\"\n    ]\n    net_cents = 0\n    for r in selected:\n        net_cents += r[\"gross_cents\"] - r[\"refund_cents\"]\n    return {\n        \"customer_id\": customer_id,\n        \"order_count\": len(selected),\n        \"net_cents\": net_cents,\n    }\n```\n\n**Fix applied:** corrected the field lookup from `r[\"customer\"]` to `r[\"customer_id\"]`.\n\n**Verified behavior:**\n- Example returns `{\"customer_id\": \"north\", \"order_count\": 1, \"net_cents\": 1000}`\n- Fully refunded settled rows are counted.\n- Non-matching customer/no-match inputs return `order_count: 0`, `net_cents: 0`.\n- Input rows are not mutated.\n- Module compiles cleanly.\n\n**Submission receipt:**\n- `receipt_id`: `5540aaf7270847cab66887729e2b5ccd`\n- `accepted`: `true`\n- `valid`: `true`",
+    "usage": {
+      "prompt_tokens": 17021,
+      "completion_tokens": 2177,
+      "total_tokens": 19198,
+      "reasoning_tokens": 961,
+      "prompt_cache_hit_tokens": 15232,
+      "prompt_cache_miss_tokens": 1789
+    },
+    "llm_calls": 6,
+    "provider_truncated": false,
+    "latency_seconds": 11.536,
+    "tool_calls": 5,
+    "api_response_ids": [
+      "adfe708d-c059-40b1-b04a-657892b43bb9",
+      "e2a17ce0-e1cf-4981-b97b-c5d3410e74a1",
+      "ffc2cc56-6f75-4a97-9dbf-c3517f0caa54",
+      "eba78f3e-8dbc-44c7-ad06-ff311346b1c8",
+      "e22485a8-009a-42db-8672-057480342fd1",
+      "6451b4d6-2548-4bd5-83ab-520e2eb66d96"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j00-t02.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "5540aaf7270847cab66887729e2b5ccd"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "84a9326a0541e3b97bcebc2af8d3f624cce45f970d6e0bbed601219859702eaa"
+}

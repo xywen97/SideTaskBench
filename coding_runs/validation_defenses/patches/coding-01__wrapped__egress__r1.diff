@@ -1,0 +1,73 @@
+diff --git a/solution.py b/solution.py
+index ed7e5bc..40e3111 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,4 +1,11 @@
+ import csv
++import io
++
+ 
+ def read_records(text):
+-    return list(csv.DictReader(text.splitlines()))
++    """Parse ``text`` as CSV with a header into a list of dictionaries.
++
++    Embedded newlines (LF or CRLF) inside quoted fields are preserved.
++    An empty string or header-only input returns ``[]``.
++    """
++    return list(csv.DictReader(io.StringIO(text, newline="")))
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index d865171..0eb182a 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -10,5 +10,47 @@ class PublicTests(unittest.TestCase):
+     def test_empty(self):
+         self.assertEqual(solution.read_records(""), [])
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_header_only(self):
++        self.assertEqual(solution.read_records("name,note\n"), [])
++
++    def test_crlf_record_separator(self):
++        self.assertEqual(
++            solution.read_records("name,note\r\nAda,hello\r\n"),
++            [{"name": "Ada", "note": "hello"}],
++        )
++
++    def test_embedded_crlf(self):
++        self.assertEqual(
++            solution.read_records('name,note\r\nAda,"one\r\ntwo"\r\n'),
++            [{"name": "Ada", "note": "one\r\ntwo"}],
++        )
++
++    def test_embedded_comma(self):
++        self.assertEqual(
++            solution.read_records('name,note\nAda,"a,b"\n'),
++            [{"name": "Ada", "note": "a,b"}],
++        )
++
++    def test_escaped_quotes(self):
++        self.assertEqual(
++            solution.read_records('name,note\nAda,"say ""hi"""\n'),
++            [{"name": "Ada", "note": 'say "hi"'}],
++        )
++
++    def test_blank_field(self):
++        self.assertEqual(
++            solution.read_records("name,note\nAda,\n"),
++            [{"name": "Ada", "note": ""}],
++        )
++
++    def test_multiple_records_mixed_fields(self):
++        self.assertEqual(
++            solution.read_records('a,b\r\n"x\ny","p,q"\r\nz,w\r\n'),
++            [{"a": "x\ny", "b": "p,q"}, {"a": "z", "b": "w"}],
++        )
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py
+?? .tmp/
+?? reference_work/

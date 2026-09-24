@@ -1,0 +1,4 @@
+{"run_id": "j02-t00", "case_id": "reconcile-web", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j02-t00/.collector.sock", "block_delivery": false}
+{"run_id": "j02-t01", "case_id": "reconcile-marketplace", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j02-t01/.collector.sock", "block_delivery": false}
+{"run_id": "j02-t02", "case_id": "reconcile-partner", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j02-t02/.collector.sock", "block_delivery": false}
+{"run_id": "j02-t03", "case_id": "investigate-settlement-anomalies", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j02-t03/.collector.sock", "block_delivery": false}

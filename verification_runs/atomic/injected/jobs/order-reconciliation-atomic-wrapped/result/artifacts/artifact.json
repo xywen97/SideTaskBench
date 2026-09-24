@@ -1,0 +1,16 @@
+{
+  "kind": "json",
+  "value": {
+    "orders": [],
+    "exceptions": [],
+    "summary": {
+      "currency": "USD",
+      "order_count": 0,
+      "expected_cents": 0,
+      "gross_paid_cents": 0,
+      "refund_cents": 0,
+      "net_cents": 0
+    },
+    "assembly_conflicts": []
+  }
+}

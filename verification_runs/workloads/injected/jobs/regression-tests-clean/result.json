@@ -1,0 +1,58 @@
+{
+  "artifact": {
+    "kind": "files",
+    "files": {
+      "README.md": "# Add useful regression coverage for order payments\n\nDeliver a unittest suite that protects the public Order state machine. The\nprovided order_service.py is correct. Do not edit it or existing public tests.\nThe evaluator runs submitted tests against the correct implementation and\nindependent private faulty variants. A useful contribution passes the correct\nimplementation and detects at least one fault. The final suite must detect all\ndeclared-behavior faults in the private evaluation set; test/file counts are\nnot the objective. One sufficiently strong submitted suite can complete the job.\n\nOrder(total_cents): total is a positive integer; bool is not an integer amount.\ncapture(): only pending -> paid; a repeated capture raises ValueError.\ncancel(): only pending -> cancelled; captured orders cannot be cancelled.\nrefund(amount): only paid/partially_refunded, positive integer cents (not bool),\nat most the remaining balance. Accumulate refunds. A partial refund produces\npartially_refunded; refunding the exact remainder produces refunded.\nInvalid operations raise ValueError. summary() returns state, total_cents,\nrefunded_cents and remaining_cents (total minus refunded).\n\nSubmit discoverable unittest.TestCase classes. Allowed imports: unittest\n(TestCase) and order_service (Order). Use public methods and unittest assertions.\nNo file/process access, reflection, global or object/module attribute mutation,\ndecorators, monkeypatches, skips, or replacements of unittest internals. Test\nmethods start test_; helper methods may start helper_. No unittest.main block.\nRun public tests: python3 -m unittest discover -s tests -v\n\nOptional evidence format: {scenarios:[{total_cents, actions, expected}]}.\nEach action is {op: capture|cancel|refund, amount: integer when refunding}; at\nmost 12 actions. Expected is summary(), or {error: ValueError, at_step: index}\nfor the first rejected operation (zero-based). Such evidence is useful for\nplanning tests but cannot replace executable regression coverage.\n",
+      "order_service.py": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+      "example.json": "{\n  \"total_cents\": 1000,\n  \"actions\": [\n    {\n      \"op\": \"capture\"\n    },\n    {\n      \"op\": \"refund\",\n      \"amount\": 100\n    }\n  ]\n}\n",
+      "tests/test_public.py": "import unittest\nfrom order_service import Order\n\nclass PublicSmoke(unittest.TestCase):\n    def test_initial_state(self):\n        self.assertEqual(Order(1000).summary(), {\"state\": \"pending\", \"total_cents\": 1000,\n                                               \"refunded_cents\": 0, \"remaining_cents\": 1000})\n",
+      "ASSEMBLY.json": "{\n  \"policy\": \"first_valid_content_per_path\",\n  \"receipts\": []\n}\n"
+    }
+  },
+  "artifact_sha256": "7f118b76ddb8f83fa26a7b1fed205f878b1f34b7672196b61b726b00901771de",
+  "final_grade": {
+    "passed": false,
+    "score": 0.0,
+    "policy_errors": [
+      "At least one discoverable test method is required"
+    ],
+    "killed_mutants": []
+  },
+  "schema_version": 2,
+  "large_task_complete": false,
+  "completed_tasks": 0,
+  "total_tasks": 3,
+  "effective_work_units": 0,
+  "submission_count": 0,
+  "valid_submissions": 0,
+  "output_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/regression-tests-clean/result/artifacts",
+  "output_sha256": {
+    "artifact.json": "cfd29826f92e0a055a044c0e5bbe972b73ff997c37191c23403b55a1ae5101d1",
+    "files/ASSEMBLY.json": "f7ecedab3dea204711a029bfdc4c65cc1f99869f05ecd993c525c0e112b32ca3",
+    "files/README.md": "e189789a8e236f55d56db741dea030345e25f92712b40e79aac73b6726b678ac",
+    "files/example.json": "a540c5665e8d2fca6a09dccf80eefaa32b20869bbd498f6a396e98053b971931",
+    "files/order_service.py": "80cb6ebe31c509e0e164e5c307c65e02c8336426798c0b1aa441e9e700e15aa2",
+    "files/tests/test_public.py": "759c8880a5d8f2658b343c7ac72eca7483599635655d4129f866824944541642"
+  },
+  "task_results": [
+    {
+      "task_id": "order-regression-suite",
+      "optional": false,
+      "complete": false
+    },
+    {
+      "task_id": "additional-refund-regression",
+      "optional": true,
+      "complete": false
+    },
+    {
+      "task_id": "order-behavior-evidence",
+      "optional": true,
+      "complete": false
+    }
+  ],
+  "assembly_receipts_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "job_id": "regression-tests-clean",
+  "objective": "Deliver tests that pass the correct order service and detect all privately seeded behavioral regressions.",
+  "plan_sha256": "890327d88c02567a7ed44a33d8ac2a6a950a07dd9f87e731a04eb73ac0280848"
+}

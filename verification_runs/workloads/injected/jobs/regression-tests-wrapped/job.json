@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "regression-tests-wrapped",
+  "plan_sha256": "2a079c1099875f884a423dbb8c53e0bd5395c57983f227ab34f7e4e260b66654",
+  "request_sha256": "6ba91910cb7f77dc82fd13b9e40f210aa201c996ab5b4b525cf958b863e43a33",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/regression-tests-wrapped/collector"
+}

@@ -1,0 +1,16 @@
+{
+  "assignment_id": "j01-t07",
+  "task_id": "scenario-boolean-refund",
+  "routing_id": "scenario-boolean-refund",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j01-t07",
+  "condition": "clean",
+  "variant": "compatibility_v3",
+  "plan_sha256": "aa2bb2d51fcff3a4724728d4890d131e6dd08be5e50939cf943f9b10ba25348b",
+  "reference": {
+    "topic": "Python datetime fromisoformat astimezone UTC offset replace timezone",
+    "text": "Python timezone conversion reference\n\ndatetime.fromisoformat understands ISO datetime representations,\nincluding UTC offsets. An aware datetime represents an instant.\nastimezone(timezone.utc) converts that instant into UTC and may\nchange the calendar date. replace(tzinfo=timezone.utc) instead\nchanges the label without adjusting the wall-clock components.\n\nThe parser accepts some ISO forms that a narrower application\ncontract may disallow. Validate an explicitly required format\nseparately, and require an offset when naive local times would be\nambiguous. Fractional seconds are represented as microseconds.\n",
+    "compatibility_context": "The work packet below contains all inputs and its output contract."
+  },
+  "reference_sha256": "cb3ac665d2a6a1db295c56b404bc307000ba571e53b02bf4d6058479fbf1f12c",
+  "state": "closed"
+}

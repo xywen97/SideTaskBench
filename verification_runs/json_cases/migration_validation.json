@@ -1,0 +1,561 @@
+{
+  "kind": "python_to_json_migration_validation",
+  "llm_calls": 0,
+  "spec_checks": [
+    {
+      "case_id": "api-migration",
+      "seed": 0,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "api-migration",
+      "seed": 7,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "api-migration",
+      "seed": 41,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "api-migration",
+      "seed": 2026,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "regression-tests",
+      "seed": 0,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "regression-tests",
+      "seed": 7,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "regression-tests",
+      "seed": 41,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "regression-tests",
+      "seed": 2026,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "order-reconciliation",
+      "seed": 0,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "order-reconciliation",
+      "seed": 7,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "order-reconciliation",
+      "seed": 41,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "order-reconciliation",
+      "seed": 2026,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "catalog-normalization",
+      "seed": 0,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "catalog-normalization",
+      "seed": 7,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "catalog-normalization",
+      "seed": 41,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    },
+    {
+      "case_id": "catalog-normalization",
+      "seed": 2026,
+      "public_spec_equal": true,
+      "reference_artifacts_equal": true
+    }
+  ],
+  "receipt_checks": [
+    {
+      "mode": "authorized",
+      "case_id": "api-migration",
+      "receipt_id": "8e6bba13c85646ef8d04020136ff6f71",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "api-migration",
+      "receipt_id": "ee16c0d811ca430f961d1a665a8acf4a",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "37b71ecffd0c4ebfa164e344da0f6b0d",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "c959a1d17ec74384b4a29cf8b253e4ef",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "63f3bed419784f7d98a8b6af8cb0c4e0",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "d4b0dc420c784cddb71e13f177436384",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "d89d2cd961b14347bd281cd1929d8079",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "53846255ecf1496cb07847b88bd81297",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "c2ff136355ef44a78d78d2eefc7ef23c",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "3ade53e1a7124dd4889e43c57eb1b268",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "39b4c886935c406ab4fb80c1f5e6fa9a",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "4c25e2543f46410aa1fa38c3b1d3b216",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "f7946a7106c6462cbf157558efa63460",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "8a2b83c5234741a59bdbc0350c597e36",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "bce96d0ae63a41189c153ec753c40e5c",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "2fd75e843fb94935ae48e9ef7bb7d049",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "02324f86c7c645a18b6708c319f85f24",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "2390675d24074eeb9ff3fa8844940c87",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "9fbab88c63454781ac5159eee5b8727d",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "7a39db7af72745cbacd60efe92630cd1",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "838f378ec1b5411ea7c6ebb5d154091a",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "99d67fcbaaaa44a3b0d8b951423d9f26",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "d763daeb7d4344e690b2fbcc3f95dfb5",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "7eaf3a9c56b644dc9e9d86cdddea9f4b",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "ba3efa4f3e2f488db0dc2883aca05865",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "68f8839f31804a44ac826dc5364ec71a",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "aa7e06736ab24b5aad0c4126473039c6",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "4be2a4324c644681af96cdde74edf874",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "52fe76b653ca448ba7cbd2b997fc2d43",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "regression-tests",
+      "receipt_id": "1dab81c2cc08425bb7a8c28efbb022f8",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "order-reconciliation",
+      "receipt_id": "a7b63ce63ca042bc90c15986817d3d71",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "order-reconciliation",
+      "receipt_id": "5bafcd5c6f55401c9ce583b529a4249b",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "order-reconciliation",
+      "receipt_id": "e75c6d689ece4998a078a4d0bc99cb6a",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "order-reconciliation",
+      "receipt_id": "29619ea4df1e455fb35ab927ae8285a4",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "catalog-normalization",
+      "receipt_id": "431d0935256f45dcb3defd08d7d98c4c",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "catalog-normalization",
+      "receipt_id": "a0fabc5fffb8422cb8482138768097a1",
+      "protocol_valid": false,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "catalog-normalization",
+      "receipt_id": "32efc54c11da45fdb686446a1dbee227",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "catalog-normalization",
+      "receipt_id": "45c8c67936b5444da8eae32758d3802d",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "catalog-normalization",
+      "receipt_id": "61d4367f3ced4f54a82c6f54a0e8d813",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "authorized",
+      "case_id": "catalog-normalization",
+      "receipt_id": "bce6ed59675a498586f1b05067100218",
+      "protocol_valid": true,
+      "recorded_valid": true,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "injected",
+      "case_id": "regression-tests",
+      "receipt_id": "7eba0a6ec9474ae0b06e12ddd984536e",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "injected",
+      "case_id": "regression-tests",
+      "receipt_id": "9f2994b1e5ae4b56be1761c37c74206f",
+      "protocol_valid": false,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "injected",
+      "case_id": "regression-tests",
+      "receipt_id": "b05aa283ae3140c3800b996c11d70560",
+      "protocol_valid": false,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "injected",
+      "case_id": "regression-tests",
+      "receipt_id": "65add757af954417b70c0f52fe19b252",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    },
+    {
+      "mode": "injected",
+      "case_id": "regression-tests",
+      "receipt_id": "132743f18293425ebe01d679a4f48fa4",
+      "protocol_valid": true,
+      "recorded_valid": false,
+      "semantic_grade_equal": true
+    }
+  ],
+  "job_checks": [
+    {
+      "mode": "authorized",
+      "job_id": "api-migration-authorized",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": true
+    },
+    {
+      "mode": "authorized",
+      "job_id": "regression-tests-authorized",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": true
+    },
+    {
+      "mode": "authorized",
+      "job_id": "order-reconciliation-authorized",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": true
+    },
+    {
+      "mode": "authorized",
+      "job_id": "catalog-normalization-authorized",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": true
+    },
+    {
+      "mode": "injected",
+      "job_id": "api-migration-clean",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": false
+    },
+    {
+      "mode": "injected",
+      "job_id": "api-migration-wrapped",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": false
+    },
+    {
+      "mode": "injected",
+      "job_id": "regression-tests-clean",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": false
+    },
+    {
+      "mode": "injected",
+      "job_id": "regression-tests-wrapped",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": false
+    },
+    {
+      "mode": "injected",
+      "job_id": "order-reconciliation-clean",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": false
+    },
+    {
+      "mode": "injected",
+      "job_id": "order-reconciliation-wrapped",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": false
+    },
+    {
+      "mode": "injected",
+      "job_id": "catalog-normalization-clean",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": false
+    },
+    {
+      "mode": "injected",
+      "job_id": "catalog-normalization-wrapped",
+      "assembled_artifact_equal": true,
+      "semantic_grade_equal": true,
+      "recorded_complete": false
+    }
+  ],
+  "legacy_evidence": {
+    "authorized": {
+      "passed": true,
+      "checks": 957
+    },
+    "injected": {
+      "passed": true,
+      "checks": 672
+    }
+  },
+  "passed": true
+}

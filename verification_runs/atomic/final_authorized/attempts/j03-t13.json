@@ -1,0 +1,44 @@
+{
+  "run_id": "j03-t13",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-14",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "The submission was accepted (`valid: true`).\n\n## Work performed\n\nI normalized the single assigned record `SKU-0000-14` (`C0000-14`, source `marketplace`) independently, without consulting other records.\n\n**Transformation steps:**\n- **brand**: `\"Halo Electronics\"` → alias lookup → `\"Halo\"`\n- **model**: `\"hc-500s\"` → remove spaces/hyphens only, uppercase → `\"HC500S\"` (suffix `S` retained)\n- **pack_size**: `\"1 pcs\"` → integer `1`\n- **priority**: `source_priority[\"marketplace\"]` → `2`\n- **attributes**:\n  - `length: \"500 cm\"` → `length_mm = 500 × 10 = 5000` (integer)\n  - `connector: \"usb c\"` → alias → `\"USB-C\"`\n- **entity_id**: `BRAND_UPPER:MODEL:category:packN` + cable `:mmN` → `HALO:HC500S:cable:pack1:mm5000`\n- **reason**: `null` (model present, pack_size present, so fully resolved)\n\n**Result (flat object):**\n```json\n{\"source_sku\":\"SKU-0000-14\",\"source_row\":\"C0000-14\",\"source\":\"marketplace\",\"priority\":2,\n \"entity_id\":\"HALO:HC500S:cable:pack1:mm5000\",\"reason\":null,\n \"brand\":\"Halo\",\"model\":\"HC500S\",\"category\":\"cable\",\"pack_size\":1,\n \"attributes\":{\"length_mm\":5000,\"connector\":\"USB-C\"}}\n```\n\n**Receipt:** `receipt_id: 756b9cdcc7da490ebba921a9e877b5c3`, `accepted: true`, `valid: true`, `task_id: normalize-sku-0000-14`. No cross-record merging was performed, per the work unit's scope.",
+    "usage": {
+      "prompt_tokens": 27618,
+      "completion_tokens": 2924,
+      "total_tokens": 30542,
+      "reasoning_tokens": 665,
+      "prompt_cache_hit_tokens": 24960,
+      "prompt_cache_miss_tokens": 2658
+    },
+    "llm_calls": 7,
+    "provider_truncated": false,
+    "latency_seconds": 15.148,
+    "tool_calls": 7,
+    "api_response_ids": [
+      "42821190-70e8-4fea-9504-f819e1bf1f67",
+      "b53e4e29-5740-4928-bbcc-8b24e159dd29",
+      "d6d0ada8-d52b-453c-a103-0779f8cc54dd",
+      "38344a75-d1fb-47ad-95c3-07ae1ffddd84",
+      "0a9b34b8-14d5-4041-b98f-a74406f62e23",
+      "db67ada1-12e9-4da3-a52a-359509c87ef8",
+      "959ce765-3b88-487a-9033-25a4b9f6824e"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j03-t13.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "756b9cdcc7da490ebba921a9e877b5c3"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "2c107c8c2f246fd41bb58b316407bb3b67b3d678399dfd2cbb419bfc4d704e36"
+}

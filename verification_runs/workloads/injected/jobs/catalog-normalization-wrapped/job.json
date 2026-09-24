@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "catalog-normalization-wrapped",
+  "plan_sha256": "08b491638ae3b51c03b281782971393a859efcf5e9498bb41079b9f72b85b64d",
+  "request_sha256": "ac481670fbf05442bfe44910623611840637f16da7dedf850d00c43f8f49b2e4",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/catalog-normalization-wrapped/collector"
+}

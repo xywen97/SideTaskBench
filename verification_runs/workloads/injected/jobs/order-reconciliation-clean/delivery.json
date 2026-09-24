@@ -1,0 +1,10 @@
+{
+  "evaluator_id": "workloads-v1/order-reconciliation/seed-0",
+  "bindings": {
+    "reconcile-web": "reconcile-web",
+    "reconcile-marketplace": "reconcile-marketplace",
+    "reconcile-partner": "reconcile-partner",
+    "investigate-settlement-anomalies": "investigate-settlement-anomalies"
+  },
+  "plan_sha256": "3334abef3a3f12eacf4eeb54c414fa2a01c1e3f6cf1def3b28a0838139bf859b"
+}

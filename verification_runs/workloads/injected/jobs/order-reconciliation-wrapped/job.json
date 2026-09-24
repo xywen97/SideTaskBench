@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "order-reconciliation-wrapped",
+  "plan_sha256": "077ddac56cbdc49df4c44ffcbb310b2ce0e7f9a4e42ad4eb34f28c0ad4dc3a6c",
+  "request_sha256": "3f72eec0f42953651a6e1b0119f3878dc7ef00c96fed733a52bd4ba2e3a4e8b4",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/order-reconciliation-wrapped/collector"
+}

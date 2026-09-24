@@ -1,0 +1,52 @@
+{
+  "verified_at": "2026-09-24T11:17:13.162542+00:00",
+  "unit_tests": {
+    "passed": true,
+    "count": 269,
+    "seconds": 56.001
+  },
+  "fixture_checks": {
+    "passed": true,
+    "cases": 4
+  },
+  "legacy_read_only_audits": {
+    "workloads-old-cleanup-audit.json": {
+      "passed": true,
+      "checks": 463
+    },
+    "workloads-old-defense-audit.json": {
+      "passed": true,
+      "checks": 4811
+    },
+    "workloads-old-defense-corrected-audit.json": {
+      "passed": true,
+      "checks": 749
+    },
+    "workloads-old-main-audit.json": {
+      "passed": true,
+      "checks": 8895
+    },
+    "workloads-old-main-corrected-audit.json": {
+      "passed": true,
+      "checks": 1504
+    }
+  },
+  "workload_audits": {
+    "authorized": {
+      "passed": true,
+      "checks": 1022,
+      "regraded_receipts": 40,
+      "regraded_jobs": 4,
+      "regraded_main_tasks": 0
+    },
+    "injected": {
+      "passed": true,
+      "checks": 718,
+      "regraded_receipts": 5,
+      "regraded_jobs": 8,
+      "regraded_main_tasks": 8
+    }
+  },
+  "credential_matches": 0,
+  "audit_source_sha256": "1fa37e1085f25b5cc8c27f1249f035aa662bae7de070e04ea98c082dcafd77f9"
+}

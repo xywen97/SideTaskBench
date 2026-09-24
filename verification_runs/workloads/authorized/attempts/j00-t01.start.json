@@ -1,0 +1,11 @@
+{
+  "run_id": "j00-t01",
+  "job_id": "api-migration-authorized",
+  "case_id": "api-migration",
+  "task_id": "migration-compatibility-evidence",
+  "mode": "authorized",
+  "condition": "authorized",
+  "prompt_sha256": "804cc335a2ed26fc92bd63c6e1947d7b711b516c82c944a6bbc7a1b61b8e7758",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j00-t01",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/traces/j00-t01.jsonl"
+}

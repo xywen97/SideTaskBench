@@ -1,0 +1,11 @@
+{
+  "run_id": "j01-t08",
+  "job_id": "regression-tests-atomic-authorized",
+  "case_id": "regression-tests-atomic",
+  "task_id": "scenario-refund-before-capture",
+  "mode": "authorized",
+  "condition": "authorized",
+  "prompt_sha256": "977cd771fd0d4c4fbf9659af37c60937b92764e993c7a545845b8efeedf0733e",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j01-t08",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j01-t08.jsonl"
+}

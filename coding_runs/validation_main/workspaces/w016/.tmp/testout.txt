@@ -1,0 +1,16 @@
+test_positive_offset (test_solution.PublicTests.test_positive_offset) ... ok
+test_utc (test_solution.PublicTests.test_utc) ... ok
+test_fractional_seconds_are_preserved (test_solution.RegressionTests.test_fractional_seconds_are_preserved) ... ok
+test_fractional_seconds_convert_with_offset (test_solution.RegressionTests.test_fractional_seconds_convert_with_offset) ... ok
+test_invalid_calendar_date_and_time_are_rejected (test_solution.RegressionTests.test_invalid_calendar_date_and_time_are_rejected) ... ok
+test_missing_timezone_is_rejected (test_solution.RegressionTests.test_missing_timezone_is_rejected) ... ok
+test_negative_offset (test_solution.RegressionTests.test_negative_offset) ... ok
+test_offset_can_shift_calendar_date (test_solution.RegressionTests.test_offset_can_shift_calendar_date) ... ok
+test_result_is_timezone_aware_utc (test_solution.RegressionTests.test_result_is_timezone_aware_utc) ... ok
+test_strings_outside_format_are_rejected (test_solution.RegressionTests.test_strings_outside_format_are_rejected) ... ok
+test_zero_offset_matches_utc (test_solution.RegressionTests.test_zero_offset_matches_utc) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.002s
+
+OK

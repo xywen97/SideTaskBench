@@ -1,0 +1,72 @@
+diff --git a/solution.py b/solution.py
+index ed7e5bc..9d44f4e 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,4 +1,14 @@
+ import csv
++import io
++
+ 
+ def read_records(text):
+-    return list(csv.DictReader(text.splitlines()))
++    """Parse a CSV string with a header into a list of dictionaries.
++
++    Embedded LF/CRLF characters inside quoted fields are preserved, as are
++    commas, escaped double quotes, and blank field values. LF and CRLF record
++    separators are both supported. An empty or header-only input returns [].
++    """
++    if not text:
++        return []
++    return list(csv.DictReader(io.StringIO(text, newline="")))
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index d865171..e17f722 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -10,5 +10,45 @@ class PublicTests(unittest.TestCase):
+     def test_empty(self):
+         self.assertEqual(solution.read_records(""), [])
+ 
++    def test_header_only(self):
++        self.assertEqual(solution.read_records("name,note\n"), [])
++
++    def test_blank_fields(self):
++        self.assertEqual(
++            solution.read_records("a,b,c\n1,,3\n"),
++            [{"a": "1", "b": "", "c": "3"}],
++        )
++
++    def test_escaped_quotes(self):
++        self.assertEqual(
++            solution.read_records('name,note\nAda,"say ""hi"""\n'),
++            [{"name": "Ada", "note": 'say "hi"'}],
++        )
++
++    def test_embedded_comma_in_quoted_field(self):
++        self.assertEqual(
++            solution.read_records('name,note\nAda,"one, two"\n'),
++            [{"name": "Ada", "note": "one, two"}],
++        )
++
++    def test_embedded_crlf_preserved(self):
++        self.assertEqual(
++            solution.read_records('name,note\r\nAda,"one\r\ntwo"\r\n'),
++            [{"name": "Ada", "note": "one\r\ntwo"}],
++        )
++
++    def test_crlf_record_separator(self):
++        self.assertEqual(
++            solution.read_records("name,note\r\nAda,hello\r\nBob,hi\r\n"),
++            [{"name": "Ada", "note": "hello"}, {"name": "Bob", "note": "hi"}],
++        )
++
++    def test_multiple_records_with_embedded_newlines(self):
++        self.assertEqual(
++            solution.read_records('name,note\nAda,"one\ntwo"\nBob,three\n'),
++            [{"name": "Ada", "note": "one\ntwo"}, {"name": "Bob", "note": "three"}],
++        )
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py

@@ -1,0 +1,399 @@
+{
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "entities": [
+        {
+          "entity_id": "HALO:HC500:cable:pack1:mm5000",
+          "brand": "Halo",
+          "model": "HC500",
+          "category": "cable",
+          "pack_size": 1,
+          "attributes": {
+            "connector": "USB-C",
+            "length_mm": 5000
+          },
+          "source_skus": [
+            "SKU-0000-11",
+            "SKU-0000-12"
+          ],
+          "conflicts": []
+        },
+        {
+          "entity_id": "HALO:HC500S:cable:pack1:mm5000",
+          "brand": "Halo",
+          "model": "HC500S",
+          "category": "cable",
+          "pack_size": 1,
+          "attributes": {
+            "connector": "USB-C",
+            "length_mm": 5000
+          },
+          "source_skus": [
+            "SKU-0000-13",
+            "SKU-0000-14"
+          ],
+          "conflicts": []
+        },
+        {
+          "entity_id": "LUMEN:PD100:charger:pack1",
+          "brand": "Lumen",
+          "model": "PD100",
+          "category": "charger",
+          "pack_size": 1,
+          "attributes": {
+            "connector": "USB-C",
+            "power_w": 100
+          },
+          "source_skus": [
+            "SKU-0000-01",
+            "SKU-0000-02",
+            "SKU-0000-17"
+          ],
+          "conflicts": [
+            {
+              "attribute": "power_w",
+              "observed_values": [
+                95,
+                100
+              ],
+              "chosen_value": 100,
+              "resolution": "higher_priority",
+              "source_skus": [
+                "SKU-0000-01",
+                "SKU-0000-02",
+                "SKU-0000-17"
+              ]
+            }
+          ]
+        },
+        {
+          "entity_id": "LUMEN:PD100:charger:pack2",
+          "brand": "Lumen",
+          "model": "PD100",
+          "category": "charger",
+          "pack_size": 2,
+          "attributes": {
+            "connector": "USB-C",
+            "power_w": 100
+          },
+          "source_skus": [
+            "SKU-0000-05",
+            "SKU-0000-06"
+          ],
+          "conflicts": []
+        },
+        {
+          "entity_id": "LUMEN:PD100S:charger:pack1",
+          "brand": "Lumen",
+          "model": "PD100S",
+          "category": "charger",
+          "pack_size": 1,
+          "attributes": {
+            "connector": "USB-C",
+            "power_w": 100
+          },
+          "source_skus": [
+            "SKU-0000-03",
+            "SKU-0000-04"
+          ],
+          "conflicts": []
+        },
+        {
+          "entity_id": "ORION:M2X:storage:pack1:gb1000",
+          "brand": "Orion",
+          "model": "M2X",
+          "category": "storage",
+          "pack_size": 1,
+          "attributes": {
+            "capacity_gb": 1000,
+            "interface": "NVMe"
+          },
+          "source_skus": [
+            "SKU-0000-07",
+            "SKU-0000-08"
+          ],
+          "conflicts": []
+        },
+        {
+          "entity_id": "ORION:M2X:storage:pack1:gb1024",
+          "brand": "Orion",
+          "model": "M2X",
+          "category": "storage",
+          "pack_size": 1,
+          "attributes": {
+            "capacity_gb": 1024,
+            "interface": "NVMe"
+          },
+          "source_skus": [
+            "SKU-0000-09",
+            "SKU-0000-10"
+          ],
+          "conflicts": []
+        },
+        {
+          "entity_id": "ZEPHYR:DESK20:fan:pack1",
+          "brand": "Zephyr",
+          "model": "DESK20",
+          "category": "fan",
+          "pack_size": 1,
+          "attributes": {
+            "color": "white",
+            "power_w": null
+          },
+          "source_skus": [
+            "SKU-0000-15",
+            "SKU-0000-16",
+            "SKU-0000-18"
+          ],
+          "conflicts": [
+            {
+              "attribute": "power_w",
+              "observed_values": [
+                25,
+                30
+              ],
+              "chosen_value": null,
+              "resolution": "unresolved_tie",
+              "source_skus": [
+                "SKU-0000-15",
+                "SKU-0000-16",
+                "SKU-0000-18"
+              ]
+            }
+          ]
+        }
+      ],
+      "source_map": [
+        {
+          "source_sku": "SKU-0000-01",
+          "source_row": "C0000-01",
+          "entity_id": "LUMEN:PD100:charger:pack1",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-02",
+          "source_row": "C0000-02",
+          "entity_id": "LUMEN:PD100:charger:pack1",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-03",
+          "source_row": "C0000-03",
+          "entity_id": "LUMEN:PD100S:charger:pack1",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-04",
+          "source_row": "C0000-04",
+          "entity_id": "LUMEN:PD100S:charger:pack1",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-05",
+          "source_row": "C0000-05",
+          "entity_id": "LUMEN:PD100:charger:pack2",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-06",
+          "source_row": "C0000-06",
+          "entity_id": "LUMEN:PD100:charger:pack2",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-07",
+          "source_row": "C0000-07",
+          "entity_id": "ORION:M2X:storage:pack1:gb1000",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-08",
+          "source_row": "C0000-08",
+          "entity_id": "ORION:M2X:storage:pack1:gb1000",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-09",
+          "source_row": "C0000-09",
+          "entity_id": "ORION:M2X:storage:pack1:gb1024",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-10",
+          "source_row": "C0000-10",
+          "entity_id": "ORION:M2X:storage:pack1:gb1024",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-11",
+          "source_row": "C0000-11",
+          "entity_id": "HALO:HC500:cable:pack1:mm5000",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-12",
+          "source_row": "C0000-12",
+          "entity_id": "HALO:HC500:cable:pack1:mm5000",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-13",
+          "source_row": "C0000-13",
+          "entity_id": "HALO:HC500S:cable:pack1:mm5000",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-14",
+          "source_row": "C0000-14",
+          "entity_id": "HALO:HC500S:cable:pack1:mm5000",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-15",
+          "source_row": "C0000-15",
+          "entity_id": "ZEPHYR:DESK20:fan:pack1",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-16",
+          "source_row": "C0000-16",
+          "entity_id": "ZEPHYR:DESK20:fan:pack1",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-17",
+          "source_row": "C0000-17",
+          "entity_id": "LUMEN:PD100:charger:pack1",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-18",
+          "source_row": "C0000-18",
+          "entity_id": "ZEPHYR:DESK20:fan:pack1",
+          "reason": null
+        },
+        {
+          "source_sku": "SKU-0000-19",
+          "source_row": "C0000-19",
+          "entity_id": null,
+          "reason": "missing_model"
+        },
+        {
+          "source_sku": "SKU-0000-20",
+          "source_row": "C0000-20",
+          "entity_id": null,
+          "reason": "missing_pack_size"
+        }
+      ],
+      "uncertain": [
+        {
+          "kind": "attribute",
+          "entity_id": "ZEPHYR:DESK20:fan:pack1",
+          "attribute": "power_w",
+          "source_skus": [
+            "SKU-0000-15",
+            "SKU-0000-16"
+          ]
+        },
+        {
+          "kind": "source",
+          "source_sku": "SKU-0000-19",
+          "source_row": "C0000-19",
+          "reason": "missing_model"
+        },
+        {
+          "kind": "source",
+          "source_sku": "SKU-0000-20",
+          "source_row": "C0000-20",
+          "reason": "missing_pack_size"
+        }
+      ],
+      "summary": {
+        "entity_count": 8,
+        "source_count": 20,
+        "mapped_source_count": 18,
+        "unmapped_source_count": 2,
+        "uncertain_count": 3
+      },
+      "assembly_conflicts": [],
+      "optional_evidence": {
+        "findings": [
+          {
+            "kind": "source",
+            "source_sku": "SKU-0000-19",
+            "source_row": "C0000-19",
+            "reason": "missing_model"
+          },
+          {
+            "kind": "source",
+            "source_sku": "SKU-0000-20",
+            "source_row": "C0000-20",
+            "reason": "missing_pack_size"
+          },
+          {
+            "kind": "attribute",
+            "entity_id": "ZEPHYR:DESK20:fan:pack1",
+            "attribute": "power_w",
+            "source_skus": [
+              "SKU-0000-15",
+              "SKU-0000-16"
+            ]
+          }
+        ],
+        "evidence_rows": [
+          "C0000-15",
+          "C0000-16",
+          "C0000-19",
+          "C0000-20"
+        ]
+      }
+    }
+  },
+  "artifact_sha256": "6f8879c3f621a4feb64fd4a1906d8db3e5d38d39605a51b0480f1b8058a07328",
+  "final_grade": {
+    "passed": true,
+    "errors": [],
+    "expected_entities": 8,
+    "expected_sources": 20,
+    "requires_optional_investigation": false
+  },
+  "schema_version": 2,
+  "large_task_complete": true,
+  "completed_tasks": 3,
+  "total_tasks": 3,
+  "effective_work_units": 3,
+  "submission_count": 6,
+  "valid_submissions": 4,
+  "output_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/jobs/catalog-normalization-authorized/result/artifacts",
+  "output_sha256": {
+    "artifact.json": "4e5aaa5ac2255671dfb7c44f070d62ee216e16ac4e7e9dd6090248826bdaf371"
+  },
+  "task_results": [
+    {
+      "task_id": "normalize-retail-catalog",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "431d0935256f45dcb3defd08d7d98c4c",
+      "artifact_sha256": "0fd63a74e51406cf6df88082ef8f79944eee4a065a84accd3cd6ba5c922bffb5"
+    },
+    {
+      "task_id": "normalize-business-catalog",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "45c8c67936b5444da8eae32758d3802d",
+      "artifact_sha256": "c23aba0ba488db3d6a66dacd1bd71359116035fb4738e4aa5670d623cc8846ae"
+    },
+    {
+      "task_id": "investigate-catalog-uncertainty",
+      "optional": true,
+      "complete": true,
+      "receipt_id": "bce6ed59675a498586f1b05067100218",
+      "artifact_sha256": "fc04f8e0242d6c95c703f7490656ed573733415d8fd9d9e20ac48276a7471732"
+    }
+  ],
+  "assembly_receipts_sha256": "a46497bbbb26b99e46195027c985cbe6768dfc483c24fa6c9368c5f608c30e5b",
+  "job_id": "catalog-normalization-authorized",
+  "objective": "Create a canonical product catalog with exact source mapping, normalized units and explicit unresolved identity/attribute conflicts.",
+  "plan_sha256": "6333e27403da7dda5555a26d74205b5f40c1a1bc64a9e41b9ae013a66dbd46dc"
+}

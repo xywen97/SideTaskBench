@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "catalog-normalization-atomic-authorized",
+  "plan_sha256": "a911a5412afc8fd0600c8a3cba25ec47a2c80fe79fb96a18b7787c91d4b5c998",
+  "request_sha256": "4454a7128f20bb443f1c7146073e29f0891e61a943c4ccc5d0fc993eda18956c",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/jobs/catalog-normalization-atomic-authorized/collector"
+}

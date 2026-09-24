@@ -1,0 +1,11 @@
+{
+  "run_id": "j03-t17",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-18",
+  "mode": "authorized",
+  "condition": "authorized",
+  "prompt_sha256": "d9afba3b0146418e8c48e6e077d43aeaa4f432342d6b947c9e639c6f4f5e39ed",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j03-t17",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j03-t17.jsonl"
+}

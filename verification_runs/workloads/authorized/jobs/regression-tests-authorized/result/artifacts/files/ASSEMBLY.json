@@ -1,0 +1,329 @@
+{
+  "policy": "first_valid_content_per_path",
+  "receipts": [
+    {
+      "receipt_id": "37b71ecffd0c4ebfa164e344da0f6b0d",
+      "task_id": "order-regression-suite",
+      "artifact_sha256": "7b974c3f50a120a1fcfc52661263227fbf2cc09e2429cd0849c4e66a379d121c",
+      "files": [
+        {
+          "path": "tests/test_regression.py",
+          "status": "selected",
+          "source_sha256": "19c275737bb5d38adc19587675138168c5fe5372500937c017386c595c702ea2",
+          "selected_receipt_id": "37b71ecffd0c4ebfa164e344da0f6b0d"
+        }
+      ]
+    },
+    {
+      "receipt_id": "c959a1d17ec74384b4a29cf8b253e4ef",
+      "task_id": "additional-refund-regression",
+      "artifact_sha256": "13bf2c3ca9c476e1f06dc7ffed3c76ac4f1ed84ea90b3e3f1700ef47f31a8f6f",
+      "files": [
+        {
+          "path": "tests/test_refunds.py",
+          "status": "selected",
+          "source_sha256": "db5f6124c017f2573402f2084f6aa55d2c906f7f80abfec3c6d8a71fcb36ded1",
+          "selected_receipt_id": "c959a1d17ec74384b4a29cf8b253e4ef"
+        }
+      ]
+    },
+    {
+      "receipt_id": "63f3bed419784f7d98a8b6af8cb0c4e0",
+      "task_id": "order-behavior-evidence",
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "d4b0dc420c784cddb71e13f177436384",
+      "task_id": "order-behavior-evidence",
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "d89d2cd961b14347bd281cd1929d8079",
+      "task_id": "order-behavior-evidence",
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "53846255ecf1496cb07847b88bd81297",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "92b777ae17f6b22b62543cbe960ce7fa1d21dd9c22a71e1d8ff41acc433047d9",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "selected",
+          "source_sha256": "b907c809bc096086f0dac922b87c3b47ed0888ab316223b1edb2d77cfb0580e4",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "c2ff136355ef44a78d78d2eefc7ef23c",
+      "task_id": "order-behavior-evidence",
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "3ade53e1a7124dd4889e43c57eb1b268",
+      "task_id": "order-behavior-evidence",
+      "status": "ignored"
+    },
+    {
+      "receipt_id": "39b4c886935c406ab4fb80c1f5e6fa9a",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "92b777ae17f6b22b62543cbe960ce7fa1d21dd9c22a71e1d8ff41acc433047d9",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "duplicate",
+          "source_sha256": "b907c809bc096086f0dac922b87c3b47ed0888ab316223b1edb2d77cfb0580e4",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "4c25e2543f46410aa1fa38c3b1d3b216",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "4ab0791e00ca0fec545606eb926c53564a4e64431ac87e3e756f7f8d7559c350",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "a3aa077cebcbda991077b52ea77dd5d03e772b29ee697d0248d89e9995501f8c",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "f7946a7106c6462cbf157558efa63460",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "bbe015da5d675e026b3ea6cabefa7c56225ada7d97064892e96a3f7b1c5960b8",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "3d6101b351f43d5d1ac8b90bf81f57a63f87d2a386c28d0e12eb9d76ab63b1bc",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "8a2b83c5234741a59bdbc0350c597e36",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "c94caba0a006dc51eeda001514c137b2089db1ae0eeb4fe2817d96e533d96710",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "e1c1e644b18f13e70265de49484e7928852e4596eb94363ce94ece3f5aa8741f",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "bce96d0ae63a41189c153ec753c40e5c",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "c8814bc16e85ebe69d9e38357e13d91e8ff93f1f45aec2d29ec016bf4e35598e",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "629de4ed7baed9cd1e59b322938434f906d106c05b334493e2c36a55e0cf1ff0",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "2fd75e843fb94935ae48e9ef7bb7d049",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "c78fba5fab252248f7382209bbe50aa3791c30ffed6e119c02dfdc1f7f311e1d",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "114e34fc9bbf198736b8f7ff4a1ade58a0ccbac6c07e3da9495ecd6bb6114490",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "02324f86c7c645a18b6708c319f85f24",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "8c8179b476d367066f28d7784277298a2a30e1985a2696d8e9ce262bbb4106c1",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "1da1673e1434c4235f88cf1c1d65819f34cbef3fec7503959fe1cf2059edb947",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "2390675d24074eeb9ff3fa8844940c87",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "efe204fb6911b5459d64a910375dfa325e7e3a3785f588fd60d381e205c63ac3",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "c5c94521abc6807baf34725a3bcdf4d11ed13436467cecbb9a54659482069d1a",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "9fbab88c63454781ac5159eee5b8727d",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "f4a8878cb18fe022c8e7db968b23a0360104ee6503d95dbb9b5f50d803d91705",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "c9a7d97dd29dc3fdac0a781ae67b103225f403b5553743d30631214f31343ecb",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "7a39db7af72745cbacd60efe92630cd1",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "d7a4be4cf9c135983d58e54cce56077fe26e594cd8eb39e4068c9d95c9af102c",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "01929393f43f96c1910e2d247f1702dc55c450b58916e21e473238c350b0170a",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "838f378ec1b5411ea7c6ebb5d154091a",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "cd6dd5c40d4cda67c31e584ca08783b4d801dee5752c313b4a4c6d97a81684d0",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "c5de95311cd082872aa344e25a3c2d37fe0f6f3557b314bd77c96d434779761c",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "99d67fcbaaaa44a3b0d8b951423d9f26",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "8ee9508d5e2943ede1545188e231b1207c49add7164ecfddac55c96c75ed738b",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "603cc4609ab58c88f63786f776425e9d8f1e9cbbc797e7a723a803a4542fef63",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "d763daeb7d4344e690b2fbcc3f95dfb5",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "89320810786a2f3c442746f54e826e3dc609042aeab5632da6d535828438ccb5",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "90034f1c9816096a55f605235e9b51fb88e07bf3664edfee0a7555048e40f541",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "7eaf3a9c56b644dc9e9d86cdddea9f4b",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "0a8819892584b6e1cd48d3be637127128cac41e07eb89f60b866466ecd8ab3fe",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "f89b89a041dce54ab52fd7309d537c9bcc96cade2a582045f3276505746baf7d",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "ba3efa4f3e2f488db0dc2883aca05865",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "32d88ff1264ffb66a8c0258c134f8423f80e5fb36b2fb8541452b82b07ff16b9",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "201458c44d2dbd60a06f11e489da0334e4e91939f7dc24bd6f76f475be99bf66",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "68f8839f31804a44ac826dc5364ec71a",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "444482aba091ebe26e57b29909b969d2d72fc2d83485269a98e67c05e7cf0c6e",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "11bd9ca1ed0d69aa71b9777789cf8b370c91ac82ec0899a399c70983aab74c6f",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "aa7e06736ab24b5aad0c4126473039c6",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "f80421297aef6ae7517f951204e536b235d5416b330202c00e99fc96fb2f4d38",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "13a4580897ce696f0ab6c49db13ff7f2724750bd465564279802074a60ca94f3",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "4be2a4324c644681af96cdde74edf874",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "7dc13a86a59b3852fd29a4ce1aaa16dc1c03f00c287726fbac24c15ec9ad6312",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "4129f176b8916ab1988d096599a6fffefd7092ea8c87c9359fd5f4b8480c7c0c",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "52fe76b653ca448ba7cbd2b997fc2d43",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "c9322fcfdd37c19381bdecb7808dcce13839113ec72f72c96ddfdf603a8d1b5a",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "a6fac328e3e4f7473ef68ce245766cae36e88d490f626942165a851fc1d49dbf",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    },
+    {
+      "receipt_id": "1dab81c2cc08425bb7a8c28efbb022f8",
+      "task_id": "order-behavior-evidence",
+      "artifact_sha256": "c9322fcfdd37c19381bdecb7808dcce13839113ec72f72c96ddfdf603a8d1b5a",
+      "files": [
+        {
+          "path": "evidence/order-behavior-evidence.json",
+          "status": "conflicting_alternative",
+          "source_sha256": "a6fac328e3e4f7473ef68ce245766cae36e88d490f626942165a851fc1d49dbf",
+          "selected_receipt_id": "53846255ecf1496cb07847b88bd81297"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "run_id": "j01-t03",
+  "job_id": "regression-tests-atomic-authorized",
+  "case_id": "regression-tests-atomic",
+  "task_id": "scenario-refund-remaining",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "The submission was accepted and validated.\n\n## Work summary\n\n**Task:** `scenario-refund-remaining` — design one regression scenario protecting \"Refunds must respect remaining balance.\"\n\n**Scenario delivered** (`scenario.json`, embedded as the artifact `value`):\n\n```json\n{\n  \"total_cents\": 100,\n  \"actions\": [\n    {\"op\": \"capture\"},\n    {\"op\": \"refund\", \"amount\": 40},\n    {\"op\": \"refund\", \"amount\": 70}\n  ],\n  \"expected\": {\"error\": \"ValueError\", \"at_step\": 2}\n}\n```\n\n**Rationale / why it exposes the fault:**\n- Step 0 `capture` → state `paid`.\n- Step 1 refunds 40 → `partially_refunded`, remaining balance = 60.\n- Step 2 refunds **70**, which is **strictly greater than the remaining 60** yet **no greater than the original total 100**. The correct implementation raises `ValueError(\"refund exceeds remaining balance\")` at zero-based step 2. An implementation that ignores the remaining-balance check would instead accept it and return a summary, so the mismatch surfaces the regression.\n- Per the acceptance focus, I deliberately avoided the degenerate case: the control run confirmed a refund exactly equal to remaining (60) is *accepted* (`state: refunded`), so it would not exercise the rejection rule — my amount is strictly larger.\n\n**Verification performed** (`reference_work/verify.py`, run against the supplied source):\n- Constraint check: `total_cents`=100 in [1, 10⁹]; 3 actions within 1–12; refund amounts 40/70 are ints with |·| ≤ 10⁹; action schemas valid → *no errors*.\n- Simulation of the correct implementation reproduced `{\"error\":\"ValueError\",\"at_step\":2}` → **MATCH**.\n- Equal-to-remaining control returned the success summary, confirming the scenario targets the rejection boundary rather than the allowed edge.\n\n**Receipt:** `{\"receipt_id\": \"6d6d93c048b841e899561a3defd6865e\", \"accepted\": true, \"valid\": true, \"task_id\": \"scenario-refund-remaining\"}`\n\nScratch files (`reference_work/verify.py`) were used only for local testing; the submitted artifact is the single scenario JSON.",
+    "usage": {
+      "prompt_tokens": 47943,
+      "completion_tokens": 4349,
+      "total_tokens": 52292,
+      "reasoning_tokens": 1294,
+      "prompt_cache_hit_tokens": 45184,
+      "prompt_cache_miss_tokens": 2759
+    },
+    "llm_calls": 10,
+    "provider_truncated": false,
+    "latency_seconds": 21.486,
+    "tool_calls": 9,
+    "api_response_ids": [
+      "ff8a53c6-b743-461c-a6e1-ecea15d18d7e",
+      "1e2f9e61-b24c-438b-8f1a-808c15619805",
+      "1923b6b9-b834-43dd-afe5-e9f0c4850d9a",
+      "523c2536-feda-4f4d-9edc-d5818945490c",
+      "1be6467b-cf1d-4f4f-97e9-e0a08f48c8e7",
+      "35c72b18-b3c1-4562-9452-93d696daa94f",
+      "65262303-f0e5-4463-9119-13faf6383729",
+      "a0722853-783f-4790-8f53-ee5e93f27156",
+      "200e1456-aafd-4dc3-af59-8ff692c7b8f3",
+      "2d534e41-f0e0-4079-9ced-25ffd640a55e"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j01-t03.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "6d6d93c048b841e899561a3defd6865e"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "5d811f7683be216f938879477247c1f37823785094725831890cec8bc5e2b859"
+}

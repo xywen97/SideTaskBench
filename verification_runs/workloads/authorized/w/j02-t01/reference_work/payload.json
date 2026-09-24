@@ -1,0 +1,88 @@
+{
+  "task_id": "reconcile-marketplace",
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "batch": "marketplace",
+      "orders": [
+        {
+          "order_id": "ORD-0000-04",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 11149,
+          "gross_paid_cents": 11149,
+          "refund_cents": 0,
+          "net_cents": 11149,
+          "state": "paid",
+          "anomalies": [
+            "duplicate_delivery"
+          ],
+          "payment_ids": [
+            "PAY-0000-04-a"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-04",
+            "P0000-05",
+            "P0000-04"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-05",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 13049,
+          "gross_paid_cents": 26098,
+          "refund_cents": 0,
+          "net_cents": 26098,
+          "state": "overpaid",
+          "anomalies": [
+            "overpaid",
+            "multiple_successful_payments"
+          ],
+          "payment_ids": [
+            "PAY-0000-05-a",
+            "PAY-0000-05-b"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-05",
+            "P0000-07",
+            "P0000-06"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-06",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 15725,
+          "gross_paid_cents": 15725,
+          "refund_cents": 15725,
+          "net_cents": 0,
+          "state": "fully_refunded",
+          "anomalies": [],
+          "payment_ids": [
+            "PAY-0000-06-a"
+          ],
+          "refund_ids": [
+            "REF-0000-06"
+          ],
+          "source_rows": [
+            "O0000-06",
+            "P0000-08",
+            "R0000-03"
+          ]
+        }
+      ],
+      "summary": {
+        "currency": "USD",
+        "order_count": 3,
+        "expected_cents": 39923,
+        "gross_paid_cents": 52972,
+        "refund_cents": 15725,
+        "net_cents": 37247
+      },
+      "exceptions": []
+    }
+  }
+}

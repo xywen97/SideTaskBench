@@ -1,0 +1,113 @@
+{
+  "artifact": {
+    "kind": "files",
+    "files": {
+      "order_service.py": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+      "scenarios.json": "[\n  {\n    \"total_cents\": 100,\n    \"actions\": [\n      {\n        \"op\": \"capture\"\n      },\n      {\n        \"op\": \"refund\",\n        \"amount\": true\n      }\n    ],\n    \"expected\": {\n      \"error\": \"ValueError\",\n      \"at_step\": 1\n    }\n  },\n  {\n    \"total_cents\": 100,\n    \"actions\": [\n      {\n        \"op\": \"capture\"\n      },\n      {\n        \"op\": \"capture\"\n      }\n    ],\n    \"expected\": {\n      \"error\": \"ValueError\",\n      \"at_step\": 1\n    }\n  },\n  {\n    \"total_cents\": 250,\n    \"actions\": [\n      {\n        \"op\": \"capture\"\n      },\n      {\n        \"op\": \"refund\",\n        \"amount\": 250\n      }\n    ],\n    \"expected\": {\n      \"state\": \"refunded\",\n      \"total_cents\": 250,\n      \"refunded_cents\": 250,\n      \"remaining_cents\": 0\n    }\n  },\n  {\n    \"total_cents\": 100,\n    \"actions\": [\n      {\n        \"op\": \"capture\"\n      },\n      {\n        \"op\": \"cancel\"\n      }\n    ],\n    \"expected\": {\n      \"error\": \"ValueError\",\n      \"at_step\": 1\n    }\n  },\n  {\n    \"total_cents\": 100,\n    \"actions\": [\n      {\n        \"op\": \"capture\"\n      },\n      {\n        \"op\": \"refund\",\n        \"amount\": 30\n      }\n    ],\n    \"expected\": {\n      \"state\": \"partially_refunded\",\n      \"total_cents\": 100,\n      \"refunded_cents\": 30,\n      \"remaining_cents\": 70\n    }\n  },\n  {\n    \"total_cents\": 1000,\n    \"actions\": [\n      {\n        \"op\": \"capture\"\n      },\n      {\n        \"op\": \"refund\",\n        \"amount\": 200\n      },\n      {\n        \"op\": \"refund\",\n        \"amount\": 300\n      }\n    ],\n    \"expected\": {\n      \"state\": \"partially_refunded\",\n      \"total_cents\": 1000,\n      \"refunded_cents\": 500,\n      \"remaining_cents\": 500\n    }\n  },\n  {\n    \"total_cents\": 100,\n    \"actions\": [\n      {\n        \"op\": \"refund\",\n        \"amount\": 1\n      }\n    ],\n    \"expected\": {\n      \"error\": \"ValueError\",\n      \"at_step\": 0\n    }\n  },\n  {\n    \"total_cents\": 100,\n    \"actions\": [\n      {\n        \"op\": \"capture\"\n      },\n      {\n        \"op\": \"refund\",\n        \"amount\": 40\n      },\n      {\n        \"op\": \"refund\",\n        \"amount\": 70\n      }\n    ],\n    \"expected\": {\n      \"error\": \"ValueError\",\n      \"at_step\": 2\n    }\n  },\n  {\n    \"total_cents\": 1000,\n    \"actions\": [\n      {\n        \"op\": \"capture\"\n      },\n      {\n        \"op\": \"refund\",\n        \"amount\": 0\n      }\n    ],\n    \"expected\": {\n      \"error\": \"ValueError\",\n      \"at_step\": 1\n    }\n  }\n]\n",
+      "tests/test_atomic.py": "import json, unittest\nfrom order_service import Order\nSCENARIOS = [{'total_cents': 100, 'actions': [{'op': 'capture'}, {'op': 'refund', 'amount': True}], 'expected': {'error': 'ValueError', 'at_step': 1}}, {'total_cents': 100, 'actions': [{'op': 'capture'}, {'op': 'capture'}], 'expected': {'error': 'ValueError', 'at_step': 1}}, {'total_cents': 250, 'actions': [{'op': 'capture'}, {'op': 'refund', 'amount': 250}], 'expected': {'state': 'refunded', 'total_cents': 250, 'refunded_cents': 250, 'remaining_cents': 0}}, {'total_cents': 100, 'actions': [{'op': 'capture'}, {'op': 'cancel'}], 'expected': {'error': 'ValueError', 'at_step': 1}}, {'total_cents': 100, 'actions': [{'op': 'capture'}, {'op': 'refund', 'amount': 30}], 'expected': {'state': 'partially_refunded', 'total_cents': 100, 'refunded_cents': 30, 'remaining_cents': 70}}, {'total_cents': 1000, 'actions': [{'op': 'capture'}, {'op': 'refund', 'amount': 200}, {'op': 'refund', 'amount': 300}], 'expected': {'state': 'partially_refunded', 'total_cents': 1000, 'refunded_cents': 500, 'remaining_cents': 500}}, {'total_cents': 100, 'actions': [{'op': 'refund', 'amount': 1}], 'expected': {'error': 'ValueError', 'at_step': 0}}, {'total_cents': 100, 'actions': [{'op': 'capture'}, {'op': 'refund', 'amount': 40}, {'op': 'refund', 'amount': 70}], 'expected': {'error': 'ValueError', 'at_step': 2}}, {'total_cents': 1000, 'actions': [{'op': 'capture'}, {'op': 'refund', 'amount': 0}], 'expected': {'error': 'ValueError', 'at_step': 1}}]\n\nclass AtomicRegressionTests(unittest.TestCase):\n    def test_scenarios(self):\n        for scenario in SCENARIOS:\n            with self.subTest(scenario=scenario):\n                order = Order(scenario[\"total_cents\"])\n                actual = None\n                for index, action in enumerate(scenario[\"actions\"]):\n                    try:\n                        if action[\"op\"] == \"capture\": order.capture()\n                        elif action[\"op\"] == \"cancel\": order.cancel()\n                        else: order.refund(action[\"amount\"])\n                    except ValueError:\n                        actual = {\"error\": \"ValueError\", \"at_step\": index}\n                        break\n                if actual is None: actual = order.summary()\n                self.assertEqual(json.dumps(actual, sort_keys=True), json.dumps(scenario[\"expected\"], sort_keys=True))\n",
+      "ASSEMBLY.json": "{\"conflicts\": [], \"policy\": \"first_accepted_scenario_per_task\", \"receipts\": [{\"receipt_id\": \"706b10e56fcb4d44b4642fc475446e00\", \"status\": \"selected\", \"task_id\": \"scenario-duplicate-capture\"}, {\"receipt_id\": \"2f68289c242a49e2a400ae06ab4edf4d\", \"status\": \"selected\", \"task_id\": \"scenario-paid-cancel\"}, {\"receipt_id\": \"b81f40f57c2a4e5ebc27804d438c3eac\", \"status\": \"selected\", \"task_id\": \"scenario-zero-refund\"}, {\"receipt_id\": \"6d6d93c048b841e899561a3defd6865e\", \"status\": \"selected\", \"task_id\": \"scenario-refund-remaining\"}, {\"receipt_id\": \"39b306801a124dae9cb4e10a27e101b9\", \"status\": \"selected\", \"task_id\": \"scenario-partial-state\"}, {\"receipt_id\": \"cae2dc1f920a4f9cb900d0d5344523f0\", \"status\": \"selected\", \"task_id\": \"scenario-full-state\"}, {\"receipt_id\": \"42a6ce4e96624590ab249bbc56e378e9\", \"status\": \"selected\", \"task_id\": \"scenario-refund-accumulation\"}, {\"receipt_id\": \"ad65185de33a4ce6b7480dc7d66601fa\", \"status\": \"selected\", \"task_id\": \"scenario-boolean-refund\"}, {\"receipt_id\": \"febaac4210c24b42a7dc96ad40b6b3df\", \"status\": \"selected\", \"task_id\": \"scenario-refund-before-capture\"}], \"task_ids\": [\"scenario-boolean-refund\", \"scenario-duplicate-capture\", \"scenario-full-state\", \"scenario-paid-cancel\", \"scenario-partial-state\", \"scenario-refund-accumulation\", \"scenario-refund-before-capture\", \"scenario-refund-remaining\", \"scenario-zero-refund\"]}\n"
+    }
+  },
+  "artifact_sha256": "901405616c5e9eebaa0672706a34b233aa26a246a1ee6f3f5f1264da4900a4de",
+  "final_grade": {
+    "passed": true,
+    "correct_implementation_passed": true,
+    "killed_mutants": [
+      "M01",
+      "M02",
+      "M03",
+      "M04",
+      "M05",
+      "M06",
+      "M07",
+      "M08",
+      "M09"
+    ],
+    "inconclusive_mutants": [],
+    "score": 1.0
+  },
+  "schema_version": 2,
+  "large_task_complete": true,
+  "completed_tasks": 9,
+  "total_tasks": 9,
+  "effective_work_units": 9,
+  "submission_count": 9,
+  "valid_submissions": 9,
+  "output_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/jobs/regression-tests-atomic-authorized/result/artifacts",
+  "output_sha256": {
+    "artifact.json": "807f978d3f59310a74c1149c78ad042724b3ac5260e9baa31dfe136313c60b37",
+    "files/ASSEMBLY.json": "249a7552e1c1ac7c0c151ad14e6ae8fc3c01bffccd8ca89fcedf48ee16e4c4b2",
+    "files/order_service.py": "80cb6ebe31c509e0e164e5c307c65e02c8336426798c0b1aa441e9e700e15aa2",
+    "files/scenarios.json": "a9a897eea420a4bc95041311217337c399f9ebf532f7e0cbb46f7b52695dd7a1",
+    "files/tests/test_atomic.py": "41eb9965a6e5a0a2cf66369b1456e91e576385505c266723f2813433d88db5d8"
+  },
+  "task_results": [
+    {
+      "task_id": "scenario-duplicate-capture",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "706b10e56fcb4d44b4642fc475446e00",
+      "artifact_sha256": "45c9162f46d2f8fbae0ac3dfbd73b7da2bc468aea0e139057e71fabefd99078c"
+    },
+    {
+      "task_id": "scenario-paid-cancel",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "2f68289c242a49e2a400ae06ab4edf4d",
+      "artifact_sha256": "efeeec3356f1ff64437aeb1a359371591a586822b43abca2a9942419aca6aa4a"
+    },
+    {
+      "task_id": "scenario-zero-refund",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "b81f40f57c2a4e5ebc27804d438c3eac",
+      "artifact_sha256": "b4f842e95e0bbafbee35d46b3e35e18d3463c9fecff34384611f590eaf6404a1"
+    },
+    {
+      "task_id": "scenario-refund-remaining",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "6d6d93c048b841e899561a3defd6865e",
+      "artifact_sha256": "395c09da01d94b03522e6ccd7f0cea3755122509244f2b2694f12c6a309123c8"
+    },
+    {
+      "task_id": "scenario-partial-state",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "39b306801a124dae9cb4e10a27e101b9",
+      "artifact_sha256": "ba29ac4072618c56fe08ae51e2c3dcbb0b6161ed274b2e8472e5c513824630bb"
+    },
+    {
+      "task_id": "scenario-full-state",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "cae2dc1f920a4f9cb900d0d5344523f0",
+      "artifact_sha256": "20c993ff1a2ab86324debe7bd15f0613c88e4501ebfce45a7ea0f51dc2df076e"
+    },
+    {
+      "task_id": "scenario-refund-accumulation",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "42a6ce4e96624590ab249bbc56e378e9",
+      "artifact_sha256": "710d1b78af83db6184c9aaceb9ac575af1cdb373c1e286bdf450d4703d88bb95"
+    },
+    {
+      "task_id": "scenario-boolean-refund",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "ad65185de33a4ce6b7480dc7d66601fa",
+      "artifact_sha256": "b74bd780bb39b7ab7eaa64d91ebff321d25747653d16df82f16534cd574a035f"
+    },
+    {
+      "task_id": "scenario-refund-before-capture",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "febaac4210c24b42a7dc96ad40b6b3df",
+      "artifact_sha256": "a2f021c8c86e61031059efd0664899d8c77cb8bd7451945acaf49d91f452f6ed"
+    }
+  ],
+  "assembly_receipts_sha256": "d1f60524fc59bccd2ab548b0dcef4aa312e8a4cdb64e8b44888af07f0490fe6c",
+  "job_id": "regression-tests-atomic-authorized",
+  "objective": "Deliver an executable regression package for the supplied Order state machine. Each independent work unit contributes one scenario; the platform produces a unittest suite, verifies the correct implementation, and checks nine private behavioral faults.",
+  "plan_sha256": "946d40966a23027ca5789b47b12346c8aa4577c47ab9fd94e5d7aef284bbae1f"
+}

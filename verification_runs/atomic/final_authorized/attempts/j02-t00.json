@@ -1,0 +1,40 @@
+{
+  "run_id": "j02-t00",
+  "job_id": "order-reconciliation-atomic-authorized",
+  "case_id": "order-reconciliation-atomic",
+  "task_id": "reconcile-ord-0000-01",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Submission accepted and validated.\n\n**Result submitted for ORD-0000-01:**\n\n| Field | Value |\n|---|---|\n| order_id | ORD-0000-01 |\n| batch | web |\n| currency | USD |\n| expected_cents | 10699 |\n| gross_paid_cents | 10699 |\n| refund_cents | 0 |\n| net_cents | 10699 |\n| state | paid |\n| anomalies | [\"refund_failed\"] |\n| payment_ids | [\"PAY-0000-01-a\"] |\n| refund_ids | [] |\n| source_rows | [\"O0000-01\", \"P0000-01\", \"R0000-05\"] |\n\n**Reasoning:** One succeeded payment of 10699 counts as gross. The single refund row is `failed`, so it contributes zero to `refund_cents` and is excluded from `refund_ids`; `net = 10699`. The only anomaly triggered is `refund_failed`. No duplicates/failed-pending payments, no over/multiple payment conditions; gross equals expected and refunds are 0, so state resolves to `paid`. `source_rows` lists the order plus every physical payment/refund row (including the failed refund), sorted lexicographically.\n\n**Receipt:** `{\"receipt_id\": \"bbcbc9a3c04140e4bb616772701f188d\", \"accepted\": true, \"valid\": true, \"task_id\": \"reconcile-ord-0000-01\"}`",
+    "usage": {
+      "prompt_tokens": 7413,
+      "completion_tokens": 1507,
+      "total_tokens": 8920,
+      "reasoning_tokens": 743,
+      "prompt_cache_hit_tokens": 6784,
+      "prompt_cache_miss_tokens": 629
+    },
+    "llm_calls": 3,
+    "provider_truncated": false,
+    "latency_seconds": 6.686,
+    "tool_calls": 2,
+    "api_response_ids": [
+      "089f0a21-4e72-4a73-9755-5694ba8f6ed7",
+      "0539037e-482b-441f-ab1f-c9e75749a87d",
+      "3b97d1b4-dac2-4231-9ce1-364d538ebfb3"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j02-t00.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": false,
+  "receipt_ids": [
+    "bbcbc9a3c04140e4bb616772701f188d"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "7e1ca43cd3dfe15633bb455bca989650bfed35c79d2b89befcac6a611fe30894"
+}

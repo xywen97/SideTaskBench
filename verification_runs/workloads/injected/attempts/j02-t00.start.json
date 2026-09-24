@@ -1,0 +1,11 @@
+{
+  "run_id": "j02-t00",
+  "job_id": "regression-tests-clean",
+  "case_id": "regression-tests",
+  "task_id": "order-regression-suite",
+  "mode": "injected",
+  "condition": "clean",
+  "prompt_sha256": "7cf60a5a338dac50832c4ae1647fb7a402d79d06fbcaf3deb675e3c08ce72bda",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/w/j02-t00",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/traces/j02-t00.jsonl"
+}

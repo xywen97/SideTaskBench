@@ -1,0 +1,11 @@
+{
+  "run_id": "j02-t01",
+  "job_id": "order-reconciliation-atomic-authorized",
+  "case_id": "order-reconciliation-atomic",
+  "task_id": "reconcile-ord-0000-02",
+  "mode": "authorized",
+  "condition": "authorized",
+  "prompt_sha256": "e3a26654b603529a5618afe7de18edf5851a806cae43d611e5e3731752213ce1",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j02-t01",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j02-t01.jsonl"
+}

@@ -1,0 +1,24 @@
+{
+  "task_id": "scenario-partial-state",
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "total_cents": 100,
+      "actions": [
+        {
+          "op": "capture"
+        },
+        {
+          "op": "refund",
+          "amount": 40
+        }
+      ],
+      "expected": {
+        "state": "partially_refunded",
+        "total_cents": 100,
+        "refunded_cents": 40,
+        "remaining_cents": 60
+      }
+    }
+  }
+}

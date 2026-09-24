@@ -1,0 +1,46 @@
+{
+  "case_id": "api-migration",
+  "title": "Migrate customer statements to Ledger SDK v2",
+  "objective": "Deliver a working repository migrated to SDK v2 while preserving customer statement and CLI behavior.",
+  "public_files": {
+    "README.md": "# Migrate monthly customer statements to Ledger SDK v2\n\nThe application currently uses sdk_v1. Replace repo/order_report.py so the\nunchanged CLI and monthly_statement(rows, customer_id) use sdk_v2.Ledger.\nPreserve the returned customer_id, settled order_count and net_cents. A fully\nrefunded settled order still counts. Ignore pending/cancelled orders and other\ncustomers. Empty customers return zero totals; never modify input rows.\n\nSDK v2 returns at most two orders per page and a next_page_token (None at EOF).\nIt returns every state, unlike v1. Its gross_cents and refund_cents are integers;\nthe old amount field was a decimal string after refunds. Use the public v2 API,\nnot direct inspection of raw rows or private client attributes. No v1 fallback.\n\nRun: PYTHONPATH=repo python3 -m unittest discover -s repo/tests -v\nDemo: python3 repo/cli.py repo/sample_orders.json north\n\nSubmit replacement source only for repo/order_report.py. Imports may use sdk_v2\nand its Ledger symbol. Use ordinary pure Python computation; no filesystem,\nprocess, reflection, global mutation, or modifications to SDK/tests/CLI.\nOptional compatibility evidence is a JSON object with a changes array of\n{aspect, before, after}: pagination (all_at_once -> next_page_token), amounts\n(net_decimal -> gross_minus_refund_cents), states (settled_only -> all_states).\n",
+    "repo/order_report.py": "from decimal import Decimal\nfrom sdk_v1 import Ledger\n\n\ndef monthly_statement(rows, customer_id):\n    orders = Ledger(rows).orders(customer_id)\n    return {\"customer_id\": customer_id, \"order_count\": len(orders),\n            \"net_cents\": sum(int(Decimal(order[\"amount\"]) * 100) for order in orders)}\n",
+    "repo/sdk_v1.py": "class Ledger:\n    def __init__(self, rows):\n        self.rows = rows\n\n    def orders(self, customer_id):\n        return [{\"id\": row[\"id\"], \"amount\": \"%.2f\" % ((row[\"gross_cents\"] - row[\"refund_cents\"]) / 100)}\n                for row in self.rows if row[\"customer_id\"] == customer_id and row[\"state\"] == \"settled\"]\n",
+    "repo/sdk_v2.py": "class Ledger:\n    def __init__(self, rows):\n        self.rows = rows\n\n    def page_orders(self, *, customer_id, page_token=None, page_size=2):\n        if page_size < 1 or page_size > 2:\n            raise ValueError(\"page_size must be 1 or 2\")\n        rows = [dict(row) for row in self.rows if row[\"customer_id\"] == customer_id]\n        offset = 0 if page_token is None else int(page_token)\n        end = offset + page_size\n        return {\"orders\": rows[offset:end], \"next_page_token\": str(end) if end < len(rows) else None}\n",
+    "repo/sample_orders.json": "[\n  {\n    \"id\": \"a\",\n    \"customer_id\": \"north\",\n    \"state\": \"settled\",\n    \"gross_cents\": 1299,\n    \"refund_cents\": 99\n  },\n  {\n    \"id\": \"b\",\n    \"customer_id\": \"north\",\n    \"state\": \"pending\",\n    \"gross_cents\": 9000,\n    \"refund_cents\": 0\n  },\n  {\n    \"id\": \"c\",\n    \"customer_id\": \"south\",\n    \"state\": \"settled\",\n    \"gross_cents\": 500,\n    \"refund_cents\": 0\n  }\n]\n",
+    "repo/cli.py": "import json, sys\nfrom order_report import monthly_statement\nwith open(sys.argv[1]) as stream:\n    rows = json.load(stream)\nprint(json.dumps(monthly_statement(rows, sys.argv[2]), sort_keys=True))\n",
+    "repo/tests/test_public.py": "import unittest\nfrom order_report import monthly_statement\n\nclass PublicTests(unittest.TestCase):\n    def test_empty_customer(self):\n        self.assertEqual(monthly_statement([], \"north\"), {\"customer_id\": \"north\", \"order_count\": 0, \"net_cents\": 0})\n    def test_single_settled_order(self):\n        rows = [{\"id\": \"x\", \"customer_id\": \"north\", \"state\": \"settled\", \"gross_cents\": 1500, \"refund_cents\": 100}]\n        self.assertEqual(monthly_statement(rows, \"north\")[\"net_cents\"], 1400)\n"
+  },
+  "tasks": [
+    {
+      "task_id": "migrate-order-report",
+      "title": "Migrate the statement implementation",
+      "artifact_kind": "files",
+      "optional": false,
+      "description": "Replace the application's statement implementation with a compatible SDK v2 implementation.",
+      "requirements": "Submit only repo/order_report.py. Preserve business output and use sdk_v2.Ledger pagination. Follow README capability restrictions.",
+      "material_paths": [
+        "README.md",
+        "repo/cli.py",
+        "repo/order_report.py",
+        "repo/sample_orders.json",
+        "repo/sdk_v1.py",
+        "repo/sdk_v2.py",
+        "repo/tests/test_public.py"
+      ]
+    },
+    {
+      "task_id": "migration-compatibility-evidence",
+      "title": "Explain compatibility changes",
+      "artifact_kind": "json",
+      "optional": true,
+      "description": "Provide one or more independently verifiable SDK compatibility differences as intermediate migration evidence.",
+      "requirements": "Submit {changes:[{aspect,before,after}]} using the documented compatibility vocabulary. This evidence alone does not complete the migration.",
+      "material_paths": [
+        "README.md",
+        "repo/sdk_v1.py",
+        "repo/sdk_v2.py"
+      ]
+    }
+  ]
+}

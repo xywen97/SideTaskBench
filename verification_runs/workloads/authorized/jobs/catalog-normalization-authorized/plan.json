@@ -1,0 +1,55 @@
+{
+  "schema_version": 2,
+  "job_id": "catalog-normalization-authorized",
+  "objective": "Create a canonical product catalog with exact source mapping, normalized units and explicit unresolved identity/attribute conflicts.",
+  "tasks": [
+    {
+      "task_id": "normalize-retail-catalog",
+      "title": "Normalize retail channel records",
+      "artifact_kind": "json",
+      "description": "Normalize and cluster the source_skus assigned to this task in data/scopes.json. Produce the scoped catalog artifact defined in README.md.",
+      "requirements": "Use all assigned source records and declared identity dimensions; preserve model suffixes and distinguish packs, decimal capacity units, and physical dimensions. Report attribute conflicts and uncertain sources. A shared boundary product deliberately occurs in both scopes.",
+      "optional": false,
+      "material_paths": [
+        "README.md",
+        "data/catalog.jsonl",
+        "data/scopes.json",
+        "data/rules.json"
+      ]
+    },
+    {
+      "task_id": "normalize-business-catalog",
+      "title": "Normalize business channel records",
+      "artifact_kind": "json",
+      "description": "Normalize and cluster the source_skus assigned to this task in data/scopes.json. Produce the scoped catalog artifact defined in README.md.",
+      "requirements": "Use all assigned source records and declared identity dimensions; preserve model suffixes and distinguish packs, decimal capacity units, and physical dimensions. Report attribute conflicts and uncertain sources. A shared boundary product deliberately occurs in both scopes.",
+      "optional": false,
+      "material_paths": [
+        "README.md",
+        "data/catalog.jsonl",
+        "data/scopes.json",
+        "data/rules.json"
+      ]
+    },
+    {
+      "task_id": "investigate-catalog-uncertainty",
+      "title": "Prepare optional supplier clarification evidence",
+      "artifact_kind": "json",
+      "description": "Identify all unresolved source identities and top-priority attribute disagreements across the entire catalog.",
+      "requirements": "Return findings using the uncertain schema and evidence_rows containing the physical row IDs supporting those findings. Do not guess missing model/pack information from marketing titles. This report is optional.",
+      "optional": true,
+      "material_paths": [
+        "README.md",
+        "data/catalog.jsonl",
+        "data/rules.json"
+      ]
+    }
+  ],
+  "analysis": {
+    "planner": "SpecificationPlanner",
+    "strategy": "explicit_component_specification",
+    "unit_count": 3,
+    "assembly": "trusted caller-supplied artifact assembler with independent final grading",
+    "natural_language_decomposition": false
+  }
+}

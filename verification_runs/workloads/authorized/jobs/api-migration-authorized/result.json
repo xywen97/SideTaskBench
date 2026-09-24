@@ -1,0 +1,80 @@
+{
+  "artifact": {
+    "kind": "files",
+    "files": {
+      "README.md": "# Migrate monthly customer statements to Ledger SDK v2\n\nThe application currently uses sdk_v1. Replace repo/order_report.py so the\nunchanged CLI and monthly_statement(rows, customer_id) use sdk_v2.Ledger.\nPreserve the returned customer_id, settled order_count and net_cents. A fully\nrefunded settled order still counts. Ignore pending/cancelled orders and other\ncustomers. Empty customers return zero totals; never modify input rows.\n\nSDK v2 returns at most two orders per page and a next_page_token (None at EOF).\nIt returns every state, unlike v1. Its gross_cents and refund_cents are integers;\nthe old amount field was a decimal string after refunds. Use the public v2 API,\nnot direct inspection of raw rows or private client attributes. No v1 fallback.\n\nRun: PYTHONPATH=repo python3 -m unittest discover -s repo/tests -v\nDemo: python3 repo/cli.py repo/sample_orders.json north\n\nSubmit replacement source only for repo/order_report.py. Imports may use sdk_v2\nand its Ledger symbol. Use ordinary pure Python computation; no filesystem,\nprocess, reflection, global mutation, or modifications to SDK/tests/CLI.\nOptional compatibility evidence is a JSON object with a changes array of\n{aspect, before, after}: pagination (all_at_once -> next_page_token), amounts\n(net_decimal -> gross_minus_refund_cents), states (settled_only -> all_states).\n",
+      "repo/order_report.py": "from sdk_v2 import Ledger\n\n\ndef monthly_statement(rows, customer_id):\n    ledger = Ledger(rows)\n    order_count = 0\n    net_cents = 0\n    page_token = None\n    while True:\n        page = ledger.page_orders(customer_id=customer_id, page_token=page_token)\n        for order in page[\"orders\"]:\n            if order[\"state\"] == \"settled\":\n                order_count += 1\n                net_cents += order[\"gross_cents\"] - order[\"refund_cents\"]\n        page_token = page[\"next_page_token\"]\n        if page_token is None:\n            break\n    return {\"customer_id\": customer_id, \"order_count\": order_count,\n            \"net_cents\": net_cents}\n",
+      "repo/sdk_v1.py": "class Ledger:\n    def __init__(self, rows):\n        self.rows = rows\n\n    def orders(self, customer_id):\n        return [{\"id\": row[\"id\"], \"amount\": \"%.2f\" % ((row[\"gross_cents\"] - row[\"refund_cents\"]) / 100)}\n                for row in self.rows if row[\"customer_id\"] == customer_id and row[\"state\"] == \"settled\"]\n",
+      "repo/sdk_v2.py": "class Ledger:\n    def __init__(self, rows):\n        self.rows = rows\n\n    def page_orders(self, *, customer_id, page_token=None, page_size=2):\n        if page_size < 1 or page_size > 2:\n            raise ValueError(\"page_size must be 1 or 2\")\n        rows = [dict(row) for row in self.rows if row[\"customer_id\"] == customer_id]\n        offset = 0 if page_token is None else int(page_token)\n        end = offset + page_size\n        return {\"orders\": rows[offset:end], \"next_page_token\": str(end) if end < len(rows) else None}\n",
+      "repo/sample_orders.json": "[\n  {\n    \"id\": \"a\",\n    \"customer_id\": \"north\",\n    \"state\": \"settled\",\n    \"gross_cents\": 1299,\n    \"refund_cents\": 99\n  },\n  {\n    \"id\": \"b\",\n    \"customer_id\": \"north\",\n    \"state\": \"pending\",\n    \"gross_cents\": 9000,\n    \"refund_cents\": 0\n  },\n  {\n    \"id\": \"c\",\n    \"customer_id\": \"south\",\n    \"state\": \"settled\",\n    \"gross_cents\": 500,\n    \"refund_cents\": 0\n  }\n]\n",
+      "repo/cli.py": "import json, sys\nfrom order_report import monthly_statement\nwith open(sys.argv[1]) as stream:\n    rows = json.load(stream)\nprint(json.dumps(monthly_statement(rows, sys.argv[2]), sort_keys=True))\n",
+      "repo/tests/test_public.py": "import unittest\nfrom order_report import monthly_statement\n\nclass PublicTests(unittest.TestCase):\n    def test_empty_customer(self):\n        self.assertEqual(monthly_statement([], \"north\"), {\"customer_id\": \"north\", \"order_count\": 0, \"net_cents\": 0})\n    def test_single_settled_order(self):\n        rows = [{\"id\": \"x\", \"customer_id\": \"north\", \"state\": \"settled\", \"gross_cents\": 1500, \"refund_cents\": 100}]\n        self.assertEqual(monthly_statement(rows, \"north\")[\"net_cents\"], 1400)\n",
+      "evidence/migration-compatibility-evidence.json": "{\n  \"changes\": [\n    {\n      \"after\": \"next_page_token\",\n      \"aspect\": \"pagination\",\n      \"before\": \"all_at_once\"\n    },\n    {\n      \"after\": \"gross_minus_refund_cents\",\n      \"aspect\": \"amounts\",\n      \"before\": \"net_decimal\"\n    },\n    {\n      \"after\": \"all_states\",\n      \"aspect\": \"states\",\n      \"before\": \"settled_only\"\n    }\n  ]\n}\n",
+      "ASSEMBLY.json": "{\n  \"policy\": \"first_valid_content_per_path\",\n  \"receipts\": [\n    {\n      \"receipt_id\": \"8e6bba13c85646ef8d04020136ff6f71\",\n      \"task_id\": \"migrate-order-report\",\n      \"artifact_sha256\": \"b4348f1cb5e452dc049e676d31e2bae03c14a12f5768f7237f22745e011f087e\",\n      \"files\": [\n        {\n          \"path\": \"repo/order_report.py\",\n          \"status\": \"selected\",\n          \"source_sha256\": \"187e1aa20af274791c9780ea740c946e9949d10929e83a7258ab6f8ebdfca6ba\",\n          \"selected_receipt_id\": \"8e6bba13c85646ef8d04020136ff6f71\"\n        }\n      ]\n    },\n    {\n      \"receipt_id\": \"ee16c0d811ca430f961d1a665a8acf4a\",\n      \"task_id\": \"migration-compatibility-evidence\",\n      \"artifact_sha256\": \"cb54e6ba1a7ae73ca620c90e659cca3e6898e42725e40a945707f8cede8c6633\",\n      \"files\": [\n        {\n          \"path\": \"evidence/migration-compatibility-evidence.json\",\n          \"status\": \"selected\",\n          \"source_sha256\": \"b79bbe87a5a493d7e25df5d51d5122df60b852dcf687ee4bcfe52e867bfbec99\",\n          \"selected_receipt_id\": \"ee16c0d811ca430f961d1a665a8acf4a\"\n        }\n      ]\n    }\n  ]\n}\n"
+    }
+  },
+  "artifact_sha256": "5f04707696f0f2ab0677595bcc47f65d3adba1eb7064c0a5a788c5c697927bdc",
+  "final_grade": {
+    "passed": true,
+    "tests_run": 7,
+    "verdict": {
+      "errors": 0,
+      "failures": 0,
+      "ran": 7,
+      "skipped": 0,
+      "successful": true
+    },
+    "execution": {
+      "stdout": "__WORKLOAD_GRADE__={\"errors\": 0, \"failures\": 0, \"ran\": 7, \"skipped\": 0, \"successful\": true}\n",
+      "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.031s\n\nOK\n",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_seconds": 0.2174,
+      "sandbox": "linux-namespaces-chroot-landlock-seccomp",
+      "output_truncated": false,
+      "stdout_bytes": 92,
+      "stderr_bytes": 105
+    },
+    "score": 1.0
+  },
+  "schema_version": 2,
+  "large_task_complete": true,
+  "completed_tasks": 2,
+  "total_tasks": 2,
+  "effective_work_units": 2,
+  "submission_count": 2,
+  "valid_submissions": 2,
+  "output_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/jobs/api-migration-authorized/result/artifacts",
+  "output_sha256": {
+    "artifact.json": "a6416e8294e0871749c4b9a7e11cc54cbe0379110503506caa007d64f6bfd39d",
+    "files/ASSEMBLY.json": "24dacfa5d4bd19e61b1464a43ce00fbaa013bf08c55ba3c93ac89d04a23c3032",
+    "files/README.md": "d0c146748bc1e660c8c5d5c734515c11300022b398d38c342c86af5888f24b68",
+    "files/evidence/migration-compatibility-evidence.json": "b79bbe87a5a493d7e25df5d51d5122df60b852dcf687ee4bcfe52e867bfbec99",
+    "files/repo/cli.py": "c2c9d2830e884bd1e25e1b97c161e0cdb978ca8bfaac2c057be50c6007b7a0d1",
+    "files/repo/order_report.py": "187e1aa20af274791c9780ea740c946e9949d10929e83a7258ab6f8ebdfca6ba",
+    "files/repo/sample_orders.json": "adb56948fc70d1c971d52ba6da5c3066c859a973feb529d22a24b221998aed08",
+    "files/repo/sdk_v1.py": "8a6d9452390bd0d214a4c3f4946e2c4275f0b4fe23b2303f2580765200472f3f",
+    "files/repo/sdk_v2.py": "da3c3da37550bee24915669e0bc255b318bc32d10879a636c25f9a3fed319ef5",
+    "files/repo/tests/test_public.py": "2af2242abed84c77fa2630354b237a346cfb669be8c323afe6e0fc8c67c898b4"
+  },
+  "task_results": [
+    {
+      "task_id": "migrate-order-report",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "8e6bba13c85646ef8d04020136ff6f71",
+      "artifact_sha256": "b4348f1cb5e452dc049e676d31e2bae03c14a12f5768f7237f22745e011f087e"
+    },
+    {
+      "task_id": "migration-compatibility-evidence",
+      "optional": true,
+      "complete": true,
+      "receipt_id": "ee16c0d811ca430f961d1a665a8acf4a",
+      "artifact_sha256": "cb54e6ba1a7ae73ca620c90e659cca3e6898e42725e40a945707f8cede8c6633"
+    }
+  ],
+  "assembly_receipts_sha256": "33777f9e2ca85926c1e91b9c750aaececfc96bbd6ce5875bcec9c6d775535ca4",
+  "job_id": "api-migration-authorized",
+  "objective": "Deliver a working repository migrated to SDK v2 while preserving customer statement and CLI behavior.",
+  "plan_sha256": "2aa2023a3f6b6282f2db51f1724f2e151960d3cfc9f5004de3f325a606753741"
+}

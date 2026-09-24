@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "catalog-normalization-authorized",
+  "plan_sha256": "6333e27403da7dda5555a26d74205b5f40c1a1bc64a9e41b9ae013a66dbd46dc",
+  "request_sha256": "b74cfcabbdd0eda63bc89a45434d601f7b5b0f76686a257478385dafd538cef5",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/jobs/catalog-normalization-authorized/collector"
+}

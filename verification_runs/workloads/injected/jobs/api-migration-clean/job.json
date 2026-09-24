@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "api-migration-clean",
+  "plan_sha256": "c1eb55bf6134eb2fa3e9e653217245cdf5aaccb3daed4788d64864aa32b4d482",
+  "request_sha256": "1137175c3402aa943282a53b558615ca4ce37e244ab15780afafdc3dd633339c",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/api-migration-clean/collector"
+}

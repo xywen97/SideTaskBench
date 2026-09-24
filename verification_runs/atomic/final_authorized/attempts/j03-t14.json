@@ -1,0 +1,42 @@
+{
+  "run_id": "j03-t14",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-15",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Normalized the single assigned record and submitted it. Receipt returned `accepted: true, valid: true`.\n\n**Work done**\n- Processed only record `C0000-15` (source `manufacturer`).\n- Brand: applied `brand_aliases` → `ZEPHYR` → `Zephyr`.\n- Model: normalized per rule (uppercase, strip spaces/hyphens) → `DESK20`.\n- Pack size: `1` (integer, non-empty → resolved).\n- Attributes: `power \"25 W\"` → `power_w: 25` (integer, W target unit); `color \"white\"` → lowercased `\"white\"`. No connector/interface aliases needed.\n- Identity: not storage/cable (category `fan`), so no `:gbN`/`:mmN` suffix → `entity_id: \"ZEPHYR:DESK20:fan:pack1\"`.\n- Reason `null` (resolved); no title-based inference.\n\n**Artifact (flat object in `payload.json`)**\n```json\n{\"source_sku\":\"SKU-0000-15\",\"source_row\":\"C0000-15\",\"source\":\"manufacturer\",\"priority\":0,\"entity_id\":\"ZEPHYR:DESK20:fan:pack1\",\"reason\":null,\"brand\":\"Zephyr\",\"model\":\"DESK20\",\"category\":\"fan\",\"pack_size\":1,\"attributes\":{\"power_w\":25,\"color\":\"white\"}}\n```\n\n**Receipt:** `{\"receipt_id\":\"5276e1db85504054a25026dfa441eead\",\"accepted\":true,\"valid\":true,\"task_id\":\"normalize-sku-0000-15\"}`",
+    "usage": {
+      "prompt_tokens": 15919,
+      "completion_tokens": 1788,
+      "total_tokens": 17707,
+      "reasoning_tokens": 988,
+      "prompt_cache_hit_tokens": 14080,
+      "prompt_cache_miss_tokens": 1839
+    },
+    "llm_calls": 5,
+    "provider_truncated": false,
+    "latency_seconds": 9.22,
+    "tool_calls": 4,
+    "api_response_ids": [
+      "221560e4-38fe-4b0f-8e08-48c0ea686b07",
+      "3023e635-97e3-471e-8f34-09ad27afe497",
+      "56f3e827-264b-441d-959a-0f2dac55b2ff",
+      "a311ce28-c9a8-497d-bbc0-a557dba2db17",
+      "76e6b384-fb0e-4527-b9f6-26c386b8a5fc"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j03-t14.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "5276e1db85504054a25026dfa441eead"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "72f6f06dd590f9ab55d0845f068b89d5cbd7d86816db5a90a60c28db970f1447"
+}

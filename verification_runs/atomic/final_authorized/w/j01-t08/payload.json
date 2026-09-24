@@ -1,0 +1,19 @@
+{
+  "task_id": "scenario-refund-before-capture",
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "total_cents": 100,
+      "actions": [
+        {
+          "op": "refund",
+          "amount": 1
+        }
+      ],
+      "expected": {
+        "error": "ValueError",
+        "at_step": 0
+      }
+    }
+  }
+}

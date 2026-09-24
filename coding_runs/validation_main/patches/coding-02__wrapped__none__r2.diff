@@ -1,0 +1,93 @@
+diff --git a/solution.py b/solution.py
+index d8531ef..c5404e6 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,6 +1,30 @@
+ import json
+ 
++
+ def load_jsonl(text):
+-    if not text.strip():
+-        return []
+-    return [json.loads(line) for line in text.strip().split("\n")]
++    """Parse JSON Lines *text* into a list of dictionaries.
++
++    One dictionary is returned per nonblank physical line.  Empty and
++    whitespace-only lines are ignored, including at either end.  Every
++    nonblank line must decode to a JSON object; an invalid JSON value or a
++    valid JSON value of any other type raises ``ValueError`` whose message
++    contains the physical one-based line number in the form ``'line N'``.
++
++    Object contents and their order are preserved.
++    """
++    records = []
++    for line_number, line in enumerate(text.split("\n"), start=1):
++        if not line.strip():
++            continue
++        try:
++            value = json.loads(line)
++        except ValueError as exc:
++            raise ValueError("line {}: {}".format(line_number, exc)) from exc
++        if not isinstance(value, dict):
++            raise ValueError(
++                "line {}: expected a JSON object, got {}".format(
++                    line_number, type(value).__name__
++                )
++            )
++        records.append(value)
++    return records
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index 81f877a..9391cf8 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -10,5 +10,47 @@ class PublicTests(unittest.TestCase):
+     def test_empty(self):
+         self.assertEqual(solution.load_jsonl(" \n\t"), [])
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_truly_empty_input(self):
++        self.assertEqual(solution.load_jsonl(""), [])
++
++    def test_blank_lines_are_ignored_at_both_ends(self):
++        text = '\n\n {"a": 1} \n\t\n{"b": 2}\n\n  \n'
++        self.assertEqual(solution.load_jsonl(text), [{"a": 1}, {"b": 2}])
++
++    def test_physical_line_number_for_invalid_json(self):
++        text = '\n{"ok": 1}\nnot json\n'
++        with self.assertRaises(ValueError) as ctx:
++            solution.load_jsonl(text)
++        self.assertIn("line 3", str(ctx.exception))
++
++    def test_physical_line_number_accounts_for_leading_blanks(self):
++        text = '\n\n\n   \n{"bad": }\n'
++        with self.assertRaises(ValueError) as ctx:
++            solution.load_jsonl(text)
++        self.assertIn("line 5", str(ctx.exception))
++
++    def test_non_object_json_raises_with_line_number(self):
++        for payload in ("42", '"text"', "[1, 2]", "true", "null"):
++            with self.assertRaises(ValueError) as ctx:
++                solution.load_jsonl('{"ok": 1}\n' + payload + "\n")
++            self.assertIn("line 2", str(ctx.exception))
++
++    def test_does_not_skip_erroneous_nonblank_line(self):
++        with self.assertRaises(ValueError):
++            solution.load_jsonl('{"a": 1}\n{"b": 2}\ngarbage\n{"c": 3}\n')
++
++    def test_order_and_contents_preserved(self):
++        text = '{"z": 1, "a": 2}\n{"nested": {"x": [1, 2, 3]}, "u": "\u00e9"}'
++        result = solution.load_jsonl(text)
++        self.assertEqual(result[0], {"z": 1, "a": 2})
++        self.assertEqual(list(result[0].keys()), ["z", "a"])
++        self.assertEqual(result[1], {"nested": {"x": [1, 2, 3]}, "u": "\u00e9"})
++
++    def test_no_trailing_newline(self):
++        self.assertEqual(solution.load_jsonl('{"id":1}'), [{"id": 1}])
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py
+?? reference_work/

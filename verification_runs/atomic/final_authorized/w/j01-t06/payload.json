@@ -1,0 +1,1 @@
+{"task_id": "scenario-refund-accumulation", "artifact": {"kind": "json", "value": {"total_cents": 1000, "actions": [{"op": "capture"}, {"op": "refund", "amount": 200}, {"op": "refund", "amount": 300}], "expected": {"state": "partially_refunded", "total_cents": 1000, "refunded_cents": 500, "remaining_cents": 500}}}}

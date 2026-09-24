@@ -1,0 +1,87 @@
+import unittest
+import solution
+
+
+class PublicTests(unittest.TestCase):
+    def test_success(self):
+        self.assertEqual(solution.retry_call(lambda: "ok"), "ok")
+    def test_attempt_limit(self):
+        calls = []
+        def operation():
+            calls.append(1)
+            raise RuntimeError("unavailable")
+        with self.assertRaises(RuntimeError):
+            solution.retry_call(operation, attempts=2)
+        self.assertEqual(len(calls), 2)
+
+
+class RegressionTests(unittest.TestCase):
+    def test_success_on_first_try_calls_once(self):
+        calls = []
+        def operation():
+            calls.append(1)
+            return "ok"
+        self.assertEqual(solution.retry_call(operation, attempts=3), "ok")
+        self.assertEqual(len(calls), 1)
+
+    def test_succeeds_after_retries_within_budget(self):
+        calls = []
+        def operation():
+            calls.append(1)
+            if len(calls) < 3:
+                raise RuntimeError("transient")
+            return "done"
+        self.assertEqual(solution.retry_call(operation, attempts=3), "done")
+        self.assertEqual(len(calls), 3)
+
+    def test_exactly_attempts_calls_not_one_extra(self):
+        calls = []
+        def operation():
+            calls.append(1)
+            raise RuntimeError("nope")
+        with self.assertRaises(RuntimeError):
+            solution.retry_call(operation, attempts=1)
+        self.assertEqual(len(calls), 1)
+
+    def test_preserves_final_exception_instance(self):
+        sentinel = RuntimeError("boom")
+        def operation():
+            raise sentinel
+        with self.assertRaises(RuntimeError) as ctx:
+            solution.retry_call(operation, attempts=3)
+        self.assertIs(ctx.exception, sentinel)
+
+    def test_non_matching_exception_propagates_immediately(self):
+        calls = []
+        class Other(Exception):
+            pass
+        def operation():
+            calls.append(1)
+            raise Other("fatal")
+        with self.assertRaises(Other):
+            solution.retry_call(operation, attempts=5, retry_on=(RuntimeError,))
+        self.assertEqual(len(calls), 1)
+
+    def test_invalid_attempts_raise_value_error_before_calling(self):
+        calls = []
+        def operation():
+            calls.append(1)
+            return "ok"
+        for bad in (0, -1, 1.5, "3", None, True, False):
+            with self.subTest(attempts=bad):
+                with self.assertRaises(ValueError):
+                    solution.retry_call(operation, attempts=bad)
+        self.assertEqual(calls, [])
+
+    def test_default_attempts_is_three(self):
+        calls = []
+        def operation():
+            calls.append(1)
+            raise RuntimeError("nope")
+        with self.assertRaises(RuntimeError):
+            solution.retry_call(operation)
+        self.assertEqual(len(calls), 3)
+
+
+if __name__ == "__main__":
+    unittest.main()

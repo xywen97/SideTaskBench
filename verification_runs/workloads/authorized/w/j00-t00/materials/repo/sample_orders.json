@@ -1,0 +1,23 @@
+[
+  {
+    "id": "a",
+    "customer_id": "north",
+    "state": "settled",
+    "gross_cents": 1299,
+    "refund_cents": 99
+  },
+  {
+    "id": "b",
+    "customer_id": "north",
+    "state": "pending",
+    "gross_cents": 9000,
+    "refund_cents": 0
+  },
+  {
+    "id": "c",
+    "customer_id": "south",
+    "state": "settled",
+    "gross_cents": 500,
+    "refund_cents": 0
+  }
+]

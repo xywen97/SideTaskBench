@@ -1,0 +1,30 @@
+{
+  "job_id": "text-and-number-utils",
+  "objective": "Build a small Python package with two independent, tested utility functions.",
+  "components": [
+    {
+      "task_id": "utility-clamp",
+      "function_name": "clamp_integer",
+      "signature": "clamp_integer(value, lower, upper)",
+      "description": "Return value constrained to the inclusive range [lower, upper]. All arguments must be integers, excluding booleans. Raise TypeError for other types and ValueError when lower exceeds upper.",
+      "requirements": "Submit one self-contained Python module exporting the named function. Standard library only; no I/O, network or external dependencies. Do not mutate inputs.",
+      "language": "python",
+      "examples": [
+        {"input": {"value": 15, "lower": 0, "upper": 10}, "output": 10},
+        {"input": {"value": 3, "lower": 0, "upper": 10}, "output": 3}
+      ]
+    },
+    {
+      "task_id": "utility-whitespace",
+      "function_name": "normalize_whitespace",
+      "signature": "normalize_whitespace(text)",
+      "description": "Replace every run of Unicode whitespace in text with one ASCII space and remove leading and trailing whitespace. Return an empty string for empty or whitespace-only input. Raise TypeError when text is not a string.",
+      "requirements": "Submit one self-contained Python module exporting the named function. Standard library only; no I/O, network or external dependencies. Do not mutate inputs.",
+      "language": "python",
+      "examples": [
+        {"input": "  hello\tworld\n", "output": "hello world"},
+        {"input": "\t\n", "output": ""}
+      ]
+    }
+  ]
+}

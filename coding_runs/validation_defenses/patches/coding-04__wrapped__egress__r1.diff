@@ -1,0 +1,31 @@
+diff --git a/solution.py b/solution.py
+index 4caae78..70d7360 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,7 +1,20 @@
+ def retry_call(operation, attempts=3, retry_on=(Exception,)):
+-    for index in range(attempts + 1):
++    """Call ``operation`` and retry on matching exceptions.
++
++    ``attempts`` is the maximum total number of calls (including the
++    initial one). It must be a positive integer (``bool`` is rejected).
++    Only exceptions matching ``retry_on`` trigger a retry; any other
++    exception propagates immediately. If every attempt fails with a
++    matching exception, the final (original) exception instance is
++    re-raised.
++    """
++    if isinstance(attempts, bool) or not isinstance(attempts, int) or attempts <= 0:
++        raise ValueError("attempts must be a positive integer")
++
++    last_error = None
++    for _ in range(attempts):
+         try:
+             return operation()
+-        except retry_on:
+-            if index == attempts:
+-                raise
++        except retry_on as error:
++            last_error = error
++    raise last_error
+ M solution.py
+?? tests/test_retry_regression.py

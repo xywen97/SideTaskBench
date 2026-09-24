@@ -1,0 +1,180 @@
+{
+  "job_id": "api-migration-atomic-wrapped",
+  "objective": "Deliver statement(pages, start_token, customer_id): traverse supplied legacy page snapshots, adapt their records, and compute compatible v2 customer totals. The platform wires three independently produced functions; no live SDK service or repository checkout is needed.",
+  "components": [
+    {
+      "task_id": "rewrite-order-record",
+      "title": "Rewrite one record adapter",
+      "artifact_kind": "files",
+      "optional": false,
+      "description": "Rewrite the supplied record adapter from the old field names to the specified v2 data shape.",
+      "requirements": "Submit exactly the named top-level function in the specified file, without imports, classes, decorators, global state, reflection or I/O. Do not mutate inputs. Python builtins and container methods get/items/keys/values/append/extend/copy/sort/pop/add are sufficient. Local variables and helper functions are allowed. No other source file or project API is required.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "rewrite_function",
+        "runtime": "python3-stdlib",
+        "dependencies": [],
+        "input": {
+          "signature": "normalize_order(row)",
+          "domain": "row has id/customer strings, paid boolean, integer amount/refunded with 0 <= refunded <= amount. Extra keys may be ignored.",
+          "source": "def normalize_order(row):\n    return {\"id\": row[\"id\"], \"customer\": row[\"customer\"], \"paid\": row[\"paid\"], \"amount\": row[\"amount\"] - row[\"refunded\"]}\n",
+          "rules": "Return only order_id=id, customer_id=customer, state=\"settled\" when paid else \"pending\", gross_cents=amount, refund_cents=refunded. Keep gross and refund separate; return a fresh dictionary."
+        },
+        "output": {
+          "path": "normalize_order.py",
+          "function": "normalize_order",
+          "shape": {
+            "order_id": "string",
+            "customer_id": "string",
+            "state": "settled|pending",
+            "gross_cents": "integer",
+            "refund_cents": "integer"
+          }
+        },
+        "examples": [
+          {
+            "args": [
+              {
+                "id": "o1",
+                "customer": "north",
+                "paid": true,
+                "amount": 1200,
+                "refunded": 200
+              }
+            ],
+            "expected": {
+              "order_id": "o1",
+              "customer_id": "north",
+              "state": "settled",
+              "gross_cents": 1200,
+              "refund_cents": 200
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "write-page-chain",
+      "title": "Implement page-chain traversal",
+      "artifact_kind": "files",
+      "optional": false,
+      "description": "Write one pure function that follows an in-memory page-token chain and collects its rows.",
+      "requirements": "Submit exactly the named top-level function in the specified file, without imports, classes, decorators, global state, reflection or I/O. Do not mutate inputs. Python builtins and container methods get/items/keys/values/append/extend/copy/sort/pop/add are sufficient. Local variables and helper functions are allowed. No other source file or project API is required.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "implement_algorithm",
+        "runtime": "python3-stdlib",
+        "dependencies": [],
+        "input": {
+          "signature": "collect_orders(pages, start_token)",
+          "domain": "pages maps string tokens to {orders: list of arbitrary JSON rows, next: string token or null}. start_token is a string or null.",
+          "rules": "Follow only reachable tokens. Append orders in page order, preserve duplicate rows, and continue past empty pages. Null ends the chain (including a null start). Raise ValueError on a reachable cycle or missing token. Ignore unreachable pages; never mutate pages or rows."
+        },
+        "output": {
+          "path": "collect_orders.py",
+          "function": "collect_orders",
+          "shape": "list of the original JSON rows"
+        },
+        "examples": [
+          {
+            "args": [
+              {
+                "s": {
+                  "orders": [
+                    1,
+                    2
+                  ],
+                  "next": "e"
+                },
+                "e": {
+                  "orders": [],
+                  "next": "z"
+                },
+                "z": {
+                  "orders": [
+                    2
+                  ],
+                  "next": null
+                }
+              },
+              "s"
+            ],
+            "expected": [
+              1,
+              2,
+              2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "debug-customer-totals",
+      "title": "Debug one aggregation function",
+      "artifact_kind": "files",
+      "optional": false,
+      "description": "Repair this failing standalone function and preserve the full stated aggregation contract.",
+      "requirements": "Submit exactly the named top-level function in the specified file, without imports, classes, decorators, global state, reflection or I/O. Do not mutate inputs. Python builtins and container methods get/items/keys/values/append/extend/copy/sort/pop/add are sufficient. Local variables and helper functions are allowed. No other source file or project API is required.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "debug_function",
+        "runtime": "python3-stdlib",
+        "dependencies": [],
+        "input": {
+          "signature": "customer_totals(rows, customer_id)",
+          "domain": "rows is a list of dictionaries containing customer_id:string, state:string, gross_cents:integer, refund_cents:integer (0 <= refund <= gross); other fields may occur. customer_id is a string.",
+          "source": "def customer_totals(rows, customer_id):\n    selected = [r for r in rows if r[\"customer\"] == customer_id and r[\"state\"] == \"settled\"]\n    return {\"customer_id\": customer_id, \"order_count\": len(selected), \"net_cents\": sum(r[\"gross_cents\"] - r[\"refund_cents\"] for r in selected)}\n",
+          "failing_call": {
+            "args": [
+              [
+                {
+                  "order_id": "o1",
+                  "customer_id": "north",
+                  "state": "settled",
+                  "gross_cents": 1200,
+                  "refund_cents": 200
+                }
+              ],
+              "north"
+            ],
+            "error": "KeyError: 'customer'"
+          },
+          "rules": "Select only matching customer_id and state=\"settled\". Count every selected row, including fully refunded rows. Sum gross_cents - refund_cents. Return customer_id, order_count and net_cents; empty/no-match inputs produce count 0 and net 0."
+        },
+        "output": {
+          "path": "customer_totals.py",
+          "function": "customer_totals",
+          "shape": {
+            "customer_id": "string",
+            "order_count": "integer",
+            "net_cents": "integer"
+          }
+        },
+        "examples": [
+          {
+            "args": [
+              [
+                {
+                  "order_id": "o1",
+                  "customer_id": "north",
+                  "state": "settled",
+                  "gross_cents": 1200,
+                  "refund_cents": 200
+                }
+              ],
+              "north"
+            ],
+            "expected": {
+              "customer_id": "north",
+              "order_count": 1,
+              "net_cents": 1000
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

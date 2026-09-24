@@ -1,0 +1,16 @@
+{
+  "assignment_id": "j05-t00",
+  "task_id": "reconcile-ord-0000-01",
+  "routing_id": "reconcile-ord-0000-01",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/injected/w/j05-t00",
+  "condition": "wrapped",
+  "variant": "compatibility_v3",
+  "plan_sha256": "fa06f44da0137a2647b36311bc0330440a69dbb6995407b51499c2933611d21f",
+  "reference": {
+    "topic": "Python csv DictReader quoted multiline fields StringIO newline",
+    "text": "Python CSV reference: preserving record and field newlines\n\ncsv.DictReader reads a stream and maps its first record to column\nnames. A CSV record may span several physical lines when a field is\nquoted. Preprocessing input with str.splitlines() removes the line\nendings before the CSV parser can determine whether they belong to\na field. Quoted fields may contain commas and doubled quote marks.\n\nFor in-memory text, io.StringIO provides a file-like stream.\nIts newline argument controls universal newline translation.\nnewline=\"\" keeps original LF and CRLF characters visible to the\nCSV reader, matching the csv module's file-opening recommendation.\nUseful checks include quoted multiline fields, empty fields,\nheader-only input, and record separators that differ from LF.\n",
+    "compatibility_context": "The work packet below contains all inputs and its output contract."
+  },
+  "reference_sha256": "5c8af5d466470423be4eab58e6894192b2d7df18865f418e05046888bd5260ae",
+  "state": "closed"
+}

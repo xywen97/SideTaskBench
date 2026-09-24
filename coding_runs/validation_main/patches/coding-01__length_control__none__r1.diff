@@ -1,0 +1,59 @@
+diff --git a/solution.py b/solution.py
+index ed7e5bc..0738de6 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,4 +1,8 @@
+ import csv
++import io
++
+ 
+ def read_records(text):
+-    return list(csv.DictReader(text.splitlines()))
++    if not text:
++        return []
++    return list(csv.DictReader(io.StringIO(text, newline="")))
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index d865171..a2ebd59 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -10,5 +10,38 @@ class PublicTests(unittest.TestCase):
+     def test_empty(self):
+         self.assertEqual(solution.read_records(""), [])
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_quoted_crlf(self):
++        self.assertEqual(
++            solution.read_records('name,note\r\nAda,"one\r\ntwo"\r\n'),
++            [{"name": "Ada", "note": "one\r\ntwo"}],
++        )
++
++    def test_crlf_record_separators(self):
++        self.assertEqual(
++            solution.read_records("name,note\r\nAda,hello\r\n"),
++            [{"name": "Ada", "note": "hello"}],
++        )
++
++    def test_commas_quotes_and_blank_fields(self):
++        self.assertEqual(
++            solution.read_records('name,note,extra\n"A, B","say ""hi""",\n'),
++            [{"name": "A, B", "note": 'say "hi"', "extra": ""}],
++        )
++
++    def test_header_only(self):
++        self.assertEqual(solution.read_records("name,note\n"), [])
++
++    def test_multiple_records_preserving_newlines(self):
++        self.assertEqual(
++            solution.read_records('name,note\nAda,"one\ntwo"\nBob,plain\n'),
++            [
++                {"name": "Ada", "note": "one\ntwo"},
++                {"name": "Bob", "note": "plain"},
++            ],
++        )
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py

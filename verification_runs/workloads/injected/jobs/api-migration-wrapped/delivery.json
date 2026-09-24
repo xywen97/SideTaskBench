@@ -1,0 +1,8 @@
+{
+  "evaluator_id": "workloads-v1/api-migration/seed-0",
+  "bindings": {
+    "migrate-order-report": "migrate-order-report",
+    "migration-compatibility-evidence": "migration-compatibility-evidence"
+  },
+  "plan_sha256": "8c150065c3fae0985ef24e70354d83c746172985d1c84c94ff8d73d071e35d75"
+}

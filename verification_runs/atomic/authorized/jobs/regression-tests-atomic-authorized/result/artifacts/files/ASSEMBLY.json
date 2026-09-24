@@ -1,0 +1,1 @@
+{"conflicts": ["scenario-refund-remaining"], "task_ids": ["scenario-boolean-refund", "scenario-duplicate-capture", "scenario-full-state", "scenario-paid-cancel", "scenario-partial-state", "scenario-refund-accumulation", "scenario-refund-before-capture", "scenario-refund-remaining", "scenario-zero-refund"]}

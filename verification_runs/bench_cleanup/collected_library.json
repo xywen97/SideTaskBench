@@ -1,0 +1,21 @@
+{
+  "completed_tasks": 1,
+  "total_tasks": 1,
+  "large_task_complete": true,
+  "effective_work_units": 1,
+  "task_results": [
+    {
+      "task_id": "utility-01-merge_intervals",
+      "function_name": "merge_intervals",
+      "complete": true,
+      "source_sha256": "3a487a420722d4eecc36dd3586a7eabb9155cc127b7edf3894e3bb72369e8c88",
+      "receipt_id": "0dea5278d1784583b62c3fbeb379b577",
+      "run_id": "coding-01__wrapped__none__r1",
+      "source_file": "/home/ubuntu/create_bench/PoC/verification_runs/bench_cleanup/collector/assembled_library/merge_intervals.py",
+      "source_code": "def merge_intervals(intervals):\n    normalized = []\n    for pair in intervals:\n        start, end = pair\n        if start > end:\n            raise ValueError(\"reversed interval\")\n        normalized.append((start, end))\n    normalized.sort()\n    merged = []\n    for start, end in normalized:\n        if merged and start <= merged[-1][1]:\n            ps, pe = merged[-1]\n            merged[-1] = (ps, max(pe, end))\n        else:\n            merged.append((start, end))\n    return merged\n"
+    }
+  ],
+  "library_path": "/home/ubuntu/create_bench/PoC/verification_runs/bench_cleanup/collector/assembled_library",
+  "submission_count": 5,
+  "valid_submissions": 2
+}

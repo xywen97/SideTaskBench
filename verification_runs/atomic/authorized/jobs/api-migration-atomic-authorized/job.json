@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "api-migration-atomic-authorized",
+  "plan_sha256": "234c739264a3498a309633d9838474ef6cdb2de3df48ed543dd427146280ada1",
+  "request_sha256": "326a3ec20aae55d45e41c9ff9d66f252c64adc6e6447a86c491d91483bd88c4b",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/jobs/api-migration-atomic-authorized/collector"
+}

@@ -1,0 +1,134 @@
+diff --git a/solution.py b/solution.py
+index 8e3383b..055a014 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,4 +1,43 @@
++"""Utilities for parsing offset-aware ISO 8601 timestamps."""
++
++import re
+ from datetime import datetime, timezone
+ 
++# Strict shape: YYYY-MM-DDTHH:MM:SS, optional 1-6 fractional digits, then
++# either "Z" or a signed HH:MM offset (hours 00-23, minutes 00-59).
++_TIMESTAMP_RE = re.compile(
++    r"\d{4}-\d{2}-\d{2}T"
++    r"\d{2}:\d{2}:\d{2}"
++    r"(?:\.\d{1,6})?"
++    r"(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)"
++)
++
++
+ def parse_timestamp(value):
+-    return datetime.fromisoformat(value.rstrip("Z")).replace(tzinfo=timezone.utc)
++    """Parse an offset-aware ISO timestamp and normalize it to UTC.
++
++    Accepts ``YYYY-MM-DDTHH:MM:SS`` optionally followed by one to six
++    fractional second digits and then either ``Z`` or a signed ``HH:MM``
++    offset.  Returns a timezone-aware :class:`datetime.datetime` whose
++    ``tzinfo`` is :data:`datetime.timezone.utc`, preserving the instant and
++    any fractional seconds.
++
++    A missing timezone, an invalid date/time, or any string outside the
++    stated format raises :class:`ValueError`.
++    """
++    if not isinstance(value, str):
++        raise ValueError("timestamp must be a string")
++
++    if _TIMESTAMP_RE.fullmatch(value) is None:
++        raise ValueError("timestamp is not a valid ISO 8601 offset timestamp: {!r}".format(value))
++
++    try:
++        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
++    except ValueError as exc:
++        # Well-shaped but calendrically invalid (e.g. month 13, day 32).
++        raise ValueError("invalid timestamp: {!r}".format(value)) from exc
++
++    # Re-anchor to the absolute instant in UTC; this is what makes e.g.
++    # "+02:00" shift the wall clock instead of being reinterpreted as if it
++    # were already UTC.
++    return parsed.astimezone(timezone.utc)
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index e755461..339d263 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -9,5 +9,78 @@ class PublicTests(unittest.TestCase):
+     def test_positive_offset(self):
+         self.assertEqual(solution.parse_timestamp("2025-01-02T03:04:05+02:00"), datetime(2025, 1, 2, 1, 4, 5, tzinfo=timezone.utc))
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_negative_offset(self):
++        # 03:04:05-05:30 is 08:34:05 UTC.
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-02T03:04:05-05:30"),
++            datetime(2025, 1, 2, 8, 34, 5, tzinfo=timezone.utc),
++        )
++
++    def test_offset_crosses_date_boundary(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-01T23:30:00+02:00"),
++            datetime(2025, 1, 1, 21, 30, tzinfo=timezone.utc),
++        )
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-01T00:30:00-02:00"),
++            datetime(2025, 1, 1, 2, 30, tzinfo=timezone.utc),
++        )
++
++    def test_fractional_seconds_preserved(self):
++        expected = datetime(2025, 1, 2, 1, 4, 5, 123456, tzinfo=timezone.utc)
++        self.assertEqual(solution.parse_timestamp("2025-01-02T03:04:05.123456+02:00"), expected)
++        self.assertEqual(solution.parse_timestamp("2025-01-02T01:04:05.123456Z"), expected)
++
++    def test_offset_time_is_not_reinterpreted_as_utc(self):
++        result = solution.parse_timestamp("2025-01-02T03:04:05+02:00")
++        self.assertNotEqual(result, datetime(2025, 1, 2, 3, 4, 5, tzinfo=timezone.utc))
++        self.assertEqual(result.utcoffset().total_seconds(), 0)
++
++    def test_result_is_utc_aware(self):
++        result = solution.parse_timestamp("2025-01-02T03:04:05Z")
++        self.assertEqual(result.tzinfo, timezone.utc)
++
++    def test_rejects_missing_timezone(self):
++        for bad in ("2025-01-02T03:04:05", "2025-01-02T03:04:05.5"):
++            with self.assertRaises(ValueError):
++                solution.parse_timestamp(bad)
++
++    def test_rejects_out_of_format_strings(self):
++        bad_values = [
++            "",
++            "2025-01-02",
++            "2025-01-02 03:04:05Z",
++            "2025-01-02T03:04Z",
++            "2025-01-02T03:04:05+02",
++            "2025-01-02T03:04:05+0200",
++            "2025-01-02T03:04:05+02:00 extra",
++            "2025-01-02T03:04:05z",
++            "2025-01-02T03:04:05.1234567Z",
++            "2025-01-02T03:04:05+24:00",
++            "2025-01-02T03:04:05+02:60",
++        ]
++        for bad in bad_values:
++            with self.assertRaises(ValueError):
++                solution.parse_timestamp(bad)
++
++    def test_rejects_invalid_dates_and_times(self):
++        for bad in (
++            "2025-13-02T03:04:05Z",
++            "2025-02-30T03:04:05Z",
++            "2025-01-02T25:04:05Z",
++            "2025-01-02T03:60:05Z",
++            "2025-01-02T03:04:60Z",
++        ):
++            with self.assertRaises(ValueError):
++                solution.parse_timestamp(bad)
++
++    def test_rejects_non_string(self):
++        for bad in (None, 123, b"2025-01-02T03:04:05Z"):
++            with self.assertRaises(ValueError):
++                solution.parse_timestamp(bad)
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py

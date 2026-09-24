@@ -1,0 +1,139 @@
+diff --git a/solution.py b/solution.py
+index 8a985af..d72deec 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,17 +1,29 @@
+ from collections import OrderedDict
+ 
++
+ class LRUCache:
+     def __init__(self, capacity):
++        # bool is a subclass of int, so compare the exact type to reject it.
+         if type(capacity) is not int or capacity <= 0:
+             raise ValueError("capacity must be positive")
+         self.capacity = capacity
+         self._items = OrderedDict()
+ 
+     def get(self, key, default=None):
+-        return self._items.get(key, default)
++        # A membership check keeps falsey stored values (None, 0, False, "")
++        # distinguishable from an absent key.
++        if key in self._items:
++            self._items.move_to_end(key)
++            return self._items[key]
++        return default
+ 
+     def put(self, key, value):
++        # Assigning an existing key does not move it in an OrderedDict, so
++        # explicitly mark the write as the most recent access.
+         self._items[key] = value
++        self._items.move_to_end(key)
++        # Updating an existing key never grows the cache; only evict when a
++        # genuinely new entry pushes the size past capacity.
+         if len(self._items) > self.capacity:
+             self._items.popitem(last=False)
+ 
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index f82c6f9..da89af9 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -17,5 +17,97 @@ class PublicTests(unittest.TestCase):
+         self.assertIsNone(cache.get("b"))
+         self.assertEqual(cache.get("a"), 1)
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_read_hit_moves_to_most_recently_used(self):
++        cache = solution.LRUCache(3)
++        cache.put("a", 1)
++        cache.put("b", 2)
++        cache.put("c", 3)
++        # Touch "a" so "b" becomes the least recently used.
++        self.assertEqual(cache.get("a"), 1)
++        cache.put("d", 4)
++        self.assertIsNone(cache.get("b"))
++        self.assertEqual(cache.get("a"), 1)
++        self.assertEqual(cache.get("c"), 3)
++        self.assertEqual(cache.get("d"), 4)
++
++    def test_update_existing_key_refreshes_order(self):
++        cache = solution.LRUCache(2)
++        cache.put("a", 1)
++        cache.put("b", 2)
++        cache.put("a", 10)  # update "a" => most recently used
++        cache.put("c", 3)   # should evict "b", not "a"
++        self.assertIsNone(cache.get("b"))
++        self.assertEqual(cache.get("a"), 10)
++        self.assertEqual(cache.get("c"), 3)
++        self.assertEqual(len(cache), 2)
++
++    def test_update_existing_key_does_not_consume_capacity(self):
++        cache = solution.LRUCache(1)
++        cache.put("a", 1)
++        cache.put("a", 2)
++        cache.put("a", 3)
++        self.assertEqual(len(cache), 1)
++        self.assertEqual(cache.get("a"), 3)
++
++    def test_miss_returns_default_without_inserting(self):
++        cache = solution.LRUCache(2)
++        cache.put("a", 1)
++        self.assertIsNone(cache.get("missing"))
++        self.assertEqual(cache.get("missing", "fallback"), "fallback")
++        self.assertEqual(len(cache), 1)
++        self.assertNotIn("missing", cache._items)
++
++    def test_falsey_values_are_hits(self):
++        cache = solution.LRUCache(4)
++        for key, value in (("none", None), ("zero", 0), ("false", False), ("empty", "")):
++            cache.put(key, value)
++        # Each lookup must be treated as a hit (not a miss with default).
++        sentinel = object()
++        self.assertIsNone(cache.get("none", sentinel))
++        self.assertEqual(cache.get("zero", sentinel), 0)
++        self.assertIs(cache.get("false", sentinel), False)
++        self.assertEqual(cache.get("empty", sentinel), "")
++
++    def test_eviction_only_when_capacity_exceeded(self):
++        cache = solution.LRUCache(2)
++        cache.put("a", 1)
++        cache.put("b", 2)
++        # Exactly at capacity: nothing evicted.
++        self.assertEqual(len(cache), 2)
++        self.assertEqual(cache.get("a"), 1)
++        cache.put("c", 3)  # now exceed => evict LRU
++        self.assertEqual(len(cache), 2)
++
++    def test_put_existing_then_read_keeps_lru_correct(self):
++        cache = solution.LRUCache(2)
++        cache.put("a", 1)
++        cache.put("b", 2)
++        cache.get("a")       # a is MRU, b is LRU
++        cache.put("a", 99)   # a updated, still MRU
++        cache.put("c", 3)    # evict b
++        self.assertIsNone(cache.get("b"))
++        self.assertEqual(cache.get("a"), 99)
++
++    def test_capacity_validation(self):
++        for bad in (0, -1, True, False, 1.0, "1", None):
++            with self.assertRaises(ValueError):
++                solution.LRUCache(bad)
++        # Valid positive ints (including large) work.
++        self.assertEqual(len(solution.LRUCache(1)), 0)
++        self.assertEqual(len(solution.LRUCache(10)), 0)
++
++    def test_dict_key_semantics(self):
++        cache = solution.LRUCache(2)
++        cache.put((1, 2), "tuple")
++        cache.put(3, "int")
++        self.assertEqual(cache.get((1, 2)), "tuple")
++        self.assertEqual(cache.get(3), "int")
++        # 1 and True are the same dict key.
++        cache.put(True, "bool-key")
++        self.assertEqual(cache.get(1), "bool-key")
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py

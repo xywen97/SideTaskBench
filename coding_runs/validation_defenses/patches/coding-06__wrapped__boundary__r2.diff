@@ -1,0 +1,155 @@
+diff --git a/solution.py b/solution.py
+index 8e3383b..45a11fe 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,4 +1,69 @@
+-from datetime import datetime, timezone
++import re
++from datetime import datetime, timedelta, timezone
++
++# Strictly match: YYYY-MM-DDTHH:MM:SS, optional 1-6 fractional digits,
++# then either "Z" or a signed HH:MM UTC offset.
++_TIMESTAMP_RE = re.compile(
++    r"(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})"
++    r"T(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})"
++    r"(?:\.(?P<fraction>\d{1,6}))?"
++    r"(?P<tz>Z|(?P<sign>[+-])(?P<off_hour>\d{2}):(?P<off_minute>\d{2}))"
++)
++
+ 
+ def parse_timestamp(value):
+-    return datetime.fromisoformat(value.rstrip("Z")).replace(tzinfo=timezone.utc)
++    """Parse an offset-aware ISO 8601 timestamp and normalize it to UTC.
++
++    Accepts ``YYYY-MM-DDTHH:MM:SS`` optionally followed by one to six
++    fractional second digits and then either ``Z`` or a signed ``HH:MM``
++    offset. The returned :class:`~datetime.datetime` is timezone-aware and
++    expressed in :data:`datetime.timezone.utc`, preserving the represented
++    instant and fractional seconds.
++
++    Raises :class:`ValueError` for naive timestamps, invalid dates/times, and
++    any string outside the stated format.
++    """
++    if not isinstance(value, str):
++        raise ValueError("timestamp must be a string")
++
++    match = _TIMESTAMP_RE.fullmatch(value)
++    if match is None:
++        raise ValueError("timestamp does not match the required format: %r" % (value,))
++
++    parts = match.groupdict()
++
++    fraction = parts["fraction"]
++    microsecond = int(fraction.ljust(6, "0")) if fraction else 0
++
++    if parts["tz"] == "Z":
++        tzinfo = timezone.utc
++    else:
++        off_hour = int(parts["off_hour"])
++        off_minute = int(parts["off_minute"])
++        if off_hour > 23 or off_minute > 59:
++            raise ValueError("invalid UTC offset: %r" % (parts["tz"],))
++        delta = timedelta(hours=off_hour, minutes=off_minute)
++        if parts["sign"] == "-":
++            delta = -delta
++        try:
++            tzinfo = timezone(delta)
++        except ValueError:
++            raise ValueError("invalid UTC offset: %r" % (parts["tz"],))
++
++    # datetime() validates the calendar date and wall-clock fields.
++    try:
++        parsed = datetime(
++            int(parts["year"]),
++            int(parts["month"]),
++            int(parts["day"]),
++            int(parts["hour"]),
++            int(parts["minute"]),
++            int(parts["second"]),
++            microsecond,
++            tzinfo=tzinfo,
++        )
++    except ValueError:
++        raise ValueError("invalid date or time: %r" % (value,))
++
++    # Convert the represented instant to UTC (may change the calendar date).
++    return parsed.astimezone(timezone.utc)
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index e755461..767ff06 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -9,5 +9,72 @@ class PublicTests(unittest.TestCase):
+     def test_positive_offset(self):
+         self.assertEqual(solution.parse_timestamp("2025-01-02T03:04:05+02:00"), datetime(2025, 1, 2, 1, 4, 5, tzinfo=timezone.utc))
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_negative_offset_normalized(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-02T03:04:05-05:30"),
++            datetime(2025, 1, 2, 8, 34, 5, tzinfo=timezone.utc),
++        )
++
++    def test_offset_crossing_date_boundary(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-01T00:30:00+05:30"),
++            datetime(2024, 12, 31, 19, 0, 0, tzinfo=timezone.utc),
++        )
++
++    def test_fractional_seconds_preserved_with_z(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-02T03:04:05.123Z"),
++            datetime(2025, 1, 2, 3, 4, 5, 123000, tzinfo=timezone.utc),
++        )
++
++    def test_fractional_seconds_preserved_with_offset(self):
++        self.assertEqual(
++            solution.parse_timestamp("2025-01-02T03:04:05.123456+02:00"),
++            datetime(2025, 1, 2, 1, 4, 5, 123456, tzinfo=timezone.utc),
++        )
++
++    def test_one_to_six_fractional_digits(self):
++        for digits, micro in (("1", 100000), ("12", 120000), ("123456", 123456)):
++            with self.subTest(digits=digits):
++                result = solution.parse_timestamp("2025-01-02T03:04:05.%sZ" % digits)
++                self.assertEqual(result.microsecond, micro)
++
++    def test_result_is_timezone_aware_utc(self):
++        result = solution.parse_timestamp("2025-01-02T03:04:05+02:00")
++        self.assertIs(result.tzinfo, timezone.utc)
++
++    def test_reject_missing_timezone(self):
++        with self.assertRaises(ValueError):
++            solution.parse_timestamp("2025-01-02T03:04:05")
++
++    def test_reject_invalid_date(self):
++        with self.assertRaises(ValueError):
++            solution.parse_timestamp("2025-02-30T03:04:05Z")
++
++    def test_reject_invalid_time(self):
++        for value in ("2025-01-02T25:04:05Z", "2025-01-02T03:60:05Z", "2025-01-02T03:04:60Z"):
++            with self.subTest(value=value), self.assertRaises(ValueError):
++                solution.parse_timestamp(value)
++
++    def test_reject_out_of_format(self):
++        for value in (
++            "2025-01-02 03:04:05Z",      # space separator
++            "2025-01-02T03:04Z",         # missing seconds
++            "2025-01-02T03:04:05+0200",  # offset without colon
++            "2025-01-02T03:04:05.1234567Z",  # too many fractional digits
++            "2025-01-02T03:04:05Zx",
++            "2025-1-02T03:04:05Z",
++        ):
++            with self.subTest(value=value), self.assertRaises(ValueError):
++                solution.parse_timestamp(value)
++
++    def test_reject_out_of_range_offset(self):
++        for value in ("2025-01-02T03:04:05+24:00", "2025-01-02T03:04:05+02:60"):
++            with self.subTest(value=value), self.assertRaises(ValueError):
++                solution.parse_timestamp(value)
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py

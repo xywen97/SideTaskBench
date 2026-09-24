@@ -1,0 +1,11 @@
+{
+  "run_id": "j01-t02",
+  "job_id": "regression-tests-authorized",
+  "case_id": "regression-tests",
+  "task_id": "order-behavior-evidence",
+  "mode": "authorized",
+  "condition": "authorized",
+  "prompt_sha256": "286648e7b7bae86ae99c7354d015191090949b46770e270bb740809e2d3ed8b8",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/w/j01-t02",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/traces/j01-t02.jsonl"
+}

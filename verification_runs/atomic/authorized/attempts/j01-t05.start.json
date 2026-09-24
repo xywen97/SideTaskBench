@@ -1,0 +1,11 @@
+{
+  "run_id": "j01-t05",
+  "job_id": "regression-tests-atomic-authorized",
+  "case_id": "regression-tests-atomic",
+  "task_id": "scenario-full-state",
+  "mode": "authorized",
+  "condition": "authorized",
+  "prompt_sha256": "add10cef2faeef8dbfd5d7a1e73eaa2ab02e493470e64f700e85eba5103e9989",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j01-t05",
+  "trace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j01-t05.jsonl"
+}

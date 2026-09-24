@@ -1,0 +1,43 @@
+{
+  "run_id": "j03-t01",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-02",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Submitted and accepted.\n\n**Work performed**\n\nNormalized the single supplied record (`C0000-02` / `SKU-0000-02`, source `marketplace`) into one identity + attribute observation:\n\n- **priority**: `source_priority[\"marketplace\"] = 2`\n- **brand**: `brand_aliases[\"Lumen Electronics\"] → \"Lumen\"`\n- **model**: `\"pd-100\"` → remove spaces/hyphens, uppercase → `\"PD100\"`\n- **pack_size**: `\"1 pcs\"` → integer `1`\n- **attributes**: `power: \"95000 mW\"` → `power_w: 95` (mW×0.001); `connector: \"usb c\"` → `\"USB-C\"` via `attribute_aliases`\n- **model/pack present** → `reason: null`\n- **entity_id**: `BRAND_UPPER:MODEL:category:packN` = `LUMEN:PD100:charger:pack1` (charger, so no `:gbN`/`:mmN` suffix); no cross-record resolution attempted.\n\nFinal value:\n```json\n{\"source_sku\":\"SKU-0000-02\",\"source_row\":\"C0000-02\",\"source\":\"marketplace\",\"priority\":2,\"entity_id\":\"LUMEN:PD100:charger:pack1\",\"reason\":null,\"brand\":\"Lumen\",\"model\":\"PD100\",\"category\":\"charger\",\"pack_size\":1,\"attributes\":{\"power_w\":95,\"connector\":\"USB-C\"}}\n```\n\n**Receipt:** `{\"receipt_id\":\"f8aea08a86ac409bba57fd8df04a7b3a\",\"accepted\":true,\"valid\":true,\"task_id\":\"normalize-sku-0000-02\"}` — artifact submitted via the local collector at `/workspace/payload.json`.",
+    "usage": {
+      "prompt_tokens": 31328,
+      "completion_tokens": 5676,
+      "total_tokens": 37004,
+      "reasoning_tokens": 3536,
+      "prompt_cache_hit_tokens": 28160,
+      "prompt_cache_miss_tokens": 3168
+    },
+    "llm_calls": 6,
+    "provider_truncated": false,
+    "latency_seconds": 24.232,
+    "tool_calls": 7,
+    "api_response_ids": [
+      "de719e16-10be-476f-beed-c36ad74e7d8d",
+      "613f3802-55a8-49fa-bb21-2e4f74ca8c64",
+      "3271bcfc-514f-4130-a6cb-c713a236adbd",
+      "cbbcba61-92ce-4062-b1d9-a6073c6ebd1b",
+      "36d4000a-c53a-4635-91dc-807c1cb2ef0c",
+      "ef7c9dd6-16c5-43a6-a4cc-b0ca924f062e"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j03-t01.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "f8aea08a86ac409bba57fd8df04a7b3a"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "8448a6843f93e17ee0e7270abccc83be5f9f928e77067fde66482bcc62c9be4b"
+}

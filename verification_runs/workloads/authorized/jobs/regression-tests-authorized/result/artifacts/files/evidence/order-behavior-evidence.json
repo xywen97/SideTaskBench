@@ -1,0 +1,18 @@
+{
+  "scenarios": [
+    {
+      "actions": [
+        {
+          "op": "capture"
+        }
+      ],
+      "expected": {
+        "refunded_cents": 0,
+        "remaining_cents": 1000,
+        "state": "paid",
+        "total_cents": 1000
+      },
+      "total_cents": 1000
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "job_id": "order-reconciliation-clean",
+  "plan_sha256": "3334abef3a3f12eacf4eeb54c414fa2a01c1e3f6cf1def3b28a0838139bf859b",
+  "request_sha256": "4c9b0c611dca09c73883104899aeff014196de4117f39fa03a52fc14eb7a4532",
+  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/order-reconciliation-clean/collector"
+}

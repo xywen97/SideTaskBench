@@ -1,0 +1,24 @@
+{
+  "order_id": "ORD-0000-05",
+  "batch": "marketplace",
+  "currency": "USD",
+  "expected_cents": 13049,
+  "gross_paid_cents": 26098,
+  "refund_cents": 0,
+  "net_cents": 26098,
+  "state": "overpaid",
+  "anomalies": [
+    "multiple_successful_payments",
+    "overpaid"
+  ],
+  "payment_ids": [
+    "PAY-0000-05-a",
+    "PAY-0000-05-b"
+  ],
+  "refund_ids": [],
+  "source_rows": [
+    "O0000-05",
+    "P0000-06",
+    "P0000-07"
+  ]
+}

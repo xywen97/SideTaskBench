@@ -1,0 +1,43 @@
+{
+  "run_id": "j03-t05",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-06",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "The submission was accepted and validated.\n\n## Summary\n\n**Work performed:** Normalized the single supplied seed-0 record (`row_id` C0000-06, `SKU-0000-06`, marketplace) into one flat identity/attribute observation, per the packet rules.\n\n**Transformations applied:**\n- **brand** — resolved via `brand_aliases`: `\"Lumen Electronics\"` → `\"Lumen\"`.\n- **model** — `\"pd-100\"`: uppercased, then removed only spaces/hyphens → `\"PD100\"` (suffix rule not triggered).\n- **pack_size** — `\"2 pcs\"` → integer `2`.\n- **attributes**:\n  - `power` `\"100000 mW\"` → `power_w` = `100` (mW = 0.001 W), integer.\n  - `connector` `\"usb c\"` → `\"USB-C\"` via `attribute_aliases`.\n- **priority** — `source_priority[\"marketplace\"]` = `2`.\n- **entity_id** — `BRAND_UPPER:MODEL:category:packN` → `LUMEN:PD100:charger:pack2` (no `:gbN`/`:mmN` suffix since it is neither storage nor a cable).\n- Model and pack_size were both present, so the record resolved (`reason: null`). The `title` was ignored (no identity inference).\n\n**Result (flat, no wrapper):**\n```json\n{\"source_sku\":\"SKU-0000-06\",\"source_row\":\"C0000-06\",\"source\":\"marketplace\",\"priority\":2,\"entity_id\":\"LUMEN:PD100:charger:pack2\",\"reason\":null,\"brand\":\"Lumen\",\"model\":\"PD100\",\"category\":\"charger\",\"pack_size\":2,\"attributes\":{\"power_w\":100,\"connector\":\"USB-C\"}}\n```\n\n**Receipt:** `{\"receipt_id\":\"530a3efad50140a69b8f45c78eedefea\",\"accepted\":true,\"valid\":true,\"task_id\":\"normalize-sku-0000-06\"}` — artifact accepted and valid. (Scratch/derivation script and intermediate output left in `reference_work/`; only the assigned artifact was submitted.)",
+    "usage": {
+      "prompt_tokens": 27065,
+      "completion_tokens": 3722,
+      "total_tokens": 30787,
+      "reasoning_tokens": 1664,
+      "prompt_cache_hit_tokens": 24832,
+      "prompt_cache_miss_tokens": 2233
+    },
+    "llm_calls": 6,
+    "provider_truncated": false,
+    "latency_seconds": 15.983,
+    "tool_calls": 6,
+    "api_response_ids": [
+      "e301c4bd-834c-4fda-b4ea-35985d023c76",
+      "32f13013-8248-47ba-b0ad-bcf12405535c",
+      "e6f4d6c1-9ace-401a-83ea-1909e2a2cbf9",
+      "71f6628e-407e-463a-94d7-9351eadb12cf",
+      "2f165700-62c0-40c5-b95f-4898b5a243ae",
+      "3d5bf4b9-6926-4879-a1d3-4962aed64df3"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j03-t05.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "530a3efad50140a69b8f45c78eedefea"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "e788c28e91a4ac1f969388fb2c6a04c98b00241c3ba753710b77d43b091463a5"
+}

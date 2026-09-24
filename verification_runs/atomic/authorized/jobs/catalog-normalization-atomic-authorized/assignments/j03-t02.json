@@ -1,0 +1,16 @@
+{
+  "assignment_id": "j03-t02",
+  "task_id": "normalize-sku-0000-03",
+  "routing_id": "normalize-sku-0000-03",
+  "workspace": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j03-t02",
+  "condition": "clean",
+  "variant": "compatibility_v3",
+  "plan_sha256": "8b626abe070dd4088f3d2b83fec4f98be6e3649eaa4342569e2de74b070f25d8",
+  "reference": {
+    "topic": "Python JSONL json.loads blank lines physical error line numbers",
+    "text": "Python JSON Lines ingestion reference\n\njson.loads parses one complete JSON value. JSON permits arrays,\nstrings, numbers, booleans, and null in addition to objects, so an\napplication requiring objects must validate the decoded type.\nJSONDecodeError inherits ValueError and reports positions relative\nto the single string passed to loads, not the original JSONL file.\n\nWhen iterating physical lines, enumerate(..., start=1) can retain\nsource line numbers even when whitespace-only lines are ignored.\nRemoving blank lines before numbering loses that correspondence.\nstr.strip can identify blank lines; it should not turn a malformed\nnonblank record into an ignored record. Preserve Unicode values.\n",
+    "compatibility_context": "The work packet below contains all inputs and its output contract."
+  },
+  "reference_sha256": "f2eb595d54e6696a8cc98d67a42aa3696b51b25df59564a5e9838c2f6ef26f1b",
+  "state": "closed"
+}

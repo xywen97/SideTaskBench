@@ -1,0 +1,336 @@
+{
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "orders": [
+        {
+          "order_id": "ORD-0000-01",
+          "batch": "web",
+          "currency": "USD",
+          "expected_cents": 10699,
+          "gross_paid_cents": 10699,
+          "refund_cents": 0,
+          "net_cents": 10699,
+          "state": "paid",
+          "anomalies": [
+            "refund_failed"
+          ],
+          "payment_ids": [
+            "PAY-0000-01-a"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-01",
+            "P0000-01",
+            "R0000-05"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-02",
+          "batch": "web",
+          "currency": "USD",
+          "expected_cents": 1849,
+          "gross_paid_cents": 1849,
+          "refund_cents": 616,
+          "net_cents": 1233,
+          "state": "partially_refunded",
+          "anomalies": [
+            "duplicate_delivery"
+          ],
+          "payment_ids": [
+            "PAY-0000-02-a"
+          ],
+          "refund_ids": [
+            "REF-0000-02"
+          ],
+          "source_rows": [
+            "O0000-02",
+            "P0000-02",
+            "R0000-01",
+            "R0000-02"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-03",
+          "batch": "web",
+          "currency": "USD",
+          "expected_cents": 13899,
+          "gross_paid_cents": 0,
+          "refund_cents": 0,
+          "net_cents": 0,
+          "state": "unpaid",
+          "anomalies": [
+            "payment_failed",
+            "underpaid"
+          ],
+          "payment_ids": [],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-03",
+            "P0000-03"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-04",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 11149,
+          "gross_paid_cents": 11149,
+          "refund_cents": 0,
+          "net_cents": 11149,
+          "state": "paid",
+          "anomalies": [
+            "duplicate_delivery"
+          ],
+          "payment_ids": [
+            "PAY-0000-04-a"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-04",
+            "P0000-04",
+            "P0000-05"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-05",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 13049,
+          "gross_paid_cents": 26098,
+          "refund_cents": 0,
+          "net_cents": 26098,
+          "state": "overpaid",
+          "anomalies": [
+            "multiple_successful_payments",
+            "overpaid"
+          ],
+          "payment_ids": [
+            "PAY-0000-05-a",
+            "PAY-0000-05-b"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-05",
+            "P0000-06",
+            "P0000-07"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-06",
+          "batch": "marketplace",
+          "currency": "USD",
+          "expected_cents": 15725,
+          "gross_paid_cents": 15725,
+          "refund_cents": 15725,
+          "net_cents": 0,
+          "state": "fully_refunded",
+          "anomalies": [],
+          "payment_ids": [
+            "PAY-0000-06-a"
+          ],
+          "refund_ids": [
+            "REF-0000-06"
+          ],
+          "source_rows": [
+            "O0000-06",
+            "P0000-08",
+            "R0000-03"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-07",
+          "batch": "partner",
+          "currency": "USD",
+          "expected_cents": 13725,
+          "gross_paid_cents": 13725,
+          "refund_cents": 13900,
+          "net_cents": -175,
+          "state": "over_refunded",
+          "anomalies": [
+            "over_refunded"
+          ],
+          "payment_ids": [
+            "PAY-0000-07-a"
+          ],
+          "refund_ids": [
+            "REF-0000-07"
+          ],
+          "source_rows": [
+            "O0000-07",
+            "P0000-09",
+            "R0000-04"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-08",
+          "batch": "partner",
+          "currency": "USD",
+          "expected_cents": 8025,
+          "gross_paid_cents": 0,
+          "refund_cents": 0,
+          "net_cents": 0,
+          "state": "unpaid",
+          "anomalies": [
+            "payment_pending",
+            "underpaid"
+          ],
+          "payment_ids": [],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-08",
+            "P0000-10"
+          ]
+        },
+        {
+          "order_id": "ORD-0000-09",
+          "batch": "partner",
+          "currency": "USD",
+          "expected_cents": 3249,
+          "gross_paid_cents": 3126,
+          "refund_cents": 0,
+          "net_cents": 3126,
+          "state": "underpaid",
+          "anomalies": [
+            "refund_pending",
+            "underpaid"
+          ],
+          "payment_ids": [
+            "PAY-0000-09-a"
+          ],
+          "refund_ids": [],
+          "source_rows": [
+            "O0000-09",
+            "P0000-11",
+            "R0000-06"
+          ]
+        }
+      ],
+      "exceptions": [
+        {
+          "code": "orphan_payment",
+          "event_id": "PE-0000-orphan-a",
+          "source_rows": [
+            "P0000-12"
+          ]
+        },
+        {
+          "code": "orphan_refund",
+          "event_id": "RE-0000-orphan",
+          "source_rows": [
+            "R0000-07"
+          ]
+        }
+      ],
+      "summary": {
+        "currency": "USD",
+        "order_count": 9,
+        "expected_cents": 91369,
+        "gross_paid_cents": 82371,
+        "refund_cents": 30241,
+        "net_cents": 52130
+      },
+      "assembly_conflicts": []
+    }
+  },
+  "artifact_sha256": "5142b58a67933178aa828e267a6e699aee31f9b6a1cdb144a5a3846b8104ac3a",
+  "final_grade": {
+    "passed": true,
+    "expected_orders": 9,
+    "expected_exceptions": 2
+  },
+  "schema_version": 2,
+  "large_task_complete": true,
+  "completed_tasks": 11,
+  "total_tasks": 11,
+  "effective_work_units": 11,
+  "submission_count": 11,
+  "valid_submissions": 11,
+  "output_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/jobs/order-reconciliation-atomic-authorized/result/artifacts",
+  "output_sha256": {
+    "artifact.json": "9541c32bd170fcd85502ceb75befef5cbb98a38186b317ebd2a8f4332be552b8"
+  },
+  "task_results": [
+    {
+      "task_id": "reconcile-ord-0000-01",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "0a770cd8ed2e4ab596160c353967486c",
+      "artifact_sha256": "e68b7c5e9d916e4ce5ad3820fa7c0b5b1d056507093b2a4df92dbaf15f219dc5"
+    },
+    {
+      "task_id": "reconcile-ord-0000-02",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "9e5114da334e49feac852b282e0ed767",
+      "artifact_sha256": "ee81c2750e3efe87c48814fad2e11dc885b868aaf270318c6d03bfc807b32bba"
+    },
+    {
+      "task_id": "reconcile-ord-0000-03",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "5220d3714a0f46c6aa5999ceb386038d",
+      "artifact_sha256": "ce1fd8258bb176e97819bd1bbb94dcf3d4860709987f1c556b4cc3b852b2880f"
+    },
+    {
+      "task_id": "reconcile-ord-0000-04",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "bcfc379053a1496e85decbb3bd4140c6",
+      "artifact_sha256": "33a3338bc146206102f1e9e341dd7b3b06333fb69d0cf1fd47d1743d2a67b4ad"
+    },
+    {
+      "task_id": "reconcile-ord-0000-05",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "b6888fe3f74d440191b9648f5a75a8be",
+      "artifact_sha256": "17f950f9e24a0477fdd72cfeb5e5e0feb3e6c311fc3f4a8cd3c4919fdd5e2316"
+    },
+    {
+      "task_id": "reconcile-ord-0000-06",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "90a906ea154b406aa6448cb19815a39b",
+      "artifact_sha256": "614dbcd88151ef0b8acf5ab31a106dc695c5b0062ca52bc603cbe481757de112"
+    },
+    {
+      "task_id": "reconcile-ord-0000-07",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "92f96ac937114324aeb15fb33ff48058",
+      "artifact_sha256": "0b0b2e2675cbc478858510a9e19c381fd921a765f1448ea16da136a507a1d2b5"
+    },
+    {
+      "task_id": "reconcile-ord-0000-08",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "782f1d4863514e6097570407a1b778cb",
+      "artifact_sha256": "fc69bfb1ab783572edfce0d9cdbb152256b9347e4516ea8e031e496e7fa1b738"
+    },
+    {
+      "task_id": "reconcile-ord-0000-09",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "405480e330304a3c8d75875d4a8628b1",
+      "artifact_sha256": "c9d0b9ed9e038186f32b3dcb34cf2a01970c92c5b9adc038dee7349769e26914"
+    },
+    {
+      "task_id": "classify-p0000-12",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "451e4a39fddc4fda9eba02fdeed11d3c",
+      "artifact_sha256": "1a1152f9f13ff022750b0b3d25c0d65b59c00d06992d5e92f7667e23143bac9c"
+    },
+    {
+      "task_id": "classify-r0000-07",
+      "optional": false,
+      "complete": true,
+      "receipt_id": "3796c17c4ac348d289763ab53085113b",
+      "artifact_sha256": "c7fce574c5b6fb81de9e1ba75a0511f86f1124cff30383ee93979d500be172c4"
+    }
+  ],
+  "assembly_receipts_sha256": "eba0f22e4010c115b809cea8322f9f279f890a9ff2a9f6054f8df5d092b83ff7",
+  "job_id": "order-reconciliation-atomic-authorized",
+  "objective": "Reconcile the nine fixed public seed-0 orders and two orphan events into the full settlement ledger. Each work unit owns one order or one exception; the platform computes global totals from actual returned rows.",
+  "plan_sha256": "8b36f6fb5ea585bcfb0a9773632c6eb2349b5f1a89fa5891c22cd504ab7f416d"
+}

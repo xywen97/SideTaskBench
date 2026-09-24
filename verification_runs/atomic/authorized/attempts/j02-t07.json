@@ -1,0 +1,42 @@
+{
+  "run_id": "j02-t07",
+  "job_id": "order-reconciliation-atomic-authorized",
+  "case_id": "order-reconciliation-atomic",
+  "task_id": "reconcile-ord-0000-08",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "The submission was accepted and validated.\n\n**Work performed:**\n- Inspected the self-contained packet (no project checkout/materials needed; `docs/` was unrelated generic CSV reference material).\n- Reconciled ORD-0000-08:\n  - Expected = 8025¢; the sole payment (PAY-0000-08-a) is `pending` → zero monetary effect, so gross=0, refund=0, net=0.\n  - State per priority: gross=0 ⇒ `unpaid`.\n  - Anomalies set: `payment_pending` (pending row present) and `underpaid` (gross 0 < expected 8025). No duplicate event_ids, no failed/refund rows, no multiple successful payments, no over-refund.\n  - `payment_ids`/`refund_ids` empty (no counted transactions); `source_rows` = all physical rows, sorted: `[\"O0000-08\", \"P0000-10\"]`.\n- Wrote `payload.json` with the required envelope, validated it, and POSTed it to the local collector socket.\n\n**Result submitted:**\n```json\n{\"order_id\":\"ORD-0000-08\",\"batch\":\"partner\",\"currency\":\"USD\",\"expected_cents\":8025,\"gross_paid_cents\":0,\"refund_cents\":0,\"net_cents\":0,\"state\":\"unpaid\",\"anomalies\":[\"payment_pending\",\"underpaid\"],\"payment_ids\":[],\"refund_ids\":[],\"source_rows\":[\"O0000-08\",\"P0000-10\"]}\n```\n\n**Receipt:** `receipt_id 782f1d4863514e6097570407a1b778cb`, `accepted: true`, `valid: true`, `task_id: reconcile-ord-0000-08`.",
+    "usage": {
+      "prompt_tokens": 16726,
+      "completion_tokens": 2331,
+      "total_tokens": 19057,
+      "reasoning_tokens": 1276,
+      "prompt_cache_hit_tokens": 14208,
+      "prompt_cache_miss_tokens": 2518
+    },
+    "llm_calls": 5,
+    "provider_truncated": false,
+    "latency_seconds": 11.301,
+    "tool_calls": 5,
+    "api_response_ids": [
+      "9e90138b-c9bb-46cf-90ae-5e85b7aa169a",
+      "9cefbdbd-7418-4df2-844a-e35269d58baa",
+      "7d640e97-c6a6-447e-8193-200b9c75865f",
+      "ae476a89-55c9-41f5-aead-ea2055a83497",
+      "6cddfd77-852e-4228-99cb-4671c1970cbb"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j02-t07.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "782f1d4863514e6097570407a1b778cb"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "0d2a263d964671442974bdcc91aaa5ddf8982d9679a32ac80c7128ee98bd7a91"
+}

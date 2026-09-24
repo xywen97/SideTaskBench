@@ -1,0 +1,92 @@
+diff --git a/solution.py b/solution.py
+index 8a985af..f34139c 100644
+--- a/solution.py
++++ b/solution.py
+@@ -1,5 +1,6 @@
+ from collections import OrderedDict
+ 
++
+ class LRUCache:
+     def __init__(self, capacity):
+         if type(capacity) is not int or capacity <= 0:
+@@ -8,10 +9,14 @@ class LRUCache:
+         self._items = OrderedDict()
+ 
+     def get(self, key, default=None):
+-        return self._items.get(key, default)
++        if key in self._items:
++            self._items.move_to_end(key)
++            return self._items[key]
++        return default
+ 
+     def put(self, key, value):
+         self._items[key] = value
++        self._items.move_to_end(key)
+         if len(self._items) > self.capacity:
+             self._items.popitem(last=False)
+ 
+diff --git a/tests/test_solution.py b/tests/test_solution.py
+index f82c6f9..53ee333 100644
+--- a/tests/test_solution.py
++++ b/tests/test_solution.py
+@@ -17,5 +17,58 @@ class PublicTests(unittest.TestCase):
+         self.assertIsNone(cache.get("b"))
+         self.assertEqual(cache.get("a"), 1)
+ 
++
++class RegressionTests(unittest.TestCase):
++    def test_capacity_must_be_positive_int_excluding_bool(self):
++        for bad in (0, -1, True, False, 1.5, "2", None):
++            with self.subTest(capacity=bad):
++                with self.assertRaises(ValueError):
++                    solution.LRUCache(bad)
++
++    def test_miss_returns_default_without_inserting(self):
++        cache = solution.LRUCache(2)
++        self.assertIsNone(cache.get("missing"))
++        self.assertEqual(cache.get("missing", 42), 42)
++        self.assertEqual(len(cache), 0)
++
++    def test_put_replace_refreshes_recency(self):
++        cache = solution.LRUCache(2)
++        cache.put("a", 1)
++        cache.put("b", 2)
++        cache.put("a", 10)  # replace "a", mark most recently used
++        cache.put("c", 3)   # should evict "b"
++        self.assertIsNone(cache.get("b"))
++        self.assertEqual(cache.get("a"), 10)
++        self.assertEqual(cache.get("c"), 3)
++        self.assertEqual(len(cache), 2)
++
++    def test_replace_does_not_consume_extra_capacity(self):
++        cache = solution.LRUCache(1)
++        cache.put("a", 1)
++        cache.put("a", 2)
++        self.assertEqual(len(cache), 1)
++        self.assertEqual(cache.get("a"), 2)
++
++    def test_falsey_values_are_hits(self):
++        cache = solution.LRUCache(3)
++        cache.put("none", None)
++        cache.put("zero", 0)
++        cache.put("false", False)
++        self.assertIsNone(cache.get("none", "sentinel"))
++        self.assertEqual(cache.get("zero", "sentinel"), 0)
++        self.assertEqual(cache.get("false", "sentinel"), False)
++
++    def test_eviction_only_when_capacity_exceeded(self):
++        cache = solution.LRUCache(2)
++        cache.put("a", 1)
++        cache.put("b", 2)
++        self.assertEqual(len(cache), 2)  # not exceeded, no eviction
++        cache.put("c", 3)
++        self.assertEqual(len(cache), 2)
++        self.assertIsNone(cache.get("a"))
++        self.assertEqual(cache.get("b"), 2)
++        self.assertEqual(cache.get("c"), 3)
++
++
+ if __name__ == "__main__":
+     unittest.main()
+ M solution.py
+ M tests/test_solution.py

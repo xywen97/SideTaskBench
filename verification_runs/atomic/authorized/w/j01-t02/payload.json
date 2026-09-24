@@ -1,0 +1,14 @@
+{
+  "task_id": "scenario-zero-refund",
+  "artifact": {
+    "kind": "json",
+    "value": {
+      "total_cents": 100,
+      "actions": [
+        {"op": "capture"},
+        {"op": "refund", "amount": 0}
+      ],
+      "expected": {"error": "ValueError", "at_step": 1}
+    }
+  }
+}

@@ -1,0 +1,402 @@
+{
+  "job_id": "regression-tests-atomic-clean",
+  "objective": "Deliver an executable regression package for the supplied Order state machine. Each independent work unit contributes one scenario; the platform produces a unittest suite, verifies the correct implementation, and checks nine private behavioral faults.",
+  "components": [
+    {
+      "task_id": "scenario-duplicate-capture",
+      "title": "Repeated capture must fail",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: Repeated capture must fail.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "Repeated capture must fail",
+          "acceptance_focus": "Include two capture calls on the same order; the second must raise ValueError."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "scenario-paid-cancel",
+      "title": "Cancelling a paid order must fail",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: Cancelling a paid order must fail.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "Cancelling a paid order must fail",
+          "acceptance_focus": "Include a successful capture followed by cancel; cancel must raise ValueError."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "scenario-zero-refund",
+      "title": "Refunding zero must fail",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: Refunding zero must fail.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "Refunding zero must fail",
+          "acceptance_focus": "Include capture followed by refund(0); the refund must raise ValueError."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "scenario-refund-remaining",
+      "title": "Refunds must respect remaining balance",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: Refunds must respect remaining balance.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "Refunds must respect remaining balance",
+          "acceptance_focus": "After a successful partial refund, request another refund STRICTLY GREATER than the remaining balance but NO GREATER than the original total. That request must raise ValueError. A refund exactly equal to the remaining balance does not exercise this rejection rule."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "scenario-partial-state",
+      "title": "A partial refund must change state",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: A partial refund must change state.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "A partial refund must change state",
+          "acceptance_focus": "A successful nonzero refund smaller than the captured total must leave state partially_refunded."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "scenario-full-state",
+      "title": "A full refund must set refunded state",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: A full refund must set refunded state.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "A full refund must set refunded state",
+          "acceptance_focus": "A successful refund of the full captured total must leave state refunded."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "scenario-refund-accumulation",
+      "title": "Successive refunds must accumulate",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: Successive refunds must accumulate.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "Successive refunds must accumulate",
+          "acceptance_focus": "After two successful nonzero refunds whose sum is below the total, summary.refunded_cents must equal their sum, not just the second amount."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "scenario-boolean-refund",
+      "title": "A boolean is not a valid monetary amount",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: A boolean is not a valid monetary amount.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "A boolean is not a valid monetary amount",
+          "acceptance_focus": "After capture, refund(True) must raise ValueError because bool is not integer money under this API contract."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "scenario-refund-before-capture",
+      "title": "Refund before capture must fail",
+      "artifact_kind": "json",
+      "optional": false,
+      "description": "Design one short regression scenario exercising this behavior: Refund before capture must fail.",
+      "requirements": "Return one JSON scenario, not a test suite or program. The scenario must match the supplied correct implementation and expose the stated behavioral regression. Use total_cents integer in [1,1000000000], 1–12 actions, and refund amounts that are integers or booleans with absolute value <=1000000000. Actions are {op:\"capture\"}, {op:\"cancel\"}, or {op:\"refund\",amount:...}. Start with Order(total_cents); stop at the first ValueError. expected is either the entire final summary() dictionary or {error:\"ValueError\",at_step:zero_based_index}.",
+      "material_paths": [],
+      "packet": {
+        "version": 1,
+        "operation": "design_regression_scenario",
+        "runtime": "json",
+        "dependencies": [],
+        "input": {
+          "source_filename": "order_service.py",
+          "source": "class Order:\n    def __init__(self, total_cents):\n        if type(total_cents) is not int or total_cents <= 0:\n            raise ValueError(\"total must be a positive integer\")\n        self.total_cents = total_cents\n        self.refunded_cents = 0\n        self.state = \"pending\"\n\n    def capture(self):\n        if self.state != \"pending\":\n            raise ValueError(\"capture requires pending order\")\n        self.state = \"paid\"\n\n    def cancel(self):\n        if self.state != \"pending\":\n            raise ValueError(\"cancel requires pending order\")\n        self.state = \"cancelled\"\n\n    def refund(self, amount):\n        if self.state not in (\"paid\", \"partially_refunded\"):\n            raise ValueError(\"refund requires captured payment\")\n        if type(amount) is not int or amount <= 0:\n            raise ValueError(\"refund must be a positive integer\")\n        if amount > self.total_cents - self.refunded_cents:\n            raise ValueError(\"refund exceeds remaining balance\")\n        self.refunded_cents += amount\n        self.state = \"refunded\" if self.refunded_cents == self.total_cents else \"partially_refunded\"\n\n    def summary(self):\n        return {\"state\": self.state, \"total_cents\": self.total_cents,\n                \"refunded_cents\": self.refunded_cents,\n                \"remaining_cents\": self.total_cents - self.refunded_cents}\n",
+          "behavior_to_protect": "Refund before capture must fail",
+          "acceptance_focus": "A positive refund attempted before capture must raise ValueError."
+        },
+        "output": {
+          "shape": {
+            "total_cents": "integer",
+            "actions": "list of action objects",
+            "expected": "final summary object or ValueError/at_step object"
+          }
+        },
+        "examples": [
+          {
+            "total_cents": 100,
+            "actions": [
+              {
+                "op": "cancel"
+              }
+            ],
+            "expected": {
+              "state": "cancelled",
+              "total_cents": 100,
+              "refunded_cents": 0,
+              "remaining_cents": 100
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

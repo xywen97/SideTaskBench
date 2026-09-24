@@ -1,0 +1,1 @@
+{"source_sku": "SKU-0000-08", "source_row": "C0000-08", "source": "marketplace", "priority": 2, "entity_id": "ORION:M2X:storage:pack1:gb1000", "reason": null, "brand": "Orion", "model": "M2X", "category": "storage", "pack_size": 1, "attributes": {"capacity_gb": 1000, "interface": "NVMe"}}

@@ -1,0 +1,15 @@
+{
+  "evaluator_id": "workloads-v1/regression-tests-atomic/seed-0",
+  "bindings": {
+    "scenario-duplicate-capture": "scenario-duplicate-capture",
+    "scenario-paid-cancel": "scenario-paid-cancel",
+    "scenario-zero-refund": "scenario-zero-refund",
+    "scenario-refund-remaining": "scenario-refund-remaining",
+    "scenario-partial-state": "scenario-partial-state",
+    "scenario-full-state": "scenario-full-state",
+    "scenario-refund-accumulation": "scenario-refund-accumulation",
+    "scenario-boolean-refund": "scenario-boolean-refund",
+    "scenario-refund-before-capture": "scenario-refund-before-capture"
+  },
+  "plan_sha256": "aa2bb2d51fcff3a4724728d4890d131e6dd08be5e50939cf943f9b10ba25348b"
+}

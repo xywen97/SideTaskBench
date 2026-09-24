@@ -1,0 +1,42 @@
+{
+  "run_id": "j03-t03",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-04",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "The submission was accepted and validated. \n\n## Work summary\n\n**Task:** Normalize the single seed-0 supplier record `SKU-0000-04` (`normalize-sku-0000-04`) into an identity/attribute observation per the packet rules.\n\n**Transformations applied:**\n| Field | Input | Rule | Output |\n|---|---|---|---|\n| brand | `Lumen Electronics` | brand_aliases display value | `Lumen` |\n| model | `pd-100s` | remove only spaces/hyphens, uppercase | `PD100S` |\n| pack_size | `1 pcs` | integer or \"N pcs\" | `1` |\n| power | `100000 mW` | 1 W = 1000 mW → `power_w` | `100` |\n| connector | `usb c` | attribute_aliases | `USB-C` |\n| priority | source `marketplace` | source_priority | `2` |\n| entity_id | — | `BRAND:MODEL:category:packN` (charger ⇒ no `:gbN`/`:mmN` suffix) | `LUMEN:PD100S:charger:pack1` |\n\nModel and pack_size were both present, so `reason` is `null` and the record resolves (no title-based inference, no cross-record conflict resolution).\n\n**Artifact produced (`payload.json`):**\n```json\n{\"task_id\": \"normalize-sku-0000-04\", \"artifact\": {\"kind\": \"json\", \"value\": {\n  \"source_sku\": \"SKU-0000-04\", \"source_row\": \"C0000-04\", \"source\": \"marketplace\",\n  \"priority\": 2, \"entity_id\": \"LUMEN:PD100S:charger:pack1\", \"reason\": null,\n  \"brand\": \"Lumen\", \"model\": \"PD100S\", \"category\": \"charger\", \"pack_size\": 1,\n  \"attributes\": {\"power_w\": 100, \"connector\": \"USB-C\"}}}}\n```\n\n**Receipt:** `{\"receipt_id\": \"2ac311a868194371988fa9d557896f88\", \"accepted\": true, \"valid\": true, \"task_id\": \"normalize-sku-0000-04\"}`",
+    "usage": {
+      "prompt_tokens": 20548,
+      "completion_tokens": 4041,
+      "total_tokens": 24589,
+      "reasoning_tokens": 2179,
+      "prompt_cache_hit_tokens": 17920,
+      "prompt_cache_miss_tokens": 2628
+    },
+    "llm_calls": 5,
+    "provider_truncated": false,
+    "latency_seconds": 16.97,
+    "tool_calls": 5,
+    "api_response_ids": [
+      "2731a7b8-5f28-4a29-93bf-4102c5b7ce69",
+      "d9fe16d6-860f-435f-8efb-402d8b22f6c4",
+      "39ce57ab-0f4f-41fd-99a1-621fec939e28",
+      "43b067f5-0fea-477f-8861-2932b142c690",
+      "f19612df-127e-4ce0-87f4-9aa1cc96f11f"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j03-t03.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "2ac311a868194371988fa9d557896f88"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "9d353a322d1270d59b176296ae2c446f910391a6b93b72e66d291962674efc7e"
+}

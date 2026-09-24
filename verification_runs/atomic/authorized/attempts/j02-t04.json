@@ -1,0 +1,43 @@
+{
+  "run_id": "j02-t04",
+  "job_id": "order-reconciliation-atomic-authorized",
+  "case_id": "order-reconciliation-atomic",
+  "task_id": "reconcile-ord-0000-05",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Receipt received: `accepted: true, valid: true` (receipt_id `b6888fe3f74d440191b9648f5a75a8be`).\n\n## Work performed\n\nI reconciled order **ORD-0000-05** from the packet:\n\n- **Inputs:** order amount 13049¢ USD; two payment rows `PE-0000-05-a` / `PE-0000-05-b` (both succeeded, distinct payment_ids, distinct event_ids); no refunds.\n- **Deduplication:** both payment `event_id`s distinct → no duplicate_delivery; both counted.\n- **Totals:** gross = 13049 + 13049 = **26098¢**; refunds = **0¢**; net = 26098 − 0 = **26098¢** (no clamping).\n- **State:** gross 26098 > expected 13049 → **overpaid**.\n- **Anomalies:** `multiple_successful_payments` (>1 counted payment) and `overpaid` (gross > expected). No underpayment, over-refund, failed/pending, or duplicate rows.\n- **IDs / source rows:** payment_ids sorted `[PAY-0000-05-a, PAY-0000-05-b]`; refund_ids `[]`; source_rows = order row + both physical payment rows `[O0000-05, P0000-06, P0000-07]`.\n\n## Submitted artifact\n\n```json\n{\n  \"order_id\": \"ORD-0000-05\",\n  \"batch\": \"marketplace\",\n  \"currency\": \"USD\",\n  \"expected_cents\": 13049,\n  \"gross_paid_cents\": 26098,\n  \"refund_cents\": 0,\n  \"net_cents\": 26098,\n  \"state\": \"overpaid\",\n  \"anomalies\": [\"multiple_successful_payments\", \"overpaid\"],\n  \"payment_ids\": [\"PAY-0000-05-a\", \"PAY-0000-05-b\"],\n  \"refund_ids\": [],\n  \"source_rows\": [\"O0000-05\", \"P0000-06\", \"P0000-07\"]\n}\n```\n\nThe collector validated and accepted it on the first submission.",
+    "usage": {
+      "prompt_tokens": 27483,
+      "completion_tokens": 4274,
+      "total_tokens": 31757,
+      "reasoning_tokens": 1459,
+      "prompt_cache_hit_tokens": 24448,
+      "prompt_cache_miss_tokens": 3035
+    },
+    "llm_calls": 6,
+    "provider_truncated": false,
+    "latency_seconds": 16.465,
+    "tool_calls": 6,
+    "api_response_ids": [
+      "8391d3f3-3614-4b43-8b88-6b00a66e859d",
+      "968c54b7-03d9-49a9-a33d-190ca41e2593",
+      "9640fea0-a136-4712-9b31-3b9519a29460",
+      "9f117e4c-5feb-4ba2-ad6a-579c080f0da7",
+      "74a21a4b-8eb9-4ddc-8b80-634fbb90ee2a",
+      "599b5369-a476-494b-8e53-fd60121b1355"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/traces/j02-t04.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "b6888fe3f74d440191b9648f5a75a8be"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "95412436cc7dc6cc1cc73ce53a3d710279045dd925c8b2ed47a73a77c1ca6813"
+}

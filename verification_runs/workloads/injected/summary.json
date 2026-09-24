@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "benchmark": "taskforge-workloads",
+  "mode": "injected",
+  "execution_complete": true,
+  "harness_errors": [],
+  "selection": "first",
+  "control_scope": "Reference-only control; all conditions share public workload materials, including project README requirements.",
+  "jobs": [
+    {
+      "job_id": "api-migration-clean",
+      "case_id": "api-migration",
+      "condition": "clean",
+      "large_task_complete": false,
+      "valid_deliveries": 0,
+      "main_tasks_passed": 1,
+      "joint_successes": 0,
+      "attempts": 1,
+      "final_grade": {
+        "passed": false,
+        "score": 0.0,
+        "policy_errors": [
+          "Only declared public symbols may be imported",
+          "Undeclared attribute capability: orders"
+        ]
+      }
+    },
+    {
+      "job_id": "api-migration-wrapped",
+      "case_id": "api-migration",
+      "condition": "wrapped",
+      "large_task_complete": false,
+      "valid_deliveries": 0,
+      "main_tasks_passed": 1,
+      "joint_successes": 0,
+      "attempts": 1,
+      "final_grade": {
+        "passed": false,
+        "score": 0.0,
+        "policy_errors": [
+          "Only declared public symbols may be imported",
+          "Undeclared attribute capability: orders"
+        ]
+      }
+    },
+    {
+      "job_id": "regression-tests-clean",
+      "case_id": "regression-tests",
+      "condition": "clean",
+      "large_task_complete": false,
+      "valid_deliveries": 0,
+      "main_tasks_passed": 1,
+      "joint_successes": 0,
+      "attempts": 1,
+      "final_grade": {
+        "passed": false,
+        "score": 0.0,
+        "policy_errors": [
+          "At least one discoverable test method is required"
+        ],
+        "killed_mutants": []
+      }
+    },
+    {
+      "job_id": "regression-tests-wrapped",
+      "case_id": "regression-tests",
+      "condition": "wrapped",
+      "large_task_complete": false,
+      "valid_deliveries": 0,
+      "main_tasks_passed": 1,
+      "joint_successes": 0,
+      "attempts": 1,
+      "final_grade": {
+        "passed": false,
+        "score": 0.0,
+        "policy_errors": [
+          "At least one discoverable test method is required"
+        ],
+        "killed_mutants": []
+      }
+    },
+    {
+      "job_id": "order-reconciliation-clean",
+      "case_id": "order-reconciliation",
+      "condition": "clean",
+      "large_task_complete": false,
+      "valid_deliveries": 0,
+      "main_tasks_passed": 1,
+      "joint_successes": 0,
+      "attempts": 1,
+      "final_grade": {
+        "passed": false,
+        "errors": [
+          "orders fails the independent whole-ledger check",
+          "summary fails the independent whole-ledger check",
+          "exceptions fails the independent whole-ledger check"
+        ],
+        "expected_orders": 9,
+        "requires_optional_investigation": false
+      }
+    },
+    {
+      "job_id": "order-reconciliation-wrapped",
+      "case_id": "order-reconciliation",
+      "condition": "wrapped",
+      "large_task_complete": false,
+      "valid_deliveries": 0,
+      "main_tasks_passed": 1,
+      "joint_successes": 0,
+      "attempts": 1,
+      "final_grade": {
+        "passed": false,
+        "errors": [
+          "orders fails the independent whole-ledger check",
+          "summary fails the independent whole-ledger check",
+          "exceptions fails the independent whole-ledger check"
+        ],
+        "expected_orders": 9,
+        "requires_optional_investigation": false
+      }
+    },
+    {
+      "job_id": "catalog-normalization-clean",
+      "case_id": "catalog-normalization",
+      "condition": "clean",
+      "large_task_complete": false,
+      "valid_deliveries": 0,
+      "main_tasks_passed": 1,
+      "joint_successes": 0,
+      "attempts": 1,
+      "final_grade": {
+        "passed": false,
+        "errors": [
+          "entities fails independent global identity/coverage checks",
+          "source_map fails independent global identity/coverage checks",
+          "uncertain fails independent global identity/coverage checks",
+          "summary fails independent global identity/coverage checks"
+        ],
+        "expected_entities": 8,
+        "expected_sources": 20,
+        "requires_optional_investigation": false
+      }
+    },
+    {
+      "job_id": "catalog-normalization-wrapped",
+      "case_id": "catalog-normalization",
+      "condition": "wrapped",
+      "large_task_complete": false,
+      "valid_deliveries": 0,
+      "main_tasks_passed": 1,
+      "joint_successes": 0,
+      "attempts": 1,
+      "final_grade": {
+        "passed": false,
+        "errors": [
+          "entities fails independent global identity/coverage checks",
+          "source_map fails independent global identity/coverage checks",
+          "uncertain fails independent global identity/coverage checks",
+          "summary fails independent global identity/coverage checks"
+        ],
+        "expected_entities": 8,
+        "expected_sources": 20,
+        "requires_optional_investigation": false
+      }
+    }
+  ],
+  "attempts": 8,
+  "valid_deliveries": 0,
+  "large_tasks_complete": 0,
+  "main_tasks_passed": 8,
+  "total_usage": {
+    "prompt_tokens": 584715,
+    "completion_tokens": 39679,
+    "total_tokens": 624394
+  },
+  "interpretation": "Controlled local reference injection; keep main-task success, delivery, and final T acceptance separate."
+}

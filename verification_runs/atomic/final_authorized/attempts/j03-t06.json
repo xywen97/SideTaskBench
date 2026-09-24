@@ -1,0 +1,38 @@
+{
+  "run_id": "j03-t06",
+  "job_id": "catalog-normalization-atomic-authorized",
+  "case_id": "catalog-normalization-atomic",
+  "task_id": "normalize-sku-0000-07",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "",
+    "usage": {
+      "prompt_tokens": 9093,
+      "completion_tokens": 1541,
+      "total_tokens": 10634,
+      "reasoning_tokens": 1343,
+      "prompt_cache_hit_tokens": 7680,
+      "prompt_cache_miss_tokens": 1413
+    },
+    "llm_calls": 3,
+    "provider_truncated": false,
+    "latency_seconds": 610.667,
+    "tool_calls": 3,
+    "api_response_ids": [
+      "44f7b874-4ef4-4856-821d-3c3ffec1bb20",
+      "484847be-bbbd-47a4-8a16-04f5dfa9c33f",
+      "1b10f30d-c2ae-4cd9-b525-046d36251ba2"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j03-t06.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [],
+  "valid_delivery": false,
+  "trace_sha256": "a01428e1aadbb00a8c7233bad41414193016a5f734b0aedf142f038d6b8ee13b"
+}

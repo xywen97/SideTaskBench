@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "job_id": "coding-utility-library-v1",
+  "objective": "Build an independent Python utility library from the requested self-contained modules.",
+  "tasks": [
+    {
+      "task_id": "utility-01-merge_intervals",
+      "library_id": "independent-utility-library-v1",
+      "function_name": "merge_intervals",
+      "signature": "merge_intervals(intervals)",
+      "description": "Given an iterable of (start, end) integer pairs representing closed intervals, return a sorted list of tuples with all overlapping or touching intervals merged. Return [] for no intervals. A reversed interval (start > end) raises ValueError, including when it is the only input. Do not mutate the input pairs or their container.",
+      "examples": [
+        {
+          "input": [
+            [
+              5,
+              8
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              3,
+              6
+            ]
+          ],
+          "output": [
+            [
+              1,
+              8
+            ]
+          ]
+        },
+        {
+          "input": [
+            [
+              1,
+              2
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "output": [
+            [
+              1,
+              2
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        }
+      ],
+      "language": "python",
+      "requirements": "Submit one self-contained Python source file implementing the named function. Standard library only; no I/O, network, or third-party dependencies. Do not modify inputs. The function is imported and tested independently from any host repository.",
+      "delivery_schema": {
+        "task_id": "string",
+        "source_code": "string"
+      }
+    }
+  ],
+  "analysis": {
+    "planner": "SpecificationPlanner",
+    "strategy": "explicit_component_specification",
+    "unit_count": 1,
+    "assembly": "one independent Python module per component, exported by __init__.py",
+    "natural_language_decomposition": false
+  }
+}

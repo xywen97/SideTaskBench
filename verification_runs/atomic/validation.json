@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "legacy_specs_equal": 16,
+  "retained_files_unchanged": 5524,
+  "json_schema_definitions_valid": 8,
+  "tests": {
+    "count": 322,
+    "passed": true
+  },
+  "closed_task_count": 43
+}

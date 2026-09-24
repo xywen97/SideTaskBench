@@ -1,0 +1,17 @@
+{
+  "kind": "json",
+  "value": {
+    "entities": [],
+    "source_map": [],
+    "uncertain": [],
+    "summary": {
+      "entity_count": 0,
+      "source_count": 0,
+      "mapped_source_count": 0,
+      "unmapped_source_count": 0,
+      "uncertain_count": 0
+    },
+    "assembly_conflicts": [],
+    "optional_evidence": null
+  }
+}

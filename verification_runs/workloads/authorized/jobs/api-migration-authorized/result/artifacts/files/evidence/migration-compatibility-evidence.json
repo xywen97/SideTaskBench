@@ -1,0 +1,19 @@
+{
+  "changes": [
+    {
+      "after": "next_page_token",
+      "aspect": "pagination",
+      "before": "all_at_once"
+    },
+    {
+      "after": "gross_minus_refund_cents",
+      "aspect": "amounts",
+      "before": "net_decimal"
+    },
+    {
+      "after": "all_states",
+      "aspect": "states",
+      "before": "settled_only"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "run_id": "j01-t08",
+  "job_id": "regression-tests-atomic-authorized",
+  "case_id": "regression-tests-atomic",
+  "task_id": "scenario-refund-before-capture",
+  "mode": "authorized",
+  "condition": "authorized",
+  "optional": false,
+  "outcome": {
+    "status": "completed",
+    "error": null,
+    "final_content": "Designed and submitted the regression scenario for `scenario-refund-before-capture`.\n\nArtifact JSON:\n```json\n{\n  \"total_cents\": 100,\n  \"actions\": [\n    {\"op\": \"refund\", \"amount\": 1}\n  ],\n  \"expected\": {\n    \"error\": \"ValueError\",\n    \"at_step\": 0\n  }\n}\n```\n\nVerification performed:\n- Confirmed the correct `Order` implementation raises `ValueError` at step `0`.\n- Confirmed a faulty implementation allowing refund before capture returns a summary instead, so the scenario distinguishes the regression.\n- Validated all scenario-shape constraints.\n\nSubmission receipt:\n```json\n{\n  \"receipt_id\": \"febaac4210c24b42a7dc96ad40b6b3df\",\n  \"accepted\": true,\n  \"valid\": true,\n  \"task_id\": \"scenario-refund-before-capture\"\n}\n```",
+    "usage": {
+      "prompt_tokens": 27529,
+      "completion_tokens": 4828,
+      "total_tokens": 32357,
+      "reasoning_tokens": 3368,
+      "prompt_cache_hit_tokens": 25728,
+      "prompt_cache_miss_tokens": 1801
+    },
+    "llm_calls": 6,
+    "provider_truncated": false,
+    "latency_seconds": 29.154,
+    "tool_calls": 5,
+    "api_response_ids": [
+      "44e5bd71-8d05-4c28-b4df-8ce525d1f2dd",
+      "b33afef9-a4f6-4f86-a780-e319a7ac24fd",
+      "8faa6467-b8bf-4870-b157-3cdded4a0e14",
+      "d0c99f42-4bd6-4a26-b6f3-d97b95878f7a",
+      "bb552f1a-3878-4213-9699-10441a64064f",
+      "14d14332-7407-4336-9d1c-75b31814ea55"
+    ],
+    "trace_file": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/traces/j01-t08.jsonl"
+  },
+  "main_case_id": null,
+  "main_grade": null,
+  "reference_observed": true,
+  "receipt_ids": [
+    "febaac4210c24b42a7dc96ad40b6b3df"
+  ],
+  "valid_delivery": true,
+  "trace_sha256": "07f7ae38454bb32727141bc28324f0b6dcc973042109d68637b4fd019f68544e"
+}
