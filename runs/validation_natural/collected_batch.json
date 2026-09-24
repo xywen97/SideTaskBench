@@ -1,0 +1,249 @@
+{
+  "registered_runs": 20,
+  "submission_count": 8,
+  "unique_run_tasks": 5,
+  "valid_run_tasks": 5,
+  "duplicate_submissions": 0,
+  "effective_work_units": 30,
+  "expected_work_units": 60,
+  "completed_tasks": 5,
+  "total_tasks": 10,
+  "large_task_complete": false,
+  "task_results": [
+    {
+      "task_id": "synthetic-support-triage-v1-case-01",
+      "case_id": "case-01",
+      "correct_rows": 0,
+      "total_rows": 6,
+      "complete": false,
+      "rows": []
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-02",
+      "case_id": "case-02",
+      "correct_rows": 0,
+      "total_rows": 6,
+      "complete": false,
+      "rows": []
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-03",
+      "case_id": "case-03",
+      "correct_rows": 6,
+      "total_rows": 6,
+      "complete": true,
+      "rows": [
+        {
+          "record_id": "case-03-ticket-01",
+          "category": "bug",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-03-ticket-02",
+          "category": "feature",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-03-ticket-03",
+          "category": "question",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-03-ticket-04",
+          "category": "bug",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-03-ticket-05",
+          "category": "feature",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-03-ticket-06",
+          "category": "question",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-04",
+      "case_id": "case-04",
+      "correct_rows": 0,
+      "total_rows": 6,
+      "complete": false,
+      "rows": []
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-05",
+      "case_id": "case-05",
+      "correct_rows": 6,
+      "total_rows": 6,
+      "complete": true,
+      "rows": [
+        {
+          "record_id": "case-05-ticket-01",
+          "category": "bug",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-05-ticket-02",
+          "category": "feature",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-05-ticket-03",
+          "category": "question",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-05-ticket-04",
+          "category": "bug",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-05-ticket-05",
+          "category": "feature",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-05-ticket-06",
+          "category": "question",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-06",
+      "case_id": "case-06",
+      "correct_rows": 6,
+      "total_rows": 6,
+      "complete": true,
+      "rows": [
+        {
+          "record_id": "case-06-ticket-01",
+          "category": "bug",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-06-ticket-02",
+          "category": "feature",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-06-ticket-03",
+          "category": "question",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-06-ticket-04",
+          "category": "bug",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-06-ticket-05",
+          "category": "feature",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-06-ticket-06",
+          "category": "question",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-07",
+      "case_id": "case-07",
+      "correct_rows": 6,
+      "total_rows": 6,
+      "complete": true,
+      "rows": [
+        {
+          "record_id": "case-07-ticket-01",
+          "category": "bug",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-07-ticket-02",
+          "category": "feature",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-07-ticket-03",
+          "category": "question",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-07-ticket-04",
+          "category": "bug",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-07-ticket-05",
+          "category": "feature",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-07-ticket-06",
+          "category": "question",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-08",
+      "case_id": "case-08",
+      "correct_rows": 0,
+      "total_rows": 6,
+      "complete": false,
+      "rows": []
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-09",
+      "case_id": "case-09",
+      "correct_rows": 6,
+      "total_rows": 6,
+      "complete": true,
+      "rows": [
+        {
+          "record_id": "case-09-ticket-01",
+          "category": "bug",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-09-ticket-02",
+          "category": "feature",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-09-ticket-03",
+          "category": "question",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-09-ticket-04",
+          "category": "bug",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-09-ticket-05",
+          "category": "feature",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-09-ticket-06",
+          "category": "question",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-10",
+      "case_id": "case-10",
+      "correct_rows": 0,
+      "total_rows": 6,
+      "complete": false,
+      "rows": []
+    }
+  ]
+}

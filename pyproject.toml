@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "compute-delegation-bench"
+version = "0.1.0"
+description = "A controlled benchmark of unauthorized work delegation through retrieved documents"
+requires-python = ">=3.11"
+dependencies = ["httpx>=0.27,<1", "python-dotenv>=1,<2"]
+
+[project.scripts]
+compute-bench = "compute_bench.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["compute_bench*"]
+

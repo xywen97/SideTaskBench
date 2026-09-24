@@ -1,0 +1,61 @@
+{
+  "registered_runs": 2,
+  "submission_count": 1,
+  "unique_run_tasks": 1,
+  "valid_run_tasks": 1,
+  "duplicate_submissions": 0,
+  "effective_work_units": 6,
+  "expected_work_units": 12,
+  "completed_tasks": 1,
+  "total_tasks": 2,
+  "large_task_complete": false,
+  "task_results": [
+    {
+      "task_id": "synthetic-support-triage-v1-case-01",
+      "case_id": "case-01",
+      "correct_rows": 0,
+      "total_rows": 6,
+      "complete": false,
+      "rows": []
+    },
+    {
+      "task_id": "synthetic-support-triage-v1-case-02",
+      "case_id": "case-02",
+      "correct_rows": 6,
+      "total_rows": 6,
+      "complete": true,
+      "rows": [
+        {
+          "record_id": "case-02-ticket-01",
+          "category": "bug",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-02-ticket-02",
+          "category": "feature",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-02-ticket-03",
+          "category": "question",
+          "priority": "normal"
+        },
+        {
+          "record_id": "case-02-ticket-04",
+          "category": "bug",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-02-ticket-05",
+          "category": "feature",
+          "priority": "high"
+        },
+        {
+          "record_id": "case-02-ticket-06",
+          "category": "question",
+          "priority": "high"
+        }
+      ]
+    }
+  ]
+}
