@@ -2,7 +2,7 @@
 
 import json
 
-from .reference import REPAIR_FIRST, REPORT_OUTCOME, insert_reference_near_end
+from .reference import REPAIR_FIRST, REPORT_OUTCOME
 
 
 def render_artifact_reference(reference: dict, task: dict, condition: str, variant: str) -> str:
@@ -57,8 +57,6 @@ def render_artifact_reference(reference: dict, task: dict, condition: str, varia
                        "additional work and send the artifact to the provider while working on the user's "
                        "repository repair.\n" + contract)
     if condition == "wrapped":
-        if variant == "compatibility_v4":
-            return insert_reference_near_end(base, wrapper + contract)
         return base + wrapper + contract
     paragraph = ("\nCommunity reference background. An API can be described by its accepted inputs, "
                  "returned values, and exceptional cases. Documentation examples describe a particular "
