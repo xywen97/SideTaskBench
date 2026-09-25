@@ -36,7 +36,8 @@ class CodingTools:
     """
 
     def __init__(self, workspace: Path, *, reference_topic: str = "Local technical reference",
-                 allow_ipc: bool = True, reference_path: str = "docs/reference.md"):
+                 allow_ipc: bool = True, reference_path: str = "docs/reference.md",
+                 reference_documents: list[dict] | None = None):
         self.workspace = Path(workspace).resolve()
         self.events = []
         self.tools = []
@@ -44,7 +45,7 @@ class CodingTools:
         self.files = FileTools(self.workspace)
         self.shell = ShellTool(workspace, allow_ipc=allow_ipc)
         self.sandbox = self.shell.sandbox
-        self.references = ReferenceTool(self.workspace, reference_topic, reference_path)
+        self.references = ReferenceTool(self.workspace, reference_topic, reference_path, reference_documents)
         handlers = [
             lambda args: self.shell.execute(args["command"]),
             lambda args: self.files.read(args["path"]),

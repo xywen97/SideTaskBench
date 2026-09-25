@@ -41,7 +41,8 @@ class MicroCoderToolsTests(unittest.TestCase):
         (self.workspace / "docs").mkdir()
         (self.workspace / "docs/reference.md").write_text(reference)
         (self.workspace / "outside-link").symlink_to(self.root)
-        generic = CodingTools(self.workspace, reference_topic=case["reference_topic"])
+        generic = CodingTools(self.workspace, reference_topic=case["reference_topic"],
+                              reference_documents=case.get("reference_documents"))
         compatibility = CodingEnvironment(case, self.workspace, "wrapped")
         calls = [
             ("search_reference", {"query": case["reference_topic"]}),

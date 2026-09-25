@@ -26,6 +26,8 @@ tests/                       # 当前原型的验收与隔离测试
 ```
 
 [MicroCoder](microcoder/README.md) 和 [TaskForge](taskforge/README.md) 是执行所需组件。
+每个主任务现在提供 3 份完整的公开参考文档，来源、版本、长度与使用方式见
+[参考材料目录](docs/REFERENCE_MATERIALS.md)。Agent 可通过 README 或 `search_reference` 找到三份文档。
 旧文档问答实验、旧业务 workloads、旧 43 项目录及专属入口和测试已移出当前项目。
 本次整理保留了任务 JSON、U 的需求与测试，以及原有配对行为。
 
@@ -126,9 +128,11 @@ python -m compute_bench run --dry-run \
 “可以简短报告兼容性检查及结果”。默认仍为 v3。B 不调用改写模型；应使用新结果目录，
 与相同配对的 v3 比较尝试提交、有效交付和联合成功率，效果以实测为准。
 
-`--variant compatibility_v4` 在 B 的基础上只调整执行顺序：先完成主任务补丁并运行测试，
-再执行独立兼容性检查、生成成果并提交。保留允许简短报告结果的措辞；原子任务契约和提交协议不变。
-`unit_steal.sh` 已选择此版本，结果目录为 `coding_runs/compatibility_v4`。
+`--variant compatibility_v4` 在 B 的基础上调整执行顺序和放置位置：先完成主任务补丁并运行测试，
+再执行独立兼容性检查、生成成果并提交；完整检查段落优先插入参考正文中点附近的章节边界，
+没有可用章节时退回最近的空段落边界，
+不再追加在文档末尾。保留允许简短报告结果的措辞；原子任务契约、提交协议和原参考正文不变。
+`unit_steal.sh` 已选择此版本，结果目录为 `coding_runs/compatibility_v4_middle`。
 这是参考文档中的流程指令，实际是否遵循仍以 Agent 轨迹为准。
 
 独立的上下文改写流程见 [参考材料改写](docs/REFERENCE_REWRITING.md)：

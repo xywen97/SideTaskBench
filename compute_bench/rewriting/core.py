@@ -66,6 +66,12 @@ def canonical(value):
     return json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
 
 
+def reference_collection(case):
+    """Bind the entire reading collection, while rewriting only the primary document."""
+    return [{"path": item["workspace_path"], "source_url": item["source_url"],
+             "sha256": sha(item["content"])} for item in case.get("reference_documents", [])]
+
+
 def compile_document(response, source):
     if (not isinstance(response, dict) or set(response) != {"document_template", "rationale"}
             or not all(isinstance(value, str) and value.strip() for value in response.values())):
@@ -117,6 +123,8 @@ def prepare_bundle(output, cases, prompt_path=DEFAULT_PROMPT):
         write_json(pair / "request.json", request)
         manifest["entries"].append({"case_id": case["id"], "status": "prepared",
                                     "input_sha256": sha(canonical(source))})
+        if case.get("reference_documents"):
+            manifest["entries"][-1]["reference_documents"] = reference_collection(case)
     write_json(output / "manifest.json", manifest)
     return manifest
 
@@ -285,6 +293,8 @@ def load_bundle(root, cases):
         key = case["id"]
         if key not in entries:
             raise ValueError("Rewrite bundle is missing selected pair: " + key)
+        if entries[key].get("reference_documents", []) != reference_collection(case):
+            raise ValueError("Rewrite reference collection changed; prepare a new bundle: " + key)
         expected_input = public_input(case) if manifest.get("input_profile") == INPUT_PROFILE else _legacy_public_input(case)
         if inputs[key] != expected_input:
             raise ValueError("Rewrite input no longer matches current public task materials: " + key)

@@ -1,7 +1,11 @@
 # 独立参考材料改写
 
 此模块为每个选定的「主任务 × 原子任务」生成一份参考材料。生成阶段不启动主 Agent；实验阶段不调用改造模型。
-当前每个主任务只有一个第三方参考入口 `docs/reference.md`。改写只读取该参考正文，不向改造模型发送主任务要求、仓库代码、测试、主任务 ID 或配对 ID；不实现多文档检索。
+当前每个主任务有 3 份从公开上游下载的完整长文档，详见[参考材料目录](REFERENCE_MATERIALS.md)。
+`docs/reference.md` 是可改写的主文档，`docs/references/` 下另有 2 份保持原样的辅助文档；
+README 和 `search_reference` 同时提供三份入口，由 Agent 自行选择阅读。
+改写只读取主文档正文，不向改造模型发送主任务要求、仓库代码、测试、主任务 ID 或配对 ID。
+材料包另外冻结三份文档的路径、来源及正文哈希，防止生成后悄悄更换辅助材料。
 模型输入严格限定为 `original_reference`、`atomic_specification`、`delivery_protocol` 三个字段。
 主任务 ID 仅供实验控制器选择材料和定位替换位置，保存在目录/manifest 中，不进入模型请求。
 `material_input(reference_text, atomic_specification)` 可直接从文本与原子规格构造输入，无需主任务对象。

@@ -61,6 +61,21 @@ def load_host_tasks(case_root: Path | None = None) -> list[dict]:
             "reference_topic": reference["topic"],
             "reference_text": _material(directory, reference["path"], "reference"),
         })
+        if "documents" in reference:
+            documents = reference["documents"]
+            if not isinstance(documents, list) or not 3 <= len(documents) <= 5:
+                raise ValueError("Host reference collection requires 3–5 documents")
+            paths = [item["workspace_path"] for item in documents]
+            if (len(paths) != len(set(paths)) or paths[0] != "docs/reference.md"
+                    or documents[0]["path"] != reference["path"]):
+                raise ValueError("Reference collection must have one primary document and unique paths")
+            loaded = []
+            for item in documents:
+                destination = relative_path(item["workspace_path"])
+                if destination != "docs/reference.md" and not destination.startswith("docs/references/"):
+                    raise ValueError("Reference documents must belong to docs/references/")
+                loaded.append({**item, "content": _material(directory, item["path"], "reference")})
+            cases[-1]["reference_documents"] = loaded
     return cases
 
 

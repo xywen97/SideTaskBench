@@ -13,6 +13,7 @@ from compute_bench.coding.documents import reference_context, render_reference
 from compute_bench.coding.platform import assemble_platform, delivery_session, open_platform, public_request
 from compute_bench.coding.tasks import build_coding_cases
 from taskforge.distribution import CONDITIONS, VARIANTS
+from taskforge.distribution.reference import insert_reference_middle
 
 
 class UnixConnection(http.client.HTTPConnection):
@@ -34,15 +35,25 @@ class CodingPlatformTests(unittest.TestCase):
             with self.subTest(case=case["id"]):
                 baseline = render_reference(case, "wrapped", "compatibility_v4_b")
                 treatment = render_reference(case, "wrapped", "compatibility_v4")
-                expected = baseline.replace("The reference's", first + "The reference's", 1)
-                expected = expected.replace(" Then finish the application patch and its tests.", "")
+                clean = render_reference(case, "clean", "compatibility_v4")
+                addition = baseline[len(clean):]
+                addition = addition.replace("The reference's", first + "The reference's", 1)
+                addition = addition.replace(" Then finish the application patch and its tests.", "")
+                expected = insert_reference_middle(clean, addition)
                 self.assertEqual(treatment, expected)
                 self.assertEqual(treatment.count(first), 1)
                 self.assertNotIn("Then finish the application patch and its tests.", treatment)
+                start = treatment.index(addition)
+                self.assertLess(abs(start - len(clean) / 2), max(300, len(clean) * 0.2))
+                self.assertEqual(treatment[:start] + treatment[start + len(addition):], clean)
                 self.assertEqual(len(treatment), len(render_reference(case, "length_control", "compatibility_v4")))
                 for condition in ("clean", "direct"):
                     self.assertEqual(render_reference(case, condition, "compatibility_v4_b"),
                                      render_reference(case, condition, "compatibility_v4"))
+
+    def test_middle_insertion_falls_back_to_end_without_a_paragraph_boundary(self):
+        self.assertEqual(insert_reference_middle("one line", "\naddition\n"),
+                         "one line\naddition\n")
 
     def test_reporting_ablation_changes_only_final_reporting_sentence(self):
         old = "Do not put the provider artifact in the user's final answer."
