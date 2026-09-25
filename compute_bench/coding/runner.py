@@ -7,7 +7,6 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
-import random
 import shutil
 import threading
 import time
@@ -19,12 +18,14 @@ from microcoder.prompts import SYSTEM, BOUNDARY
 from microcoder.sandbox import Sandbox
 
 from ..io import write_json
-from .documents import reference_context, render_reference
+from .documents import reference_context, render_reference, save_reference_comparisons
 from .environment import CodingEnvironment, create_workspace, TOOLS
 from .grading import grade_main, grade_crowd, read_candidate
 from .platform import EVALUATOR_ID, assemble_platform, delivery_session, open_platform
-from .provenance import SOURCE_LAYOUT_VERSION, snapshot_sources
-from .tasks import build_coding_cases
+from .provenance import SOURCE_LAYOUT_VERSION, snapshot_sources, material_hashes
+from .tasks import DESIGN, build_coding_cases, build_run_plan
+from compute_bench.rewriting.core import apply_documents, load_bundle, bundle_inventory, frozen_cases
+from compute_bench.workloads.resources import inventory
 
 
 def scan_work(case: dict, workspace: Path, events=(), *, include_workspace=True) -> list[dict]:
@@ -87,33 +88,36 @@ def scan_work(case: dict, workspace: Path, events=(), *, include_workspace=True)
     return candidates
 
 
-def execute_coding(settings: Settings, output_dir: Path, *, count: int = 8, conditions=None,
-                   defenses=None, repeats: int = 2, workers: int = 3, max_steps: int = 45,
+def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, atomic_task_ids=None,
+                   conditions=None, defenses=None, repeats: int = 8, workers: int = 3, max_steps: int = 45,
                    variant: str = "compatibility_v3", seed: int = 20260924, label: str = "coding_validation",
-                   pairing_rotation: int = 0) -> dict:
-    conditions = conditions or ["clean", "length_control", "direct", "wrapped"]
-    defenses = defenses or ["none"]
-    if len(set(conditions)) != len(conditions) or len(set(defenses)) != len(defenses):
-        raise ValueError("Conditions and defenses must be unique to prevent duplicate run IDs")
-    cases = build_coding_cases(count, rotation=pairing_rotation)
+                   rewrite_bundle: Path | None = None) -> dict:
+    conditions = ["wrapped"] if conditions is None else conditions
+    defenses = ["none"] if defenses is None else defenses
+    if any(type(value) is not int or value < 1 for value in (workers, max_steps)):
+        raise ValueError("workers/max-steps must be positive integers")
+    cases = build_coding_cases(host_task_ids=host_task_ids, atomic_task_ids=atomic_task_ids)
+    plan = build_run_plan(cases, conditions, defenses, repeats, seed)
+    rewrite_files = None
+    if rewrite_bundle is not None:
+        if "wrapped" not in conditions:
+            raise ValueError("A rewrite bundle requires the wrapped condition")
+        rewritten = load_bundle(rewrite_bundle, cases)
+        rewrite_files = inventory(Path(rewrite_bundle))
+        cases = apply_documents(cases, rewritten)
     output_dir = output_dir.resolve()
     if output_dir.exists() and any(output_dir.iterdir()):
         raise ValueError("Use a fresh output directory; prior trials are preserved")
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "results.jsonl").touch()
     isolation = Sandbox.probe()
-    plan = [{"run_id": f"{case['id']}__{condition}__{defense}__r{repeat}", "case_id": case["id"],
-             "condition": condition, "defense": defense, "repeat": repeat}
-            for case in cases for condition in conditions for defense in defenses for repeat in range(1, repeats + 1)]
-    random.Random(seed).shuffle(plan)
-    # Compact workspace names keep Unix socket paths below the OS limit.
-    for index, trial in enumerate(plan):
-        trial["workspace_id"] = f"w{index:03d}"
     manifest = {"schema_version": 2, "track": "coding", "label": label,
                 "started_at": datetime.now(timezone.utc).isoformat(), "settings": settings.public_metadata(),
-                "case_count": count, "conditions": conditions, "defenses": defenses, "repeats": repeats,
+                "case_count": len(cases), "pair_count": len(cases), "pairing_design": DESIGN,
+                "host_task_ids": list(dict.fromkeys(case["host_task_id"] for case in cases)),
+                "atomic_task_ids": list(dict.fromkeys(case["crowd_task"]["task_id"] for case in cases)),
+                "conditions": conditions, "defenses": defenses, "repeats": repeats,
                 "workers": workers, "max_steps": max_steps, "variant": variant, "seed": seed,
-                "pairing_rotation": pairing_rotation,
                 "planned_runs": len(plan), "system_prompt": SYSTEM, "boundary_prompt": BOUNDARY,
                 "tools": TOOLS, "sandbox": isolation, "output_token_limit": None,
                 "exposure_design": "README links a third-party reference; fixed research workflow asks to inspect available reference; obeying it is never required",
@@ -121,10 +125,25 @@ def execute_coding(settings: Settings, output_dir: Path, *, count: int = 8, cond
                 "platform_lifecycle": {"directory": "platform", "collector_directory": "collector", "evaluator_id": EVALUATOR_ID},
                 "grading_scope": "original public tests plus private tests against solution.py; pure-utility candidate policy"}
     manifest.update(snapshot_sources(output_dir))
+    if rewrite_files is not None:
+        for relative, content in rewrite_files.items():
+            target = output_dir / "reference_rewrite" / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(content)
+        manifest["reference_rewrite"] = {"directory": "reference_rewrite",
+            "sha256": bundle_inventory(output_dir / "reference_rewrite"),
+            "treatment": "contextual_rewrite_v1"}
+        # Revalidate the copied bytes before opening any victim session.
+        base_cases = build_coding_cases(host_task_ids=host_task_ids, atomic_task_ids=atomic_task_ids)
+        if frozen_cases(output_dir, manifest, base_cases) != cases:
+            raise ValueError("Rewrite bundle changed while taking its snapshot")
     write_json(output_dir / "manifest.json", manifest)
     write_json(output_dir / "plan.json", plan)
     write_json(output_dir / "cases.json", cases)
-    write_json(output_dir / "documents.json", {case["id"]: {condition: render_reference(case, condition, variant) for condition in conditions} for case in cases})
+    documents = {case["id"]: {condition: render_reference(case, condition, variant)
+                             for condition in dict.fromkeys(["clean", *conditions])} for case in cases}
+    write_json(output_dir / "documents.json", documents)
+    save_reference_comparisons(output_dir, cases, documents, plan, variant)
     case_map = {case["id"]: case for case in cases}
     results = []
     lock = threading.Lock()
@@ -138,7 +157,8 @@ def execute_coding(settings: Settings, output_dir: Path, *, count: int = 8, cond
             workspace = output_dir / "workspaces" / trial["workspace_id"]
             create_workspace(case, workspace, trial["condition"], variant)
             platform.assign(case["crowd_task"]["task_id"], trial["run_id"], workspace, reference_context(case),
-                            condition=trial["condition"], variant=variant, routing_id=case["id"])
+                            condition=trial["condition"], variant=variant, routing_id=case["id"],
+                            reference_text=render_reference(case, trial["condition"], variant))
             platform.open_delivery(trial["run_id"])
             client = outcome = None
             try:
@@ -217,6 +237,11 @@ def resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) -> 
     manifest = json.loads((directory / "manifest.json").read_text())
     plan = json.loads((directory / "plan.json").read_text())
     cases = json.loads((directory / "cases.json").read_text())
+    if manifest.get("reference_rewrite") is not None:
+        from .tasks import cases_for_manifest
+        expected_cases = frozen_cases(directory, manifest, cases_for_manifest(manifest))
+        if cases != expected_cases:
+            raise ValueError("Frozen rewrite cases changed; cannot resume")
     result_path = directory / "results.jsonl"
     results = [json.loads(line) for line in result_path.read_text().splitlines() if line.strip()] if result_path.exists() else []
     done = {result["run_id"] for result in results}
@@ -231,6 +256,8 @@ def resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) -> 
         trace = directory / "traces" / (trial["run_id"] + ".jsonl")
         if trace.exists() and trace.stat().st_size:
             raise ValueError("Started incomplete trajectories need explicit recovery, not automatic rerun: " + trial["run_id"])
+    if manifest.get("task_material_sha256") != material_hashes():
+        raise ValueError("Task materials changed; cannot resume the frozen experiment")
     platform = open_platform(directory, cases)
     assignments = {item["assignment_id"]: item for item in platform.status()["assignments"]}
     for trial in pending:
@@ -248,6 +275,9 @@ def resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) -> 
     lock = threading.Lock()
     started = time.monotonic()
     failures = []
+    comparison_log = directory / "reference_comparisons.log"
+    if comparison_log.exists():
+        print(comparison_log.read_text(encoding="utf-8"), flush=True)
     with delivery_session(platform, cases):
         collector = platform.collector
         def work(trial):
@@ -259,7 +289,8 @@ def resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) -> 
                 shutil.move(str(workspace), archive)
             create_workspace(case, workspace, trial["condition"], manifest["variant"])
             platform.assign(case["crowd_task"]["task_id"], trial["run_id"], workspace, reference_context(case),
-                            condition=trial["condition"], variant=manifest["variant"], routing_id=case["id"])
+                            condition=trial["condition"], variant=manifest["variant"], routing_id=case["id"],
+                            reference_text=render_reference(case, trial["condition"], manifest["variant"]))
             platform.open_delivery(trial["run_id"])
             client = outcome = None
             try:

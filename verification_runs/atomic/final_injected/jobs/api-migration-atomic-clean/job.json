@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "api-migration-atomic-clean",
-  "plan_sha256": "06f775d87848426a013ecc8b713f1c7b5c840000e84a84c2da202a37824234db",
-  "request_sha256": "592cfd43a87331eac3233b69b230970e271210099316201ef9ef6fc60d713312",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_injected/jobs/api-migration-atomic-clean/collector"
-}

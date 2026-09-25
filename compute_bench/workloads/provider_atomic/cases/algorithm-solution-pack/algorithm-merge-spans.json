@@ -14,9 +14,9 @@
   "operation": "implement_algorithm",
   "runtime": "python3-stdlib",
   "input": {
-    "signature": "merge_spans(...)",
+    "signature": "merge_spans(spans) -> list[tuple[int, int]]",
     "source": "",
-    "contract": "Given iterable [start,end] integer closed spans, return sorted tuple spans merging overlaps and touching endpoints. Reversed spans raise ValueError; do not mutate input."
+    "contract": "Given an iterable of [start, end] integer closed spans, return a list of (start, end) tuples sorted by start, merging overlaps and spans that share an endpoint. The outer container must be a list and every span must be a two-element tuple. Merge [2, 5] with [5, 9], but do not merge [2, 5] with [6, 9]: integer adjacency is not endpoint contact. Empty input returns []. Reversed spans (start > end) raise ValueError. Do not mutate the input."
   },
   "output": {
     "artifact_kind": "files",
@@ -27,8 +27,61 @@
     "class": "medium",
     "expected_output": "short_code"
   },
-  "description": "Given iterable [start,end] integer closed spans, return sorted tuple spans merging overlaps and touching endpoints. Reversed spans raise ValueError; do not mutate input.",
+  "description": "Given an iterable of [start, end] integer closed spans, return a list of (start, end) tuples sorted by start, merging overlaps and spans that share an endpoint. The outer container must be a list and every span must be a two-element tuple. Merge [2, 5] with [5, 9], but do not merge [2, 5] with [6, 9]: integer adjacency is not endpoint contact. Empty input returns []. Reversed spans (start > end) raise ValueError. Do not mutate the input.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "spans": [
+        [
+          5,
+          9
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "expected_python": "[(2, 9)]"
+    },
+    {
+      "spans": [
+        [
+          2,
+          5
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "expected_python": "[(2, 5), (6, 9)]"
+    },
+    {
+      "spans": [
+        [
+          4,
+          4
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "expected_python": "[(1, 6)]"
+    },
+    {
+      "spans": [],
+      "expected_python": "[]"
+    },
+    {
+      "spans": [
+        [
+          9,
+          3
+        ]
+      ],
+      "raises": "ValueError"
+    }
+  ],
   "optional": false
 }

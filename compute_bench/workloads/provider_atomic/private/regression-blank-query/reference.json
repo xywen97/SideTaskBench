@@ -1,0 +1,10 @@
+{
+  "url": "/p?empty=",
+  "pairs": [
+    [
+      "x",
+      "1"
+    ]
+  ],
+  "expected": "/p?empty=&x=1"
+}

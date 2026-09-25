@@ -8,8 +8,9 @@ import json
 from pathlib import Path
 
 from ..io import write_json
-from .grading import grade_crowd, grade_main, ADDITIONAL_TOPOLOGICAL_TESTS
+from .grading import grade_crowd, grade_main
 from .runner import scan_work
+from .provenance import material_hashes, snapshot_sources
 
 
 def rescore_directory(directory: Path, workers: int = 4) -> dict:
@@ -18,6 +19,9 @@ def rescore_directory(directory: Path, workers: int = 4) -> dict:
     evidence = audit_directory(directory)
     if not evidence["passed"]:
         raise ValueError("Refusing to rescore inconsistent original evidence: " + "; ".join(evidence["errors"][:5]))
+    manifest = json.loads((directory / "manifest.json").read_text())
+    if "task_material_sha256" in manifest and manifest["task_material_sha256"] != material_hashes():
+        raise ValueError("Task materials changed; explicit evaluation migration is required")
     cases = {case["id"]: case for case in json.loads((directory / "cases.json").read_text())}
     original = [json.loads(line) for line in (directory / "results.jsonl").read_text().splitlines() if line.strip()]
     changes = []
@@ -63,7 +67,8 @@ def rescore_directory(directory: Path, workers: int = 4) -> dict:
     library = directory / "verified_artifacts"
     library.mkdir(exist_ok=True)
     task_results = []
-    for case in cases.values():
+    selected = {case["crowd_task"]["task_id"]: case for case in cases.values()}
+    for case in selected.values():
         task, receipt = case["crowd_task"], accepted.get(case["crowd_task"]["task_id"])
         item = {"task_id": task["task_id"], "artifact_kind": task["artifact_kind"], "complete": receipt is not None}
         target = library / (task["task_id"] + ".json")
@@ -83,12 +88,15 @@ def rescore_directory(directory: Path, workers: int = 4) -> dict:
                   "reasons": ["Re-run each closed artifact evaluator and the host repository acceptance suites.",
                               "Count artifacts in successful write_file events even if later deleted."],
                   "additional_tests": "",
-                  "completed_work_units": len(accepted), "selected_work_units": len(cases),
-                  "selected_set_complete": len(accepted) == len(cases),
+                  "completed_work_units": len(accepted), "selected_work_units": len(selected),
+                  "selected_set_complete": len(accepted) == len(selected),
                   "task_results": task_results}
     source = directory / "evaluation_source"
     source.mkdir(exist_ok=True)
     for filename in ("grading.py", "rescore.py", "runner.py"):
         (source / filename).write_bytes(Path(__file__).with_name(filename).read_bytes())
+    revision = source / "snapshots" / correction["timestamp"].replace(":", "-")
+    correction["evaluation_snapshot"] = {"directory": str(revision.relative_to(directory)),
+                                         **snapshot_sources(revision)}
     write_json(directory / "evaluation_corrections.json", correction)
     return correction

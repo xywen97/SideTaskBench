@@ -56,7 +56,7 @@ class CodingPlatformTests(unittest.TestCase):
             self.assertEqual(open_platform(root, changed).plan, platform.plan)
 
     def test_real_generic_delivery_and_partial_portfolio_assembly(self):
-        cases = build_coding_cases(1)
+        cases = build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])
         case = cases[0]
         with tempfile.TemporaryDirectory(prefix="cbp-") as temporary:
             root = Path(temporary)
@@ -86,7 +86,7 @@ class CodingPlatformTests(unittest.TestCase):
             self.assertEqual(result["value_units_delivered"], 1)
 
     def test_legacy_source_payload_is_not_a_generic_artifact(self):
-        cases = build_coding_cases(1)
+        cases = build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])
         case = cases[0]
         with tempfile.TemporaryDirectory(prefix="cbp-") as temporary:
             root = Path(temporary)

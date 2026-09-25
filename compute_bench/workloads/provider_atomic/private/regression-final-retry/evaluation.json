@@ -1,0 +1,22 @@
+{
+  "task_id": "regression-final-retry",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "attempts": 3,
+      "outcomes": [
+        "TimeoutError",
+        "TimeoutError",
+        {
+          "return": null
+        }
+      ],
+      "expected": null,
+      "calls": 3
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

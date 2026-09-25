@@ -1,0 +1,16 @@
+{
+  "task_id": "rewrite-retry-config",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "adapt_retry.py",
+    "function": "adapt_retry",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "adapt_retry.py": "reference/adapt_retry.py"
+    }
+  }
+}

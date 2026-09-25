@@ -11,41 +11,34 @@ import ast
 from copy import deepcopy
 import json
 from pathlib import Path
+import re
+import unicodedata
 
-from .python_grading import grade_source, source_policy
+from ..python_grading import grade_source, source_policy
+from ..resources import read_json, read_text
 
 
 PORTFOLIO_ID = "atomic-provider-portfolio-v1"
 CASE_ROOT = Path(__file__).with_name("cases")
 
-LARGE_TASKS = {
-    "atomic-function-library": {"title": "Atomic function library", "threshold": 8, "total": 10},
-    "algorithm-solution-pack": {"title": "Algorithm solution pack", "threshold": 4, "total": 5},
-    "regression-test-suite": {"title": "Regression test suite", "threshold": 4, "total": 5},
-    "event-processing-pipeline": {"title": "Event processing pipeline", "threshold": 4, "total": 5},
-    "technical-document": {"title": "Technical document", "threshold": 4, "total": 5},
-}
-
-
-def _unique_object(pairs: list[tuple[str, object]]) -> dict:
-    result = {}
-    for key, value in pairs:
-        if key in result:
-            raise ValueError(f"Duplicate JSON key: {key}")
-        result[key] = value
-    return result
+PRIVATE_ROOT = Path(__file__).with_name("private")
 
 
 def _read_json_object(path: Path) -> dict:
-    if path.is_symlink() or not path.is_file():
-        raise ValueError(f"Atomic catalog entry must be a regular file: {path}")
-    try:
-        value = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_unique_object)
-    except (OSError, UnicodeError, json.JSONDecodeError) as error:
-        raise ValueError(f"Cannot read atomic catalog JSON: {path}") from error
+    value = read_json(path.parent, path.name)
     if not isinstance(value, dict):
         raise ValueError(f"Atomic catalog JSON must contain an object: {path}")
     return value
+
+
+# Public catalog.json is the single source of large-task metadata.
+LARGE_TASKS = {
+    item["large_task_id"]: {
+        "title": item["title"], "threshold": item["acceptance_threshold"],
+        "total": len(item["task_ids"]),
+    }
+    for item in _read_json_object(CASE_ROOT / "catalog.json")["large_tasks"]
+}
 
 
 def _load_public_tasks(case_root: Path | None = None) -> list[dict]:
@@ -115,213 +108,57 @@ def _load_public_tasks(case_root: Path | None = None) -> list[dict]:
     return tasks
 
 
-def _artifact(path: str, source: str) -> dict:
-    return {"kind": "files", "files": {path: source.strip() + "\n"}}
-
-
-def _call_tests(function: str, cases: list[dict]) -> str:
-    encoded = repr(cases)
-    return f'''import builtins
-import copy
-import unittest
-import solution
-
-class Acceptance(unittest.TestCase):
-    def test_private_cases(self):
-        cases = {encoded}
-        for index, case in enumerate(cases):
-            with self.subTest(index=index):
-                args = copy.deepcopy(case.get("args", []))
-                kwargs = copy.deepcopy(case.get("kwargs", {{}}))
-                before = copy.deepcopy((args, kwargs))
-                if "raises" in case:
-                    with self.assertRaises(getattr(builtins, case["raises"])):
-                        solution.{function}(*args, **kwargs)
-                else:
-                    self.assertEqual(solution.{function}(*args, **kwargs), case["expected"])
-                if case.get("no_mutation"):
-                    self.assertEqual((args, kwargs), before)
-'''
-
-
-def _code_units() -> list[dict]:
-    specs = [
-        # Five function rewrites.
-        dict(id="rewrite-user-record", cat="function_rewrite", op="rewrite_function", large="atomic-function-library",
-             fn="normalize_user", path="normalize_user.py", cls="small",
-             source='def normalize_user(row):\n    return {"id": row["user_id"], "name": row["full_name"]}\n',
-             contract="Return a fresh object with user_id renamed to id, a stripped display_name from full_name, and active as a strict boolean; ignore extra fields and do not mutate row.",
-             gold='def normalize_user(row):\n    return {"id": row["user_id"], "display_name": row["full_name"].strip(), "active": bool(row["active"])}\n',
-             cases=[{"args": [{"user_id": "u1", "full_name": " Ada ", "active": 1, "x": 2}], "expected": {"id": "u1", "display_name": "Ada", "active": True}, "no_mutation": True}, {"args": [{"user_id": "u2", "full_name": "Lin", "active": 0}], "expected": {"id": "u2", "display_name": "Lin", "active": False}}]),
-        dict(id="rewrite-retry-config", cat="function_rewrite", op="rewrite_function", large="atomic-function-library",
-             fn="adapt_retry", path="adapt_retry.py", cls="small",
-             source='def adapt_retry(config):\n    return {"retries": config["attempts"], "delay": config["delay_ms"]}\n',
-             contract="Return max_attempts=attempts and base_delay_seconds=delay_ms/1000 plus retry_codes as a fresh list preserving order and duplicates. Do not mutate config.",
-             gold='def adapt_retry(config):\n    return {"max_attempts": config["attempts"], "base_delay_seconds": config["delay_ms"] / 1000, "retry_codes": list(config["codes"])}\n',
-             cases=[{"args": [{"attempts": 3, "delay_ms": 250, "codes": [429, 503]}], "expected": {"max_attempts": 3, "base_delay_seconds": .25, "retry_codes": [429, 503]}, "no_mutation": True}, {"args": [{"attempts": 1, "delay_ms": 0, "codes": [500, 500]}], "expected": {"max_attempts": 1, "base_delay_seconds": 0, "retry_codes": [500, 500]}}]),
-        dict(id="rewrite-pairs-loop", cat="function_rewrite", op="rewrite_function", large="atomic-function-library",
-             fn="index_pairs", path="index_pairs.py", cls="medium",
-             source='def index_pairs(pairs):\n    return dict(pairs)\n',
-             contract="Using an explicit loop, map each key to a list of all its values in encounter order. Accept any iterable and return an ordinary dict. Do not use dict/set comprehensions.",
-             gold='def index_pairs(pairs):\n    result = {}\n    for key, value in pairs:\n        result.setdefault(key, []).append(value)\n    return result\n',
-             cases=[{"args": [[("a", 1), ("b", 2), ("a", 3)]], "expected": {"a": [1, 3], "b": [2]}}, {"args": [[]], "expected": {}}], constraints={"forbid_comprehensions": True}),
-        dict(id="rewrite-tree-iterative", cat="function_rewrite", op="rewrite_function", large="atomic-function-library",
-             fn="sum_tree", path="sum_tree.py", cls="medium",
-             source='def sum_tree(node):\n    return node["value"] + sum(sum_tree(child) for child in node.get("children", []))\n',
-             contract="Rewrite as an iterative traversal. A node is {value:int, children?:list[node]}; return the total and do not mutate nodes. Recursion is forbidden.",
-             gold='def sum_tree(node):\n    total = 0\n    pending = [node]\n    while pending:\n        current = pending.pop()\n        total += current["value"]\n        pending.extend(current.get("children", []))\n    return total\n',
-             cases=[{"args": [{"value": 1, "children": [{"value": 2}, {"value": 3, "children": [{"value": 4}]}]}], "expected": 10, "no_mutation": True}, {"args": [{"value": -5}], "expected": -5}], constraints={"forbid_recursion": True}),
-        dict(id="rewrite-status-map", cat="function_rewrite", op="rewrite_function", large="atomic-function-library",
-             fn="map_status", path="map_status.py", cls="small",
-             source='def map_status(value):\n    return value.upper()\n',
-             contract="Trim and case-fold the input, mapping queued/running/done to pending/active/complete. Unknown values raise ValueError.",
-             gold='def map_status(value):\n    key = value.strip().casefold()\n    mapping = {"queued": "pending", "running": "active", "done": "complete"}\n    if key not in mapping:\n        raise ValueError("unknown status")\n    return mapping[key]\n',
-             cases=[{"args": [" RUNNING "], "expected": "active"}, {"args": ["done"], "expected": "complete"}, {"args": ["lost"], "raises": "ValueError"}]),
-        # Five single-function debugging units.
-        dict(id="debug-pagination-cycle", cat="function_debug", op="debug_function", large="atomic-function-library",
-             fn="collect_pages", path="collect_pages.py", cls="medium",
-             source='def collect_pages(pages, start):\n    out = []\n    while start and pages[start]["items"]:\n        out.extend(pages[start]["items"]); start = pages[start]["next"]\n    return out\n',
-             contract="Follow supplied page snapshots until next is None, continuing through empty pages. Preserve item order. Raise ValueError on a reachable repeated token or missing token. None start returns [].",
-             gold='def collect_pages(pages, start):\n    out, seen = [], set()\n    while start is not None:\n        if start in seen or start not in pages:\n            raise ValueError("cycle or missing token")\n        seen.add(start)\n        page = pages[start]\n        out.extend(page["items"])\n        start = page["next"]\n    return out\n',
-             cases=[{"args": [{"a": {"items": [1], "next": "b"}, "b": {"items": [], "next": "c"}, "c": {"items": [2], "next": None}}, "a"], "expected": [1, 2], "no_mutation": True}, {"args": [{"a": {"items": [], "next": "a"}}, "a"], "raises": "ValueError"}, {"args": [{}, None], "expected": []}, {"args": [{}, "missing"], "raises": "ValueError"}]),
-        dict(id="debug-batch-ranges", cat="function_debug", op="debug_function", large="atomic-function-library",
-             fn="batch_ranges", path="batch_ranges.py", cls="small",
-             source='def batch_ranges(length, size):\n    return [(i, min(i + size, length - 1)) for i in range(0, length, size)]\n',
-             contract="Return half-open (start,end) ranges covering [0,length) in chunks of size. Both arguments are nonnegative/positive ints respectively; bool is invalid and raises ValueError.",
-             gold='def batch_ranges(length, size):\n    if type(length) is not int or length < 0 or type(size) is not int or size <= 0:\n        raise ValueError("invalid range")\n    return [(i, min(i + size, length)) for i in range(0, length, size)]\n',
-             cases=[{"args": [5, 2], "expected": [(0, 2), (2, 4), (4, 5)]}, {"args": [0, 3], "expected": []}, {"args": [3, True], "raises": "ValueError"}]),
-        dict(id="debug-boolean-option", cat="function_debug", op="debug_function", large="atomic-function-library",
-             fn="parse_enabled", path="parse_enabled.py", cls="small",
-             source='def parse_enabled(value):\n    return bool(value)\n',
-             contract="Accept bool or strings true/false/1/0/yes/no case-insensitively with surrounding whitespace. Return bool; all other values raise ValueError.",
-             gold='def parse_enabled(value):\n    if type(value) is bool:\n        return value\n    if isinstance(value, str):\n        key = value.strip().casefold()\n        if key in {"true", "1", "yes"}: return True\n        if key in {"false", "0", "no"}: return False\n    raise ValueError("invalid boolean")\n',
-             cases=[{"args": [" false "], "expected": False}, {"args": ["YES"], "expected": True}, {"args": [False], "expected": False}, {"args": [1], "raises": "ValueError"}]),
-        dict(id="debug-moving-average", cat="function_debug", op="debug_function", large="atomic-function-library",
-             fn="moving_average", path="moving_average.py", cls="medium",
-             source='def moving_average(values, width):\n    return [sum(values[i:i+width])/width for i in range(len(values)-width)]\n',
-             contract="Return averages for every complete consecutive window. width must be a positive non-bool int no larger than len(values), else ValueError. Do not mutate values.",
-             gold='def moving_average(values, width):\n    if type(width) is not int or width <= 0 or width > len(values):\n        raise ValueError("invalid width")\n    return [sum(values[i:i + width]) / width for i in range(len(values) - width + 1)]\n',
-             cases=[{"args": [[1, 2, 3, 4], 2], "expected": [1.5, 2.5, 3.5], "no_mutation": True}, {"args": [[2, 4], 2], "expected": [3.0]}, {"args": [[], 1], "raises": "ValueError"}]),
-        dict(id="debug-cache-update", cat="function_debug", op="debug_function", large="atomic-function-library",
-             fn="update_cache", path="update_cache.py", cls="medium",
-             source='def update_cache(entries, key, value, capacity):\n    entries[key] = value\n    if len(entries) >= capacity:\n        entries.pop(next(iter(entries)))\n    return entries\n',
-             contract="Treat dict insertion order as LRU-to-MRU. Return a fresh dict, never mutate entries. Updating or inserting key makes it MRU; evict only when length exceeds positive non-bool capacity.",
-             gold='def update_cache(entries, key, value, capacity):\n    if type(capacity) is not int or capacity <= 0:\n        raise ValueError("invalid capacity")\n    result = dict(entries)\n    result.pop(key, None)\n    result[key] = value\n    while len(result) > capacity:\n        result.pop(next(iter(result)))\n    return result\n',
-             cases=[{"args": [{"a": 1, "b": 2}, "a", 3, 2], "expected": {"b": 2, "a": 3}, "no_mutation": True}, {"args": [{"a": 1}, "b", 2, 1], "expected": {"b": 2}}, {"args": [{}, "x", 1, 0], "raises": "ValueError"}]),
-        # Five algorithm implementations.
-        dict(id="algorithm-merge-spans", cat="algorithm", op="implement_algorithm", large="algorithm-solution-pack",
-             fn="merge_spans", path="merge_spans.py", cls="medium", source="",
-             contract="Given iterable [start,end] integer closed spans, return sorted tuple spans merging overlaps and touching endpoints. Reversed spans raise ValueError; do not mutate input.",
-             gold='def merge_spans(spans):\n    values = []\n    for start, end in spans:\n        if start > end: raise ValueError("reversed")\n        values.append((start, end))\n    out = []\n    for start, end in sorted(values):\n        if out and start <= out[-1][1]: out[-1] = (out[-1][0], max(end, out[-1][1]))\n        else: out.append((start, end))\n    return out\n',
-             cases=[{"args": [[[5, 8], [1, 3], [3, 6]]], "expected": [(1, 8)], "no_mutation": True}, {"args": [[[-3, -1], [0, 2]]], "expected": [(-3, -1), (0, 2)]}, {"args": [[[2, 1]]], "raises": "ValueError"}]),
-        dict(id="algorithm-stable-dag", cat="algorithm", op="implement_algorithm", large="algorithm-solution-pack",
-             fn="stable_schedule", path="stable_schedule.py", cls="large", source="",
-             contract="graph maps string node to iterable prerequisites. Include dependency-only nodes; repeatedly choose lexicographically smallest ready node. Deduplicate edges and raise ValueError on cycles.",
-             gold='import heapq\ndef stable_schedule(graph):\n    deps = {k: set(v) for k, v in graph.items()}\n    for values in list(deps.values()):\n        for item in values: deps.setdefault(item, set())\n    followers = {k: set() for k in deps}\n    for node, values in deps.items():\n        for value in values: followers[value].add(node)\n    ready = [k for k, v in deps.items() if not v]; heapq.heapify(ready); out = []\n    while ready:\n        node = heapq.heappop(ready); out.append(node)\n        for nxt in followers[node]:\n            deps[nxt].remove(node)\n            if not deps[nxt]: heapq.heappush(ready, nxt)\n    if len(out) != len(deps): raise ValueError("cycle")\n    return out\n',
-             cases=[{"args": [{"ship": ["build"], "build": ["fetch"], "lint": []}], "expected": ["fetch", "build", "lint", "ship"], "no_mutation": True}, {"args": [{"a": ["b"], "b": ["a"]}], "raises": "ValueError"}]),
-        dict(id="algorithm-weighted-chain", cat="algorithm", op="implement_algorithm", large="algorithm-solution-pack",
-             fn="bounded_chain", path="bounded_chain.py", cls="medium", source="",
-             contract="Follow nodes[start]={value:int,next:token|null}, summing values until null. Return {tokens:list,total:int}. Raise ValueError for a cycle, missing token, or when total would exceed limit; None start returns empty/zero.",
-             gold='def bounded_chain(nodes, start, limit):\n    tokens, total, seen = [], 0, set()\n    while start is not None:\n        if start in seen or start not in nodes: raise ValueError("cycle or missing")\n        seen.add(start); item = nodes[start]\n        if total + item["value"] > limit: raise ValueError("limit")\n        total += item["value"]; tokens.append(start); start = item["next"]\n    return {"tokens": tokens, "total": total}\n',
-             cases=[{"args": [{"a": {"value": 2, "next": "b"}, "b": {"value": 3, "next": None}}, "a", 5], "expected": {"tokens": ["a", "b"], "total": 5}, "no_mutation": True}, {"args": [{"a": {"value": 6, "next": None}}, "a", 5], "raises": "ValueError"}, {"args": [{}, None, 0], "expected": {"tokens": [], "total": 0}}]),
-        dict(id="algorithm-tree-independent", cat="algorithm", op="implement_algorithm", large="algorithm-solution-pack",
-             fn="max_tree_weight", path="max_tree_weight.py", cls="large", source="",
-             contract="A node is {weight:nonnegative int,children:list}. Return maximum selected weight when parent and child cannot both be selected. Tree is finite; do not mutate it.",
-             gold='def max_tree_weight(root):\n    def visit(node):\n        pairs = [visit(child) for child in node.get("children", [])]\n        take = node["weight"] + sum(skip for take, skip in pairs)\n        skip = sum(max(take, skip) for take, skip in pairs)\n        return take, skip\n    return max(visit(root))\n',
-             cases=[{"args": [{"weight": 5, "children": [{"weight": 4}, {"weight": 3, "children": [{"weight": 10}]}]}], "expected": 15, "no_mutation": True}, {"args": [{"weight": 0, "children": []}], "expected": 0}]),
-        dict(id="algorithm-grid-routes", cat="algorithm", op="implement_algorithm", large="algorithm-solution-pack",
-             fn="count_routes", path="count_routes.py", cls="large", source="",
-             contract="For rows x cols grid and blocked coordinate pairs, count paths from (0,0) to (rows-1,cols-1) moving only right/down. Positive non-bool dimensions required; ignore duplicate blocked coordinates; out-of-range blocks raise ValueError.",
-             gold='def count_routes(rows, cols, blocked):\n    if type(rows) is not int or type(cols) is not int or rows <= 0 or cols <= 0: raise ValueError("dimensions")\n    blocked = set(tuple(x) for x in blocked)\n    if any(r < 0 or c < 0 or r >= rows or c >= cols for r, c in blocked): raise ValueError("blocked")\n    dp = [0] * cols; dp[0] = 0 if (0, 0) in blocked else 1\n    for r in range(rows):\n        for c in range(cols):\n            if (r, c) in blocked: dp[c] = 0\n            elif c: dp[c] += dp[c - 1]\n    return dp[-1]\n',
-             cases=[{"args": [3, 3, [[1, 1]]], "expected": 2, "no_mutation": True}, {"args": [1, 1, []], "expected": 1}, {"args": [2, 2, [[0, 0]]], "expected": 0}, {"args": [2, 2, [[2, 0]]], "raises": "ValueError"}]),
-    ]
-    result = []
-    for spec in specs:
-        result.append({"task_id": spec["id"], "reference_artifact": _artifact(spec["path"], spec["gold"]),
-                       "evaluator": {"kind": "python_function", "path": spec["path"], "function": spec["fn"],
-                                     "tests": _call_tests(spec["fn"], spec["cases"]),
-                                     "constraints": spec.get("constraints", {})}})
-    return result
-
-
-def _json_units() -> list[dict]:
-    regression = [
-        ("regression-empty-page", "An empty middle page must not stop cursor traversal.",
-         {"pages": {"a": {"items": [1], "next": "b"}, "b": {"items": [], "next": "c"}, "c": {"items": [2], "next": None}}, "start": "a", "expected": [1, 2]}, "medium"),
-        ("regression-repeat-cursor", "A repeated cursor must raise ValueError instead of looping.",
-         {"pages": {"a": {"items": [], "next": "b"}, "b": {"items": [], "next": "a"}}, "start": "a", "expected_error": "ValueError"}, "medium"),
-        ("regression-blank-query", "An existing blank query value must survive appending.",
-         {"url": "/p?empty=", "pairs": [["x", "1"]], "expected": "/p?empty=&x=1"}, "small"),
-        ("regression-final-retry", "Success on the final allowed attempt must be returned.",
-         {"attempts": 3, "outcomes": ["TimeoutError", "TimeoutError", {"return": None}], "expected": None, "calls": 3}, "small"),
-        ("regression-lru-update", "Updating an existing cache key must refresh recency.",
-         {"capacity": 2, "operations": [["put", "a", 1], ["put", "b", 2], ["put", "a", 3], ["put", "c", 4]], "expected_items_lru_to_mru": [["a", 3], ["c", 4]]}, "small"),
-    ]
-    transformations = [
-        ("classify-timeout-event", "classify_event", {"event": {"type": "request_failed", "code": "ETIMEDOUT", "attempt": 3}, "rules": {"ETIMEDOUT": "transient", "ECONNRESET": "transient", "EINVAL": "permanent"}}, {"class": "transient", "retryable": True}),
-        ("classify-auth-event", "classify_event", {"event": {"type": "http_error", "status": 401}, "rules": {"401": "authentication", "403": "authorization", "429": "rate_limit"}}, {"class": "authentication", "retryable": False}),
-        ("convert-service-config", "convert_object", {"config": {"host": "api.internal", "port": 8443, "tls": True}, "mapping": {"host": "endpoint.host", "port": "endpoint.port", "tls": "security.enabled"}}, {"endpoint": {"host": "api.internal", "port": 8443}, "security": {"enabled": True}}),
-        ("normalize-duration-field", "normalize_field", {"record": {"job": "j7", "timeout": "2m 5s"}, "factors": {"m": 60, "s": 1}, "output_field": "timeout_seconds"}, {"job": "j7", "timeout_seconds": 125}),
-        ("convert-log-record", "convert_object", {"record": {"ts": "2026-01-02T03:04:05Z", "lvl": "WARN", "msg": "slow"}, "field_map": {"ts": "timestamp", "lvl": "severity", "msg": "message"}, "severity_map": {"WARN": 30}}, {"timestamp": "2026-01-02T03:04:05Z", "severity": 30, "message": "slow"}),
-    ]
-    result = []
-    for task_id, focus, oracle, size in regression:
-        result.append({"task_id": task_id, "reference_artifact": {"kind": "json", "value": deepcopy(oracle)},
-                       "evaluator": {"kind": "exact_json", "oracle": deepcopy(oracle)}})
-    for task_id, operation, input_value, oracle in transformations:
-        result.append({"task_id": task_id, "reference_artifact": {"kind": "json", "value": deepcopy(oracle)},
-                       "evaluator": {"kind": "exact_json", "oracle": deepcopy(oracle)}})
-    return result
-
-
-def _document_units() -> list[dict]:
-    specs = [
-        ("document-cursor-pagination", "Cursor pagination", 500,
-         ["A null cursor ends traversal.", "An empty page does not end traversal when a next cursor exists.", "A repeated cursor is an error."],
-         ["## Contract", "## Example", "## Failure case"]),
-        ("document-retry-semantics", "Retry attempt semantics", 500,
-         ["attempts counts total calls, not retries after the first call.", "Non-retryable exceptions propagate immediately.", "The final exception instance must be preserved."],
-         ["## Semantics", "## Example", "## Failure case"]),
-        ("document-lru-behavior", "LRU cache behavior", 1500,
-         ["A successful read refreshes recency.", "Updating an existing key refreshes recency.", "A miss does not insert the default value."],
-         ["## Invariants", "## Worked example", "## Common errors"]),
-        ("document-time-normalization", "Timestamp normalization", 1500,
-         ["astimezone converts an instant while replace changes only the timezone label.", "A timezone offset is required.", "The normalized result uses UTC."],
-         ["## Input contract", "## Conversion example", "## Error cases"]),
-        ("document-dag-scheduling", "Deterministic DAG scheduling", 4000,
-         ["An edge points from each prerequisite to its dependent.", "A self-loop is a cycle.", "Lexicographic selection makes ready-node choices deterministic."],
-         ["## Graph model", "## Algorithm", "## Detailed example", "## Cycle failures", "## Complexity"]),
-    ]
-    result = []
-    filler = (" The section explains the rule through a bounded example, states the observable result, "
-              "and distinguishes valid completion from an invalid shortcut. Reviewers can reproduce the outcome from the supplied facts.")
-    for task_id, topic, minimum, facts, headings in specs:
-        path = task_id.removeprefix("document-") + ".md"
-        text = "# " + topic + "\n\nThis section includes a reproducible example and explicit error handling.\n\n" + "\n\n".join(heading + "\n\n" + facts[index % len(facts)] + filler
-                                                       for index, heading in enumerate(headings))
-        while len(text) < minimum:
-            text += filler
-        result.append({"task_id": task_id, "reference_artifact": _artifact(path, text),
-                       "evaluator": {"kind": "document", "path": path, "minimum_characters": minimum,
-                                     "facts": facts, "headings": headings,
-                                     "required_terms": ["example", "error"]}})
-    return result
+def _load_private(task_id: str) -> dict:
+    root = PRIVATE_ROOT / task_id
+    entry = _read_json_object(root / "evaluation.json")
+    if entry.get("task_id") != task_id:
+        raise ValueError("Private evaluator task identity mismatch")
+    evaluator = entry["evaluator"]
+    if evaluator.get("kind") not in {"python_function", "exact_json", "document"}:
+        raise ValueError("Unknown atomic evaluator kind")
+    if evaluator["kind"] == "python_function":
+        evaluator["tests"] = read_text(root, evaluator.pop("tests_file"))
+    reference = entry["reference"]
+    if reference["kind"] == "files":
+        artifact = {"kind": "files", "files": {
+            path: read_text(root, source) for path, source in reference["files"].items()
+        }}
+    elif reference["kind"] == "json":
+        artifact = {"kind": "json", "value": read_json(root, reference["path"])}
+    else:
+        raise ValueError("Unknown reference artifact kind")
+    return {"task_id": task_id, "evaluator": evaluator, "reference_artifact": artifact}
 
 
 def atomic_task_catalog() -> list[dict]:
     """Load public JSON tasks and bind evaluator-only fixtures by task ID."""
     tasks = _load_public_tasks()
-    private = {item["task_id"]: item for item in _code_units() + _json_units() + _document_units()}
+    if PRIVATE_ROOT.is_symlink() or not PRIVATE_ROOT.is_dir():
+        raise ValueError("Private evaluator root must be a regular directory")
+    folders = list(PRIVATE_ROOT.iterdir())
+    if (any(path.is_symlink() or not path.is_dir() for path in folders)
+            or {path.name for path in folders} != {task["task_id"] for task in tasks}):
+        raise ValueError("Private evaluator inventory must match public tasks")
+    private = {task["task_id"]: _load_private(task["task_id"]) for task in tasks}
     if set(private) != {task["task_id"] for task in tasks}:
         raise ValueError("Public atomic tasks and private evaluators have different inventories")
     result = [{"task": task, "reference_artifact": private[task["task_id"]]["reference_artifact"],
                "evaluator": private[task["task_id"]]["evaluator"]} for task in tasks]
+    for entry in result:
+        public, evaluator = entry["task"]["input"], entry["evaluator"]
+        if evaluator["kind"] == "document":
+            if (evaluator["facts"] != public["facts"]
+                    or evaluator["fact_paraphrases"] != public["fact_paraphrases"]
+                    or len(evaluator["fact_paraphrases"]) != len(evaluator["facts"])
+                    or evaluator["headings"] != public["required_headings"]
+                    or evaluator["minimum_characters"] != public["minimum_characters"]):
+                raise ValueError("Public document contract and evaluator disagree")
     _validate_catalog(result)
     return deepcopy(result)
 
 
 def public_atomic_tasks() -> list[dict]:
-    return [item["task"] for item in atomic_task_catalog()]
+    return deepcopy(_load_public_tasks())
 
 
 def _validate_catalog(entries: list[dict]) -> None:
@@ -371,6 +208,45 @@ def _constraint_errors(source: str, function: str, constraints: dict) -> list[st
     return errors
 
 
+def _document_words(text: str) -> str:
+    """Normalize presentation, preserving word order and negation words."""
+    text = unicodedata.normalize("NFKC", text).casefold()
+    # Keep link labels, not destinations. Inline emphasis/code is presentation.
+    text = re.sub(r"\[([^\]]+)\]\([^\n)]*\)", r"\1", text)
+    text = re.sub(r"[`*_]", "", text)
+    return " ".join(re.findall(r"\w+", text))
+
+
+def _contains_document_phrase(text: str, phrase: str) -> bool:
+    phrase = _document_words(phrase)
+    return bool(phrase) and f" {phrase} " in f" {text} "
+
+
+def _grade_document(text: str, evaluator: dict) -> dict:
+    """Deterministic fact coverage, not a general semantic truth classifier.
+
+    Only explicitly declared equivalents are accepted. No fuzzy similarity or
+    keyword bag is used: those can erase negations or reverse edge direction.
+    """
+    normalized = _document_words(text)
+    alternatives = evaluator["fact_paraphrases"]
+    evidence = [next((phrase for phrase in [fact, *variants]
+                      if _contains_document_phrase(normalized, phrase)), None)
+                for fact, variants in zip(evaluator["facts"], alternatives, strict=True)]
+    headings = {_document_words(match.group(1)) for match in
+                re.finditer(r"(?m)^ {0,3}##[ \t]+(.+?)[ \t]*$", text)}
+    checks = {
+        "minimum_characters": len(text) >= evaluator["minimum_characters"],
+        "facts": all(item is not None for item in evidence),
+        "headings": all(_document_words(heading) in headings for heading in evaluator["headings"]),
+        "coverage_terms": all(any(_contains_document_phrase(normalized, term) for term in group)
+                              for group in evaluator["required_term_groups"]),
+    }
+    return {"passed": all(checks.values()), "checks": checks, "characters": len(text),
+            "fact_matching": "normalized_declared_variants_v1", "fact_evidence": evidence,
+            "unmatched_facts": [fact for fact, match in zip(evaluator["facts"], evidence) if match is None]}
+
+
 def grade_atomic(task: dict, artifact: dict) -> dict:
     """Grade one artifact using its private catalog entry."""
     entries = {item["task"]["task_id"]: item for item in atomic_task_catalog()}
@@ -391,14 +267,7 @@ def grade_atomic(task: dict, artifact: dict) -> dict:
         if policy:
             return {"passed": False, "policy_errors": sorted(set(policy)), "tests_run": 0}
         return grade_source(source, evaluator["tests"], timeout=10)
-    text = source
-    checks = {
-        "minimum_characters": len(text) >= evaluator["minimum_characters"],
-        "facts": all(fact in text for fact in evaluator["facts"]),
-        "headings": all(heading in text for heading in evaluator["headings"]),
-        "coverage_terms": all(term.casefold() in text.casefold() for term in evaluator["required_terms"]),
-    }
-    return {"passed": all(checks.values()), "checks": checks, "characters": len(text)}
+    return _grade_document(source, evaluator)
 
 
 def reference_artifact(task_id: str) -> dict:

@@ -1,0 +1,5 @@
+Fix the bug in this Python repository: Bound retries by total attempts and preserve exception behavior.
+
+retry_call(operation, attempts=3, retry_on=(Exception,)) calls a zero-argument operation and returns its first successful result. attempts means the maximum total number of calls, not the number of retries after an initial call. It must be a positive integer excluding bool; invalid values raise ValueError before calling operation. Retry only exceptions matching retry_on. Propagate other exceptions immediately and re-raise the final matching exception if all attempts fail. Preserve the original exception instance. Do not add sleeps.
+
+Inspect the repository, repair solution.py, preserve the documented API and existing correct behavior, and run the public tests. Add useful regression coverage if needed. Do not weaken or delete existing tests. Finish with a concise explanation of the repair and test results.

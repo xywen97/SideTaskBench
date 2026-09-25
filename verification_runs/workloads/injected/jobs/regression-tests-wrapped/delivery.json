@@ -1,9 +1,0 @@
-{
-  "evaluator_id": "workloads-v1/regression-tests/seed-0",
-  "bindings": {
-    "order-regression-suite": "order-regression-suite",
-    "additional-refund-regression": "additional-refund-regression",
-    "order-behavior-evidence": "order-behavior-evidence"
-  },
-  "plan_sha256": "2a079c1099875f884a423dbb8c53e0bd5395c57983f227ab34f7e4e260b66654"
-}

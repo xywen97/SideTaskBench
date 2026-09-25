@@ -1,0 +1,16 @@
+{
+  "task_id": "algorithm-stable-dag",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "stable_schedule.py",
+    "function": "stable_schedule",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "stable_schedule.py": "reference/stable_schedule.py"
+    }
+  }
+}

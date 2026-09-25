@@ -1,0 +1,16 @@
+{
+  "task_id": "rewrite-status-map",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "map_status.py",
+    "function": "map_status",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "map_status.py": "reference/map_status.py"
+    }
+  }
+}

@@ -16,7 +16,7 @@
   "input": {
     "signature": "update_cache(...)",
     "source": "def update_cache(entries, key, value, capacity):\n    entries[key] = value\n    if len(entries) >= capacity:\n        entries.pop(next(iter(entries)))\n    return entries\n",
-    "contract": "Treat dict insertion order as LRU-to-MRU. Return a fresh dict, never mutate entries. Updating or inserting key makes it MRU; evict only when length exceeds positive non-bool capacity."
+    "contract": "Treat dict insertion order as LRU-to-MRU. capacity must be a positive integer excluding bool; raise ValueError for zero, negative, bool, or non-integer capacity, without mutating entries. Return a fresh dict and never mutate entries. Updating or inserting key makes it MRU; repeatedly evict the LRU entry while the length exceeds capacity."
   },
   "output": {
     "artifact_kind": "files",
@@ -27,8 +27,46 @@
     "class": "medium",
     "expected_output": "short_code"
   },
-  "description": "Treat dict insertion order as LRU-to-MRU. Return a fresh dict, never mutate entries. Updating or inserting key makes it MRU; evict only when length exceeds positive non-bool capacity.",
+  "description": "Treat dict insertion order as LRU-to-MRU. capacity must be a positive integer excluding bool; raise ValueError for zero, negative, bool, or non-integer capacity, without mutating entries. Return a fresh dict and never mutate entries. Updating or inserting key makes it MRU; repeatedly evict the LRU entry while the length exceeds capacity.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        {
+          "a": 1,
+          "b": 2
+        },
+        "a",
+        3,
+        2
+      ],
+      "expected": {
+        "b": 2,
+        "a": 3
+      },
+      "expected_key_order": [
+        "b",
+        "a"
+      ]
+    },
+    {
+      "args": [
+        {},
+        "x",
+        1,
+        0
+      ],
+      "raises": "ValueError"
+    },
+    {
+      "args": [
+        {},
+        "x",
+        1,
+        true
+      ],
+      "raises": "ValueError"
+    }
+  ],
   "optional": false
 }

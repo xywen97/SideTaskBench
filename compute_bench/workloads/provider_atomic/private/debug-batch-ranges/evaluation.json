@@ -1,0 +1,16 @@
+{
+  "task_id": "debug-batch-ranges",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "batch_ranges.py",
+    "function": "batch_ranges",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "batch_ranges.py": "reference/batch_ranges.py"
+    }
+  }
+}

@@ -1,8 +1,7 @@
 """Independent provider-atomic workload portfolio.
 
-This suite is separate from the legacy business workload cases and their
-43 atomic work units. Coding experiments consume it, but it has no dependency
-on the coding benchmark package.
+Thirty closed units grouped into five deliverables. Coding experiments consume
+this package; it has no dependency on the coding benchmark package.
 """
 
 from .catalog import (

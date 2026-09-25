@@ -1,0 +1,16 @@
+{
+  "task_id": "rewrite-user-record",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "normalize_user.py",
+    "function": "normalize_user",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "normalize_user.py": "reference/normalize_user.py"
+    }
+  }
+}

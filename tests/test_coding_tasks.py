@@ -14,7 +14,8 @@ from compute_bench.workloads.provider_atomic.catalog import (
     CASE_ROOT, LARGE_TASKS, _load_public_tasks, assemble_portfolio,
     atomic_task_catalog, grade_atomic,
 )
-from compute_bench.coding.tasks import build_coding_cases
+from compute_bench.coding.tasks import build_coding_cases, build_run_plan, cases_for_manifest
+from collections import Counter
 
 
 def _run(source, tests, timeout=10):
@@ -58,26 +59,45 @@ class CodingTaskTests(unittest.TestCase):
             loaded = {item["task_id"]: item for item in _load_public_tasks(copied)}
             self.assertEqual(loaded["rewrite-user-record"]["description"], task["description"])
 
-    def test_eight_distinct_repositories_and_rotating_pairs(self):
+    def test_full_cross_plan_has_240_pairs_and_eight_repeats_each(self):
         cases = build_coding_cases()
-        self.assertEqual(len(cases), 8)
-        self.assertEqual(len({case["id"] for case in cases}), 8)
-        self.assertEqual(len({case["crowd_task"]["task_id"] for case in cases}), 8)
-        self.assertEqual({case["crowd_task"]["category"] for case in cases}, {
-            "function_rewrite", "function_debug", "algorithm", "single_behavior_regression",
-            "classification_conversion", "long_text_generation",
-        })
-        rotated = build_coding_cases(rotation=1)
-        self.assertEqual([case["repo_files"] for case in cases], [case["repo_files"] for case in rotated])
-        self.assertEqual([case["user_task"] for case in cases], [case["user_task"] for case in rotated])
-        self.assertNotEqual([case["crowd_task"]["task_id"] for case in cases],
-                            [case["crowd_task"]["task_id"] for case in rotated])
-        covered = {case["crowd_task"]["task_id"] for rotation in range(15)
-                   for case in build_coding_cases(rotation=rotation)}
-        self.assertEqual(len(covered), 30)
+        self.assertEqual(len(cases), 240)
+        self.assertEqual(len({case["id"] for case in cases}), 240)
+        self.assertEqual(len({case["host_task_id"] for case in cases}), 8)
+        self.assertEqual(len({case["crowd_task"]["task_id"] for case in cases}), 30)
+        hosts = {}
+        for case in cases:
+            contents = (case["repo_files"], case["user_task"], case["hidden_tests"], case["reference_text"])
+            self.assertEqual(contents, hosts.setdefault(case["host_task_id"], contents))
+        plan = build_run_plan(cases, ["wrapped"], ["none"])
+        self.assertEqual(len(plan), 1920)
+        self.assertEqual(set(Counter(p["case_id"] for p in plan).values()), {8})
+        self.assertEqual(len({p["run_id"] for p in plan}), 1920)
+        self.assertEqual(len({p["workspace_id"] for p in plan}), 1920)
+        for case in cases:
+            self.assertEqual({p["repeat"] for p in plan if p["case_id"] == case["id"]}, set(range(1, 9)))
+        self.assertEqual(plan, build_run_plan(cases, ["wrapped"], ["none"]))
+        self.assertNotEqual(plan, build_run_plan(cases, ["wrapped"], ["none"], seed=42))
+
+    def test_explicit_selection_is_cartesian_and_catalog_ordered(self):
+        hosts = ["coding-03", "coding-01"]
+        tasks = ["regression-empty-page", "rewrite-user-record"]
+        cases = build_coding_cases(host_task_ids=hosts, atomic_task_ids=tasks)
+        self.assertEqual(len(cases), 4)
+        self.assertEqual({(c["host_task_id"], c["crowd_task"]["task_id"]) for c in cases},
+                         {(h, t) for h in hosts for t in tasks})
+        self.assertEqual(cases, build_coding_cases(host_task_ids=hosts[::-1], atomic_task_ids=tasks[::-1]))
+        self.assertEqual(len(build_coding_cases(host_task_ids=["coding-01"])), 30)
+        self.assertEqual(len(build_coding_cases(atomic_task_ids=["rewrite-user-record"])), 8)
+
+    def test_historical_pairing_is_read_only_compatible(self):
+        cases = cases_for_manifest({"case_count": 8, "pairing_rotation": 2})
+        self.assertEqual([c["id"] for c in cases], [f"coding-{i:02}" for i in range(1, 9)])
+        self.assertEqual(cases[3]["crowd_task"]["task_id"], "rewrite-retry-config")
+        self.assertNotIn("host_task_id", cases[0])
 
     def test_every_bug_fails_and_every_reference_repair_passes(self):
-        for case in build_coding_cases():
+        for case in build_coding_cases(atomic_task_ids=["rewrite-user-record"]):
             for tests in (case["repo_files"]["tests/test_solution.py"], case["hidden_tests"]):
                 with self.subTest(case=case["id"], fixed=False):
                     broken = _run(case["repo_files"]["solution.py"], tests)
@@ -139,13 +159,14 @@ class CodingTaskTests(unittest.TestCase):
         self.assertEqual(json.loads(json.dumps(original)), original)
         original[0]["repo_files"]["solution.py"] = "changed"
         self.assertNotEqual(original, build_coding_cases())
-        self.assertEqual(build_coding_cases(2), build_coding_cases()[:2])
-        for count in (0, 9, -1, True, "2", None):
-            with self.subTest(count=count), self.assertRaises(ValueError):
-                build_coding_cases(count)
-        for rotation in (-1, True, "1"):
-            with self.subTest(rotation=rotation), self.assertRaises(ValueError):
-                build_coding_cases(rotation=rotation)
+        for field, invalid in (
+            ("host_task_ids", [[], ["bad"], ["coding-01", "coding-01"], "coding-01", [1]]),
+            ("atomic_task_ids", [[], ["bad"], ["rewrite-user-record", "rewrite-user-record"], [None]]),
+        ):
+            for value in invalid:
+                with self.subTest(field=field, value=value), self.assertRaises(ValueError):
+                    build_coding_cases(**{field: value})
+
 
 
 if __name__ == "__main__":

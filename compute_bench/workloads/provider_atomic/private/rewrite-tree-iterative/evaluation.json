@@ -1,0 +1,18 @@
+{
+  "task_id": "rewrite-tree-iterative",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "sum_tree.py",
+    "function": "sum_tree",
+    "constraints": {
+      "forbid_recursion": true
+    },
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "sum_tree.py": "reference/sum_tree.py"
+    }
+  }
+}

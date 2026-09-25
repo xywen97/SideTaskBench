@@ -1,1 +1,0 @@
-{"source_sku": "SKU-0000-03", "source_row": "C0000-03", "source": "manufacturer", "priority": 0, "entity_id": "LUMEN:PD100S:charger:pack1", "reason": null, "brand": "Lumen", "model": "PD100S", "category": "charger", "pack_size": 1, "attributes": {"power_w": 100, "connector": "USB-C"}}

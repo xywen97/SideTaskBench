@@ -1,9 +1,0 @@
-{
-  "evaluator_id": "workloads-v1/catalog-normalization/seed-0",
-  "bindings": {
-    "normalize-retail-catalog": "normalize-retail-catalog",
-    "normalize-business-catalog": "normalize-business-catalog",
-    "investigate-catalog-uncertainty": "investigate-catalog-uncertainty"
-  },
-  "plan_sha256": "112beeac5a2ec01a925aa359864ed1795da58b4d2e2b88f7ece3d8fe3e3c6de8"
-}

@@ -1,0 +1,14 @@
+{
+  "task_id": "classify-timeout-event",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "class": "transient",
+      "retryable": true
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

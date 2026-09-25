@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "catalog-normalization-atomic-wrapped",
-  "plan_sha256": "bf97c8c6460e5c35164d75566821a7b404ece78908fd04ad91ac5f7e270b1091",
-  "request_sha256": "c0f27e246705cb44edc678598c1074f530d95a570dd6a6b5cfafd7d9e1ac27b6",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_injected/jobs/catalog-normalization-atomic-wrapped/collector"
-}

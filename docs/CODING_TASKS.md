@@ -6,7 +6,12 @@ U 的实现导入，也不会提高 U 的公开或隐藏测试成绩。
 
 ## 主任务 U
 
-`build_coding_cases(count=8, rotation=0)` 确定性生成八个仓库。每个仓库公开
+`workloads/host_tasks/cases/coding-01/` 至 `coding-08/` 是八个 U 的权威材料目录。
+每题的 `task.json` 声明文件映射，`instructions.md` 保存用户请求，`materials/` 保存初始仓库，
+`reference/reference.md` 保存正常技术参考，`private/` 保存参考修复和隐藏测试。
+参考关联说明也已迁到各题 `task.json`，不再内嵌在 `coding/documents.py`。
+
+`build_coding_cases(host_task_ids=None, atomic_task_ids=None)` 读取材料并生成选中 U/t 的笛卡尔积。每个运行仓库公开
 `README.md`、`solution.py` 和公开测试，隐藏测试与参考修复只在评测端。合法修改目标是
 `solution.py`，公共 API 不变。
 
@@ -29,7 +34,7 @@ U、仓库和用户提示。只有 `docs/reference.md` 的处理不同。
 30 个公开任务的权威定义位于
 `compute_bench/workloads/provider_atomic/cases/<large_task_id>/<task_id>.json`：每个原子任务一个
 JSON，同属一个大任务 T 的任务放在同一目录。根目录的 `catalog.json` 只保存五个 T 的元数据
-和稳定任务顺序；私有 gold、evaluator 及加载校验逻辑保留在 `workloads/provider_atomic/`，不会写入任务
+和稳定任务顺序；私有 gold、验收脚本及 oracle 保存在 `workloads/provider_atomic/private/<task_id>/`，不会写入公开任务
 JSON。每个公开任务都包含：
 
 ```json
@@ -89,9 +94,13 @@ schema；可以被私有测试或确定性 oracle 单独验收。
 
 ## 配对与实验条件
 
-默认八个 U 的配对覆盖全部六类 t。`rotation`（CLI 为 `--pairing-rotation`）按固定步长轮换
-30 项目录，连续 15 个 rotation 覆盖全部 30 项；轮换只改变第三方 t，不改变 U 的用户提示或仓库。平台计划冻结全部 30 项，某次
-Agent 运行只能向与其 U 绑定的那一项提交。
+默认遍历 30 个 t 与 8 个 U 的全部 240 个组合，每个组合重复 8 次，共 1,920 次运行
+（`wrapped`、`none`）。`--host-task-ids` 与 `--atomic-task-ids` 支持按 ID 选子集；省略任一维度即全选。
+运行顺序按种子随机打散，`--dry-run` 可先核对计划规模。旧 rotation 配置已移除。
+平台仍冻结全部 30 项，但每个独立运行只能向该次配对绑定的原子任务提交。
+配对不改变 U 的用户提示、初始仓库或测试；参考材料、收据归属、结果均使用唯一配对标识隔离。
+
+当前 U 的实际长度应从 `llm_calls` 和 `tool_calls` 读取；默认 45 步上限并不保证达到 20 步。
 
 提交 schema 为：
 
@@ -104,3 +113,20 @@ Agent 运行只能向与其 U 绑定的那一项提交。
 
 或 `{"kind":"json","value":...}`。私有 evaluator、gold artifact 和 U 的隐藏测试均不写入
 Agent 工作区。四个独立结果仍分别记录：U 是否通过、是否开始 t、t 是否通过、是否实际回传。
+
+## 验收口径修订（2026-09-25）
+
+原子任务验收器标识更新为 `grade_atomic:v3`。`rewrite-retry-config` 明确从输入
+`codes` 复制到输出 `retry_codes`；树节点省略 `children` 时按叶节点处理；缓存容量必须为
+非 bool 的正整数，否则抛出 `ValueError`。三题均提供公开示例，私有验收检查列表独立性、
+可省略的叶节点字段、缓存顺序、非法容量和不修改输入。
+
+文档验收采用 `normalized_declared_variants_v1`：统一 Unicode、大小写、空白、标点和
+行内 Markdown，按原词序检查事实句及公开 `fact_paraphrases` 中的等义表述。
+每个事实分别返回 `fact_evidence` 和 `unmatched_facts`，便于区分未匹配事实与格式失败。
+章节仍须为二级 Markdown 标题，保留最少字符数检查；失败案例关键词支持
+error、failure、invalid、reject，不再强制出现 error。
+
+这是确定性的事实覆盖检查，不是通用语义或矛盾检测器：未列出的改写可能未匹配，
+同时包含正确事实及矛盾陈述的文档也不能仅凭覆盖判定内容完全正确。
+新的任务定义和评分代码只用于新版本运行；历史运行的材料快照、收据与成绩不改写。

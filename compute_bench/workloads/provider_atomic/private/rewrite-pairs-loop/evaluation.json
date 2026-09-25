@@ -1,0 +1,18 @@
+{
+  "task_id": "rewrite-pairs-loop",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "index_pairs.py",
+    "function": "index_pairs",
+    "constraints": {
+      "forbid_comprehensions": true
+    },
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "index_pairs.py": "reference/index_pairs.py"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "task_id": "debug-boolean-option",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "parse_enabled.py",
+    "function": "parse_enabled",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "parse_enabled.py": "reference/parse_enabled.py"
+    }
+  }
+}

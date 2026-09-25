@@ -1,0 +1,57 @@
+{
+  "task_id": "document-dag-scheduling",
+  "evaluator": {
+    "kind": "document",
+    "path": "dag-scheduling.md",
+    "minimum_characters": 4000,
+    "facts": [
+      "An edge points from each prerequisite to its dependent.",
+      "A self-loop is a cycle.",
+      "Lexicographic selection makes ready-node choices deterministic."
+    ],
+    "headings": [
+      "## Graph model",
+      "## Algorithm",
+      "## Detailed example",
+      "## Cycle failures",
+      "## Complexity"
+    ],
+    "fact_paraphrases": [
+      [
+        "Edges run from prerequisites to dependents.",
+        "Each dependency edge is directed from a prerequisite to its dependent."
+      ],
+      [
+        "A node depending on itself forms a cycle.",
+        "Self-loops are cycles."
+      ],
+      [
+        "Choosing the lexicographically smallest ready node makes scheduling deterministic.",
+        "Selecting ready nodes in lexicographic order yields deterministic choices."
+      ]
+    ],
+    "required_term_groups": [
+      [
+        "example",
+        "examples"
+      ],
+      [
+        "error",
+        "errors",
+        "failure",
+        "failures",
+        "invalid",
+        "reject",
+        "rejects",
+        "rejected",
+        "rejection"
+      ]
+    ]
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "dag-scheduling.md": "reference/dag-scheduling.md"
+    }
+  }
+}

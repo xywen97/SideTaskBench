@@ -4,33 +4,38 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
-import ast
 from pathlib import Path
 
+from compute_bench.workloads.resources import inventory
 
-SOURCE_LAYOUT_VERSION = 4
-SUPPORTED_SOURCE_LAYOUTS = frozenset({1, 2, 3, 4})
 
-LEGACY_REQUIRED_BENCHMARK_SOURCES = frozenset({
-    "coding/tasks.py", "coding/runner.py", "coding/grading.py", "coding/environment.py",
-    "coding/sandbox.py", "agent.py", "llm.py",
-})
-
+SOURCE_LAYOUT_VERSION = 6
 REQUIRED_BENCHMARK_SOURCES = frozenset({
     "__init__.py", "__main__.py", "cli.py", "io.py",
     "coding/__init__.py", "coding/__main__.py", "coding/cli.py", "coding/tasks.py",
     "coding/runner.py", "coding/grading.py", "coding/environment.py", "coding/documents.py",
     "coding/platform.py", "coding/provenance.py", "coding/audit.py", "coding/report.py", "coding/rescore.py",
-    "workloads/isolation.py", "workloads/provider_atomic/__init__.py",
-    "workloads/provider_atomic/catalog.py", "workloads/provider_atomic/python_grading.py",
+    "workloads/python_grading.py", "workloads/provider_atomic/__init__.py",
+    "workloads/provider_atomic/catalog.py",
+    "workloads/resources.py", "workloads/host_tasks/__init__.py",
+    "workloads/host_tasks/catalog.py",
 })
 
+MATERIAL_ROOTS = (
+    "workloads/host_tasks/cases",
+    "workloads/provider_atomic/cases",
+    "workloads/provider_atomic/private",
+)
 
-def required_benchmark_sources(layout: int) -> frozenset[str]:
-    """Version the benchmark contract without requiring removed import shims."""
-    if type(layout) is not int or layout not in SUPPORTED_SOURCE_LAYOUTS:
-        raise ValueError("Unsupported source snapshot layout")
-    return REQUIRED_BENCHMARK_SOURCES if layout == 4 else LEGACY_REQUIRED_BENCHMARK_SOURCES
+
+def task_materials() -> dict[str, bytes]:
+    root = Path(__file__).resolve().parents[1]
+    return {prefix + "/" + path: data for prefix in MATERIAL_ROOTS
+            for path, data in inventory(root / prefix).items()}
+
+
+def material_hashes() -> dict[str, str]:
+    return {path: hashlib.sha256(data).hexdigest() for path, data in task_materials().items()}
 
 
 AGENT_IDENTITY = {
@@ -82,11 +87,11 @@ def _platform_package_root() -> Path:
 
 
 def snapshot_sources(output_dir: Path) -> dict:
-    """Copy complete Python sources and return manifest provenance fields.
+    """Snapshot runtime sources and exact task materials separately.
 
     output_dir is a fresh run root or its recovery_N root. Existing source files
     are never overwritten, so a recovery cannot silently replace prior evidence.
-    Files are read once, and the same bytes are hashed and written. Environment
+    Source/material bytes are hashed and copied without importing fixtures. Environment
     files, caches and runtime outputs are excluded from all package snapshots.
     """
     output_dir = Path(output_dir).resolve()
@@ -105,6 +110,8 @@ def snapshot_sources(output_dir: Path) -> dict:
             if path.is_symlink() or not path.resolve().is_relative_to(root):
                 raise ValueError("Source snapshot cannot follow a package symlink")
             relative = path.relative_to(root).as_posix()
+            if package == "compute_bench" and any(relative.startswith(prefix + "/") for prefix in MATERIAL_ROOTS):
+                continue
             files[relative] = path.read_bytes()
         if not files or "__init__.py" not in files:
             raise ValueError(f"Missing Python package sources: {package}")
@@ -124,8 +131,15 @@ def snapshot_sources(output_dir: Path) -> dict:
             with target.open("xb") as stream:
                 stream.write(content)
             hashes[package][relative] = hashlib.sha256(content).hexdigest()
+    resources = task_materials()
+    for relative, content in resources.items():
+        target = output_dir / "task_materials" / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("xb") as stream:
+            stream.write(content)
     return {
         "source_layout_version": SOURCE_LAYOUT_VERSION,
+        "task_material_sha256": {path: hashlib.sha256(data).hexdigest() for path, data in resources.items()},
         "source_sha256": hashes["compute_bench"],
         "agent_source_sha256": hashes["microcoder"],
         "agent_source_root": "source/microcoder",
@@ -134,74 +148,3 @@ def snapshot_sources(output_dir: Path) -> dict:
         "platform_source_root": "source/taskforge",
         "platform_identity": dict(PLATFORM_IDENTITY),
     }
-
-
-def _imports_package(source: str, package: str) -> bool:
-    for node in ast.walk(ast.parse(source)):
-        names = ([item.name for item in node.names] if isinstance(node, ast.Import)
-                 else [node.module or ""] if isinstance(node, ast.ImportFrom) else [])
-        if any(name == package or name.startswith(package + ".") for name in names):
-            return True
-    return False
-
-
-def _inspect_package_snapshot(output_dir, metadata, *, label, package, identity, required_sources, layouts):
-    root = Path(output_dir).resolve()
-    benchmark = root / "source/compute_bench"
-    package_dir = root / "source" / package
-    checks = []
-
-    def check(name, passed, detail=""):
-        checks.append({"check": name, "passed": bool(passed), **({"detail": detail} if detail else {})})
-
-    layout = metadata.get("source_layout_version", 1)
-    check(label + "_source_layout_version", type(layout) is int and layout in SUPPORTED_SOURCE_LAYOUTS)
-    imports_package = False
-    for path in benchmark.rglob("*.py"):
-        if path.is_symlink() or not path.resolve().is_relative_to(root):
-            check(label + "_dependency_source_paths", False, str(path.relative_to(root)))
-            continue
-        try:
-            imports_package |= _imports_package(path.read_text(encoding="utf-8"), package)
-        except (SyntaxError, UnicodeError):
-            check(label + "_dependency_source_syntax", False, str(path.relative_to(root)))
-    fields = {label + "_source_sha256", label + "_source_root", label + "_identity"}
-    required = imports_package or package_dir.exists() or bool(fields.intersection(metadata)) or metadata.get("source_layout_version") in layouts
-    if not required:
-        return {"required": False, "checks": checks}
-    check(label + "_provenance_present", fields.issubset(metadata) and metadata.get("source_layout_version") in layouts)
-    check(label + "_identity", metadata.get(label + "_identity") == identity)
-    check(label + "_source_root", metadata.get(label + "_source_root") == "source/" + package)
-    hashes = metadata.get(label + "_source_sha256", {})
-    if not isinstance(hashes, dict):
-        hashes = {}
-    actual = {path.relative_to(package_dir).as_posix(): path for path in package_dir.rglob("*.py")} if package_dir.is_dir() and not package_dir.is_symlink() else {}
-    check(label + "_source_inventory", bool(hashes) and set(actual) == set(hashes)
-          and required_sources.issubset(hashes))
-    for relative, expected in hashes.items():
-        path = package_dir / relative
-        safe = (not Path(relative).is_absolute() and ".." not in Path(relative).parts
-                and not path.is_symlink() and path.resolve().is_relative_to(package_dir.resolve())
-                and path.resolve().is_relative_to(root))
-        check(label + "_source_path/" + relative, safe)
-        if not safe:
-            continue
-        check(label + "_source_hash/" + relative, path.is_file() and
-              hashlib.sha256(path.read_bytes()).hexdigest() == expected)
-    return {"required": True, "checks": checks}
-
-
-def inspect_agent_snapshot(output_dir: Path, metadata: dict) -> dict:
-    """Verify MicroCoder for layouts 2-4; retain combined-package evidence."""
-    return _inspect_package_snapshot(output_dir, metadata, label="agent", package="microcoder",
-                                     identity=AGENT_IDENTITY, required_sources=REQUIRED_AGENT_SOURCES, layouts={2, 3, 4})
-
-
-def inspect_platform_snapshot(output_dir: Path, metadata: dict) -> dict:
-    """Verify TaskForge for layouts 3/4 without importing retained platform code.
-
-    Platform imports, a platform source directory, or any platform metadata make
-    the complete provenance mandatory even if the layout version is removed.
-    """
-    return _inspect_package_snapshot(output_dir, metadata, label="platform", package="taskforge",
-                                     identity=PLATFORM_IDENTITY, required_sources=REQUIRED_PLATFORM_SOURCES, layouts={3, 4})

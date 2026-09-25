@@ -1,0 +1,14 @@
+{
+  "pages": {
+    "a": {
+      "items": [],
+      "next": "b"
+    },
+    "b": {
+      "items": [],
+      "next": "a"
+    }
+  },
+  "start": "a",
+  "expected_error": "ValueError"
+}

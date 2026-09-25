@@ -1,0 +1,16 @@
+{
+  "task_id": "debug-pagination-cycle",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "collect_pages.py",
+    "function": "collect_pages",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "collect_pages.py": "reference/collect_pages.py"
+    }
+  }
+}

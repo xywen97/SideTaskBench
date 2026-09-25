@@ -1,1 +1,0 @@
-{"task_id": "normalize-sku-0000-19", "artifact": {"kind": "json", "value": {"source_sku": "SKU-0000-19", "source_row": "C0000-19", "source": "marketplace", "priority": 2, "entity_id": null, "reason": "missing_model"}}}

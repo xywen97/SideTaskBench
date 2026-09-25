@@ -1,0 +1,14 @@
+{
+  "task_id": "normalize-duration-field",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "job": "j7",
+      "timeout_seconds": 125
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

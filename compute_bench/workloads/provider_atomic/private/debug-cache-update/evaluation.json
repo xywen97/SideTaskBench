@@ -1,0 +1,16 @@
+{
+  "task_id": "debug-cache-update",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "update_cache.py",
+    "function": "update_cache",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "update_cache.py": "reference/update_cache.py"
+    }
+  }
+}

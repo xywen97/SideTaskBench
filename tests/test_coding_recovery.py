@@ -57,7 +57,7 @@ class CodingRecoveryTests(unittest.TestCase):
             sandbox.probe.return_value = {"backend": "synthetic", "available": True}
             sandbox.return_value.run.return_value = {"stdout": "synthetic patch", "stderr": "", "exit_code": 0}
             with self.assertRaisesRegex(RuntimeError, "failed in the harness"):
-                execute_coding(settings, root, count=1, conditions=["clean"], repeats=1, workers=1)
+                execute_coding(settings, root, host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"], conditions=["clean"], repeats=1, workers=1)
             agent.assert_not_called()
             client.assert_not_called()
             assignment = TaskForge(root / "platform").status()["assignments"][0]
@@ -117,18 +117,18 @@ class CodingRecoveryTests(unittest.TestCase):
                     sandbox.probe.return_value = {"backend": "synthetic-test-sandbox", "available": True}
                     sandbox.return_value.run.return_value = {"stdout": "synthetic patch\n", "stderr": "", "exit_code": 0}
                     with self.assertRaisesRegex(RuntimeError, "failed in the harness"):
-                        execute_coding(settings, root, count=1, conditions=["clean"],
+                        execute_coding(settings, root, host_task_ids=["coding-01", "coding-02"], atomic_task_ids=["rewrite-user-record", "regression-empty-page"], conditions=["clean"],
                                        defenses=["none"], repeats=2, workers=1)
 
                     client.assert_not_called()
                     agent.assert_not_called()
                     plan = json.loads((root / "plan.json").read_text())
-                    self.assertEqual(len(plan), 2)
+                    self.assertEqual(len(plan), 8)
                     self.assertEqual((root / "results.jsonl").read_text(), "")
                     failed_manifest = json.loads((root / "manifest.json").read_text())
                     self.assertEqual(failed_manifest["completed_runs"], 0)
                     self.assertEqual(failed_manifest["total_usage"]["total_tokens"], 0)
-                    self.assertEqual(len(json.loads((root / "harness_errors.json").read_text())), 2)
+                    self.assertEqual(len(json.loads((root / "harness_errors.json").read_text())), 8)
                     self.assertFalse(json.loads((root / "summary.json").read_text())["all_planned_recorded"])
                     snapshot_before = (root / "source/compute_bench/coding/runner.py").read_bytes()
                     original_hashes = failed_manifest["source_sha256"]
@@ -140,11 +140,11 @@ class CodingRecoveryTests(unittest.TestCase):
                     create.side_effect = successful_bootstrap
                     summary = resume_coding(settings, root, workers=1)
 
-                    self.assertEqual(agent.call_count, 2)
-                    self.assertEqual(client.call_count, 2)
+                    self.assertEqual(agent.call_count, 8)
+                    self.assertEqual(client.call_count, 8)
                     self.assertTrue(summary["all_planned_recorded"])
-                    self.assertEqual(summary["runs"], 2)
-                    self.assertEqual(summary["total_usage"]["total_tokens"], 30)
+                    self.assertEqual(summary["runs"], 8)
+                    self.assertEqual(summary["total_usage"]["total_tokens"], 120)
                     records = [json.loads(line) for line in (root / "results.jsonl").read_text().splitlines()]
                     self.assertEqual({item["run_id"] for item in records}, {item["run_id"] for item in plan})
                     self.assertEqual(len(records), len({item["run_id"] for item in records}))
@@ -153,7 +153,7 @@ class CodingRecoveryTests(unittest.TestCase):
                     self.assertEqual((root / "source/compute_bench/coding/runner.py").read_bytes(), snapshot_before)
                     recovered_manifest = json.loads((root / "manifest.json").read_text())
                     self.assertEqual(recovered_manifest["source_sha256"], original_hashes)
-                    self.assertEqual(recovered_manifest["completed_runs"], 2)
+                    self.assertEqual(recovered_manifest["completed_runs"], 8)
                     recovery = json.loads((root / "recovery_1/recovery.json").read_text())
                     self.assertEqual(set(recovery["pending_run_ids"]), {item["run_id"] for item in plan})
                     self.assertEqual(recovery["failures"], [])
@@ -161,19 +161,19 @@ class CodingRecoveryTests(unittest.TestCase):
                         archived = root / "recovery_1/failed_bootstrap" / trial["workspace_id"] / "partial-bootstrap.txt"
                         self.assertEqual(archived.read_text(), "preserve this evidence")
                     registrations = (root / "collector/registrations.jsonl").read_text().splitlines()
-                    self.assertEqual(len(registrations), 2)
+                    self.assertEqual(len(registrations), 8)
                     self.assertEqual((root / "platform/plan.json").read_bytes(), platform_before)
                     platform = TaskForge(root / "platform")
                     assignments = platform.status()["assignments"]
                     self.assertEqual({item["assignment_id"] for item in assignments}, {item["run_id"] for item in plan})
                     self.assertTrue(all(item["state"] == "closed" for item in assignments))
-                    self.assertTrue(all(item["routing_id"] == "coding-01" for item in assignments))
+                    self.assertEqual({item["routing_id"] for item in assignments}, {item["case_id"] for item in plan})
                     self.assertEqual(json.loads((root / "platform/result.json").read_text())["completed_tasks"], 0)
                     # Resuming a complete matrix must not mutate provenance or rerun a model.
                     manifest_before = (root / "manifest.json").read_bytes()
                     records_before = (root / "results.jsonl").read_bytes()
                     self.assertTrue(resume_coding(settings, root, workers=1)["all_planned_recorded"])
-                    self.assertEqual(agent.call_count, 2)
+                    self.assertEqual(agent.call_count, 8)
                     self.assertEqual((root / "manifest.json").read_bytes(), manifest_before)
                     self.assertEqual((root / "results.jsonl").read_bytes(), records_before)
                     self.assertFalse((root / "recovery_2").exists())

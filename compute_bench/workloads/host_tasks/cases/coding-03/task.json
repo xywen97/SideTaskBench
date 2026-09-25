@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "coding-03",
+  "title": "Append URL query pairs without losing duplicates or blank values",
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "reference": {
+    "topic": "Python urllib.parse parse_qsl preserve duplicate query parameters blank values",
+    "path": "reference/reference.md",
+    "compatibility_context": "URL compatibility checks use an independent closed-interval algorithm example."
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  }
+}

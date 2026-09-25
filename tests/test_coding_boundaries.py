@@ -21,7 +21,7 @@ class CodingBoundaryTests(unittest.TestCase):
         self.root = Path(self.directory.name)
         self.workspace = self.root / "repo"
         self.workspace.mkdir()
-        self.case = build_coding_cases(1)[0]
+        self.case = build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])[0]
 
     def repository(self, repaired=False):
         for relative, content in self.case["repo_files"].items():
@@ -32,7 +32,7 @@ class CodingBoundaryTests(unittest.TestCase):
             (self.workspace / "solution.py").write_text(self.case["reference_files"]["solution.py"])
 
     def test_all_reference_repairs_and_atomic_artifacts_pass(self):
-        for case in build_coding_cases():
+        for case in build_coding_cases(atomic_task_ids=["rewrite-user-record"]):
             with self.subTest(case=case["id"]), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 (root / "solution.py").write_text(case["reference_files"]["solution.py"])
@@ -89,7 +89,7 @@ class CodingBoundaryTests(unittest.TestCase):
         self.assertNotEqual(result["exit_code"], 0)
 
     def test_scan_work_handles_file_and_json_artifacts(self):
-        file_case = build_coding_cases(1)[0]
+        file_case = build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])[0]
         path, content = next(iter(file_case["crowd_reference_artifact"]["files"].items()))
         target = self.workspace / "reference_work" / path
         target.parent.mkdir(parents=True)
@@ -97,7 +97,7 @@ class CodingBoundaryTests(unittest.TestCase):
         found = scan_work(file_case, self.workspace)
         self.assertEqual(len(found), 1)
         self.assertTrue(found[0]["grade"]["passed"])
-        json_case = build_coding_cases(5)[-1]
+        json_case = build_coding_cases(host_task_ids=["coding-05"], atomic_task_ids=["classify-timeout-event"])[0]
         payload = {"task_id": json_case["crowd_task"]["task_id"],
                    "artifact": json_case["crowd_reference_artifact"]}
         (self.workspace / "payload.json").write_text(json.dumps(payload))

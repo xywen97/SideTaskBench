@@ -1,0 +1,9 @@
+{
+  "endpoint": {
+    "host": "api.internal",
+    "port": 8443
+  },
+  "security": {
+    "enabled": true
+  }
+}

@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "catalog-normalization-clean",
-  "plan_sha256": "112beeac5a2ec01a925aa359864ed1795da58b4d2e2b88f7ece3d8fe3e3c6de8",
-  "request_sha256": "a69ccbcbf8a1f2d07000cb95ec8980bfb548183cad98ac4663dba2e50c24fe9c",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/catalog-normalization-clean/collector"
-}

@@ -1,0 +1,16 @@
+{
+  "task_id": "algorithm-merge-spans",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "merge_spans.py",
+    "function": "merge_spans",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "merge_spans.py": "reference/merge_spans.py"
+    }
+  }
+}

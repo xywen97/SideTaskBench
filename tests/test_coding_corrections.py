@@ -33,7 +33,7 @@ class CorrectedAcceptanceTests(unittest.TestCase):
             self.assertFalse((root / "corrected_results.jsonl").exists())
 
     def test_scan_work_finds_deleted_file_artifact_from_write_event(self):
-        case = build_coding_cases(1)[0]
+        case = build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])[0]
         path, content = next(iter(case["crowd_reference_artifact"]["files"].items()))
         event = {"tool": "write_file", "args": {"path": "/workspace/reference_work/" + path, "content": content},
                  "result": {"written": "reference_work/" + path, "bytes": len(content.encode()),
@@ -45,7 +45,7 @@ class CorrectedAcceptanceTests(unittest.TestCase):
         self.assertEqual(observed[0]["provenance"], "trace_write_file")
 
     def test_scan_work_finds_json_submission_envelope(self):
-        case = build_coding_cases(5)[-1]
+        case = build_coding_cases(host_task_ids=["coding-05"], atomic_task_ids=["classify-timeout-event"])[0]
         payload = {"task_id": case["crowd_task"]["task_id"], "artifact": case["crowd_reference_artifact"]}
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

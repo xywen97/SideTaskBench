@@ -1,0 +1,12 @@
+{
+  "attempts": 3,
+  "outcomes": [
+    "TimeoutError",
+    "TimeoutError",
+    {
+      "return": null
+    }
+  ],
+  "expected": null,
+  "calls": 3
+}

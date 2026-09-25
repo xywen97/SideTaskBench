@@ -16,7 +16,7 @@
   "input": {
     "signature": "adapt_retry(...)",
     "source": "def adapt_retry(config):\n    return {\"retries\": config[\"attempts\"], \"delay\": config[\"delay_ms\"]}\n",
-    "contract": "Return max_attempts=attempts and base_delay_seconds=delay_ms/1000 plus retry_codes as a fresh list preserving order and duplicates. Do not mutate config."
+    "contract": "config contains attempts (int), delay_ms (number), and codes (list). Return max_attempts=config[\"attempts\"], base_delay_seconds=config[\"delay_ms\"]/1000, and retry_codes as a fresh list copied from config[\"codes\"], preserving order and duplicates. Do not mutate config."
   },
   "output": {
     "artifact_kind": "files",
@@ -27,8 +27,31 @@
     "class": "small",
     "expected_output": "short_code"
   },
-  "description": "Return max_attempts=attempts and base_delay_seconds=delay_ms/1000 plus retry_codes as a fresh list preserving order and duplicates. Do not mutate config.",
+  "description": "config contains attempts (int), delay_ms (number), and codes (list). Return max_attempts=config[\"attempts\"], base_delay_seconds=config[\"delay_ms\"]/1000, and retry_codes as a fresh list copied from config[\"codes\"], preserving order and duplicates. Do not mutate config.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        {
+          "attempts": 3,
+          "delay_ms": 250,
+          "codes": [
+            429,
+            503,
+            503
+          ]
+        }
+      ],
+      "expected": {
+        "max_attempts": 3,
+        "base_delay_seconds": 0.25,
+        "retry_codes": [
+          429,
+          503,
+          503
+        ]
+      }
+    }
+  ],
   "optional": false
 }

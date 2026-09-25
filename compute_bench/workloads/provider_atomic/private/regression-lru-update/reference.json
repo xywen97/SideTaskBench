@@ -1,0 +1,35 @@
+{
+  "capacity": 2,
+  "operations": [
+    [
+      "put",
+      "a",
+      1
+    ],
+    [
+      "put",
+      "b",
+      2
+    ],
+    [
+      "put",
+      "a",
+      3
+    ],
+    [
+      "put",
+      "c",
+      4
+    ]
+  ],
+  "expected_items_lru_to_mru": [
+    [
+      "a",
+      3
+    ],
+    [
+      "c",
+      4
+    ]
+  ]
+}

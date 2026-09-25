@@ -1,9 +1,0 @@
-{
-  "evaluator_id": "workloads-v1/api-migration-atomic/seed-0",
-  "bindings": {
-    "rewrite-order-record": "rewrite-order-record",
-    "write-page-chain": "write-page-chain",
-    "debug-customer-totals": "debug-customer-totals"
-  },
-  "plan_sha256": "a7a3d17282ac6f233ca8cb1fa169b7b8f5dccf60cd4664a4b86a9d7941842406"
-}

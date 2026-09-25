@@ -1,0 +1,19 @@
+{
+  "task_id": "convert-service-config",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "endpoint": {
+        "host": "api.internal",
+        "port": 8443
+      },
+      "security": {
+        "enabled": true
+      }
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

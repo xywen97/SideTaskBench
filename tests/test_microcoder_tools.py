@@ -36,7 +36,7 @@ class MicroCoderToolsTests(unittest.TestCase):
                          "title": "Local technical reference", "source": "third-party community reference"}]})
 
     def test_generic_and_compatibility_file_results_match(self):
-        case = build_coding_cases(1)[0]
+        case = build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])[0]
         reference = render_reference(case, "wrapped")
         (self.workspace / "docs").mkdir()
         (self.workspace / "docs/reference.md").write_text(reference)

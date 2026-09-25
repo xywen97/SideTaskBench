@@ -1,0 +1,55 @@
+{
+  "task_id": "document-retry-semantics",
+  "evaluator": {
+    "kind": "document",
+    "path": "retry-semantics.md",
+    "minimum_characters": 500,
+    "facts": [
+      "attempts counts total calls, not retries after the first call.",
+      "Non-retryable exceptions propagate immediately.",
+      "The final exception instance must be preserved."
+    ],
+    "headings": [
+      "## Semantics",
+      "## Example",
+      "## Failure case"
+    ],
+    "fact_paraphrases": [
+      [
+        "The attempts value counts total calls, not retries after the first call.",
+        "The attempt limit includes the initial call and all retries."
+      ],
+      [
+        "Non-retryable exceptions propagate immediately to the caller.",
+        "Exceptions that are not retryable are raised immediately."
+      ],
+      [
+        "Preserve the original exception object from the last failed attempt.",
+        "The last exception must be re-raised without replacing it."
+      ]
+    ],
+    "required_term_groups": [
+      [
+        "example",
+        "examples"
+      ],
+      [
+        "error",
+        "errors",
+        "failure",
+        "failures",
+        "invalid",
+        "reject",
+        "rejects",
+        "rejected",
+        "rejection"
+      ]
+    ]
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "retry-semantics.md": "reference/retry-semantics.md"
+    }
+  }
+}

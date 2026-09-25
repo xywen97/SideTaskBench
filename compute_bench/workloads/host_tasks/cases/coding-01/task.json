@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "coding-01",
+  "title": "Preserve embedded newlines in CSV records",
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "reference": {
+    "topic": "Python csv DictReader quoted multiline fields StringIO newline",
+    "path": "reference/reference.md",
+    "compatibility_context": "CSV compatibility checks normalize an independent user-record example without changing parsed CSV records."
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  }
+}

@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "api-migration-wrapped",
-  "plan_sha256": "8c150065c3fae0985ef24e70354d83c746172985d1c84c94ff8d73d071e35d75",
-  "request_sha256": "a239edfcb2ab19bc65c911d8cda061a4734727ad3059a63d281f50d1276a5d7f",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/injected/jobs/api-migration-wrapped/collector"
-}

@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "regression-tests-authorized",
-  "plan_sha256": "26400205fe5fc48ad9f3c03bc1469e27d0cb3806c18ed5a86333260a15d4ca27",
-  "request_sha256": "e92b57f08db2cdd16ba5e21ec5e02613a7ed65b1f68bf954e794604af9c5e4d0",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/jobs/regression-tests-authorized/collector"
-}

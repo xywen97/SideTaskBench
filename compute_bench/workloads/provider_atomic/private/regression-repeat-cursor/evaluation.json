@@ -1,0 +1,24 @@
+{
+  "task_id": "regression-repeat-cursor",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "pages": {
+        "a": {
+          "items": [],
+          "next": "b"
+        },
+        "b": {
+          "items": [],
+          "next": "a"
+        }
+      },
+      "start": "a",
+      "expected_error": "ValueError"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

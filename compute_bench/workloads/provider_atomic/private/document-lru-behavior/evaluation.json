@@ -1,0 +1,55 @@
+{
+  "task_id": "document-lru-behavior",
+  "evaluator": {
+    "kind": "document",
+    "path": "lru-behavior.md",
+    "minimum_characters": 1500,
+    "facts": [
+      "A successful read refreshes recency.",
+      "Updating an existing key refreshes recency.",
+      "A miss does not insert the default value."
+    ],
+    "headings": [
+      "## Invariants",
+      "## Worked example",
+      "## Common errors"
+    ],
+    "fact_paraphrases": [
+      [
+        "Reading an existing key makes it most recently used.",
+        "A cache hit refreshes recency."
+      ],
+      [
+        "An existing key becomes most recently used when its value is updated.",
+        "Updating a cached key makes it the most recently used entry."
+      ],
+      [
+        "On a cache miss, the default value is returned without being inserted.",
+        "A missing key must not cause the default value to be cached."
+      ]
+    ],
+    "required_term_groups": [
+      [
+        "example",
+        "examples"
+      ],
+      [
+        "error",
+        "errors",
+        "failure",
+        "failures",
+        "invalid",
+        "reject",
+        "rejects",
+        "rejected",
+        "rejection"
+      ]
+    ]
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "lru-behavior.md": "reference/lru-behavior.md"
+    }
+  }
+}

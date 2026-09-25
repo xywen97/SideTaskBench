@@ -1,0 +1,55 @@
+{
+  "task_id": "document-cursor-pagination",
+  "evaluator": {
+    "kind": "document",
+    "path": "cursor-pagination.md",
+    "minimum_characters": 500,
+    "facts": [
+      "A null cursor ends traversal.",
+      "An empty page does not end traversal when a next cursor exists.",
+      "A repeated cursor is an error."
+    ],
+    "headings": [
+      "## Contract",
+      "## Example",
+      "## Failure case"
+    ],
+    "fact_paraphrases": [
+      [
+        "Traversal stops when the cursor is null.",
+        "A null cursor terminates pagination."
+      ],
+      [
+        "Continue traversal through empty pages if a next cursor is available.",
+        "An empty page with a next cursor is not the end of traversal."
+      ],
+      [
+        "Encountering the same cursor again is an error.",
+        "Repeated cursors must be rejected."
+      ]
+    ],
+    "required_term_groups": [
+      [
+        "example",
+        "examples"
+      ],
+      [
+        "error",
+        "errors",
+        "failure",
+        "failures",
+        "invalid",
+        "reject",
+        "rejects",
+        "rejected",
+        "rejection"
+      ]
+    ]
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "cursor-pagination.md": "reference/cursor-pagination.md"
+    }
+  }
+}

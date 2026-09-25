@@ -1,0 +1,16 @@
+{
+  "task_id": "algorithm-tree-independent",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "max_tree_weight.py",
+    "function": "max_tree_weight",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "max_tree_weight.py": "reference/max_tree_weight.py"
+    }
+  }
+}

@@ -1,1 +1,0 @@
-{"task_id": "scenario-refund-remaining", "artifact": {"kind": "json", "value": {"total_cents": 296, "actions": [{"op": "capture"}, {"op": "refund", "amount": 158}, {"op": "refund", "amount": 126}, {"op": "refund", "amount": 13}], "expected": {"error": "ValueError", "at_step": 3}}}}

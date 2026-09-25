@@ -1,0 +1,16 @@
+{
+  "task_id": "debug-moving-average",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "moving_average.py",
+    "function": "moving_average",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "moving_average.py": "reference/moving_average.py"
+    }
+  }
+}

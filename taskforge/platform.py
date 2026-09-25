@@ -116,12 +116,17 @@ class TaskForge:
         path.unlink()
 
     def assign(self, task_id: str, assignment_id: str, workspace: Path, reference: dict, *,
-               condition: str = "wrapped", variant: str = "compatibility_v3", routing_id: str | None = None) -> dict:
-        """Render an existing treatment into a caller-registered local repository."""
+               condition: str = "wrapped", variant: str = "compatibility_v3", routing_id: str | None = None,
+               reference_text: str | None = None) -> dict:
+        """Deliver a rendered or caller-frozen reference into a registered repository."""
         identifier(assignment_id)
         task = self._tasks[task_id]
         workspace = self._checked_workspace(workspace)
         text = render_reference(reference, task, condition, variant)
+        if reference_text is not None:
+            if not isinstance(reference_text, str) or not reference_text.strip():
+                raise ValueError("Frozen reference must be nonempty text")
+            text = reference_text
         value = {"assignment_id": assignment_id, "task_id": task_id, "routing_id": identifier(routing_id or task_id),
                  "workspace": str(workspace), "condition": condition, "variant": variant,
                  "plan_sha256": digest(self.plan), "reference": copy.deepcopy(reference),

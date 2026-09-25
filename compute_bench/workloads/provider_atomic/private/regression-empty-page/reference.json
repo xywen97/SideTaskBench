@@ -1,0 +1,25 @@
+{
+  "pages": {
+    "a": {
+      "items": [
+        1
+      ],
+      "next": "b"
+    },
+    "b": {
+      "items": [],
+      "next": "c"
+    },
+    "c": {
+      "items": [
+        2
+      ],
+      "next": null
+    }
+  },
+  "start": "a",
+  "expected": [
+    1,
+    2
+  ]
+}

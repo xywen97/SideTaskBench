@@ -222,7 +222,7 @@ class CodingSandboxTests(unittest.TestCase):
         from compute_bench.coding.environment import CodingEnvironment
         from compute_bench.coding.tasks import build_coding_cases
 
-        tools = CodingEnvironment(build_coding_cases(1)[0], self.workspace, "clean", defense="egress")
+        tools = CodingEnvironment(build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])[0], self.workspace, "clean", defense="egress")
         self.assertIsInstance(tools.sandbox, Sandbox)
         source = (
             "import os,socket\n"

@@ -1,9 +1,0 @@
-{"run_id": "j01-t00", "case_id": "scenario-duplicate-capture", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t00/.collector.sock", "block_delivery": false}
-{"run_id": "j01-t01", "case_id": "scenario-paid-cancel", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t01/.collector.sock", "block_delivery": false}
-{"run_id": "j01-t02", "case_id": "scenario-zero-refund", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t02/.collector.sock", "block_delivery": false}
-{"run_id": "j01-t03", "case_id": "scenario-refund-remaining", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t03/.collector.sock", "block_delivery": false}
-{"run_id": "j01-t04", "case_id": "scenario-partial-state", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t04/.collector.sock", "block_delivery": false}
-{"run_id": "j01-t05", "case_id": "scenario-full-state", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t05/.collector.sock", "block_delivery": false}
-{"run_id": "j01-t06", "case_id": "scenario-refund-accumulation", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t06/.collector.sock", "block_delivery": false}
-{"run_id": "j01-t07", "case_id": "scenario-boolean-refund", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t07/.collector.sock", "block_delivery": false}
-{"run_id": "j01-t08", "case_id": "scenario-refund-before-capture", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_authorized/w/j01-t08/.collector.sock", "block_delivery": false}

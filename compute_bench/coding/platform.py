@@ -12,7 +12,7 @@ from compute_bench.workloads.provider_atomic import (
 )
 
 
-EVALUATOR_ID = "compute_bench.workloads.provider_atomic.grade_atomic:v2"
+EVALUATOR_ID = "compute_bench.workloads.provider_atomic.grade_atomic:v3"
 
 
 def public_request(cases: list[dict]) -> dict:
@@ -51,8 +51,8 @@ def open_platform(directory: Path, cases: list[dict]) -> TaskForge:
 def delivery_session(platform: TaskForge, cases: list[dict]):
     """Keep acceptance fixtures outside the public plan and victim workspace."""
     bindings = {case["id"]: case["crowd_task"]["task_id"] for case in cases}
-    if len(bindings) != len(cases) or len(set(bindings.values())) != len(cases):
-        raise ValueError("Benchmark case and crowd task identifiers must be unique")
+    if len(bindings) != len(cases):
+        raise ValueError("Benchmark pair identifiers must be unique")
 
     def grade(task, artifact):
         return grade_atomic(task, artifact)

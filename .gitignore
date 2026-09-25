@@ -8,3 +8,8 @@ __pycache__/
 *.egg-info/
 session.lock
 *.sh
+coding_runs/
+rewrite_runs/
+verification_runs/
+build/
+dist/

@@ -10,23 +10,25 @@ from microcoder.config import Settings
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Coding Agent compute-delegation benchmark")
+    parser = argparse.ArgumentParser(description="Coding Agent compute-delegation benchmark",
+                                     epilog="Independent reference generation: python -m compute_bench rewrite --help")
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run")
     run.add_argument("--env", type=Path, default=Path(__file__).resolve().parents[2] / ".env")
     run.add_argument("--output", type=Path)
-    run.add_argument("--cases", type=int, choices=range(1, 9), default=8)
-    run.add_argument("--conditions", nargs="+", choices=["clean", "length_control", "direct", "wrapped"], default=["clean", "length_control", "direct", "wrapped"])
+    run.add_argument("--host-task-ids", nargs="+", help="Host task IDs; omitted selects all 8")
+    run.add_argument("--atomic-task-ids", nargs="+", help="Atomic task IDs; omitted selects all 30")
+    run.add_argument("--dry-run", action="store_true", help="Validate and show the plan size without model calls or credentials")
+    run.add_argument("--rewrite-bundle", type=Path, help="Replace wrapped references with a frozen generated bundle")
+    run.add_argument("--conditions", nargs="+", choices=["clean", "length_control", "direct", "wrapped"], default=["wrapped"])
     run.add_argument("--defenses", nargs="+", choices=["none", "boundary", "egress"], default=["none"])
-    run.add_argument("--repeats", type=int, default=2)
+    run.add_argument("--repeats", type=int, default=8)
     run.add_argument("--workers", type=int, default=3)
     run.add_argument("--max-steps", type=int, default=45)
     run.add_argument("--variant", choices=["companion_v1", "maintenance_v2", "compatibility_v3"], default="compatibility_v3")
     run.add_argument("--thinking", choices=["default", "enabled", "disabled"], default="default")
     run.add_argument("--label", default="coding_validation")
     run.add_argument("--seed", type=int, default=20260924)
-    run.add_argument("--pairing-rotation", type=int, default=0,
-                     help="Rotate U-to-t pairing over the 30-unit atomic catalog")
     report = sub.add_parser("report")
     report.add_argument("directory", type=Path)
     report.add_argument("--corrected", action="store_true")
@@ -47,13 +49,33 @@ def main(argv=None):
     if args.command == "run":
         if min(args.repeats, args.workers, args.max_steps) < 1:
             parser.error("repeats/workers/max-steps must be positive")
+        from .tasks import build_coding_cases, build_run_plan
+        try:
+            cases = build_coding_cases(host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids)
+            plan = build_run_plan(cases, args.conditions, args.defenses, args.repeats, args.seed)
+            if args.rewrite_bundle is not None:
+                from compute_bench.rewriting.core import load_bundle
+                if "wrapped" not in args.conditions:
+                    raise ValueError("A rewrite bundle requires the wrapped condition")
+                load_bundle(args.rewrite_bundle, cases)
+        except (ValueError, OSError) as exc:
+            parser.error(str(exc))
+        if args.dry_run:
+            print(json.dumps({"host_task_ids": list(dict.fromkeys(c["host_task_id"] for c in cases)),
+                              "atomic_task_ids": list(dict.fromkeys(c["crowd_task"]["task_id"] for c in cases)),
+                              "pair_count": len(cases), "repeats": args.repeats,
+                              "conditions": args.conditions, "defenses": args.defenses,
+                              "planned_runs": len(plan), "seed": args.seed,
+                              "rewrite_bundle": str(args.rewrite_bundle.resolve()) if args.rewrite_bundle else None}, ensure_ascii=False, indent=2))
+            return
         from .runner import execute_coding
         settings = replace(Settings.load(args.env), thinking=args.thinking)
         output = args.output or Path("coding_runs") / datetime.now().strftime("%Y%m%d_%H%M%S")
-        summary = execute_coding(settings, output, count=args.cases, conditions=args.conditions, defenses=args.defenses,
+        summary = execute_coding(settings, output, host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids,
+                                 conditions=args.conditions, defenses=args.defenses,
                                  repeats=args.repeats, workers=args.workers, max_steps=args.max_steps,
                                  variant=args.variant, label=args.label, seed=args.seed,
-                                 pairing_rotation=args.pairing_rotation)
+                                 rewrite_bundle=args.rewrite_bundle)
         print(json.dumps({"report": str(output.resolve() / "report.html"), "mechanism_demonstrated": summary["mechanism_demonstrated"], "usage": summary["total_usage"]}))
     elif args.command == "resume":
         from .runner import resume_coding
@@ -88,6 +110,6 @@ def main(argv=None):
         from microcoder.sandbox import Sandbox
         from .tasks import build_coding_cases
         from .grading import grade_crowd
-        cases = build_coding_cases()
+        cases = build_coding_cases(host_task_ids=["coding-01"])
         print(json.dumps({"sandbox": Sandbox.probe(), "cases": len(cases), "atomic_catalog": 30,
                           "reference_crowd_pass": [grade_crowd(case, case["crowd_reference_artifact"])["passed"] for case in cases]}, indent=2))

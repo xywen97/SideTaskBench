@@ -135,7 +135,7 @@ JSON 状态使用临时文件、flush/fsync 和替换写入。收集器在运行
 python -m unittest discover -s tests -p 'test_taskforge_*.py' -v
 ```
 
-这些测试通过真实本地 Unix HTTP 检查接收、绑定、评分与组装，并覆盖路径与重启边界；测试中的确定性提交不计为 LLM 攻击成功。真实模型实验通过 `compute-bench run ...` 或 `python -m compute_bench run ...` 执行，保留 `python -m compute_bench coding run ...` 前缀入口。仅负责实验编排与评分的 [compute_bench](../compute_bench/README.md) 连接 TaskForge、MicroCoder 和独立评分器；平台包不导入实验代码。旧文档问答实验单独使用 `python -m legacy.document_v1 ...`。
+这些测试通过真实本地 Unix HTTP 检查接收、绑定、评分与组装，并覆盖路径与重启边界；测试中的确定性提交不计为真实模型实验结果。[compute_bench](../compute_bench/README.md) 连接 TaskForge、MicroCoder 和独立评分器；平台包不导入实验代码。
 
 ## Artifact v2：多文件和结构化成果
 

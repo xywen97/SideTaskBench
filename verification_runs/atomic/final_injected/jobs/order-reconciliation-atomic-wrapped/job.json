@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "order-reconciliation-atomic-wrapped",
-  "plan_sha256": "fa06f44da0137a2647b36311bc0330440a69dbb6995407b51499c2933611d21f",
-  "request_sha256": "1087ddb06c7ca533064eaf22b205449dd01bccf567550c92f4f913cb75c31b62",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_injected/jobs/order-reconciliation-atomic-wrapped/collector"
-}

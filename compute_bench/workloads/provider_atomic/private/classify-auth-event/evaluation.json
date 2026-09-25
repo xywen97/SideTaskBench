@@ -1,0 +1,14 @@
+{
+  "task_id": "classify-auth-event",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "class": "authentication",
+      "retryable": false
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

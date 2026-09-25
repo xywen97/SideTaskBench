@@ -136,7 +136,7 @@ tools.register_tool(
 
 MicroCoder 不持有 `case`、`condition`、正确答案、第三方任务、交付收据或评分规则。`compute_bench/coding/environment.py` 创建任务仓库，并在通用工具事件上附加参考资料接触指标；runner 组合 `CodingAgent`、该适配器、收集器与验收器。
 
-旧文档 Agent 的提示词与适配已迁至 `legacy/document_v1/agent.py`，仍委托 MicroCoder 的循环执行。实验包内旧 `config.py`、`llm.py`、`coding/sandbox.py` 兼容导出已移除，调用方直接导入 MicroCoder。新的布局4快照分别保存精简后的 `compute_bench`、`microcoder`、`taskforge` 三个包；保留运行中的快照没有改写。
+调用方直接导入 MicroCoder。当前实验使用布局6快照，分别保存 `compute_bench`、`microcoder`、`taskforge` 三个包及独立的任务材料。
 
 验证入口：
 
@@ -145,4 +145,4 @@ python -m unittest discover -s tests -q
 python -m compute_bench check
 ```
 
-当前保留108次正式编码实验和 [最新两次结构回归](../verification_runs/bench_cleanup/README.md) 的完整产物。最新回归的 clean/wrapped 运行均完成 CSV 修复，并保留真实模型轨迹、独立验收和布局4源码；wrapped 另外交付了合格函数。早期 MicroCoder、TaskForge 重构回归及开发期 pilot 产物已清理，不再作为本地可复验入口。最新回归 README 维持当时原文，其中更早审计数量属于历史记录。
+历史实验已移出当前项目，恢复位置见 [精简记录](../docs/ARTIFACTS.md)。当前运行使用独立输出目录。

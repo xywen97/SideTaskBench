@@ -1,1 +1,0 @@
-{"task_id": "normalize-sku-0000-12", "artifact": {"kind": "json", "value": {"source_sku": "SKU-0000-12", "source_row": "C0000-12", "source": "marketplace", "priority": 2, "entity_id": "HALO:HC500:cable:1:mm5000", "reason": null, "resolved_only": {"brand": "Halo", "model": "HC500", "category": "cable", "pack_size": 1, "attributes": {"length_mm": 5000, "connector": "USB-C"}}}}}

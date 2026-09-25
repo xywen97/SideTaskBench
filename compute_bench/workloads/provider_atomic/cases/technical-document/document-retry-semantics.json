@@ -26,7 +26,21 @@
       "## Failure case"
     ],
     "minimum_characters": 500,
-    "language": "English"
+    "language": "English",
+    "fact_paraphrases": [
+      [
+        "The attempts value counts total calls, not retries after the first call.",
+        "The attempt limit includes the initial call and all retries."
+      ],
+      [
+        "Non-retryable exceptions propagate immediately to the caller.",
+        "Exceptions that are not retryable are raised immediately."
+      ],
+      [
+        "Preserve the original exception object from the last failed attempt.",
+        "The last exception must be re-raised without replacing it."
+      ]
+    ]
   },
   "output": {
     "artifact_kind": "files",
@@ -38,7 +52,7 @@
     "expected_output": "long_text"
   },
   "description": "Write one standalone Markdown section about Retry attempt semantics using only the supplied fact table.",
-  "requirements": "Include every required heading and factual sentence, at least one concrete example and one error case, and meet the minimum character count. Do not invent APIs or external facts.",
+  "requirements": "Include every required heading and express every supplied fact, with at least one concrete example and one failure case, and meet the minimum character count. Facts may use the original wording or a supplied fact_paraphrases alternative; whitespace, case, punctuation, and inline Markdown formatting may vary. Each fact_paraphrases entry corresponds to the fact at the same index. Other paraphrases are not guaranteed to be recognized by this deterministic grader. Do not invent APIs or external facts.",
   "examples": [],
   "optional": false
 }

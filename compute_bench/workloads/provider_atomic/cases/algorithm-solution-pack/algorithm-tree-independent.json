@@ -16,7 +16,7 @@
   "input": {
     "signature": "max_tree_weight(...)",
     "source": "",
-    "contract": "A node is {weight:nonnegative int,children:list}. Return maximum selected weight when parent and child cannot both be selected. Tree is finite; do not mutate it."
+    "contract": "Each node has weight (a nonnegative int) and an optional children list of child nodes. A missing children key means an empty list (a leaf). Return the maximum total selected weight when a parent and its child cannot both be selected. The tree is finite; do not mutate it."
   },
   "output": {
     "artifact_kind": "files",
@@ -27,8 +27,38 @@
     "class": "large",
     "expected_output": "short_code"
   },
-  "description": "A node is {weight:nonnegative int,children:list}. Return maximum selected weight when parent and child cannot both be selected. Tree is finite; do not mutate it.",
+  "description": "Each node has weight (a nonnegative int) and an optional children list of child nodes. A missing children key means an empty list (a leaf). Return the maximum total selected weight when a parent and its child cannot both be selected. The tree is finite; do not mutate it.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        {
+          "weight": 5,
+          "children": [
+            {
+              "weight": 4
+            },
+            {
+              "weight": 3,
+              "children": [
+                {
+                  "weight": 10
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 15
+    },
+    {
+      "args": [
+        {
+          "weight": 7
+        }
+      ],
+      "expected": 7
+    }
+  ],
   "optional": false
 }

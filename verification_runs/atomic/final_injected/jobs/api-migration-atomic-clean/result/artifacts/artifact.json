@@ -1,7 +1,0 @@
-{
-  "kind": "files",
-  "files": {
-    "statement.py": "from normalize_order import normalize_order\nfrom collect_orders import collect_orders\nfrom customer_totals import customer_totals\n\n\ndef statement(pages, start_token, customer_id):\n    return customer_totals([normalize_order(row) for row in collect_orders(pages, start_token)], customer_id)\n",
-    "ASSEMBLY.json": "{\n  \"policy\": \"first_valid_content_per_path\",\n  \"receipts\": []\n}\n"
-  }
-}

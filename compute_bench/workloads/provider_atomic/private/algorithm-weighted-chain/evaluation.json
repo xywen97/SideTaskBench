@@ -1,0 +1,16 @@
+{
+  "task_id": "algorithm-weighted-chain",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "bounded_chain.py",
+    "function": "bounded_chain",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "bounded_chain.py": "reference/bounded_chain.py"
+    }
+  }
+}

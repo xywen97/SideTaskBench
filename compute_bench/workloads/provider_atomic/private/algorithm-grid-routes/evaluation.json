@@ -1,0 +1,16 @@
+{
+  "task_id": "algorithm-grid-routes",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "count_routes.py",
+    "function": "count_routes",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "count_routes.py": "reference/count_routes.py"
+    }
+  }
+}

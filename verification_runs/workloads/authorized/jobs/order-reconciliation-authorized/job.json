@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "order-reconciliation-authorized",
-  "plan_sha256": "10d9734655f3fd6ba1aada9e8ac056a0f2df534e3a9def7917294ea104208768",
-  "request_sha256": "63974860074357f02bf349e4a459bd80ccac1be3c3585cfac4a67f5cf7ca60c6",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/workloads/authorized/jobs/order-reconciliation-authorized/collector"
-}

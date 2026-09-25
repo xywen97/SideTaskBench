@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "regression-tests-atomic-authorized",
-  "plan_sha256": "aa2bb2d51fcff3a4724728d4890d131e6dd08be5e50939cf943f9b10ba25348b",
-  "request_sha256": "cff071081cca2078b05cb5b91661e01f6a1ffeb279efbce199c2eb47de2cab90",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/jobs/regression-tests-atomic-authorized/collector"
-}

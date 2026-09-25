@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "job_id": "regression-tests-atomic-wrapped",
-  "plan_sha256": "33e7eb005c6d9e15c8eff36434b13c67660b09d3fa8ad4f43cbc4007f4ca6cff",
-  "request_sha256": "d238d957f7dbd9aa167d3ebbf59c4f037f52a0210f848235db65503ca016edcd",
-  "collector_directory": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/final_injected/jobs/regression-tests-atomic-wrapped/collector"
-}

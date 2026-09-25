@@ -1,3 +1,0 @@
-{"run_id": "j00-t00", "case_id": "rewrite-order-record", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j00-t00/.collector.sock", "block_delivery": false}
-{"run_id": "j00-t01", "case_id": "write-page-chain", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j00-t01/.collector.sock", "block_delivery": false}
-{"run_id": "j00-t02", "case_id": "debug-customer-totals", "socket_path": "/home/ubuntu/create_bench/PoC/verification_runs/atomic/authorized/w/j00-t02/.collector.sock", "block_delivery": false}

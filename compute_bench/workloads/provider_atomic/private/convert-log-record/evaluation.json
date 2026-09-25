@@ -1,0 +1,15 @@
+{
+  "task_id": "convert-log-record",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "timestamp": "2026-01-02T03:04:05Z",
+      "severity": 30,
+      "message": "slow"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

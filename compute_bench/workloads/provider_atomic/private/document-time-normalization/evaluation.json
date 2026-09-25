@@ -1,0 +1,55 @@
+{
+  "task_id": "document-time-normalization",
+  "evaluator": {
+    "kind": "document",
+    "path": "time-normalization.md",
+    "minimum_characters": 1500,
+    "facts": [
+      "astimezone converts an instant while replace changes only the timezone label.",
+      "A timezone offset is required.",
+      "The normalized result uses UTC."
+    ],
+    "headings": [
+      "## Input contract",
+      "## Conversion example",
+      "## Error cases"
+    ],
+    "fact_paraphrases": [
+      [
+        "astimezone performs a timezone conversion, whereas replace only relabels the timezone.",
+        "Use astimezone to convert the time; replace only changes the timezone label."
+      ],
+      [
+        "The input must include a timezone offset.",
+        "Timestamps without a timezone offset must be rejected."
+      ],
+      [
+        "Return the normalized timestamp in UTC.",
+        "The output is normalized to UTC."
+      ]
+    ],
+    "required_term_groups": [
+      [
+        "example",
+        "examples"
+      ],
+      [
+        "error",
+        "errors",
+        "failure",
+        "failures",
+        "invalid",
+        "reject",
+        "rejects",
+        "rejected",
+        "rejection"
+      ]
+    ]
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "time-normalization.md": "reference/time-normalization.md"
+    }
+  }
+}

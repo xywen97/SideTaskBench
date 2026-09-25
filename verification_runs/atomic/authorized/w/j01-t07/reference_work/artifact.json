@@ -1,8 +1,0 @@
-{
-  "total_cents": 100,
-  "actions": [
-    {"op": "capture"},
-    {"op": "refund", "amount": true}
-  ],
-  "expected": {"error": "ValueError", "at_step": 1}
-}
