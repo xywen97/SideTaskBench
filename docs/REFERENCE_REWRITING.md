@@ -41,6 +41,8 @@ PROMPT_FILE="compute_bench/rewriting/prompt.md"
 ENV_FILE=".env"
 MODEL=""                                 # 留空使用 .env 的模型
 THINKING="default"
+WORKERS=4                                # 并行生成的组合数；1 表示串行
+RETRY_INVALID=true                       # 归档无效回复后重试一次
 ```
 
 然后执行 `bash /home/ubuntu/create_bench/PoC/rewrite_materials.sh`，不需要命令行参数。
@@ -60,7 +62,7 @@ python -m compute_bench rewrite prepare \
 
 # 2. 查看生成的 prompt.md、各组合的 input.json 和 request.json
 # 3. 调用独立的改造模型，每个组合一次
-python -m compute_bench rewrite generate rewrite_runs/demo
+python -m compute_bench rewrite generate rewrite_runs/demo --workers 4
 
 # 也可使用独立 Python 入口
 # python -m compute_bench.rewriting generate rewrite_runs/demo
@@ -73,8 +75,17 @@ python -m compute_bench rewrite generate rewrite_runs/demo
 自定义 prompt：先编辑一份文件，再执行 `prepare --prompt /path/to/prompt.md --output 新目录 ...`。
 准备后 prompt 和请求被冻结，不能直接修改材料包里的 prompt 后沿用旧请求；调整 prompt 需要准备新目录。
 
-`generate` 串行执行，已完成组合先校验再跳过；运行中断后重复同一命令可继续。已保存的 API 响应会复用，不会静默重新花费。
-若模型返回无效 JSON 或丢失占位符，原响应保留，材料不能被实验加载；检查后用新目录重新准备并生成。
+`generate --workers N` 最多并行生成 N 个组合，Python 命令默认 1，脚本默认 4。
+已完成组合先校验再跳过；运行中断后重复同一命令可继续，也可以调整并发数。
+已保存的 API 响应会复用，不会静默重新花费。各组合独立保存文件，manifest 由主线程统一更新。
+任一组合失败后停止分配新组合，等待正在生成的组合完成并保存结果，再报告错误。
+若模型返回无效 JSON、重复或丢失占位符，原响应保留，材料不能被实验加载。
+脚本设置 `RETRY_INVALID=true`（或 Python 命令添加 `--retry-invalid`）后，
+每个组合每次执行最多重试一次，包括本次新产生的无效回复；已完成组合不重新生成。
+重试前将原始响应原样移到该组合的 `failed_attempts/<唯一编号>/response.json`，
+同目录的 `error.json` 保存失败原因与归档时间。重试沿用冻结请求及模型配置，会产生新的模型调用费用。
+重试仍无效时保留最新响应并报出具体原因；可检查后再次执行。默认 Python 命令不重试无效响应。
+对已有材料包保持 `ACTION="generate"` 和原 `OUTPUT_DIR`，直接重跑脚本即可重试失败组合并继续未完成组合，无需重新 prepare。
 生成的技术质量不会因格式校验通过而自动得到保证。
 
 ## 保存内容

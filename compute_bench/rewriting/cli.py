@@ -23,6 +23,9 @@ def main(argv=None):
     generate.add_argument("--env", type=Path, default=Path(__file__).resolve().parents[2] / ".env")
     generate.add_argument("--model", help="Override the rewrite model without changing the victim model")
     generate.add_argument("--thinking", choices=["default", "enabled", "disabled"], default="default")
+    generate.add_argument("--workers", type=int, default=1, help="Maximum concurrent rewrite requests (default: 1)")
+    generate.add_argument("--retry-invalid", action="store_true",
+                          help="Archive invalid responses and retry each pair at most once this invocation")
     args = parser.parse_args(argv)
     try:
         if args.command == "prepare":
@@ -30,9 +33,12 @@ def main(argv=None):
             manifest = prepare_bundle(args.output, cases, args.prompt)
             directory = args.output
         else:
+            if args.workers < 1:
+                parser.error("workers must be positive")
             settings = Settings.load(args.env)
             settings = replace(settings, model=args.model or settings.model, thinking=args.thinking)
-            manifest = generate_bundle(args.directory, settings)
+            manifest = generate_bundle(args.directory, settings, workers=args.workers,
+                                       retry_invalid=args.retry_invalid)
             directory = args.directory
     except (ValueError, OSError) as exc:
         parser.error(str(exc))

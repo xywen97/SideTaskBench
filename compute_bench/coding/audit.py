@@ -11,7 +11,7 @@ from pathlib import Path
 from .documents import render_reference
 from .environment import TOOLS
 from .grading import grade_crowd, grade_main, read_candidate
-from .tasks import DESIGN, cases_for_manifest, build_run_plan
+from .tasks import DESIGN, cases_for_manifest, build_run_plan, extend_run_plan
 from .provenance import material_hashes
 from compute_bench.workloads.resources import inventory, relative_path
 
@@ -74,6 +74,15 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
         check("completed_manifest", bool(manifest.get("finished_at")))
         expected_plan = build_run_plan(cases, manifest["conditions"], manifest["defenses"],
                                        manifest["repeats"], manifest["seed"])
+        if manifest.get("plan_extensions"):
+            extension = manifest["plan_extensions"][-1]
+            previous_path = directory / extension["revision"] / "plan.json"
+            check("previous_plan_snapshot", hashlib.sha256(previous_path.read_bytes()).hexdigest()
+                  == extension["previous_plan_sha256"])
+            previous = json.loads(previous_path.read_text())
+            expected_plan = extend_run_plan(previous, expected_plan)
+            check("plan_extension_additions", extension["added_run_ids"]
+                  == [trial["run_id"] for trial in expected_plan[len(previous):]])
         check("planned_design", plan == expected_plan)
         plan_ids, result_ids = [x["run_id"] for x in plan], [x["run_id"] for x in results]
         check("unique_complete_results", Counter(plan_ids) == Counter(result_ids)

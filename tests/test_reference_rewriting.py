@@ -9,6 +9,7 @@ import re
 from pathlib import Path
 import shutil
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -130,6 +131,172 @@ class ReferenceRewritingTests(unittest.TestCase):
             generate_bundle(self.bundle, SETTINGS)
             client.assert_not_called()
         self.assertNotIn(SETTINGS.api_key, (self.bundle / "manifest.json").read_text())
+
+    def test_parallel_generation_is_bounded_and_manifest_keeps_all_results(self):
+        cases = build_coding_cases(host_task_ids=["coding-01", "coding-02"],
+                                   atomic_task_ids=["rewrite-user-record", "classify-timeout-event"])
+        prepare_bundle(self.bundle, cases)
+        barrier = threading.Barrier(2)
+        lock = threading.Lock()
+        active = peak = 0
+
+        def complete(request):
+            nonlocal active, peak
+            with lock:
+                active += 1
+                peak = max(peak, active)
+            try:
+                barrier.wait(timeout=5)
+                return {"content": json.dumps(ANSWER)}, {}
+            finally:
+                with lock:
+                    active -= 1
+
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            client.return_value.complete.side_effect = complete
+            manifest = generate_bundle(self.bundle, SETTINGS, workers=2)
+            self.assertEqual(client.return_value.complete.call_count, 4)
+            self.assertEqual(client.return_value.close.call_count, 4)
+        self.assertEqual(peak, 2)
+        self.assertTrue(all(entry["status"] == "complete" for entry in manifest["entries"]))
+        self.assertEqual(json.loads((self.bundle / "manifest.json").read_text()), manifest)
+        self.assertEqual(len(load_bundle(self.bundle, cases)), 4)
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            generate_bundle(self.bundle, SETTINGS, workers=4)
+            client.assert_not_called()
+
+    def test_parallel_failure_saves_inflight_success_and_stops_scheduling(self):
+        cases = build_coding_cases(host_task_ids=["coding-01", "coding-02", "coding-03"],
+                                   atomic_task_ids=["rewrite-user-record"])
+        prepare_bundle(self.bundle, cases)
+        barrier = threading.Barrier(2)
+        failure_saved = threading.Event()
+        first_source = public_input(cases[0])["original_reference"]
+        from compute_bench.io import write_json
+
+        def persist(path, value):
+            write_json(path, value)
+            if path.name == "manifest.json" and any(e["status"] == "invalid" for e in value["entries"]):
+                failure_saved.set()
+
+        def complete(request):
+            barrier.wait(timeout=5)
+            if json.loads(request[1]["content"])["original_reference"] == first_source:
+                return {"content": "invalid JSON"}, {}
+            self.assertTrue(failure_saved.wait(timeout=5))
+            return {"content": json.dumps(ANSWER)}, {}
+
+        with patch("compute_bench.rewriting.core.ChatClient") as client, \
+             patch("compute_bench.rewriting.core.write_json", side_effect=persist):
+            client.return_value.complete.side_effect = complete
+            with self.assertRaisesRegex(ValueError, "Invalid rewrite response"):
+                generate_bundle(self.bundle, SETTINGS, workers=2)
+            self.assertEqual(client.return_value.complete.call_count, 2)
+            self.assertEqual(client.return_value.close.call_count, 2)
+        manifest = json.loads((self.bundle / "manifest.json").read_text())
+        self.assertEqual([e["status"] for e in manifest["entries"]], ["invalid", "complete", "prepared"])
+        self.assertEqual(len(load_bundle(self.bundle, [cases[1]])), 1)
+        self.assertFalse((self.bundle / cases[2]["id"] / "response.json").exists())
+
+    def test_parallel_resume_reuses_saved_response_and_only_calls_missing_pair(self):
+        cases = build_coding_cases(host_task_ids=["coding-01", "coding-02"],
+                                   atomic_task_ids=["rewrite-user-record"])
+        prepare_bundle(self.bundle, cases)
+        response = {"message": {"content": json.dumps(ANSWER)}, "metadata": {}}
+        (self.bundle / cases[0]["id"] / "response.json").write_text(json.dumps(response))
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            client.return_value.complete.return_value = response["message"], response["metadata"]
+            generate_bundle(self.bundle, SETTINGS, workers=2)
+            client.return_value.complete.assert_called_once()
+            client.return_value.close.assert_called_once()
+        self.assertEqual(len(load_bundle(self.bundle, cases)), 2)
+
+    def test_generate_cli_passes_workers_and_rejects_nonpositive_values_before_credentials(self):
+        with patch("compute_bench.rewriting.cli.Settings.load", return_value=SETTINGS), \
+             patch("compute_bench.rewriting.cli.generate_bundle", return_value={"entries": []}) as generate, \
+             redirect_stdout(io.StringIO()):
+            main(["rewrite", "generate", str(self.bundle), "--workers", "4"])
+        generate.assert_called_once_with(self.bundle, SETTINGS, workers=4, retry_invalid=False)
+        for workers in (0, -1):
+            with self.subTest(workers=workers), patch("compute_bench.rewriting.cli.Settings.load") as settings:
+                with self.assertRaises(SystemExit):
+                    main(["rewrite", "generate", str(self.bundle), "--workers", str(workers)])
+                settings.assert_not_called()
+                with self.assertRaisesRegex(ValueError, "workers must be positive"):
+                    generate_bundle(self.bundle, SETTINGS, workers=workers)
+
+    def test_retry_invalid_archives_response_skips_complete_and_finishes_pending(self):
+        cases = build_coding_cases(host_task_ids=["coding-01", "coding-02", "coding-03"],
+                                   atomic_task_ids=["rewrite-user-record"])
+        prepare_bundle(self.bundle, cases)
+        valid = {"message": {"content": json.dumps(ANSWER)}, "metadata": {"usage": {"total_tokens": 7}}}
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            client.return_value.complete.side_effect = [(valid["message"], valid["metadata"]),
+                                                        ({"content": "bad JSON"}, {})]
+            with self.assertRaisesRegex(ValueError, "Invalid rewrite response"):
+                generate_bundle(self.bundle, SETTINGS)
+        failed = self.bundle / cases[1]["id"]
+        original = (failed / "response.json").read_bytes()
+        completed = {p.name: p.read_bytes() for p in (self.bundle / cases[0]["id"]).iterdir()}
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            client.return_value.complete.return_value = valid["message"], valid["metadata"]
+            manifest = generate_bundle(self.bundle, SETTINGS, workers=2, retry_invalid=True)
+            self.assertEqual(client.return_value.complete.call_count, 2)
+        archives = list((failed / "failed_attempts").glob("*/response.json"))
+        self.assertEqual(len(archives), 1)
+        self.assertEqual(archives[0].read_bytes(), original)
+        error = json.loads(archives[0].with_name("error.json").read_text())
+        self.assertEqual(error["error"], "JSONDecodeError")
+        self.assertIn("error_detail", error)
+        self.assertEqual(completed, {p.name: p.read_bytes() for p in (self.bundle / cases[0]["id"]).iterdir()})
+        self.assertTrue(all(e["status"] == "complete" and "error_detail" not in e for e in manifest["entries"]))
+        self.assertEqual(len(load_bundle(self.bundle, cases)), 3)
+
+    def test_retry_is_bounded_and_default_resume_does_not_call_again(self):
+        prepare_bundle(self.bundle, self.cases)
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            client.return_value.complete.return_value = ({"content": "bad JSON"}, {})
+            with self.assertRaisesRegex(ValueError, "retry-invalid"):
+                generate_bundle(self.bundle, SETTINGS, retry_invalid=True)
+            self.assertEqual(client.return_value.complete.call_count, 2)
+        pair = self.bundle / self.case["id"]
+        self.assertEqual(len(list((pair / "failed_attempts").glob("*/response.json"))), 1)
+        self.assertTrue((pair / "response.json").exists())
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            with self.assertRaisesRegex(ValueError, "Invalid rewrite response"):
+                generate_bundle(self.bundle, SETTINGS)
+            client.assert_not_called()
+        # A later explicit retry keeps previous archives and uses the same frozen request.
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            client.return_value.complete.return_value = ({"content": json.dumps(ANSWER)}, {})
+            generate_bundle(self.bundle, SETTINGS, retry_invalid=True)
+            client.return_value.complete.assert_called_once_with(json.loads((pair / "request.json").read_text()))
+        self.assertEqual(len(list((pair / "failed_attempts").glob("*/response.json"))), 2)
+        self.assertEqual(len(load_bundle(self.bundle, self.cases)), 1)
+
+    def test_interrupted_retry_keeps_archive_and_can_resume(self):
+        prepare_bundle(self.bundle, self.cases)
+        pair = self.bundle / self.case["id"]
+        (pair / "response.json").write_text(json.dumps({"message": {"content": "bad JSON"}, "metadata": {}}))
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            client.return_value.complete.side_effect = OSError("offline")
+            with self.assertRaisesRegex(OSError, "offline"):
+                generate_bundle(self.bundle, SETTINGS, retry_invalid=True)
+            client.return_value.close.assert_called_once()
+        self.assertEqual(len(list((pair / "failed_attempts").glob("*/response.json"))), 1)
+        self.assertFalse((pair / "response.json").exists())
+        with patch("compute_bench.rewriting.core.ChatClient") as client:
+            client.return_value.complete.return_value = ({"content": json.dumps(ANSWER)}, {})
+            generate_bundle(self.bundle, SETTINGS)
+            client.return_value.complete.assert_called_once()
+        self.assertEqual(len(load_bundle(self.bundle, self.cases)), 1)
+
+    def test_generate_cli_enables_explicit_retry(self):
+        with patch("compute_bench.rewriting.cli.Settings.load", return_value=SETTINGS), \
+             patch("compute_bench.rewriting.cli.generate_bundle", return_value={"entries": []}) as generate, \
+             redirect_stdout(io.StringIO()):
+            main(["rewrite", "generate", str(self.bundle), "--workers", "4", "--retry-invalid"])
+        generate.assert_called_once_with(self.bundle, SETTINGS, workers=4, retry_invalid=True)
 
     def test_invalid_missing_duplicate_and_hidden_slots_are_rejected(self):
         templates = [ANSWER["document_template"].replace(SLOTS[0], ""),

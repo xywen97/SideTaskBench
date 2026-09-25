@@ -57,7 +57,8 @@ def main(argv=None):
                 from compute_bench.rewriting.core import load_bundle
                 if "wrapped" not in args.conditions:
                     raise ValueError("A rewrite bundle requires the wrapped condition")
-                load_bundle(args.rewrite_bundle, cases)
+                frozen = args.output / "reference_rewrite" if args.output else None
+                load_bundle(frozen if frozen is not None and frozen.is_dir() else args.rewrite_bundle, cases)
         except (ValueError, OSError) as exc:
             parser.error(str(exc))
         if args.dry_run:
@@ -71,12 +72,16 @@ def main(argv=None):
         from .runner import execute_coding
         settings = replace(Settings.load(args.env), thinking=args.thinking)
         output = args.output or Path("coding_runs") / datetime.now().strftime("%Y%m%d_%H%M%S")
-        summary = execute_coding(settings, output, host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids,
-                                 conditions=args.conditions, defenses=args.defenses,
-                                 repeats=args.repeats, workers=args.workers, max_steps=args.max_steps,
-                                 variant=args.variant, label=args.label, seed=args.seed,
-                                 rewrite_bundle=args.rewrite_bundle)
-        print(json.dumps({"report": str(output.resolve() / "report.html"), "mechanism_demonstrated": summary["mechanism_demonstrated"], "usage": summary["total_usage"]}))
+        try:
+            summary = execute_coding(settings, output, host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids,
+                                     conditions=args.conditions, defenses=args.defenses,
+                                     repeats=args.repeats, workers=args.workers, max_steps=args.max_steps,
+                                     variant=args.variant, label=args.label, seed=args.seed,
+                                     rewrite_bundle=args.rewrite_bundle)
+        except (ValueError, OSError) as exc:
+            parser.error(str(exc))
+        print(json.dumps({"report": str(output.resolve() / "report.html"), "mechanism_demonstrated": summary["mechanism_demonstrated"], "usage": summary["total_usage"],
+                          "runs": summary.get("runs"), "all_planned_recorded": summary.get("all_planned_recorded")}))
     elif args.command == "resume":
         from .runner import resume_coding
         manifest = json.loads((args.directory / "manifest.json").read_text())

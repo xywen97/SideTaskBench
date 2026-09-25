@@ -91,3 +91,30 @@ def build_run_plan(cases, conditions, defenses, repeats=8, seed=20260924):
     for index, trial in enumerate(plan):
         trial["workspace_id"] = f"w{index:03d}"
     return plan
+
+
+def extend_run_plan(previous, requested):
+    """Keep existing identities/workspaces and append only new trials."""
+    old = {trial["run_id"]: trial for trial in previous}
+    new = {trial["run_id"]: trial for trial in requested}
+    if len(old) != len(previous) or len(new) != len(requested):
+        raise ValueError("Run IDs must be unique")
+    if not old.keys() <= new.keys():
+        raise ValueError("Existing output contains runs outside the requested selection; keep the previous selection or use a new output directory")
+    for key, trial in old.items():
+        if {k: v for k, v in trial.items() if k != "workspace_id"} != {k: v for k, v in new[key].items() if k != "workspace_id"}:
+            raise ValueError("Existing trial identity changed: " + key)
+    workspaces = {trial["workspace_id"] for trial in previous}
+    if len(workspaces) != len(previous):
+        raise ValueError("Existing workspace IDs must be unique")
+    result = deepcopy(previous)
+    index = 0
+    for trial in requested:
+        if trial["run_id"] in old:
+            continue
+        while f"w{index:03d}" in workspaces:
+            index += 1
+        workspace = f"w{index:03d}"
+        result.append({**trial, "workspace_id": workspace})
+        workspaces.add(workspace)
+    return result

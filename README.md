@@ -53,7 +53,14 @@ python -m compute_bench report coding_runs/clean_baseline
 python -m compute_bench audit coding_runs/clean_baseline --regrade
 ```
 
-运行会使用真实模型并产生费用；结果目录必须为空。`resume` 只恢复当前源码布局中尚未产生模型轨迹的计划项。
+运行会使用真实模型并产生费用。同一结果目录再次执行 `run` 或 `bash unit_steal.sh` 时，
+自动跳过已有结果，只执行尚未开始的计划项；全部完成则直接更新报告。
+扩大任务选择或增加 `REPEATS` 时会保留旧运行及工作区编号，只追加新增计划，
+扩展前的计划和配置保存在 `extension_N/`。并发数可以调整；模型配置、任务材料、
+改写材料、variant、seed 和 max_steps 必须与原实验一致，任务范围不能缩小。
+续跑使用运行目录中的冻结改写材料；扩展任务也必须由这份材料包覆盖。
+已有模型轨迹但缺少最终结果的任务会保留并列出，不自动重跑，也不阻塞其他未开始任务。
+`resume` 只恢复现有计划，不扩展任务范围。
 `rescore` 另存校正结果，保留原始记录。新的运行目录默认不进入 Git。
 
 运行开始时，终端按主任务和文档条件打印 `docs/reference.md` 的完整上下文差异，

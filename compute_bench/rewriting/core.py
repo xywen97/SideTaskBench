@@ -1,5 +1,6 @@
 """Frozen public inputs, model outputs, and validated reference replacement bundles."""
 
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from copy import deepcopy
 from datetime import datetime, timezone
 import difflib
@@ -8,6 +9,7 @@ import json
 from pathlib import Path
 import re
 import sys
+from uuid import uuid4
 
 from compute_bench.coding.documents import render_reference
 from compute_bench.io import write_json
@@ -165,8 +167,52 @@ def _completed_document(root, entry, source):
     return document
 
 
-def generate_bundle(root, settings):
-    """One completion per pending pair; finished pairs are verified and reused."""
+def _generate_pair(root, key, source, settings, retry_invalid=False):
+    """Write only this pair's files; retry invalid output at most once per invocation."""
+    response_path = root / key / "response.json"
+    for attempt in range(2 if retry_invalid else 1):
+        # Reuse saved API responses after interruption, without another model call.
+        if not response_path.exists():
+            client = ChatClient(settings)
+            try:
+                message, metadata = client.complete(read_json(root, key + "/request.json"))
+                write_json(response_path, {"message": message, "metadata": metadata})
+            finally:
+                client.close()
+        response = read_json(root, key + "/response.json")
+        try:
+            if response["message"].get("tool_calls") or response["metadata"].get("provider_truncated"):
+                raise ValueError("Rewrite completion is truncated or contains tool calls")
+            answer = json.loads(response["message"]["content"])
+            document = compile_document(answer, source)
+        except (ValueError, TypeError, KeyError) as exc:
+            error = {"status": "invalid", "error": type(exc).__name__, "error_detail": str(exc)}
+            if not retry_invalid or attempt == 1:
+                return error, {}
+            # Preserve exact response bytes, usage, and validation reason before spending again.
+            archive = root / key / "failed_attempts" / uuid4().hex
+            archive.mkdir(parents=True)
+            write_json(archive / "error.json", {**error, "archived_at": datetime.now(timezone.utc).isoformat()})
+            response_path.replace(archive / "response.json")
+            print(json.dumps({"case_id": key, "status": "retrying", "error": str(exc),
+                              "archived_response": str(archive / "response.json")}),
+                  file=sys.stderr, flush=True)
+        else:
+            break
+    pair = root / key
+    (pair / "after.md").write_text(document, encoding="utf-8")
+    (pair / "rationale.md").write_text(answer["rationale"] + "\n", encoding="utf-8")
+    diff = "".join(difflib.unified_diff(source["original_reference"].splitlines(True),
+                                       document.splitlines(True), fromfile="before.md", tofile="after.md"))
+    (pair / "reference.diff").write_text(diff, encoding="utf-8")
+    return ({"status": "complete", "document_sha256": sha(document),
+             "response_sha256": sha(canonical(response))}, response["metadata"].get("usage", {}))
+
+
+def generate_bundle(root, settings, workers=1, retry_invalid=False):
+    """Generate pending pairs concurrently; verify and reuse finished pairs."""
+    if workers < 1:
+        raise ValueError("workers must be positive")
     root = Path(root)
     manifest = read_json(root, "manifest.json")
     inputs = _prepared_inputs(root, manifest)
@@ -182,40 +228,49 @@ def generate_bundle(root, settings):
         raise ValueError("Resume generation with the original rewrite model/settings")
     manifest["settings"] = settings.public_metadata()
     write_json(root / "manifest.json", manifest)
-    client = ChatClient(settings)
-    try:
-        for entry in pending:
-            key = entry["case_id"]
-            # Preserve a completed API response after a process interruption; never silently spend again.
-            response_path = root / key / "response.json"
-            if not response_path.exists():
-                message, metadata = client.complete(read_json(root, key + "/request.json"))
-                write_json(response_path, {"message": message, "metadata": metadata})
-            response = read_json(root, key + "/response.json")
-            try:
-                if response["message"].get("tool_calls") or response["metadata"].get("provider_truncated"):
-                    raise ValueError("Rewrite completion is truncated or contains tool calls")
-                answer = json.loads(response["message"]["content"])
-                document = compile_document(answer, inputs[key])
-            except (ValueError, TypeError, KeyError) as exc:
-                entry.update(status="invalid", error=type(exc).__name__)
+    remaining = iter(pending)
+    failure = None
+    with ThreadPoolExecutor(max_workers=min(workers, len(pending))) as executor:
+        active = {}
+
+        def submit_next():
+            entry = next(remaining, None)
+            if entry is not None:
+                key = entry["case_id"]
+                active[executor.submit(_generate_pair, root, key, inputs[key], settings, retry_invalid)] = entry
+
+        for _ in range(min(workers, len(pending))):
+            submit_next()
+        while active:
+            done, _ = wait(active, return_when=FIRST_COMPLETED)
+            for future in done:
+                entry = active.pop(future)
+                key = entry["case_id"]
+                try:
+                    update, usage = future.result()
+                except Exception as exc:
+                    if failure is None:
+                        failure = exc
+                    continue
+                entry.update(update)
+                if entry["status"] == "complete":
+                    entry.pop("error", None)
+                    entry.pop("error_detail", None)
+                elif failure is None:
+                    failure = ValueError("Invalid rewrite response preserved for " + key
+                                         + ": " + entry.get("error_detail", entry.get("error", "validation failed"))
+                                         + "; rerun generate with --retry-invalid to archive and retry")
                 write_json(root / "manifest.json", manifest)
-                raise ValueError("Invalid rewrite response preserved for " + key + "; prepare a new bundle to retry") from exc
-            pair = root / key
-            (pair / "after.md").write_text(document, encoding="utf-8")
-            (pair / "rationale.md").write_text(answer["rationale"] + "\n", encoding="utf-8")
-            diff = "".join(difflib.unified_diff(inputs[key]["original_reference"].splitlines(True),
-                                               document.splitlines(True), fromfile="before.md", tofile="after.md"))
-            (pair / "reference.diff").write_text(diff, encoding="utf-8")
-            entry.update(status="complete", document_sha256=sha(document), response_sha256=sha(canonical(response)))
-            entry.pop("error", None)
-            write_json(root / "manifest.json", manifest)
-            print(json.dumps({"case_id": key, "status": "complete",
-                              "completed": sum(item["status"] == "complete" for item in manifest["entries"]),
-                              "planned": len(manifest["entries"]),
-                              "usage": response["metadata"].get("usage", {})}), file=sys.stderr, flush=True)
-    finally:
-        client.close()
+                print(json.dumps({"case_id": key, "status": entry["status"],
+                                  "completed": sum(item["status"] == "complete" for item in manifest["entries"]),
+                                  "planned": len(manifest["entries"]), "usage": usage}),
+                      file=sys.stderr, flush=True)
+            # Stop scheduling after an error, but persist results of already running pairs.
+            if failure is None:
+                for _ in done:
+                    submit_next()
+    if failure is not None:
+        raise failure
     return manifest
 
 
