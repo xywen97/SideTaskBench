@@ -8,8 +8,13 @@ __pycache__/
 *.egg-info/
 session.lock
 *.sh
+
+# Generated run results, traces, and reports (keep local only).
 coding_runs/
 rewrite_runs/
 verification_runs/
+microcoder_runs/
+taskforge_runs/
+
 build/
 dist/

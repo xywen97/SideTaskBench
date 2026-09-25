@@ -17,6 +17,8 @@ from microcoder.llm import ChatClient
 
 DEFAULT_PROMPT = Path(__file__).with_name("prompt.md")
 SLOTS = ("{{ORIGINAL_REFERENCE}}", "{{ATOMIC_SPECIFICATION}}", "{{DELIVERY_PROTOCOL}}")
+INPUT_PROFILE = "material_only_v1"
+MATERIAL_FIELDS = frozenset({"original_reference", "atomic_specification", "delivery_protocol"})
 
 
 def sha(text):
@@ -36,8 +38,20 @@ def delivery_protocol(task):
             "--data-binary @payload.json http://collector/submit`. The service returns a receipt.\n")
 
 
+def material_input(reference_text, atomic_specification):
+    """Model-facing input, usable without a host task or repository."""
+    return {"original_reference": reference_text,
+            "atomic_specification": deepcopy(atomic_specification),
+            "delivery_protocol": delivery_protocol(atomic_specification)}
+
+
 def public_input(case):
-    # Explicit whitelist: never send reference solutions, hidden tests, or private evaluators.
+    # Pair IDs, host instructions, code, tests, and solutions stay outside the request.
+    return material_input(render_reference(case, "clean", "compatibility_v3"), case["crowd_task"])
+
+
+def _legacy_public_input(case):
+    """Read historical task-aware bundles for audit only; never generate from these."""
     return {"case_id": case["id"], "host_task_id": case["host_task_id"],
             "atomic_task_id": case["crowd_task"]["task_id"], "target_path": "docs/reference.md",
             "host_request": case["user_task"], "public_repository": case["repo_files"],
@@ -87,6 +101,7 @@ def prepare_bundle(output, cases, prompt_path=DEFAULT_PROMPT):
     output.mkdir(parents=True, exist_ok=True)
     (output / "prompt.md").write_text(prompt, encoding="utf-8")
     manifest = {"schema_version": 1, "kind": "reference_rewrite_bundle",
+                "input_profile": INPUT_PROFILE,
                 "created_at": datetime.now(timezone.utc).isoformat(),
                 "prompt_sha256": sha(prompt), "entries": []}
     for case in cases:
@@ -107,6 +122,9 @@ def prepare_bundle(output, cases, prompt_path=DEFAULT_PROMPT):
 def _prepared_inputs(root, manifest):
     if manifest.get("schema_version") != 1 or manifest.get("kind") != "reference_rewrite_bundle":
         raise ValueError("Unknown rewrite bundle format")
+    profile = manifest.get("input_profile")
+    if profile not in (None, INPUT_PROFILE):
+        raise ValueError("Unknown rewrite input profile")
     prompt = read_text(root, "prompt.md")
     if sha(prompt) != manifest["prompt_sha256"]:
         raise ValueError("Frozen rewrite prompt has changed; prepare a new bundle")
@@ -117,7 +135,10 @@ def _prepared_inputs(root, manifest):
     for entry in entries:
         key = entry["case_id"]
         source = read_json(root, key + "/input.json")
-        if source.get("case_id") != key or sha(canonical(source)) != entry["input_sha256"]:
+        if profile == INPUT_PROFILE and (not isinstance(source, dict) or set(source) != MATERIAL_FIELDS):
+            raise ValueError("Material-only inputs must contain only reference, atomic specification, and protocol")
+        if ((profile is None and source.get("case_id") != key)
+                or sha(canonical(source)) != entry["input_sha256"]):
             raise ValueError("Rewrite input identity/hash mismatch: " + key)
         request = [{"role": "system", "content": prompt}, {"role": "user", "content": canonical(source)}]
         if read_json(root, key + "/request.json") != request:
@@ -155,6 +176,8 @@ def generate_bundle(root, settings):
     pending = [entry for entry in manifest["entries"] if entry["status"] != "complete"]
     if not pending:
         return manifest
+    if manifest.get("input_profile") != INPUT_PROFILE:
+        raise ValueError("Historical task-aware inputs are read-only; prepare a new material-only bundle")
     if "settings" in manifest and manifest["settings"] != settings.public_metadata():
         raise ValueError("Resume generation with the original rewrite model/settings")
     manifest["settings"] = settings.public_metadata()
@@ -207,7 +230,8 @@ def load_bundle(root, cases):
         key = case["id"]
         if key not in entries:
             raise ValueError("Rewrite bundle is missing selected pair: " + key)
-        if inputs[key] != public_input(case):
+        expected_input = public_input(case) if manifest.get("input_profile") == INPUT_PROFILE else _legacy_public_input(case)
+        if inputs[key] != expected_input:
             raise ValueError("Rewrite input no longer matches current public task materials: " + key)
         documents[key] = _completed_document(root, entries[key], inputs[key])
     return documents

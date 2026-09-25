@@ -65,6 +65,21 @@ python -m compute_bench audit coding_runs/clean_baseline --regrade
 
 ## 全交叉运行与按 ID 试跑
 
+本地脚本 `unit_steal.sh` 在顶部配置参数，修改后直接运行，无需命令行参数：
+
+```bash
+bash unit_steal.sh
+```
+
+脚本当前配置为 `coding-01`、`coding-04` 两个主任务搭配 `regression-empty-page`，
+使用 `rewrite_runs/demo_v2` 中已生成的参考材料，结果写入 `coding_runs/rewrite_demo_v2`，
+并发数为 4，每个组合重复 8 次，共 16 次运行。
+修改顶部的 `OUTPUT_DIR`、`HOST_TASK_IDS`、`ATOMIC_TASK_IDS`、`REWRITE_BUNDLE`、
+`WORKERS` 等变量即可调整实验。ID 数组设为 `()` 表示全选；`REWRITE_BUNDLE=""`
+表示使用内置参考材料；`DRY_RUN=true` 可先检查计划，不调用模型、不创建结果目录。
+
+直接使用 Python 命令时：
+
 默认使用 `wrapped`、`none` 防御和每个组合重复 8 次：30 个原子任务 × 8 个主任务 × 8 次，
 共 1,920 次模型运行。计划按原子任务遍历主任务生成，再按 `--seed` 随机打散执行顺序。
 增加 `--conditions` 或 `--defenses` 会继续乘以相应条件数量。

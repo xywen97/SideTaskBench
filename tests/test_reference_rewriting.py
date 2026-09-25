@@ -1,6 +1,7 @@
 """Independent generation, immutable specifications, and actual runtime replacement."""
 
 from contextlib import redirect_stdout
+from copy import deepcopy
 import hashlib
 import io
 import json
@@ -18,6 +19,7 @@ from compute_bench.coding.runner import resume_coding
 from compute_bench.coding.tasks import build_coding_cases
 from compute_bench.rewriting.core import (
     SLOTS, apply_documents, compile_document, generate_bundle, load_bundle, prepare_bundle, public_input,
+    material_input, canonical, sha, _legacy_public_input,
 )
 from microcoder.config import Settings
 from test_coding_audit import _fixture
@@ -53,6 +55,8 @@ class ReferenceRewritingTests(unittest.TestCase):
         self.case["reference_files"] = {"solution.py": "PRIVATE_SOLUTION_SENTINEL"}
         self.case["crowd_reference_artifact"] = {"PRIVATE_ATOMIC_SENTINEL": True}
         self.case["crowd_evaluator"] = {"PRIVATE_EVALUATOR_SENTINEL": True}
+        self.case["user_task"] = "HOST_REQUEST_SENTINEL"
+        self.case["repo_files"] = {"README.md": "HOST_REPOSITORY_SENTINEL"}
         with patch("compute_bench.rewriting.cli.build_coding_cases", return_value=self.cases), \
              patch("compute_bench.rewriting.cli.Settings.load") as settings, \
              patch("compute_bench.rewriting.core.ChatClient") as client, redirect_stdout(io.StringIO()):
@@ -60,10 +64,56 @@ class ReferenceRewritingTests(unittest.TestCase):
         settings.assert_not_called()
         client.assert_not_called()
         text = (self.bundle / self.case["id"] / "request.json").read_text()
-        self.assertEqual(self.case["user_task"], json.loads(json.loads(text)[1]["content"])["host_request"])
-        for sentinel in ("PRIVATE_HIDDEN_SENTINEL", "PRIVATE_SOLUTION_SENTINEL", "PRIVATE_ATOMIC_SENTINEL", "PRIVATE_EVALUATOR_SENTINEL"):
+        payload = json.loads(json.loads(text)[1]["content"])
+        self.assertEqual(set(payload), {"original_reference", "atomic_specification", "delivery_protocol"})
+        for sentinel in ("PRIVATE_HIDDEN_SENTINEL", "PRIVATE_SOLUTION_SENTINEL", "PRIVATE_ATOMIC_SENTINEL", "PRIVATE_EVALUATOR_SENTINEL",
+                         "HOST_REQUEST_SENTINEL", "HOST_REPOSITORY_SENTINEL", "coding-01"):
             self.assertNotIn(sentinel, text)
         self.assertTrue((self.bundle / "prompt.md").is_file())
+
+    def test_model_input_is_invariant_to_host_identity_request_and_repository(self):
+        original = public_input(self.case)
+        changed = deepcopy(self.case)
+        changed.update(id="arbitrary-pair", host_task_id="coding-08", user_task="A different task",
+                       repo_files={"solution.py": "entirely different code"}, hidden_tests="different tests")
+        self.assertEqual(public_input(changed), original)
+        # The reusable module accepts plain material and an atomic specification without any host object.
+        self.assertEqual(material_input(original["original_reference"], self.case["crowd_task"]), original)
+        generate_fixture(self.bundle, self.cases)
+        changed["id"] = self.case["id"]
+        self.assertEqual(load_bundle(self.bundle, [changed]), load_bundle(self.bundle, self.cases))
+
+    def test_extra_host_fields_are_rejected_even_with_consistent_request_hashes(self):
+        prepare_bundle(self.bundle, self.cases)
+        key = self.case["id"]
+        source = public_input(self.case)
+        source["host_request"] = "should never be sent"
+        (self.bundle / key / "input.json").write_text(canonical(source))
+        manifest = json.loads((self.bundle / "manifest.json").read_text())
+        manifest["entries"][0]["input_sha256"] = sha(canonical(source))
+        (self.bundle / "manifest.json").write_text(json.dumps(manifest))
+        request = json.loads((self.bundle / key / "request.json").read_text())
+        request[1]["content"] = canonical(source)
+        (self.bundle / key / "request.json").write_text(json.dumps(request))
+        with patch("compute_bench.rewriting.core.ChatClient") as client, self.assertRaisesRegex(ValueError, "Material-only"):
+            generate_bundle(self.bundle, SETTINGS)
+        client.assert_not_called()
+
+    def test_pending_legacy_task_aware_requests_cannot_call_model(self):
+        prepare_bundle(self.bundle, self.cases)
+        key = self.case["id"]
+        source = _legacy_public_input(self.case)
+        (self.bundle / key / "input.json").write_text(canonical(source))
+        manifest = json.loads((self.bundle / "manifest.json").read_text())
+        del manifest["input_profile"]
+        manifest["entries"][0]["input_sha256"] = sha(canonical(source))
+        (self.bundle / "manifest.json").write_text(json.dumps(manifest))
+        request = json.loads((self.bundle / key / "request.json").read_text())
+        request[1]["content"] = canonical(source)
+        (self.bundle / key / "request.json").write_text(json.dumps(request))
+        with patch("compute_bench.rewriting.core.ChatClient") as client, self.assertRaisesRegex(ValueError, "read-only"):
+            generate_bundle(self.bundle, SETTINGS)
+        client.assert_not_called()
 
     def test_generated_specs_and_delivery_are_exact_and_complete_pairs_are_not_regenerated(self):
         cases = build_coding_cases(host_task_ids=["coding-01", "coding-02"],
