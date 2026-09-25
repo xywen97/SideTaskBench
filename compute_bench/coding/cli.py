@@ -25,7 +25,8 @@ def main(argv=None):
     run.add_argument("--repeats", type=int, default=8)
     run.add_argument("--workers", type=int, default=3)
     run.add_argument("--max-steps", type=int, default=45)
-    run.add_argument("--variant", choices=["companion_v1", "maintenance_v2", "compatibility_v3"], default="compatibility_v3")
+    from taskforge.distribution import VARIANTS
+    run.add_argument("--variant", choices=VARIANTS, default="compatibility_v3")
     run.add_argument("--thinking", choices=["default", "enabled", "disabled"], default="default")
     run.add_argument("--label", default="coding_validation")
     run.add_argument("--seed", type=int, default=20260924)
