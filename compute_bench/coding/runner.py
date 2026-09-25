@@ -314,7 +314,12 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
         from .report import write_report
         summary = write_report(output_dir)
         if harness_errors:
-            raise RuntimeError("Some trials failed in the harness; artifacts were preserved. Use coding resume for trials that never called the LLM.")
+            first = harness_errors[0]
+            raise RuntimeError(
+                f"Some trials failed in the harness ({len(harness_errors)}/{len(plan)}); "
+                f"first failure [{first['run_id']}]: {first['error']}. "
+                f"Details: {output_dir / 'harness_errors.json'}. "
+                "Artifacts were preserved. Use coding resume for trials that never called the LLM.")
         return summary
 
 
@@ -498,5 +503,9 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
     from .report import write_report
     summary = write_report(directory)
     if failures:
-        raise RuntimeError("Recovery has failures; see recovery.json")
+        first = failures[0]
+        raise RuntimeError(
+            f"Recovery has failures ({len(failures)}/{len(pending)}); "
+            f"first failure [{first['run_id']}]: {first['error']}. "
+            f"Details: {directory / revision / 'recovery.json'}")
     return summary

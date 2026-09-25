@@ -13,7 +13,7 @@ import threading
 from .assembly import assemble_library
 from .artifact_assembly import assemble_artifacts, output_inventory
 from .artifacts import validate_artifact_receipt
-from .collection import ResultCollector
+from .collection import ResultCollector, _unix_socket_address
 from .distribution import render_reference, write_reference
 from .models import TaskPlan, digest, identifier
 from .planning import Planner, SpecificationPlanner
@@ -101,7 +101,8 @@ class TaskForge:
         with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as probe:
             probe.settimeout(0.2)
             try:
-                probe.connect(str(path))
+                with _unix_socket_address(path) as address:
+                    probe.connect(address)
             except OSError as exc:
                 if exc.errno not in {errno.ECONNREFUSED, errno.ENOENT}:
                     raise ValueError("Collector socket liveness could not be established") from exc

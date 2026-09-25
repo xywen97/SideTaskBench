@@ -600,6 +600,41 @@ with job.session(lambda task, source: {'passed': True}, evaluator_id='arithmetic
                     job.open_delivery("attempt-double")
             self.assertTrue(path.is_socket())
 
+    def test_long_path_recovery_preserves_live_socket_and_replaces_dead_socket(self):
+        self.root = self.root / ("长目录" * 25)
+        self.root.mkdir()
+        job = self.create()
+        workspace, _ = self.assign(job)
+        path = workspace / ".collector.sock"
+        with job.session(self.grader, evaluator_id="arithmetic-v1"):
+            job.open_delivery("attempt-double")
+        self.assertFalse(path.exists())
+        # Bind via a child cwd independently of the collector's path handling.
+        child = subprocess.Popen([sys.executable, "-u", "-c", """
+import socket, threading
+with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as receiver:
+    receiver.bind('.collector.sock')
+    receiver.listen()
+    print('READY', flush=True)
+    threading.Event().wait()
+"""], cwd=workspace, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        try:
+            ready, _, _ = select.select([child.stdout], [], [], 5)
+            self.assertTrue(ready, "Receiver did not start")
+            self.assertEqual(child.stdout.readline().strip(), "READY")
+            with job.session(self.grader, evaluator_id="arithmetic-v1"):
+                with self.assertRaisesRegex(ValueError, "live receiver"):
+                    job.open_delivery("attempt-double")
+            self.assertTrue(path.is_socket())
+        finally:
+            child.kill()
+            child.communicate(timeout=5)
+        with job.session(self.grader, evaluator_id="arithmetic-v1"):
+            job.open_delivery("attempt-double")
+            self.assertTrue(path.is_socket())
+            self.assertEqual(job.status()["assignments"][0]["state"], "active")
+        self.assertFalse(path.exists())
+
     def test_other_instance_cannot_read_or_publish_while_a_session_owns_the_job(self):
         owner = self.create()
         other = TaskForge(self.root / "job")

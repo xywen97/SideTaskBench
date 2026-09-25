@@ -3,6 +3,7 @@
 from dataclasses import replace
 import json
 from pathlib import Path
+import shlex
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -10,6 +11,7 @@ from unittest.mock import patch
 from compute_bench.coding.audit import audit_directory
 from compute_bench.coding.runner import execute_coding, _run_lock
 from microcoder.config import Settings
+from microcoder.sandbox import Sandbox
 from test_coding_audit import _fixture
 from test_reference_rewriting import generate_fixture
 from compute_bench.coding.tasks import build_coding_cases
@@ -20,6 +22,38 @@ class CodingContinueTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix="cb-continue-")
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / "run"
+
+    def test_long_output_without_rewrite_supports_sandbox_delivery_and_resume(self):
+        self.root = self.root / ("long-output-" * 12)
+
+        def deliver(agent):
+            payload = json.dumps({"task_id": agent.tools.case["crowd_task"]["task_id"],
+                                  "artifact": agent.tools.case["crowd_reference_artifact"]})
+            result = Sandbox(agent.tools.workspace).run(
+                "curl --silent --show-error --unix-socket /workspace/.collector.sock "
+                "-H 'Content-Type: application/json' --data " + shlex.quote(payload)
+                + " http://collector/submit")
+            self.assertEqual(result["exit_code"], 0, result)
+            self.assertTrue(json.loads(result["stdout"])["valid"])
+
+        # Leave a prepared trial with no LLM trajectory, then repeat the same
+        # command to exercise automatic recovery at the original long path.
+        with patch("compute_bench.coding.runner.CodingEnvironment", side_effect=RuntimeError("before LLM")), \
+             self.assertRaisesRegex(RuntimeError, "before LLM"):
+            _fixture(self.root, atomic_task_ids=["regression-empty-page"], rewrite_bundle=None)
+        result, _ = _fixture(self.root, atomic_task_ids=["regression-empty-page"],
+                             rewrite_bundle=None, inspect_agent=deliver)
+        self.assertTrue(result["valid_delivery"])
+        self.assertEqual(result["execution_revision"], "recovery_1")
+        manifest = json.loads((self.root / "manifest.json").read_text())
+        self.assertNotIn("reference_rewrite", manifest)
+        registrations = [json.loads(line) for line in
+                         (self.root / "collector/registrations.jsonl").read_text().splitlines()]
+        path = self.root / "workspaces/w000/.collector.sock"
+        self.assertEqual([item["socket_path"] for item in registrations], [str(path)])
+        self.assertFalse(path.exists())
+        audit = audit_directory(self.root)
+        self.assertTrue(audit["passed"], audit["errors"])
 
     def test_expanding_hosts_and_repeats_preserves_old_results_and_passes_audit(self):
         _fixture(self.root)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from contextlib import contextmanager
 import copy
 import hashlib
 from http.server import BaseHTTPRequestHandler
@@ -16,6 +17,29 @@ import uuid
 
 from .assembly import _validated_tasks, assemble_library
 from .artifacts import artifact_digest, validate_artifact, validated_generic_tasks
+
+
+@contextmanager
+def _unix_socket_address(path: Path):
+    """Use a directory FD for long Linux socket paths without changing cwd.
+
+    The socket inode stays at the original workspace path, so sandbox clients
+    can still connect through /workspace/.collector.sock. The short address is
+    needed only while binding or connecting, never in persisted registrations.
+    """
+    if len(os.fsencode(path)) < 104:
+        yield str(path)
+        return
+    if not Path("/proc/self/fd").is_dir():
+        raise ValueError("Long Unix socket paths require Linux /proc/self/fd")
+    descriptor = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        address = f"/proc/self/fd/{descriptor}/{path.name}"
+        if len(os.fsencode(address)) >= 104:
+            raise ValueError("Unix socket filename too long; use a shorter filename")
+        yield address
+    finally:
+        os.close(descriptor)
 
 
 class _UnixHTTPServer(socketserver.ThreadingMixIn, socketserver.UnixStreamServer):
@@ -106,8 +130,6 @@ class ResultCollector:
         socket_path = Path(socket_path).absolute()
         if socket_path.exists() or socket_path.is_symlink():
             raise ValueError("Collector socket path already exists")
-        if len(str(socket_path).encode()) >= 104:
-            raise ValueError("Unix socket path too long; use a shorter output directory")
         with self._lock:
             existing = self._registrations.get(run_id)
             if existing is not None and (existing != assignment_id or run_id in self._servers):
@@ -199,7 +221,8 @@ class ResultCollector:
                 self.respond(403 if block_delivery else 200, {"receipt_id": receipt["receipt_id"],
                              "accepted": not block_delivery, "valid": receipt["valid"], "task_id": task_id})
 
-        server = _UnixHTTPServer(str(socket_path), Handler)
+        with _unix_socket_address(socket_path) as address:
+            server = _UnixHTTPServer(address, Handler)
         socket_stat = socket_path.lstat()
         thread = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True)
         try:

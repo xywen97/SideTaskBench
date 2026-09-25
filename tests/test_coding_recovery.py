@@ -116,9 +116,11 @@ class CodingRecoveryTests(unittest.TestCase):
                      patch("builtins.print"):
                     sandbox.probe.return_value = {"backend": "synthetic-test-sandbox", "available": True}
                     sandbox.return_value.run.return_value = {"stdout": "synthetic patch\n", "stderr": "", "exit_code": 0}
-                    with self.assertRaisesRegex(RuntimeError, "failed in the harness"):
+                    with self.assertRaisesRegex(RuntimeError, "failed in the harness") as raised:
                         execute_coding(settings, root, host_task_ids=["coding-01", "coding-02"], atomic_task_ids=["rewrite-user-record", "regression-empty-page"], conditions=["clean"],
                                        defenses=["none"], repeats=2, workers=1)
+                    self.assertIn("synthetic bootstrap failure", str(raised.exception))
+                    self.assertIn(str(root / "harness_errors.json"), str(raised.exception))
 
                     client.assert_not_called()
                     agent.assert_not_called()
