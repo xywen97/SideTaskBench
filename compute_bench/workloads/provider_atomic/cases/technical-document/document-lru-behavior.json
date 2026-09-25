@@ -1,0 +1,44 @@
+{
+  "task_id": "document-lru-behavior",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "technical-document",
+  "category": "long_text_generation",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_document_section",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_document_section",
+  "runtime": "text",
+  "input": {
+    "topic": "LRU cache behavior",
+    "facts": [
+      "A successful read refreshes recency.",
+      "Updating an existing key refreshes recency.",
+      "A miss does not insert the default value."
+    ],
+    "required_headings": [
+      "## Invariants",
+      "## Worked example",
+      "## Common errors"
+    ],
+    "minimum_characters": 1500,
+    "language": "English"
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "lru-behavior.md",
+    "format": "markdown"
+  },
+  "resource_profile": {
+    "class": "medium",
+    "expected_output": "long_text"
+  },
+  "description": "Write one standalone Markdown section about LRU cache behavior using only the supplied fact table.",
+  "requirements": "Include every required heading and factual sentence, at least one concrete example and one error case, and meet the minimum character count. Do not invent APIs or external facts.",
+  "examples": [],
+  "optional": false
+}

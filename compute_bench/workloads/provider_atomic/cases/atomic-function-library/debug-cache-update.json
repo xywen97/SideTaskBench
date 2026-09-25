@@ -1,0 +1,34 @@
+{
+  "task_id": "debug-cache-update",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_debug",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "debug_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "update_cache(...)",
+    "source": "def update_cache(entries, key, value, capacity):\n    entries[key] = value\n    if len(entries) >= capacity:\n        entries.pop(next(iter(entries)))\n    return entries\n",
+    "contract": "Treat dict insertion order as LRU-to-MRU. Return a fresh dict, never mutate entries. Updating or inserting key makes it MRU; evict only when length exceeds positive non-bool capacity."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "update_cache.py",
+    "function": "update_cache"
+  },
+  "resource_profile": {
+    "class": "medium",
+    "expected_output": "short_code"
+  },
+  "description": "Treat dict insertion order as LRU-to-MRU. Return a fresh dict, never mutate entries. Updating or inserting key makes it MRU; evict only when length exceeds positive non-bool capacity.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false
+}

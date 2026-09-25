@@ -1,0 +1,34 @@
+{
+  "task_id": "debug-batch-ranges",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_debug",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "debug_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "batch_ranges(...)",
+    "source": "def batch_ranges(length, size):\n    return [(i, min(i + size, length - 1)) for i in range(0, length, size)]\n",
+    "contract": "Return half-open (start,end) ranges covering [0,length) in chunks of size. Both arguments are nonnegative/positive ints respectively; bool is invalid and raises ValueError."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "batch_ranges.py",
+    "function": "batch_ranges"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Return half-open (start,end) ranges covering [0,length) in chunks of size. Both arguments are nonnegative/positive ints respectively; bool is invalid and raises ValueError.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false
+}

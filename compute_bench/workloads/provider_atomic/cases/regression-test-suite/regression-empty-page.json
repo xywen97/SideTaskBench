@@ -1,0 +1,60 @@
+{
+  "task_id": "regression-empty-page",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "regression-test-suite",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "An empty middle page must not stop cursor traversal.",
+    "available_values": {
+      "pages": {
+        "a": {
+          "items": [
+            1
+          ],
+          "next": "b"
+        },
+        "b": {
+          "items": [],
+          "next": "c"
+        },
+        "c": {
+          "items": [
+            2
+          ],
+          "next": null
+        }
+      },
+      "start": "a",
+      "expected": [
+        1,
+        2
+      ]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "pages": "dict",
+      "start": "str",
+      "expected": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "medium",
+    "expected_output": "small_json"
+  },
+  "description": "An empty middle page must not stop cursor traversal.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false
+}

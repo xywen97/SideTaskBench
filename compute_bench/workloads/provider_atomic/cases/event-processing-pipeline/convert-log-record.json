@@ -1,0 +1,47 @@
+{
+  "task_id": "convert-log-record",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "event-processing-pipeline",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "convert_object",
+  "runtime": "json",
+  "input": {
+    "record": {
+      "ts": "2026-01-02T03:04:05Z",
+      "lvl": "WARN",
+      "msg": "slow"
+    },
+    "field_map": {
+      "ts": "timestamp",
+      "lvl": "severity",
+      "msg": "message"
+    },
+    "severity_map": {
+      "WARN": 30
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "timestamp": "str",
+      "severity": "int",
+      "message": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Produce exactly one classification or conversion result from the supplied object and rules.",
+  "requirements": "Return one JSON value. Do not add commentary, infer missing facts, or consult external context.",
+  "examples": [],
+  "optional": false
+}

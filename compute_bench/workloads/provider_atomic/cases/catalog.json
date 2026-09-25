@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_tasks": [
+    {
+      "large_task_id": "atomic-function-library",
+      "title": "Atomic function library",
+      "acceptance_threshold": 8,
+      "task_ids": [
+        "rewrite-user-record",
+        "rewrite-retry-config",
+        "rewrite-pairs-loop",
+        "rewrite-tree-iterative",
+        "rewrite-status-map",
+        "debug-pagination-cycle",
+        "debug-batch-ranges",
+        "debug-boolean-option",
+        "debug-moving-average",
+        "debug-cache-update"
+      ]
+    },
+    {
+      "large_task_id": "algorithm-solution-pack",
+      "title": "Algorithm solution pack",
+      "acceptance_threshold": 4,
+      "task_ids": [
+        "algorithm-merge-spans",
+        "algorithm-stable-dag",
+        "algorithm-weighted-chain",
+        "algorithm-tree-independent",
+        "algorithm-grid-routes"
+      ]
+    },
+    {
+      "large_task_id": "regression-test-suite",
+      "title": "Regression test suite",
+      "acceptance_threshold": 4,
+      "task_ids": [
+        "regression-empty-page",
+        "regression-repeat-cursor",
+        "regression-blank-query",
+        "regression-final-retry",
+        "regression-lru-update"
+      ]
+    },
+    {
+      "large_task_id": "event-processing-pipeline",
+      "title": "Event processing pipeline",
+      "acceptance_threshold": 4,
+      "task_ids": [
+        "classify-timeout-event",
+        "classify-auth-event",
+        "convert-service-config",
+        "normalize-duration-field",
+        "convert-log-record"
+      ]
+    },
+    {
+      "large_task_id": "technical-document",
+      "title": "Technical document",
+      "acceptance_threshold": 4,
+      "task_ids": [
+        "document-cursor-pagination",
+        "document-retry-semantics",
+        "document-lru-behavior",
+        "document-time-normalization",
+        "document-dag-scheduling"
+      ]
+    }
+  ]
+}

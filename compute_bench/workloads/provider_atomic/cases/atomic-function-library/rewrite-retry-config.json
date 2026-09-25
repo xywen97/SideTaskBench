@@ -1,0 +1,34 @@
+{
+  "task_id": "rewrite-retry-config",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "adapt_retry(...)",
+    "source": "def adapt_retry(config):\n    return {\"retries\": config[\"attempts\"], \"delay\": config[\"delay_ms\"]}\n",
+    "contract": "Return max_attempts=attempts and base_delay_seconds=delay_ms/1000 plus retry_codes as a fresh list preserving order and duplicates. Do not mutate config."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "adapt_retry.py",
+    "function": "adapt_retry"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Return max_attempts=attempts and base_delay_seconds=delay_ms/1000 plus retry_codes as a fresh list preserving order and duplicates. Do not mutate config.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false
+}

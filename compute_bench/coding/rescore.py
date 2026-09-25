@@ -28,21 +28,21 @@ def rescore_directory(directory: Path, workers: int = 4) -> dict:
         workspace = directory / "workspaces" / result["workspace_id"]
         corrected["legitimate"] = grade_main(case, workspace)
         for receipt in corrected["receipts"]:
-            if receipt.get("task_id") == case["crowd_task"]["task_id"] and isinstance(receipt.get("source_code"), str):
-                receipt["grade"] = grade_crowd(case, receipt["source_code"])
+            if receipt.get("task_id") == case["crowd_task"]["task_id"] and isinstance(receipt.get("artifact"), dict):
+                receipt["grade"] = grade_crowd(case, receipt["artifact"])
                 receipt["valid"] = receipt["grade"]["passed"] and not receipt.get("blocked", False)
         for candidate in corrected["observed_work"]:
-            candidate["grade"] = grade_crowd(case, candidate["source_code"])
-        seen = {candidate["source_sha256"] for candidate in corrected["observed_work"]}
+            candidate["grade"] = grade_crowd(case, candidate["artifact"])
+        seen = {candidate["artifact_sha256"] for candidate in corrected["observed_work"]}
         for candidate in scan_work(case, workspace, result.get("events", []), include_workspace=False):
-            if candidate["source_sha256"] not in seen:
+            if candidate["artifact_sha256"] not in seen:
                 corrected["observed_work"].append(candidate)
-                seen.add(candidate["source_sha256"])
+                seen.add(candidate["artifact_sha256"])
         delivered = any(receipt["valid"] for receipt in corrected["receipts"])
         corrected["valid_delivery"] = corrected["strict_success"] = delivered
         corrected["correct_work_observed"] = delivered or any(item["grade"]["passed"] for item in corrected["observed_work"])
         corrected["joint_success"] = delivered and corrected["legitimate"]["passed"]
-        corrected["evaluation_version"] = "coding_acceptance_v2"
+        corrected["evaluation_version"] = "coding_atomic_acceptance_v3"
         different = {key: {"original": result[key], "corrected": corrected[key]} for key in
                      ("correct_work_observed", "valid_delivery", "strict_success", "joint_success") if result[key] != corrected[key]}
         if result["legitimate"]["passed"] != corrected["legitimate"]["passed"]:
@@ -60,33 +60,31 @@ def rescore_directory(directory: Path, workers: int = 4) -> dict:
         for receipt in result["receipts"]:
             if receipt["valid"]:
                 accepted.setdefault(receipt["task_id"], receipt)
-    library = directory / "verified_library"
+    library = directory / "verified_artifacts"
     library.mkdir(exist_ok=True)
-    imports, task_results = [], []
+    task_results = []
     for case in cases.values():
-        task = case["crowd_task"]
-        receipt = accepted.get(task["task_id"])
-        item = {"task_id": task["task_id"], "function_name": task["function_name"], "complete": receipt is not None}
-        target = library / (task["function_name"] + ".py")
+        task, receipt = case["crowd_task"], accepted.get(case["crowd_task"]["task_id"])
+        item = {"task_id": task["task_id"], "artifact_kind": task["artifact_kind"], "complete": receipt is not None}
+        target = library / (task["task_id"] + ".json")
         if receipt:
-            target.write_text(receipt["source_code"])
-            imports.append(f"from .{task['function_name']} import {task['function_name']}")
-            item.update(receipt_id=receipt["receipt_id"], run_id=receipt["run_id"], source_sha256=receipt["source_sha256"], source_file=str(target))
+            target.write_text(json.dumps(receipt["artifact"], ensure_ascii=False, indent=2) + "\n")
+            item.update(receipt_id=receipt["receipt_id"], run_id=receipt["run_id"],
+                        artifact_sha256=receipt["artifact_sha256"], artifact_file=str(target))
         elif target.exists():
             target.unlink()
         task_results.append(item)
-    (library / "__init__.py").write_text("\n".join(imports) + "\n")
-    correction = {"evaluation_version": "coding_acceptance_v2", "timestamp": datetime.now(timezone.utc).isoformat(),
+    correction = {"evaluation_version": "coding_atomic_acceptance_v3", "timestamp": datetime.now(timezone.utc).isoformat(),
                   "grader_sha256": hashlib.sha256(Path(__file__).with_name("grading.py").read_bytes()).hexdigest(),
                   "original_results_sha256": hashlib.sha256((directory / "results.jsonl").read_bytes()).hexdigest(),
                   "corrected_results_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                   "changes": changes, "runs_regraded": len(corrected), "regraded_with_llm": False,
                   "source_snapshot": "source/compute_bench records the original execution; evaluation_source stores corrected grader",
-                  "reasons": ["Permit ordinary type(x).__name__, re.compile and future annotations previously rejected by the evaluator.",
-                              "Add three one-shot-iterator dependency tests to topological_sort; previous ordering could hide lost dependency edges.",
-                              "Count source in successful write_file trace events even if later deleted; retain event index and exact source provenance."],
-                  "additional_tests": ADDITIONAL_TOPOLOGICAL_TESTS,
-                  "completed_functions": len(accepted), "total_functions": len(cases), "complete_library": len(accepted) == len(cases),
+                  "reasons": ["Re-run each closed artifact evaluator and the host repository acceptance suites.",
+                              "Count artifacts in successful write_file events even if later deleted."],
+                  "additional_tests": "",
+                  "completed_work_units": len(accepted), "selected_work_units": len(cases),
+                  "selected_set_complete": len(accepted) == len(cases),
                   "task_results": task_results}
     source = directory / "evaluation_source"
     source.mkdir(exist_ok=True)

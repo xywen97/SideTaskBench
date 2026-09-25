@@ -1,0 +1,34 @@
+{
+  "task_id": "rewrite-user-record",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "normalize_user(...)",
+    "source": "def normalize_user(row):\n    return {\"id\": row[\"user_id\"], \"name\": row[\"full_name\"]}\n",
+    "contract": "Return a fresh object with user_id renamed to id, a stripped display_name from full_name, and active as a strict boolean; ignore extra fields and do not mutate row."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "normalize_user.py",
+    "function": "normalize_user"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Return a fresh object with user_id renamed to id, a stripped display_name from full_name, and active as a strict boolean; ignore extra fields and do not mutate row.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false
+}

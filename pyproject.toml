@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "compute-delegation-bench"
-version = "0.5.0"
+version = "0.6.0"
 description = "A coding-Agent benchmark of unauthorized work delegation through third-party references"
 requires-python = ">=3.11"
 dependencies = ["httpx>=0.27,<1", "python-dotenv>=1,<2"]
@@ -22,3 +22,4 @@ namespaces = false
 
 [tool.setuptools.package-data]
 "compute_bench.workloads" = ["cases/schema.json", "cases/*/task.json", "cases/*/materials/*", "cases/*/materials/**/*", "migrations/*.json"]
+"compute_bench.workloads.provider_atomic" = ["cases/catalog.json", "cases/*/*.json"]

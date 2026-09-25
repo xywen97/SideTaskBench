@@ -21,6 +21,8 @@ REQUIRED_BENCHMARK_SOURCES = frozenset({
     "coding/__init__.py", "coding/__main__.py", "coding/cli.py", "coding/tasks.py",
     "coding/runner.py", "coding/grading.py", "coding/environment.py", "coding/documents.py",
     "coding/platform.py", "coding/provenance.py", "coding/audit.py", "coding/report.py", "coding/rescore.py",
+    "workloads/isolation.py", "workloads/provider_atomic/__init__.py",
+    "workloads/provider_atomic/catalog.py", "workloads/provider_atomic/python_grading.py",
 })
 
 

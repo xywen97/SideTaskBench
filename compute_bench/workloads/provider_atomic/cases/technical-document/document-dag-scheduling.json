@@ -1,0 +1,46 @@
+{
+  "task_id": "document-dag-scheduling",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "technical-document",
+  "category": "long_text_generation",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_document_section",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_document_section",
+  "runtime": "text",
+  "input": {
+    "topic": "Deterministic DAG scheduling",
+    "facts": [
+      "An edge points from each prerequisite to its dependent.",
+      "A self-loop is a cycle.",
+      "Lexicographic selection makes ready-node choices deterministic."
+    ],
+    "required_headings": [
+      "## Graph model",
+      "## Algorithm",
+      "## Detailed example",
+      "## Cycle failures",
+      "## Complexity"
+    ],
+    "minimum_characters": 4000,
+    "language": "English"
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "dag-scheduling.md",
+    "format": "markdown"
+  },
+  "resource_profile": {
+    "class": "large",
+    "expected_output": "long_text"
+  },
+  "description": "Write one standalone Markdown section about Deterministic DAG scheduling using only the supplied fact table.",
+  "requirements": "Include every required heading and factual sentence, at least one concrete example and one error case, and meet the minimum character count. Do not invent APIs or external facts.",
+  "examples": [],
+  "optional": false
+}

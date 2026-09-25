@@ -15,7 +15,7 @@ compute_bench/
 ├── cli.py、__main__.py、__init__.py  # 默认 coding 命令入口
 ├── io.py                           # 实验 JSON 文件写入
 ├── coding/
-│   ├── tasks.py                    # 六组主任务、额外任务、公开/私有验收
+│   ├── tasks.py                    # 八个用户修复仓库及公开/私有验收
 │   ├── documents.py                # 实验参考内容与包装参数
 │   ├── environment.py              # 仓库夹具、MicroCoder 接触指标适配
 │   ├── platform.py                 # TaskForge 公开契约与私有评分器绑定
@@ -27,6 +27,9 @@ compute_bench/
 │   ├── rescore.py                  # 独立校正评分，不覆盖原始记录
 │   └── cli.py、__main__.py          # coding-bench 与兼容入口
 └── workloads/
+    ├── provider_atomic/            # 新 provider portfolio：5 T / 30 t
+    │   ├── cases/*/*.json          # 30 个公开 t 的权威定义
+    │   └── catalog.py              # 加载校验、私有验收与价值组装
     ├── cases/*/task.json           # 目标、贡献规格、材料声明及后端 ID
     ├── cases/*/materials/          # README、SDK、公开实现与测试等静态材料
     ├── definitions.py、registry.py # JSON 校验/加载与受控后端白名单
@@ -81,7 +84,7 @@ python -m compute_bench workloads export api-migration /tmp/migration-export --s
 |---|---|
 | `run` | 使用本地模型配置真实执行固定实验矩阵，输出目录必须为空 |
 | `resume` | 仅补本版本尚无模型轨迹的计划项；已有结果保留 |
-| `check` | 探测真实沙箱并验收六个参考函数，不调用 LLM |
+| `check` | 探测真实沙箱并验收八个 U 配对的参考 artifact，不调用 LLM |
 | `report` | 从已有结果重建报告；`--corrected` 选择独立校正评分 |
 | `audit` | 核对原始证据；`--corrected` 核对校正产物，`--regrade` 在沙箱复验 |
 | `rescore` | 先核对原始证据，再另存校正评分、差异和有效成果 |
@@ -98,7 +101,10 @@ compute-bench audit coding_runs/validation_main --corrected --regrade
 
 | 需要修改的内容 | 位置 |
 |---|---|
-| 用户修复题目、第三方公开契约、验收用例 | `coding/tasks.py` |
+| 八个用户修复题目与主任务验收 | `coding/tasks.py` |
+| provider atomic portfolio v1（5 T / 30 t）的公开契约 | `workloads/provider_atomic/cases/<large_task_id>/<task_id>.json` |
+| provider portfolio 的私有验收与组装 | `workloads/provider_atomic/` |
+| legacy/business atomic suite（4 T / 43 t） | `workloads/cases/*_atomic/task.json`；原 case ID 与 CLI 保持不变 |
 | 四个大任务的目标、贡献描述、材料声明、角色绑定 | `workloads/cases/*/task.json` |
 | 大任务的公开静态 README、SDK、实现和测试 | `workloads/cases/*/materials/` |
 | seed 材料生成、独立业务验收及组装规则 | `workloads/evaluators/`，后端登记在 `workloads/registry.py` |

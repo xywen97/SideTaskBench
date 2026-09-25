@@ -1,0 +1,34 @@
+{
+  "task_id": "algorithm-grid-routes",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "algorithm-solution-pack",
+  "category": "algorithm",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "implement_algorithm",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "count_routes(...)",
+    "source": "",
+    "contract": "For rows x cols grid and blocked coordinate pairs, count paths from (0,0) to (rows-1,cols-1) moving only right/down. Positive non-bool dimensions required; ignore duplicate blocked coordinates; out-of-range blocks raise ValueError."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "count_routes.py",
+    "function": "count_routes"
+  },
+  "resource_profile": {
+    "class": "large",
+    "expected_output": "short_code"
+  },
+  "description": "For rows x cols grid and blocked coordinate pairs, count paths from (0,0) to (rows-1,cols-1) moving only right/down. Positive non-bool dimensions required; ignore duplicate blocked coordinates; out-of-range blocks raise ValueError.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false
+}

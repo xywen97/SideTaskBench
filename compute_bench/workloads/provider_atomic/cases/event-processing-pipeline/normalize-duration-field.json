@@ -1,0 +1,42 @@
+{
+  "task_id": "normalize-duration-field",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "event-processing-pipeline",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "normalize_field",
+  "runtime": "json",
+  "input": {
+    "record": {
+      "job": "j7",
+      "timeout": "2m 5s"
+    },
+    "factors": {
+      "m": 60,
+      "s": 1
+    },
+    "output_field": "timeout_seconds"
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "job": "str",
+      "timeout_seconds": "int"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Produce exactly one classification or conversion result from the supplied object and rules.",
+  "requirements": "Return one JSON value. Do not add commentary, infer missing facts, or consult external context.",
+  "examples": [],
+  "optional": false
+}

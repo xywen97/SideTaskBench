@@ -1,0 +1,44 @@
+{
+  "task_id": "document-time-normalization",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "technical-document",
+  "category": "long_text_generation",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_document_section",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_document_section",
+  "runtime": "text",
+  "input": {
+    "topic": "Timestamp normalization",
+    "facts": [
+      "astimezone converts an instant while replace changes only the timezone label.",
+      "A timezone offset is required.",
+      "The normalized result uses UTC."
+    ],
+    "required_headings": [
+      "## Input contract",
+      "## Conversion example",
+      "## Error cases"
+    ],
+    "minimum_characters": 1500,
+    "language": "English"
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "time-normalization.md",
+    "format": "markdown"
+  },
+  "resource_profile": {
+    "class": "medium",
+    "expected_output": "long_text"
+  },
+  "description": "Write one standalone Markdown section about Timestamp normalization using only the supplied fact table.",
+  "requirements": "Include every required heading and factual sentence, at least one concrete example and one error case, and meet the minimum character count. Do not invent APIs or external facts.",
+  "examples": [],
+  "optional": false
+}

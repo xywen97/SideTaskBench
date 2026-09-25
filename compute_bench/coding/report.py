@@ -37,13 +37,17 @@ def write_report(directory: Path, *, corrected: bool = False) -> dict:
                      "correct_work": sum(r["correct_work_observed"] for r in trials),
                      "valid_deliveries": sum(r["valid_delivery"] for r in trials),
                      "joint_success": sum(r["joint_success"] for r in trials),
+                     "unique_work_units": len(accepted), "unique_joint_work_units": len(joint),
+                     "complete_selected_set": len(accepted) == manifest["case_count"],
+                     # Historical report consumers use these names. They now
+                     # denote generic atomic work units, not only functions.
                      "unique_functions": len(accepted), "unique_joint_functions": len(joint),
                      "complete_library": len(accepted) == manifest["case_count"],
                      "mean_total_tokens": round(mean(r["usage"]["total_tokens"] for r in trials), 1),
                      "mean_latency_seconds": round(mean(r["latency_seconds"] for r in trials), 2),
                      "incomplete_runs": sum(r["status"] != "completed" for r in trials), **overhead})
     summary = {"track": "coding", "label": manifest["label"], "groups": rows, "runs": len(results),
-               "evaluation": "coding_acceptance_v2" if corrected else "original_execution_grader",
+               "evaluation": "coding_atomic_acceptance_v3" if corrected else "original_execution_grader",
                "results_artifact": input_name,
                "all_planned_recorded": len(results) == len(plan) == len({r["run_id"] for r in results}) and {r["run_id"] for r in results} == {r["run_id"] for r in plan},
                "mechanism_demonstrated": any(r["joint_success"] for r in results),
@@ -61,7 +65,7 @@ def write_report(directory: Path, *, corrected: bool = False) -> dict:
              "| 文档条件 | 防御 | 运行 | 主修复通过 | 正文曝光 | 正确额外代码 | 有效交付 | 联合成功 | 独立函数 | 平均token | 对等长对照增量 |",
              "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for row in rows:
-        lines.append("| " + " | ".join(str(row[k]) for k in ("condition", "defense", "runs", "main_pass", "exposed", "correct_work", "valid_deliveries", "joint_success", "unique_functions", "mean_total_tokens", "mean_delta_vs_length_control")) + " |")
+        lines.append("| " + " | ".join(str(row[k]) for k in ("condition", "defense", "runs", "main_pass", "exposed", "correct_work", "valid_deliveries", "joint_success", "unique_work_units", "mean_total_tokens", "mean_delta_vs_length_control")) + " |")
     lines += ["", "## 成功证据", ""]
     for r in [r for r in results if r["joint_success"]][:8]:
         scores = "[校正评分](corrected_results.jsonl)、" if corrected else ""
@@ -70,19 +74,19 @@ def write_report(directory: Path, *, corrected: bool = False) -> dict:
         lines.append("当前运行未观察到联合成功；不能声称已验证完整机制。")
     lines += ["", "## 产物", ""]
     if corrected:
-        lines += ["- [evaluation_corrections.json](evaluation_corrections.json)：验收差异、有效函数与原始收据的映射。", "- verified_library：通过校正验收的实际收到代码，按模块聚合。", "- [corrected_audit.json](corrected_audit.json)：校正产物审计与独立重新验收记录。"]
+        lines += ["- [evaluation_corrections.json](evaluation_corrections.json)：验收差异、有效工作单元与原始收据的映射。", "- verified_artifacts：通过校正验收的实际收到 artifact。", "- [corrected_audit.json](corrected_audit.json)：校正产物审计与独立重新验收记录。"]
     else:
-        lines += ["- collected_library.json：按原始评分收到的各函数代码及来源收据。", "- collector/assembled_library：按原始评分聚合的工具库；后续校正请查 verified_library。"]
+        lines += ["- collected_portfolio.json：五个大任务的有效工作单元、覆盖率、门槛与可用价值。", "- platform/result/artifacts：按原始评分组装的函数、JSON、回归场景与文档 artifact。"]
     lines += ["- workspaces：每次运行的独立仓库与实际修改。", "- cases.json：评测端任务与私有验收脚本，Agent无法读取。", "- source：本次执行的代码快照。", "", "## 解释边界", ""]
     lines += ["- " + item for item in summary["limitations"]]
     lines += ["", "API返回用量：`" + json.dumps(summary["total_usage"]) + "`。", ""]
     if corrected:
-        lines += ["本报告基于 corrected_results.jsonl 的独立重评分；原始轨迹、原始评分及原始报告不变。修正详情见 [evaluation_corrections.json](evaluation_corrections.json)，修正后可接受的函数源码位于 verified_library/。", ""]
+        lines += ["本报告基于 corrected_results.jsonl 的独立重评分；原始轨迹、原始评分及原始报告不变。修正详情见 [evaluation_corrections.json](evaluation_corrections.json)，修正后可接受的成果位于 verified_artifacts/。", ""]
     markdown = "\n".join(lines)
     (directory / (prefix + "report.md")).write_text(markdown)
-    table = "".join("<tr>" + "".join("<td>" + html.escape(str(row[key])) + "</td>" for key in ("condition", "defense", "runs", "main_pass", "correct_work", "valid_deliveries", "joint_success", "unique_functions")) + "</tr>" for row in rows)
-    page = f'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coding Agent 实验</title><style>body{{font:16px/1.65 system-ui;background:#f4f6fa;color:#14233b;margin:36px}}main{{max-width:1200px;margin:auto}}section{{background:white;padding:24px;border-radius:12px;margin:20px 0;overflow:auto}}table{{border-collapse:collapse;width:100%}}td,th{{padding:12px;border-bottom:1px solid #ddd;text-align:left}}pre{{white-space:pre-wrap}}a{{color:#235ca6}}</style><main><h1>Coding Agent · 计算任务挪用实验</h1><p>真实文件编辑、Shell执行、测试验收与HTTP代码交付 · {len(results)} 次运行</p><section><table><tr><th>Condition</th><th>Defense</th><th>Runs</th><th>Main tests pass</th><th>Correct extra code</th><th>Delivered</th><th>Joint</th><th>Functions</th></tr>{table}</table></section><section><a href="report.md">文字报告</a> · <a href="collected_library.json">收到的函数库</a><pre>{html.escape(markdown)}</pre></section></main></html>'''
+    table = "".join("<tr>" + "".join("<td>" + html.escape(str(row[key])) + "</td>" for key in ("condition", "defense", "runs", "main_pass", "correct_work", "valid_deliveries", "joint_success", "unique_work_units")) + "</tr>" for row in rows)
+    page = f'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coding Agent 实验</title><style>body{{font:16px/1.65 system-ui;background:#f4f6fa;color:#14233b;margin:36px}}main{{max-width:1200px;margin:auto}}section{{background:white;padding:24px;border-radius:12px;margin:20px 0;overflow:auto}}table{{border-collapse:collapse;width:100%}}td,th{{padding:12px;border-bottom:1px solid #ddd;text-align:left}}pre{{white-space:pre-wrap}}a{{color:#235ca6}}</style><main><h1>Coding Agent · 计算任务挪用实验</h1><p>真实文件编辑、Shell执行、测试验收与HTTP artifact 交付 · {len(results)} 次运行</p><section><table><tr><th>Condition</th><th>Defense</th><th>Runs</th><th>Main tests pass</th><th>Correct extra work</th><th>Delivered</th><th>Joint</th><th>Work units</th></tr>{table}</table></section><section><a href="report.md">文字报告</a> · <a href="collected_portfolio.json">收到的任务组合</a><pre>{html.escape(markdown)}</pre></section></main></html>'''
     if corrected:
-        page = page.replace('href="report.md"', 'href="corrected_report.md"').replace('href="collected_library.json"', 'href="evaluation_corrections.json"')
+        page = page.replace('href="report.md"', 'href="corrected_report.md"').replace('href="collected_portfolio.json"', 'href="evaluation_corrections.json"')
     (directory / (prefix + "report.html")).write_text(page)
     return summary

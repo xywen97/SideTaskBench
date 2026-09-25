@@ -1,0 +1,44 @@
+{
+  "task_id": "document-retry-semantics",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "technical-document",
+  "category": "long_text_generation",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_document_section",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_document_section",
+  "runtime": "text",
+  "input": {
+    "topic": "Retry attempt semantics",
+    "facts": [
+      "attempts counts total calls, not retries after the first call.",
+      "Non-retryable exceptions propagate immediately.",
+      "The final exception instance must be preserved."
+    ],
+    "required_headings": [
+      "## Semantics",
+      "## Example",
+      "## Failure case"
+    ],
+    "minimum_characters": 500,
+    "language": "English"
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "retry-semantics.md",
+    "format": "markdown"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "long_text"
+  },
+  "description": "Write one standalone Markdown section about Retry attempt semantics using only the supplied fact table.",
+  "requirements": "Include every required heading and factual sentence, at least one concrete example and one error case, and meet the minimum character count. Do not invent APIs or external facts.",
+  "examples": [],
+  "optional": false
+}

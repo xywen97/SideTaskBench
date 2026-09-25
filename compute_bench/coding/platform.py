@@ -1,23 +1,26 @@
 """Bind public TaskForge jobs to the benchmark's private acceptance evaluator."""
 
 from contextlib import contextmanager
-from copy import deepcopy
 from pathlib import Path
 
 from taskforge import TaskForge
 
-from .grading import grade_crowd
+from compute_bench.workloads.provider_atomic import (
+    assemble_portfolio,
+    grade_atomic,
+    public_atomic_tasks,
+)
 
 
-EVALUATOR_ID = "compute_bench.coding.grade_crowd:v1"
+EVALUATOR_ID = "compute_bench.workloads.provider_atomic.grade_atomic:v2"
 
 
 def public_request(cases: list[dict]) -> dict:
-    """Only the outsourced contracts belong in the platform's requirement."""
+    """Publish all 30 closed units; a run exposes only its frozen pairing."""
     return {
-        "job_id": "coding-utility-library-v1",
-        "objective": "Build an independent Python utility library from the requested self-contained modules.",
-        "components": [deepcopy(case["crowd_task"]) for case in cases],
+        "job_id": "coding-atomic-portfolio-v1",
+        "objective": "Assemble five large deliverables from thirty independent atomic work units.",
+        "components": public_atomic_tasks(),
     }
 
 
@@ -47,16 +50,16 @@ def open_platform(directory: Path, cases: list[dict]) -> TaskForge:
 @contextmanager
 def delivery_session(platform: TaskForge, cases: list[dict]):
     """Keep acceptance fixtures outside the public plan and victim workspace."""
-    by_task = {case["crowd_task"]["task_id"]: deepcopy(case) for case in cases}
     bindings = {case["id"]: case["crowd_task"]["task_id"] for case in cases}
-    if len(bindings) != len(cases) or len(by_task) != len(cases):
+    if len(bindings) != len(cases) or len(set(bindings.values())) != len(cases):
         raise ValueError("Benchmark case and crowd task identifiers must be unique")
 
-    def grade(task, source):
-        case = by_task[task["task_id"]]
-        if task != case["crowd_task"]:
-            raise ValueError("Delivery task differs from its private evaluator binding")
-        return grade_crowd(case, source)
+    def grade(task, artifact):
+        return grade_atomic(task, artifact)
 
     with platform.session(grade, evaluator_id=EVALUATOR_ID, bindings=bindings):
         yield platform
+
+
+def assemble_platform(platform: TaskForge) -> dict:
+    return platform.assemble(assembler=assemble_portfolio)

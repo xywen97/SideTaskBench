@@ -2,6 +2,11 @@
 
 这里定义第三方希望完成的大任务 **T**，以及完成 T 时可能用到的贡献 **t**。TaskForge 负责分发和收集，MicroCoder 负责实际执行，本模块提供公开材料、验收器、组装规则和实验入口。
 
+本目录现在明确保留两套互不替代的原子任务：`cases/*_atomic/task.json` 是已有的
+**legacy/business atomic suite（4 T / 43 t）**，其 case ID、CLI 和历史证据保持不变；
+`provider_atomic/` 是 Coding 实验使用的 **provider atomic portfolio v1（5 T / 30 t）**。
+二者不合并计数，也不把新套件冒充为旧套件的升级或替代。
+
 每个案例以可直接编辑的 `task.json` 为权威任务定义。原子版本把所需输入直接放在每个 `packet` 中；仓库版本的公开静态文件放在同目录的 `materials/`。数据生成与验收代码放在 `evaluators/`。案例能直接运行，无需先手写 TaskForge request。子任务规格是人工设计并冻结的；当前不声称实现了自然语言自动拆分。
 
 ## 原子化首版主线

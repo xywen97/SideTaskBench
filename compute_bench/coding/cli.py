@@ -15,7 +15,7 @@ def main(argv=None):
     run = sub.add_parser("run")
     run.add_argument("--env", type=Path, default=Path(__file__).resolve().parents[2] / ".env")
     run.add_argument("--output", type=Path)
-    run.add_argument("--cases", type=int, choices=range(1, 7), default=6)
+    run.add_argument("--cases", type=int, choices=range(1, 9), default=8)
     run.add_argument("--conditions", nargs="+", choices=["clean", "length_control", "direct", "wrapped"], default=["clean", "length_control", "direct", "wrapped"])
     run.add_argument("--defenses", nargs="+", choices=["none", "boundary", "egress"], default=["none"])
     run.add_argument("--repeats", type=int, default=2)
@@ -25,6 +25,8 @@ def main(argv=None):
     run.add_argument("--thinking", choices=["default", "enabled", "disabled"], default="default")
     run.add_argument("--label", default="coding_validation")
     run.add_argument("--seed", type=int, default=20260924)
+    run.add_argument("--pairing-rotation", type=int, default=0,
+                     help="Rotate U-to-t pairing over the 30-unit atomic catalog")
     report = sub.add_parser("report")
     report.add_argument("directory", type=Path)
     report.add_argument("--corrected", action="store_true")
@@ -36,7 +38,7 @@ def main(argv=None):
     resume.add_argument("--env", type=Path, default=Path(__file__).resolve().parents[2] / ".env")
     audit = sub.add_parser("audit")
     audit.add_argument("directory", type=Path)
-    audit.add_argument("--corrected", action="store_true", help="Audit versioned correction sidecars and verified library against immutable raw evidence")
+    audit.add_argument("--corrected", action="store_true", help="Audit versioned correction sidecars and verified artifacts against immutable raw evidence")
     audit.add_argument("--regrade", action="store_true", help="Independently execute candidates in the local sandbox; no LLM calls")
     audit.add_argument("--verbose", action="store_true")
     audit.add_argument("--output", type=Path)
@@ -50,7 +52,8 @@ def main(argv=None):
         output = args.output or Path("coding_runs") / datetime.now().strftime("%Y%m%d_%H%M%S")
         summary = execute_coding(settings, output, count=args.cases, conditions=args.conditions, defenses=args.defenses,
                                  repeats=args.repeats, workers=args.workers, max_steps=args.max_steps,
-                                 variant=args.variant, label=args.label, seed=args.seed)
+                                 variant=args.variant, label=args.label, seed=args.seed,
+                                 pairing_rotation=args.pairing_rotation)
         print(json.dumps({"report": str(output.resolve() / "report.html"), "mechanism_demonstrated": summary["mechanism_demonstrated"], "usage": summary["total_usage"]}))
     elif args.command == "resume":
         from .runner import resume_coding
@@ -86,4 +89,5 @@ def main(argv=None):
         from .tasks import build_coding_cases
         from .grading import grade_crowd
         cases = build_coding_cases()
-        print(json.dumps({"sandbox": Sandbox.probe(), "cases": len(cases), "reference_crowd_pass": [grade_crowd(case, case["crowd_reference_code"])["passed"] for case in cases]}, indent=2))
+        print(json.dumps({"sandbox": Sandbox.probe(), "cases": len(cases), "atomic_catalog": 30,
+                          "reference_crowd_pass": [grade_crowd(case, case["crowd_reference_artifact"])["passed"] for case in cases]}, indent=2))

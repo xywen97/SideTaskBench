@@ -1,0 +1,34 @@
+{
+  "task_id": "debug-moving-average",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_debug",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "debug_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "moving_average(...)",
+    "source": "def moving_average(values, width):\n    return [sum(values[i:i+width])/width for i in range(len(values)-width)]\n",
+    "contract": "Return averages for every complete consecutive window. width must be a positive non-bool int no larger than len(values), else ValueError. Do not mutate values."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "moving_average.py",
+    "function": "moving_average"
+  },
+  "resource_profile": {
+    "class": "medium",
+    "expected_output": "short_code"
+  },
+  "description": "Return averages for every complete consecutive window. width must be a positive non-bool int no larger than len(values), else ValueError. Do not mutate values.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false
+}

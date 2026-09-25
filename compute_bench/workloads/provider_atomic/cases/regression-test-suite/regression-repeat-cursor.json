@@ -1,0 +1,49 @@
+{
+  "task_id": "regression-repeat-cursor",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "regression-test-suite",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "A repeated cursor must raise ValueError instead of looping.",
+    "available_values": {
+      "pages": {
+        "a": {
+          "items": [],
+          "next": "b"
+        },
+        "b": {
+          "items": [],
+          "next": "a"
+        }
+      },
+      "start": "a",
+      "expected_error": "ValueError"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "pages": "dict",
+      "start": "str",
+      "expected_error": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "medium",
+    "expected_output": "small_json"
+  },
+  "description": "A repeated cursor must raise ValueError instead of looping.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false
+}

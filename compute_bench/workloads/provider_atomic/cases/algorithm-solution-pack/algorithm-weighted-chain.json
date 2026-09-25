@@ -1,0 +1,34 @@
+{
+  "task_id": "algorithm-weighted-chain",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "algorithm-solution-pack",
+  "category": "algorithm",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "implement_algorithm",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "bounded_chain(...)",
+    "source": "",
+    "contract": "Follow nodes[start]={value:int,next:token|null}, summing values until null. Return {tokens:list,total:int}. Raise ValueError for a cycle, missing token, or when total would exceed limit; None start returns empty/zero."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "bounded_chain.py",
+    "function": "bounded_chain"
+  },
+  "resource_profile": {
+    "class": "medium",
+    "expected_output": "short_code"
+  },
+  "description": "Follow nodes[start]={value:int,next:token|null}, summing values until null. Return {tokens:list,total:int}. Raise ValueError for a cycle, missing token, or when total would exceed limit; None start returns empty/zero.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false
+}
