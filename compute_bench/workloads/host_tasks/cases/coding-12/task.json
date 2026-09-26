@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "id": "coding-12",
+  "title": "Validate an archive extraction plan before writing files",
+  "difficulty_tier": "extended",
+  "recommended_max_steps": 70,
+  "expected_reference_queries": 2,
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "reference": {
+    "topic": "Python archive extraction path traversal duplicate members file directory conflicts size limit",
+    "path": "reference/reference.md",
+    "compatibility_context": "Archive compatibility checks exercise one independent safe path manifest.",
+    "documents": [
+      {
+        "path": "reference/reference.md",
+        "workspace_path": "docs/reference.md",
+        "title": "Python zipfile — Work with ZIP archives",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/zipfile.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/zipfile.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "064b13bf633489d22735672e728d0639a66930a492b37a6fdd6bed036f5d5e8b",
+        "bytes": 33144,
+        "lines": 978,
+        "words": 4274,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "archive",
+          "member",
+          "directory",
+          "extract"
+        ]
+      },
+      {
+        "path": "reference/02-tarfile.rst",
+        "workspace_path": "docs/references/02-tarfile.rst",
+        "title": "Python tarfile — Read and write tar archives",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/tarfile.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/tarfile.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "3df803a1d89f482404bed10f033b3f1bba2ce50aa53b477202650de3f8048b2a",
+        "bytes": 50243,
+        "lines": 1433,
+        "words": 6220,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "archive",
+          "member",
+          "extract",
+          "path"
+        ]
+      },
+      {
+        "path": "reference/03-pathlib.rst",
+        "workspace_path": "docs/references/03-pathlib.rst",
+        "title": "Python pathlib — Object-oriented filesystem paths",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/pathlib.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/pathlib.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "454078ed13003708a5a5f2b9046d5a434e48e5de536725ed9d3ac8d2095a64a2",
+        "bytes": 41946,
+        "lines": 1354,
+        "words": 4569,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "path",
+          "filesystem",
+          "relative",
+          "absolute",
+          "parts"
+        ]
+      },
+      {
+        "path": "reference/04-tempfile.rst",
+        "workspace_path": "docs/references/04-tempfile.rst",
+        "title": "Python tempfile — Temporary files and directories",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/tempfile.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/tempfile.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "557d79d4ff2c72e7266c0a24cc713669f10afba6cd02da87d615f879bad65840",
+        "bytes": 16868,
+        "lines": 404,
+        "words": 2277,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "archive",
+          "temporary",
+          "directory",
+          "cleanup"
+        ]
+      },
+      {
+        "path": "reference/05-stat.rst",
+        "workspace_path": "docs/references/05-stat.rst",
+        "title": "Python stat — File mode constants",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/stat.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/stat.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "4c0c0e15c0914826d251b60fa3840ea074b702df515df518d997c914d2a5d965",
+        "bytes": 10134,
+        "lines": 437,
+        "words": 1344,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "file",
+          "directory",
+          "mode",
+          "metadata"
+        ]
+      },
+      {
+        "path": "reference/06-io.rst",
+        "workspace_path": "docs/references/06-io.rst",
+        "title": "Python io — Core stream tools",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/io.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/io.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "e76dcbdef557dd6fedb2c115fb6e0da8fba1393fcdf9ce889e846a052662d58e",
+        "bytes": 46664,
+        "lines": 1188,
+        "words": 5989,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "stream",
+          "bytes",
+          "size",
+          "file"
+        ]
+      }
+    ]
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  }
+}

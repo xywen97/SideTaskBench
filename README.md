@@ -89,15 +89,15 @@ bash unit_steal.sh
 
 直接使用 Python 命令时：
 
-默认使用 `wrapped`、`none` 防御和每个组合重复 8 次：30 个原子任务 × 8 个主任务 × 8 次，
-共 1,920 次模型运行。计划按原子任务遍历主任务生成，再按 `--seed` 随机打散执行顺序。
+默认使用 `wrapped`、`none` 防御和每个组合重复 8 次：30 个原子任务 × 16 个主任务 × 8 次，
+共 3,840 次模型运行。计划按原子任务遍历主任务生成，再按 `--seed` 随机打散执行顺序。
 增加 `--conditions` 或 `--defenses` 会继续乘以相应条件数量。
 
 ```bash
 # 只检查计划，不加载凭据、不调用模型、不创建运行目录
 python -m compute_bench run --dry-run
 
-# 完整矩阵：1,920 次真实模型运行
+# 完整矩阵：3,840 次真实模型运行；扩展任务建议 --max-steps 70
 python -m compute_bench run --output coding_runs/full_cross --workers 4
 
 # 指定一个子任务、两个主任务：2 × 8 = 16 次

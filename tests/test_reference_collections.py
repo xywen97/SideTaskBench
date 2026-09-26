@@ -16,22 +16,23 @@ from test_reference_rewriting import generate_fixture
 
 
 class ReferenceCollectionsTests(unittest.TestCase):
-    def test_all_hosts_have_three_long_pinned_sources_and_license_files(self):
+    def test_all_hosts_have_pinned_sources_and_extended_hosts_have_six(self):
         cases = load_host_tasks()
-        self.assertEqual(len(cases), 8)
+        self.assertEqual(len(cases), 16)
         for case in cases:
             with self.subTest(case=case['id']):
                 docs = case['reference_documents']
-                self.assertEqual(len(docs), 3)
-                self.assertEqual(len({d['source_url'] for d in docs}), 3)
+                expected = 6 if int(case['id'].split('-')[1]) >= 9 else 3
+                self.assertEqual(len(docs), expected)
+                self.assertEqual(len({d['source_url'] for d in docs}), expected)
                 self.assertEqual(case['reference_text'], docs[0]['content'])
                 for doc in docs:
                     data = (CASE_ROOT / case['id'] / doc['path']).read_bytes()
                     self.assertEqual(data.decode(), doc['content'])
                     self.assertEqual(hashlib.sha256(data).hexdigest(), doc['sha256'])
                     self.assertEqual(len(data), doc['bytes'])
-                    self.assertGreaterEqual(doc['words'], 500)
-                    self.assertGreaterEqual(doc['lines'], 100)
+                    self.assertGreaterEqual(doc['words'], 250)
+                    self.assertGreaterEqual(doc['lines'], 50)
                     self.assertIn(doc['upstream_commit'], doc['source_url'])
                     self.assertTrue((CASE_ROOT / case['id'] / doc['license_path']).is_file())
 
@@ -58,6 +59,21 @@ class ReferenceCollectionsTests(unittest.TestCase):
                     self.assertFalse(env.events[-1]['exposed'])
                     self.assertEqual(result['content'], doc['content'])
             self.assertIn('https://github.com/python/cpython', (workspace / 'docs/reference-index.md').read_text())
+
+    def test_extended_reference_search_supports_follow_up_queries(self):
+        case = build_coding_cases(host_task_ids=['coding-09'], atomic_task_ids=['rewrite-user-record'])[0]
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary) / 'workspace'
+            with patch('compute_bench.coding.environment.Sandbox') as sandbox:
+                sandbox.return_value.run.return_value = {'exit_code': 0}
+                create_workspace(case, workspace, 'clean', 'compatibility_v4')
+            with patch('microcoder.tools.shell.Sandbox'):
+                env = CodingEnvironment(case, workspace, 'clean', variant='compatibility_v4')
+            path_results = env.execute('search_reference', {'query': 'relative path normalize'})['results']
+            hash_results = env.execute('search_reference', {'query': 'sha256 digest'})['results']
+            self.assertLessEqual(len(path_results), 3)
+            self.assertLessEqual(len(hash_results), 3)
+            self.assertNotEqual([r['path'] for r in path_results], [r['path'] for r in hash_results])
 
     def test_rewrite_freezes_companions_without_sending_host_or_extra_docs_to_model(self):
         cases = build_coding_cases(host_task_ids=['coding-08'], atomic_task_ids=['rewrite-user-record'])

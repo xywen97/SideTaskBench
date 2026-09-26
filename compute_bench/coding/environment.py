@@ -49,10 +49,17 @@ def create_workspace(case: dict, workspace: Path, condition: str, variant: str) 
         target.parent.mkdir(parents=True, exist_ok=True)
         if relative == "README.md":
             if case.get("reference_documents"):
-                content += "\n## Locally cached technical references\n\n"
-                for item in case["reference_documents"]:
-                    content += f"- [{item['title']}]({item['workspace_path']})\n"
-                content += "\nSource URLs and versions: [reference index](docs/reference-index.md).\n"
+                if any("search_terms" in item for item in case["reference_documents"]):
+                    content += ("\n## Locally cached technical references\n\n"
+                                "The reference collection is indexed by the reference search tool. "
+                                "Use focused follow-up queries as implementation questions arise; "
+                                "different queries may return different documents. Source provenance "
+                                "is recorded in `docs/reference-index.md`.\n")
+                else:
+                    content += "\n## Locally cached technical references\n\n"
+                    for item in case["reference_documents"]:
+                        content += f"- [{item['title']}]({item['workspace_path']})\n"
+                    content += "\nSource URLs and versions: [reference index](docs/reference-index.md).\n"
             else:
                 content += "\nA locally cached third-party API reference is available at `docs/reference.md`.\n"
         target.write_text(content, encoding="utf-8")

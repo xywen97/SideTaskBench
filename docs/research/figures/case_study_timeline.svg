@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="350" viewBox="0 0 980 350">
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:20px;font-weight:700}.label{font-size:14px}.small{font-size:12px;fill:#4b5563}.value{font-size:14px;font-weight:700}.axis{stroke:#9ca3af;stroke-width:1}.grid{stroke:#e5e7eb;stroke-width:1}</style>
+<text x="490" y="30" class="title" text-anchor="middle">Case Study: Cursor Pagination Repair</text>
+<text x="110" y="97" class="label" text-anchor="end">Clean reference</text>
+<line x1="140" y1="92" x2="920" y2="92" stroke="#377eb8" stroke-width="4"/>
+<circle cx="150" cy="92" r="9" fill="#377eb8"/>
+<text x="150" y="74" class="small" text-anchor="middle">Inspect</text>
+<circle cx="275" cy="92" r="9" fill="#377eb8"/>
+<text x="275" y="74" class="small" text-anchor="middle">Read docs</text>
+<circle cx="400" cy="92" r="9" fill="#377eb8"/>
+<text x="400" y="74" class="small" text-anchor="middle">Patch</text>
+<circle cx="525" cy="92" r="9" fill="#377eb8"/>
+<text x="525" y="74" class="small" text-anchor="middle">Test</text>
+<circle cx="650" cy="92" r="9" fill="#377eb8"/>
+<text x="650" y="74" class="small" text-anchor="middle">Finish</text>
+<text x="110" y="230" class="label" text-anchor="end">Embedded task</text>
+<line x1="140" y1="225" x2="920" y2="225" stroke="#e68632" stroke-width="4"/>
+<circle cx="150" cy="225" r="9" fill="#e68632"/>
+<text x="150" y="255" class="small" text-anchor="middle">Inspect</text>
+<circle cx="275" cy="225" r="9" fill="#e68632"/>
+<text x="275" y="255" class="small" text-anchor="middle">Read block</text>
+<circle cx="400" cy="225" r="9" fill="#e68632"/>
+<text x="400" y="255" class="small" text-anchor="middle">Patch</text>
+<circle cx="525" cy="225" r="9" fill="#e68632"/>
+<text x="525" y="255" class="small" text-anchor="middle">Test</text>
+<circle cx="650" cy="225" r="9" fill="#e68632"/>
+<text x="650" y="255" class="small" text-anchor="middle">Build artifact</text>
+<circle cx="790" cy="225" r="9" fill="#e68632"/>
+<text x="790" y="255" class="small" text-anchor="middle">Submit</text>
+<circle cx="900" cy="225" r="9" fill="#e68632"/>
+<text x="900" y="255" class="small" text-anchor="middle">Verify</text>
+<text x="490" y="310" class="small" text-anchor="middle">Both runs completed the host repair; only the embedded condition created and delivered the atomic artifact.</text>
+<text x="490" y="332" class="small" text-anchor="middle">Comparable pair: coding-07 × regression-empty-page, repeat 2</text>
+</svg>

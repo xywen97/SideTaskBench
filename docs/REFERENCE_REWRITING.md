@@ -72,7 +72,7 @@ python -m compute_bench rewrite generate rewrite_runs/demo --workers 4
 # python -m compute_bench.rewriting generate rewrite_runs/demo
 ```
 
-两个 ID 参数省略某个维度时全选。不传任何 ID 会准备 240 个组合，生成阶段会对每个组合调用模型一次。
+两个 ID 参数省略某个维度时全选。不传任何 ID 会准备 480 个组合，生成阶段会对每个组合调用模型一次。
 `generate` 使用项目 `.env` 中的模型配置；可通过 `--env /path/to/rewrite.env` 和 `--model MODEL` 单独指定改造模型，不修改主 Agent 的配置。
 `--thinking` 可指定思考模式。首次安装依赖与现有主程序一致。
 

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430">
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:20px;font-weight:700}.label{font-size:14px}.small{font-size:12px;fill:#4b5563}.value{font-size:14px;font-weight:700}.axis{stroke:#9ca3af;stroke-width:1}.grid{stroke:#e5e7eb;stroke-width:1}</style>
+<text x="450" y="30" class="title" text-anchor="middle">Placement Ablation: Valid Delivery Rate</text>
+<line x1="80" y1="340.0" x2="870" y2="340.0" class="grid"/>
+<text x="70" y="345.0" class="small" text-anchor="end">0%</text>
+<line x1="80" y1="284.0" x2="870" y2="284.0" class="grid"/>
+<text x="70" y="289.0" class="small" text-anchor="end">10%</text>
+<line x1="80" y1="228.0" x2="870" y2="228.0" class="grid"/>
+<text x="70" y="233.0" class="small" text-anchor="end">20%</text>
+<line x1="80" y1="172.0" x2="870" y2="172.0" class="grid"/>
+<text x="70" y="177.0" class="small" text-anchor="end">30%</text>
+<line x1="80" y1="116.0" x2="870" y2="116.0" class="grid"/>
+<text x="70" y="121.0" class="small" text-anchor="end">40%</text>
+<line x1="80" y1="60.0" x2="870" y2="60.0" class="grid"/>
+<text x="70" y="65.0" class="small" text-anchor="end">50%</text>
+<rect x="105" y="200.0" width="75" height="140.0" rx="4" fill="#6b7280"/>
+<text x="142.5" y="192.0" class="value" text-anchor="middle">25.0%</text>
+<text x="142.5" y="370" class="label" text-anchor="middle">Middle</text>
+<rect x="230" y="226.3" width="75" height="113.7" rx="4" fill="#6b7280"/>
+<text x="267.5" y="218.32" class="value" text-anchor="middle">20.3%</text>
+<text x="267.5" y="370" class="label" text-anchor="middle">Near end</text>
+<rect x="355" y="86.3" width="75" height="253.7" rx="4" fill="#377eb8"/>
+<text x="392.5" y="78.32000000000002" class="value" text-anchor="middle">45.3%</text>
+<text x="392.5" y="370" class="label" text-anchor="middle">End A</text>
+<rect x="480" y="142.9" width="75" height="197.1" rx="4" fill="#377eb8"/>
+<text x="517.5" y="134.87999999999997" class="value" text-anchor="middle">35.2%</text>
+<text x="517.5" y="370" class="label" text-anchor="middle">End B</text>
+<rect x="605" y="117.1" width="75" height="222.9" rx="4" fill="#377eb8"/>
+<text x="642.5" y="109.12000000000003" class="value" text-anchor="middle">39.8%</text>
+<text x="642.5" y="370" class="label" text-anchor="middle">End C</text>
+<rect x="730" y="115.4" width="75" height="224.6" rx="4" fill="#4daf4a"/>
+<text x="767.5" y="107.44" class="value" text-anchor="middle">40.1%</text>
+<text x="767.5" y="370" class="label" text-anchor="middle">End pooled</text>
+<text x="450" y="410" class="small" text-anchor="middle">End C is the comparable 4 × 4 subset of the full-matrix run.</text>
+</svg>

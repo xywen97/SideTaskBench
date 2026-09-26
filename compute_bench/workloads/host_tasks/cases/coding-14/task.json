@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "id": "coding-14",
+  "title": "Schedule only the dependency closure in stable batches",
+  "difficulty_tier": "extended",
+  "recommended_max_steps": 70,
+  "expected_reference_queries": 2,
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "reference": {
+    "topic": "Python dependency graph target closure stable topological batches cycle validation",
+    "path": "reference/reference.md",
+    "compatibility_context": "Dependency compatibility checks exercise one independent stable ordering example.",
+    "documents": [
+      {
+        "path": "reference/reference.md",
+        "workspace_path": "docs/reference.md",
+        "title": "Python graphlib — Topological sorting",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/graphlib.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/graphlib.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "ba4f3e8069d7d0b9a9a0c1bb19e145d823f412ce4f3f78c86448696636e5640f",
+        "bytes": 8714,
+        "lines": 210,
+        "words": 1125,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "graph",
+          "dependency",
+          "cycle",
+          "topological"
+        ]
+      },
+      {
+        "path": "reference/02-heapq.rst",
+        "workspace_path": "docs/references/02-heapq.rst",
+        "title": "Python heapq — Heap queue algorithm",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/heapq.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/heapq.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "c1297b0ac59cb633a5386a3e1f1b613f72c6421ee93fd4a94084fe762eb64fc4",
+        "bytes": 13928,
+        "lines": 322,
+        "words": 2116,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "priority",
+          "stable",
+          "ready",
+          "order"
+        ]
+      },
+      {
+        "path": "reference/03-collections.rst",
+        "workspace_path": "docs/references/03-collections.rst",
+        "title": "Python collections — Container data types",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/collections.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/collections.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "5804f984a8300d5a7d018026f0fa96ce59afcb53601769b6ce64b294dff0e40d",
+        "bytes": 53387,
+        "lines": 1391,
+        "words": 6648,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "mapping",
+          "order",
+          "layer",
+          "counter"
+        ]
+      },
+      {
+        "path": "reference/04-stdtypes.rst",
+        "workspace_path": "docs/references/04-stdtypes.rst",
+        "title": "Python built-in set and mapping types",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/stdtypes.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/stdtypes.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "397bf1f91d0515c1bc26e5c52d64efd6079d0be0589945cac4af6eec5245e5c6",
+        "bytes": 213883,
+        "lines": 5667,
+        "words": 27094,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "set",
+          "dict",
+          "dependency",
+          "mapping"
+        ]
+      },
+      {
+        "path": "reference/05-copy.rst",
+        "workspace_path": "docs/references/05-copy.rst",
+        "title": "Python copy — Shallow and deep copy",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/copy.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/copy.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "38f89309101e4d29e3232a716e1a00c488cba423b4cb9f7e0cec4b6d003ea0b0",
+        "bytes": 3476,
+        "lines": 97,
+        "words": 507,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "copy",
+          "mutation",
+          "graph",
+          "object"
+        ]
+      },
+      {
+        "path": "reference/06-enum.rst",
+        "workspace_path": "docs/references/06-enum.rst",
+        "title": "Python enum — Enumerations",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/enum.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/enum.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "4c6f910309fa5eea408329c764b4a89d351efb6357d9c8f4127e95e7de5c525f",
+        "bytes": 29902,
+        "lines": 940,
+        "words": 3644,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "state",
+          "status",
+          "batch",
+          "value"
+        ]
+      }
+    ]
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  }
+}

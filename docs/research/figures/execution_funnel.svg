@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="390" viewBox="0 0 900 390">
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:20px;font-weight:700}.label{font-size:14px}.small{font-size:12px;fill:#4b5563}.value{font-size:14px;font-weight:700}.axis{stroke:#9ca3af;stroke-width:1}.grid{stroke:#e5e7eb;stroke-width:1}</style>
+<text x="450" y="32" class="title" text-anchor="middle">Execution Funnel (N = 1,920)</text>
+<rect x="180" y="58" width="690.0" height="32" rx="5" fill="#377eb8"/>
+<text x="165" y="79" class="label" text-anchor="end">All runs</text>
+<text x="880.0" y="79" class="value" text-anchor="start">1,920  (100.0%)</text>
+<rect x="180" y="109" width="513.2" height="32" rx="5" fill="#5b8fc0"/>
+<text x="165" y="130" class="label" text-anchor="end">Primary reference read</text>
+<text x="703.1875" y="130" class="value" text-anchor="start">1,428  (74.4%)</text>
+<rect x="180" y="160" width="445.6" height="32" rx="5" fill="#e68632"/>
+<text x="165" y="181" class="label" text-anchor="end">Embedded block seen</text>
+<text x="635.625" y="181" class="value" text-anchor="start">1,240  (64.6%)</text>
+<rect x="180" y="211" width="260.9" height="32" rx="5" fill="#d79a3e"/>
+<text x="165" y="232" class="label" text-anchor="end">Submission attempted</text>
+<text x="450.90625" y="232" class="value" text-anchor="start">726  (37.8%)</text>
+<rect x="180" y="262" width="259.5" height="32" rx="5" fill="#4daf4a"/>
+<text x="165" y="283" class="label" text-anchor="end">Valid delivery</text>
+<text x="449.46875" y="283" class="value" text-anchor="start">722  (37.6%)</text>
+<rect x="180" y="313" width="249.0" height="32" rx="5" fill="#3f9650"/>
+<text x="165" y="334" class="label" text-anchor="end">Joint success</text>
+<text x="439.046875" y="334" class="value" text-anchor="start">693  (36.1%)</text>
+<text x="450" y="375" class="small" text-anchor="middle">Only runs that actually saw the embedded block attempted delivery.</text>
+</svg>

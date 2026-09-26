@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "id": "coding-09",
+  "title": "Build a deterministic and safe file copy manifest",
+  "difficulty_tier": "extended",
+  "recommended_max_steps": 70,
+  "expected_reference_queries": 2,
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "reference": {
+    "topic": "Python path normalization relative paths SHA-256 manifest deterministic ordering",
+    "path": "reference/reference.md",
+    "compatibility_context": "Filesystem compatibility checks exercise one independent pure data transformation.",
+    "documents": [
+      {
+        "path": "reference/reference.md",
+        "workspace_path": "docs/reference.md",
+        "title": "Python pathlib — Object-oriented filesystem paths",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/pathlib.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/pathlib.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "454078ed13003708a5a5f2b9046d5a434e48e5de536725ed9d3ac8d2095a64a2",
+        "bytes": 41946,
+        "lines": 1354,
+        "words": 4569,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "path",
+          "filesystem",
+          "relative",
+          "absolute",
+          "parts"
+        ]
+      },
+      {
+        "path": "reference/02-os.path.rst",
+        "workspace_path": "docs/references/02-os.path.rst",
+        "title": "Python os.path — Common pathname manipulations",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/os.path.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/os.path.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "2f7279c523da917d493a82b9caac9b98eff341807754492c41d22024b1b57fad",
+        "bytes": 18878,
+        "lines": 541,
+        "words": 2526,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "path",
+          "normalize",
+          "absolute",
+          "commonpath",
+          "basename"
+        ]
+      },
+      {
+        "path": "reference/03-fnmatch.rst",
+        "workspace_path": "docs/references/03-fnmatch.rst",
+        "title": "Python fnmatch — Unix filename pattern matching",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/fnmatch.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/fnmatch.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "bcd0607f0fe7ddf0fef768e05ef47b049ed12ba824e9f4e9b113e5842bd60e5e",
+        "bytes": 3612,
+        "lines": 107,
+        "words": 416,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "glob",
+          "pattern",
+          "filename",
+          "match"
+        ]
+      },
+      {
+        "path": "reference/04-hashlib.rst",
+        "workspace_path": "docs/references/04-hashlib.rst",
+        "title": "Python hashlib — Secure hashes and message digests",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/hashlib.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/hashlib.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "b0fbee6300e9a067a732c11ab96664cadba855734358c66e9fe914c9a03ca106",
+        "bytes": 31244,
+        "lines": 846,
+        "words": 3768,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "digest",
+          "sha256",
+          "hash",
+          "hexdigest"
+        ]
+      },
+      {
+        "path": "reference/05-shutil.rst",
+        "workspace_path": "docs/references/05-shutil.rst",
+        "title": "Python shutil — High-level file operations",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/shutil.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/shutil.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "3359088f7b4756888cccada3da5257c5b5e2e281e2036e3519d0b8605d05f198",
+        "bytes": 32620,
+        "lines": 830,
+        "words": 4187,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "copy",
+          "filesystem",
+          "archive",
+          "metadata"
+        ]
+      },
+      {
+        "path": "reference/06-exceptions.rst",
+        "workspace_path": "docs/references/06-exceptions.rst",
+        "title": "Python built-in exceptions",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/exceptions.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/exceptions.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "03f3848a26d2104e0ce8bed1f72c31e6447b7a3ca3fbd9c2c6d581cb29ccd164",
+        "bytes": 37694,
+        "lines": 1036,
+        "words": 4790,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "valueerror",
+          "typeerror",
+          "exception",
+          "validation"
+        ]
+      }
+    ]
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  }
+}

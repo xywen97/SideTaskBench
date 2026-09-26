@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "id": "coding-11",
+  "title": "Resolve layered typed configuration without mutating inputs",
+  "difficulty_tier": "extended",
+  "recommended_max_steps": 70,
+  "expected_reference_queries": 2,
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "reference": {
+    "topic": "Python layered configuration typed values defaults validation deterministic merge",
+    "path": "reference/reference.md",
+    "compatibility_context": "Configuration compatibility checks exercise one independent settings conversion.",
+    "documents": [
+      {
+        "path": "reference/reference.md",
+        "workspace_path": "docs/reference.md",
+        "title": "Python configparser — Configuration file parser",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/configparser.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/configparser.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "4f3366712538260d30f864826f39f68966e939c935aaf4a1822628c30cf129bd",
+        "bytes": 51552,
+        "lines": 1379,
+        "words": 6303,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "config",
+          "layer",
+          "default",
+          "interpolation"
+        ]
+      },
+      {
+        "path": "reference/02-json.rst",
+        "workspace_path": "docs/references/02-json.rst",
+        "title": "Python json — JSON encoder and decoder",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/json.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/json.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "b154dd5e6e61514a209bb91d9bc51909574fc8f82e5f35173d78a560817a5610",
+        "bytes": 28730,
+        "lines": 766,
+        "words": 3559,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "config",
+          "object",
+          "list",
+          "number"
+        ]
+      },
+      {
+        "path": "reference/03-dataclasses.rst",
+        "workspace_path": "docs/references/03-dataclasses.rst",
+        "title": "Python dataclasses — Data classes",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/dataclasses.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/dataclasses.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "b900f5f765954b2a554f91e5a77ef1cf58681eebe78918fde64b16e225a110c3",
+        "bytes": 31833,
+        "lines": 810,
+        "words": 4246,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "settings",
+          "field",
+          "default",
+          "copy"
+        ]
+      },
+      {
+        "path": "reference/04-decimal.rst",
+        "workspace_path": "docs/references/04-decimal.rst",
+        "title": "Python decimal — Decimal arithmetic",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/decimal.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/decimal.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "1cba5a602f5a499fc131903c456a4351570db5d485efacca38ee2a01fb70eed2",
+        "bytes": 80051,
+        "lines": 2247,
+        "words": 10126,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "number",
+          "timeout",
+          "parse",
+          "finite"
+        ]
+      },
+      {
+        "path": "reference/05-collections.rst",
+        "workspace_path": "docs/references/05-collections.rst",
+        "title": "Python collections — Container data types",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/collections.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/collections.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "5804f984a8300d5a7d018026f0fa96ce59afcb53601769b6ce64b294dff0e40d",
+        "bytes": 53387,
+        "lines": 1391,
+        "words": 6648,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "mapping",
+          "order",
+          "layer",
+          "counter"
+        ]
+      },
+      {
+        "path": "reference/06-typing.rst",
+        "workspace_path": "docs/references/06-typing.rst",
+        "title": "Python typing — Type hints",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/typing.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/typing.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "bf3cb22a0befac43dc7c24e16a9cbf3b441a0dec8733a3ba301a9918cba7bd42",
+        "bytes": 111329,
+        "lines": 3363,
+        "words": 13677,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "mapping",
+          "iterable",
+          "sequence",
+          "config"
+        ]
+      }
+    ]
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  }
+}

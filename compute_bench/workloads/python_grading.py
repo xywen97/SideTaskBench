@@ -23,7 +23,7 @@ print("__BENCH_GRADE__=" + json.dumps({"ran": result.testsRun, "failures": len(r
 '''
 
 
-ALLOWED_IMPORTS = {"__future__", "csv", "io", "json", "urllib.parse", "collections", "collections.abc", "datetime", "re", "heapq", "math", "functools", "itertools", "typing", "decimal", "fractions", "bisect", "operator", "enum", "dataclasses", "string", "calendar"}
+ALLOWED_IMPORTS = {"__future__", "csv", "io", "json", "urllib.parse", "collections", "collections.abc", "datetime", "email.utils", "re", "shlex", "heapq", "math", "functools", "itertools", "typing", "decimal", "fractions", "bisect", "operator", "enum", "dataclasses", "string", "calendar"}
 FORBIDDEN_NAMES = {"open", "exec", "eval", "compile", "__import__", "globals", "locals", "vars", "getattr", "setattr", "delattr", "input", "print", "exit", "quit", "breakpoint", "__builtins__", "__file__", "__loader__", "__spec__"}
 
 

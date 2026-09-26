@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "id": "coding-16",
+  "title": "Normalize and deduplicate recipient mailboxes",
+  "difficulty_tier": "extended",
+  "recommended_max_steps": 70,
+  "expected_reference_queries": 2,
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "reference": {
+    "topic": "Python email address parsing display names mailbox validation deduplication",
+    "path": "reference/reference.md",
+    "compatibility_context": "Email compatibility checks exercise one independent address record conversion.",
+    "documents": [
+      {
+        "path": "reference/reference.md",
+        "workspace_path": "docs/reference.md",
+        "title": "Python email.utils — Miscellaneous utilities",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/email.utils.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/email.utils.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "636a9be2e4600a5aada49078bd570333b7470233f9637339bfc3ec0d03b48756",
+        "bytes": 9797,
+        "lines": 231,
+        "words": 1359,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "email",
+          "address",
+          "mailbox",
+          "parseaddr"
+        ]
+      },
+      {
+        "path": "reference/02-email.message.rst",
+        "workspace_path": "docs/references/02-email.message.rst",
+        "title": "Python email.message — Representing an email message",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/email.message.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/email.message.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "aab456c776746adb40839c066db61d79b152c29606bca440cd60733aed77cd8f",
+        "bytes": 33043,
+        "lines": 751,
+        "words": 4085,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "header",
+          "email",
+          "message",
+          "duplicate"
+        ]
+      },
+      {
+        "path": "reference/03-email.policy.rst",
+        "workspace_path": "docs/references/03-email.policy.rst",
+        "title": "Python email.policy — Parsing policy controls",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/email.policy.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/email.policy.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "d4530c0b7057f947e88c2f93786061db9af741cff6e938c174a1f935b30046df",
+        "bytes": 27615,
+        "lines": 668,
+        "words": 3652,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "header",
+          "policy",
+          "validation",
+          "line"
+        ]
+      },
+      {
+        "path": "reference/04-re.rst",
+        "workspace_path": "docs/references/04-re.rst",
+        "title": "Python re — Regular expression operations",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/re.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/re.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "68d6f2440bf0e87a5e9b9afdef44199f7ffc65373e57277cf789d54e6079f2c2",
+        "bytes": 75221,
+        "lines": 1899,
+        "words": 9975,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "token",
+          "validation",
+          "pattern",
+          "header"
+        ]
+      },
+      {
+        "path": "reference/05-string.rst",
+        "workspace_path": "docs/references/05-string.rst",
+        "title": "Python string — Common string operations",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/string.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/string.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "269c4cbbd7b33cb078115e6f77b8249ecabf33d8104b4f1ff66d514932b39185",
+        "bytes": 40701,
+        "lines": 915,
+        "words": 5232,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "string",
+          "identifier",
+          "template",
+          "token"
+        ]
+      },
+      {
+        "path": "reference/06-exceptions.rst",
+        "workspace_path": "docs/references/06-exceptions.rst",
+        "title": "Python built-in exceptions",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/exceptions.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/exceptions.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "03f3848a26d2104e0ce8bed1f72c31e6447b7a3ca3fbd9c2c6d581cb29ccd164",
+        "bytes": 37694,
+        "lines": 1036,
+        "words": 4790,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes",
+        "search_terms": [
+          "valueerror",
+          "typeerror",
+          "exception",
+          "validation"
+        ]
+      }
+    ]
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  }
+}

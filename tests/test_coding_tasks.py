@@ -1,4 +1,4 @@
-"""Task validity for the eight host repairs and thirty closed provider units."""
+"""Task validity for the sixteen host repairs and thirty closed provider units."""
 
 from __future__ import annotations
 
@@ -59,21 +59,21 @@ class CodingTaskTests(unittest.TestCase):
             loaded = {item["task_id"]: item for item in _load_public_tasks(copied)}
             self.assertEqual(loaded["rewrite-user-record"]["description"], task["description"])
 
-    def test_full_cross_plan_has_240_pairs_and_eight_repeats_each(self):
+    def test_full_cross_plan_has_480_pairs_and_eight_repeats_each(self):
         cases = build_coding_cases()
-        self.assertEqual(len(cases), 240)
-        self.assertEqual(len({case["id"] for case in cases}), 240)
-        self.assertEqual(len({case["host_task_id"] for case in cases}), 8)
+        self.assertEqual(len(cases), 480)
+        self.assertEqual(len({case["id"] for case in cases}), 480)
+        self.assertEqual(len({case["host_task_id"] for case in cases}), 16)
         self.assertEqual(len({case["crowd_task"]["task_id"] for case in cases}), 30)
         hosts = {}
         for case in cases:
             contents = (case["repo_files"], case["user_task"], case["hidden_tests"], case["reference_text"])
             self.assertEqual(contents, hosts.setdefault(case["host_task_id"], contents))
         plan = build_run_plan(cases, ["wrapped"], ["none"])
-        self.assertEqual(len(plan), 1920)
+        self.assertEqual(len(plan), 3840)
         self.assertEqual(set(Counter(p["case_id"] for p in plan).values()), {8})
-        self.assertEqual(len({p["run_id"] for p in plan}), 1920)
-        self.assertEqual(len({p["workspace_id"] for p in plan}), 1920)
+        self.assertEqual(len({p["run_id"] for p in plan}), 3840)
+        self.assertEqual(len({p["workspace_id"] for p in plan}), 3840)
         for case in cases:
             self.assertEqual({p["repeat"] for p in plan if p["case_id"] == case["id"]}, set(range(1, 9)))
         self.assertEqual(plan, build_run_plan(cases, ["wrapped"], ["none"]))
@@ -88,7 +88,7 @@ class CodingTaskTests(unittest.TestCase):
                          {(h, t) for h in hosts for t in tasks})
         self.assertEqual(cases, build_coding_cases(host_task_ids=hosts[::-1], atomic_task_ids=tasks[::-1]))
         self.assertEqual(len(build_coding_cases(host_task_ids=["coding-01"])), 30)
-        self.assertEqual(len(build_coding_cases(atomic_task_ids=["rewrite-user-record"])), 8)
+        self.assertEqual(len(build_coding_cases(atomic_task_ids=["rewrite-user-record"])), 16)
 
     def test_historical_pairing_is_read_only_compatible(self):
         cases = cases_for_manifest({"case_count": 8, "pairing_rotation": 2})

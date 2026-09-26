@@ -31,9 +31,9 @@ def load_host_tasks(case_root: Path | None = None) -> list[dict]:
     index = read_json(root, "catalog.json")
     ids = index.get("case_ids")
     if (index.get("schema_version") != 1 or not isinstance(ids, list)
-            or len(ids) != 8 or any(not isinstance(item, str) for item in ids)
+            or len(ids) < 8 or any(not isinstance(item, str) for item in ids)
             or len(set(ids)) != len(ids)):
-        raise ValueError("Host catalog requires eight unique case IDs")
+        raise ValueError("Host catalog requires at least eight unique case IDs")
     cases = []
     for case_id in ids:
         metadata = _manifest(case_id, root)
@@ -54,6 +54,9 @@ def load_host_tasks(case_root: Path | None = None) -> list[dict]:
             raise ValueError("Host instructions must be instructions.md")
         cases.append({
             "id": case_id, "title": metadata["title"],
+            "difficulty_tier": metadata.get("difficulty_tier", "base"),
+            "recommended_max_steps": metadata.get("recommended_max_steps", 45),
+            "expected_reference_queries": metadata.get("expected_reference_queries", 1),
             "user_task": read_text(directory, metadata["user_task"]).rstrip("\n"),
             "repo_files": {path: _material(directory, source, "materials") for path, source in public.items()},
             "hidden_tests": _material(directory, metadata["hidden_tests"], "private"),
@@ -63,8 +66,8 @@ def load_host_tasks(case_root: Path | None = None) -> list[dict]:
         })
         if "documents" in reference:
             documents = reference["documents"]
-            if not isinstance(documents, list) or not 3 <= len(documents) <= 5:
-                raise ValueError("Host reference collection requires 3–5 documents")
+            if not isinstance(documents, list) or not 3 <= len(documents) <= 8:
+                raise ValueError("Host reference collection requires 3–8 documents")
             paths = [item["workspace_path"] for item in documents]
             if (len(paths) != len(set(paths)) or paths[0] != "docs/reference.md"
                     or documents[0]["path"] != reference["path"]):

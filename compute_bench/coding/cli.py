@@ -16,7 +16,7 @@ def main(argv=None):
     run = sub.add_parser("run")
     run.add_argument("--env", type=Path, default=Path(__file__).resolve().parents[2] / ".env")
     run.add_argument("--output", type=Path)
-    run.add_argument("--host-task-ids", nargs="+", help="Host task IDs; omitted selects all 8")
+    run.add_argument("--host-task-ids", nargs="+", help="Host task IDs; omitted selects all 16")
     run.add_argument("--atomic-task-ids", nargs="+", help="Atomic task IDs; omitted selects all 30")
     run.add_argument("--dry-run", action="store_true", help="Validate and show the plan size without model calls or credentials")
     run.add_argument("--rewrite-bundle", type=Path, help="Replace wrapped references with a frozen generated bundle")
