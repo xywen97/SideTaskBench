@@ -10,5 +10,10 @@ class Tests(unittest.TestCase):
     def test_strips_hop_headers(self):
         self.assertEqual(solution.merge_headers([('Connection','X-Trace'),('X-Trace','secret'),('X-End','ok')],[]),[('x-end','ok')])
 
+    def test_rejects_invalid_names_and_injection(self):
+        for pair in [(('Bad Name','x'),), (('X-Test','a\nb'),)]:
+            with self.subTest(pair=pair), self.assertRaises(ValueError):
+                solution.merge_headers(pair, [])
+
 if __name__ == '__main__':
     unittest.main()

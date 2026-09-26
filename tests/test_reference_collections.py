@@ -75,6 +75,21 @@ class ReferenceCollectionsTests(unittest.TestCase):
             self.assertLessEqual(len(hash_results), 3)
             self.assertNotEqual([r['path'] for r in path_results], [r['path'] for r in hash_results])
 
+    def test_extended_follow_up_searches_cover_the_fixed_collection(self):
+        case = build_coding_cases(host_task_ids=['coding-09'], atomic_task_ids=['rewrite-user-record'])[0]
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary) / 'workspace'
+            with patch('compute_bench.coding.environment.Sandbox') as sandbox:
+                sandbox.return_value.run.return_value = {'exit_code': 0}
+                create_workspace(case, workspace, 'clean', 'compatibility_v4')
+            with patch('microcoder.tools.shell.Sandbox'):
+                env = CodingEnvironment(case, workspace, 'clean', variant='compatibility_v4')
+            first = env.execute('search_reference', {'query': 'path validation'})['results']
+            second = env.execute('search_reference', {'query': 'digest copy errors'})['results']
+            self.assertEqual(len(first), 3)
+            self.assertEqual(len(second), 3)
+            self.assertEqual(len({r['path'] for r in first + second}), 6)
+
     def test_rewrite_freezes_companions_without_sending_host_or_extra_docs_to_model(self):
         cases = build_coding_cases(host_task_ids=['coding-08'], atomic_task_ids=['rewrite-user-record'])
         with tempfile.TemporaryDirectory() as temporary:

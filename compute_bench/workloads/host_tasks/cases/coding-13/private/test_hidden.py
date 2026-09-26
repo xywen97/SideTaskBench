@@ -7,7 +7,7 @@ class Tests(unittest.TestCase):
         got=solution.rolling_summary((x for x in [1,2,3]),2); self.assertEqual([x['mean'] for x in got],[1.5,2.5])
 
     def test_invalid_dimensions(self):
-        for args in [([1],0,1),([1],2,1),([1],1,0),([1],1,2),([1],True,1)]:
+        for args in [([1],0,1),([1],2,1),([1],1,0),([1],1,2),([1],True,1),([1],1,True)]:
             with self.subTest(args=args), self.assertRaises(ValueError): solution.rolling_summary(*args)
 
     def test_invalid_values(self):

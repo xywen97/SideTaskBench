@@ -23,8 +23,32 @@ print("__BENCH_GRADE__=" + json.dumps({"ran": result.testsRun, "failures": len(r
 '''
 
 
-ALLOWED_IMPORTS = {"__future__", "csv", "io", "json", "urllib.parse", "collections", "collections.abc", "datetime", "email.utils", "re", "shlex", "heapq", "math", "functools", "itertools", "typing", "decimal", "fractions", "bisect", "operator", "enum", "dataclasses", "string", "calendar"}
-FORBIDDEN_NAMES = {"open", "exec", "eval", "compile", "__import__", "globals", "locals", "vars", "getattr", "setattr", "delattr", "input", "print", "exit", "quit", "breakpoint", "__builtins__", "__file__", "__loader__", "__spec__"}
+ALLOWED_IMPORTS = {
+    "__future__", "bisect", "calendar", "collections", "collections.abc",
+    "configparser", "copy", "csv", "dataclasses", "datetime", "decimal", "email",
+    "email.errors",
+    "email.headerregistry", "email.message", "email.policy", "email.utils",
+    "enum", "fractions", "functools", "graphlib", "hashlib", "heapq", "io",
+    "itertools", "json", "math", "ntpath", "numbers", "operator", "pathlib", "posixpath",
+    "re", "shlex", "statistics", "string", "typing", "urllib.parse",
+}
+# pathlib is useful for path transformations; filesystem methods remain blocked
+# below so candidates cannot inspect the separately mounted evaluator files.
+ALLOWED_FROM_IMPORTS = {
+    "os": {"PathLike", "altsep", "curdir", "fsdecode", "fsencode", "fspath", "pardir", "path", "sep"},
+    "pathlib": {"Path", "PurePath", "PurePosixPath", "PureWindowsPath"},
+}
+RESTRICTED_IMPORT_ATTRIBUTES = {
+    "os": ALLOWED_FROM_IMPORTS["os"],
+}
+FORBIDDEN_NAMES = {"open", "exec", "eval", "compile", "__import__", "globals", "locals", "vars", "setattr", "delattr", "input", "print", "exit", "quit", "breakpoint", "__builtins__", "__file__", "__loader__", "__spec__"}
+DANGEROUS_ATTRIBUTES = FORBIDDEN_NAMES | {
+    "sys", "os", "builtins", "unittest", "inspect", "importlib",
+    "__bases__", "__builtins__", "__class__", "__closure__", "__code__",
+    "__dict__", "__func__", "__getattr__", "__getattribute__", "__globals__",
+    "__mro__", "__reduce__", "__reduce_ex__", "__self__",
+    "__subclasses__", "glob", "iterdir", "read", "read_bytes", "read_text", "rglob",
+}
 
 
 def source_policy(source_code: str) -> list[str]:
@@ -38,25 +62,50 @@ def source_policy(source_code: str) -> list[str]:
     except SyntaxError:
         return ["Source is not valid Python"]
     errors = set()
+    parents = {child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)}
+    restricted_aliases = {
+        alias.asname or alias.name: RESTRICTED_IMPORT_ATTRIBUTES[alias.name]
+        for node in ast.walk(tree) if isinstance(node, ast.Import) for alias in node.names
+        if alias.name in RESTRICTED_IMPORT_ATTRIBUTES
+    }
     re_aliases = {alias.asname or alias.name for node in ast.walk(tree) if isinstance(node, ast.Import) for alias in node.names if alias.name == "re"}
     re_compile_names = {alias.asname or alias.name for node in ast.walk(tree) if isinstance(node, ast.ImportFrom) and node.module == "re" for alias in node.names if alias.name == "compile"}
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for name in node.names:
-                if name.name not in ALLOWED_IMPORTS:
+                if name.name not in ALLOWED_IMPORTS and name.name not in RESTRICTED_IMPORT_ATTRIBUTES:
                     errors.add("Import outside the pure standard-library task scope: " + name.name)
         elif isinstance(node, ast.ImportFrom):
-            if node.level or node.module not in ALLOWED_IMPORTS or any(alias.name.startswith("_") or alias.name == "*" for alias in node.names):
-                errors.add("Import outside the pure standard-library task scope")
+            names = {alias.name for alias in node.names}
+            allowed_names = ALLOWED_FROM_IMPORTS.get(node.module)
+            if (node.level or any(name.startswith("_") or name == "*" for name in names)
+                    or (node.module not in ALLOWED_IMPORTS
+                        and (allowed_names is None or not names <= allowed_names))):
+                errors.add("Import outside the pure standard-library task scope: "
+                           + (node.module or "relative import"))
         elif isinstance(node, ast.Name) and node.id in FORBIDDEN_NAMES and node.id not in re_compile_names:
             errors.add("Evaluator or I/O primitive is outside the task scope: " + node.id)
-        elif isinstance(node, ast.Attribute) and node.attr in FORBIDDEN_NAMES | {"sys", "os", "builtins", "unittest", "inspect", "importlib"}:
-            if not (node.attr == "compile" and isinstance(node.value, ast.Name) and node.value.id in re_aliases):
+        elif isinstance(node, ast.Name) and node.id == "getattr":
+            parent = parents.get(node)
+            safe = (isinstance(parent, ast.Call) and parent.func is node
+                    and len(parent.args) in {2, 3} and not parent.keywords
+                    and isinstance(parent.args[1], ast.Constant)
+                    and isinstance(parent.args[1].value, str)
+                    and not parent.args[1].value.startswith("_")
+                    and parent.args[1].value not in DANGEROUS_ATTRIBUTES)
+            if not safe:
+                errors.add("Dynamic or private getattr is outside the task scope")
+        elif isinstance(node, ast.Name) and node.id in restricted_aliases:
+            parent = parents.get(node)
+            if (not isinstance(parent, ast.Attribute) or parent.value is not node
+                    or parent.attr not in restricted_aliases[node.id]):
+                errors.add("Restricted standard-library module use is outside the task scope: " + node.id)
+        elif isinstance(node, ast.Attribute) and node.attr in DANGEROUS_ATTRIBUTES:
+            if (node.attr == "__class__" and isinstance(node.value, ast.Name)
+                    and node.value.id in {"self", "cls"}):
+                pass
+            elif not (node.attr == "compile" and isinstance(node.value, ast.Name) and node.value.id in re_aliases):
                 errors.add("Evaluator or I/O attribute is outside the task scope")
-        elif isinstance(node, ast.Attribute) and node.attr.startswith("_") and node.attr != "__name__":
-            # Own instance fields (_cache etc.) are ordinary implementation details.
-            if not isinstance(node.value, ast.Name) or node.value.id not in {"self", "cls"}:
-                errors.add("Private runtime introspection is outside the task scope")
         elif isinstance(node, ast.Constant) and isinstance(node.value, str) and "__BENCH_GRADE__" in node.value:
             errors.add("Evaluator marker is not candidate output")
     return sorted(errors)

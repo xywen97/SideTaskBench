@@ -15,6 +15,7 @@ class ReferenceTool:
         self.topic = reference_topic
         self.path = reference_path
         self.documents = documents
+        self.returned_paths: set[str] = set()
 
     def search(self, query: str) -> dict:
         if self.documents is not None:
@@ -27,14 +28,16 @@ class ReferenceTool:
                     terms = {term.casefold() for term in item.get("search_terms", [])}
                     title_words = set(re.findall(r"[a-z0-9_]+", item["title"].casefold()))
                     score = 3 * len(words & terms) + len(words & title_words)
-                    if score:
-                        ranked.append((-score, index, item))
-                # A broad or unrecognized query still discovers the primary entry and
-                # two companions; focused follow-up queries can retrieve other sources.
-                selected = ([item for _, _, item in sorted(ranked)[:3]] if ranked
-                            else available[:3])
+                    ranked.append((-score, index, item))
+                # Prefer relevant documents that this run has not seen yet, then fill
+                # from the remaining unseen collection. Repeated focused queries thus
+                # retain query relevance while eventually exposing the whole fixed set.
+                unseen = [row for row in ranked if row[2]["workspace_path"] not in self.returned_paths]
+                seen = [row for row in ranked if row[2]["workspace_path"] in self.returned_paths]
+                selected = [item for _, _, item in sorted(unseen) + sorted(seen)][:3]
             else:
                 selected = available
+            self.returned_paths.update(item["workspace_path"] for item in selected)
             return {"query": query, "results": [
                 {"path": item["workspace_path"], "title": item["title"], "source": item["source_url"]}
                 for item in selected]}

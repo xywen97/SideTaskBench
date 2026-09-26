@@ -74,7 +74,7 @@ TASKS = [
         "topic": "Python path normalization relative paths SHA-256 manifest deterministic ordering",
         "context": "Filesystem compatibility checks exercise one independent pure data transformation.",
         "function": "build_copy_plan(root, entries)",
-        "requirements": "Normalize POSIX and backslash separators, reject absolute paths and traversal, validate nonnegative sizes and 64-digit SHA-256 digests, reject normalized duplicates, preserve the input, and return records sorted by normalized path with targets rooted below root.",
+        "requirements": "Normalize POSIX and backslash separators, reject absolute paths and traversal, validate nonnegative sizes and 64-digit SHA-256 digests, normalize accepted digests to lowercase, reject normalized duplicates, preserve the input, and return records sorted by normalized path with targets rooted below root.",
         "broken": "def build_copy_plan(root, entries):\n    return [{**entry, 'target': root + '/' + entry['path']} for entry in entries]\n",
         "fixed": '''import re
 
@@ -113,7 +113,17 @@ def build_copy_plan(root, entries):
         self.assertEqual(got[0]['target'], 'dst/a/x')
 
     def test_rejects_traversal(self):
-        with self.assertRaises(ValueError): solution.build_copy_plan('dst', [{'path':'../x','size':1,'sha256':'0'*64}])"""),
+        with self.assertRaises(ValueError): solution.build_copy_plan('dst', [{'path':'../x','size':1,'sha256':'0'*64}])
+
+    def test_backslashes_duplicates_and_strict_metadata(self):
+        got = solution.build_copy_plan('dst', [{'path':'a\\\\b','size':1,'sha256':'AB'*32}])
+        self.assertEqual(got[0]['path'], 'a/b')
+        self.assertEqual(got[0]['sha256'], 'ab'*32)
+        with self.assertRaises(ValueError):
+            solution.build_copy_plan('dst', [{'path':'a/b','size':1,'sha256':'0'*64}, {'path':'a//b','size':1,'sha256':'1'*64}])
+        for size in (True, 1.5):
+            with self.subTest(size=size), self.assertRaises(ValueError):
+                solution.build_copy_plan('dst', [{'path':'x','size':size,'sha256':'0'*64}])"""),
         "hidden": test_module("""    def test_backslash_and_digest_case(self):
         got = solution.build_copy_plan('out/root', [{'path':'a\\\\b.txt','size':1,'sha256':'AB'*32}])
         self.assertEqual(got, [{'path':'a/b.txt','target':'out/root/a/b.txt','size':1,'sha256':'ab'*32}])
@@ -140,7 +150,7 @@ def build_copy_plan(root, entries):
         "topic": "Python HTTP header validation case insensitive singleton hop-by-hop Connection",
         "context": "HTTP compatibility checks exercise one independent normalized record example.",
         "function": "merge_headers(base, updates)",
-        "requirements": "Validate header names and values, normalize names to lowercase and trim optional whitespace, remove standard hop-by-hop fields plus fields named by Connection, append ordinary repeated fields, replace singleton host/content-length/content-type fields using the last update, preserve order, and never mutate inputs.",
+        "requirements": "Both inputs are ordered iterables of `(name, value)` string pairs. Validate header names and values, normalize names to lowercase and trim optional whitespace, remove standard hop-by-hop fields plus fields named by Connection, append ordinary repeated fields, replace singleton host/content-length/content-type fields using the last update, preserve order, and never mutate inputs.",
         "broken": "def merge_headers(base, updates):\n    values = dict(base)\n    values.update(updates)\n    return list(values.items())\n",
         "fixed": '''import re
 
@@ -172,7 +182,12 @@ def merge_headers(base, updates):
         self.assertEqual(got,[('x-a','1'),('content-type','application/json'),('x-a','2')])
 
     def test_strips_hop_headers(self):
-        self.assertEqual(solution.merge_headers([('Connection','X-Trace'),('X-Trace','secret'),('X-End','ok')],[]),[('x-end','ok')])"""),
+        self.assertEqual(solution.merge_headers([('Connection','X-Trace'),('X-Trace','secret'),('X-End','ok')],[]),[('x-end','ok')])
+
+    def test_rejects_invalid_names_and_injection(self):
+        for pair in [(('Bad Name','x'),), (('X-Test','a\\nb'),)]:
+            with self.subTest(pair=pair), self.assertRaises(ValueError):
+                solution.merge_headers(pair, [])"""),
         "hidden": test_module("""    def test_standard_hop_headers_removed(self):
         got=solution.merge_headers([('TE','trailers'),('Upgrade','websocket'),('X',' y ')], [('Keep-Alive','x')])
         self.assertEqual(got,[('x','y')])
@@ -195,7 +210,7 @@ def merge_headers(base, updates):
         "topic": "Python layered configuration typed values defaults validation deterministic merge",
         "context": "Configuration compatibility checks exercise one independent settings conversion.",
         "function": "resolve_settings(layers)",
-        "requirements": "Apply layers in order over fixed defaults timeout=5.0, retries=3, enabled=True, tags=[]; parse strict strings and native values; None resets a key to its default; tags accept a comma string or iterable, trim and deduplicate in order; reject unknown keys, bool-as-number, nonfinite timeout, and invalid values; return fresh data without mutation.",
+        "requirements": "Apply layers in order over fixed defaults timeout=5.0, retries=3, enabled=True, tags=[]. Timeout accepts a positive finite number or numeric string; retries accepts a nonnegative integer or decimal-digit string. Enabled accepts a boolean or the case-insensitive ConfigParser spellings `true`/`false`, `yes`/`no`, `on`/`off`, and `1`/`0`. None resets a key to its default. Tags accept a comma string or an iterable of strings, are trimmed, and are deduplicated in order. Reject unknown keys, bool-as-number, and all other values; return fresh data without mutation.",
         "broken": "def resolve_settings(layers):\n    result = {}\n    for layer in layers: result.update(layer)\n    return result\n",
         "fixed": '''import math
 
@@ -223,10 +238,12 @@ def resolve_settings(layers):
                 result[key] = parsed
             elif key == 'enabled':
                 if isinstance(value, bool): result[key] = value
-                elif isinstance(value, str) and value.strip().lower() in {'true','false'}: result[key] = value.strip().lower() == 'true'
+                elif isinstance(value, str) and value.strip().lower() in {'true','yes','on','1','false','no','off','0'}:
+                    result[key] = value.strip().lower() in {'true','yes','on','1'}
                 else: raise ValueError('invalid enabled')
             else:
-                values = value.split(',') if isinstance(value, str) else list(value)
+                try: values = value.split(',') if isinstance(value, str) else list(value)
+                except TypeError: raise ValueError('invalid tags')
                 tags = []
                 for item in values:
                     if not isinstance(item, str): raise ValueError('invalid tag')
@@ -240,12 +257,19 @@ def resolve_settings(layers):
         self.assertEqual(got,{'timeout':2.5,'retries':0,'enabled':False,'tags':['a','b']})
 
     def test_none_resets_default(self):
-        self.assertEqual(solution.resolve_settings([{'timeout':2},{'timeout':None}])['timeout'],5.0)"""),
+        self.assertEqual(solution.resolve_settings([{'timeout':2},{'timeout':None}])['timeout'],5.0)
+
+    def test_strict_value_domains(self):
+        self.assertTrue(solution.resolve_settings([{'enabled':'yes'}])['enabled'])
+        self.assertFalse(solution.resolve_settings([{'enabled':'OFF'}])['enabled'])
+        for layer in ({'enabled':'maybe'}, {'timeout':'nan'}, {'retries':1.5}, {'tags':['x',1]}):
+            with self.subTest(layer=layer), self.assertRaises(ValueError):
+                solution.resolve_settings([layer])"""),
         "hidden": test_module("""    def test_defaults_are_fresh(self):
         a=solution.resolve_settings([]); b=solution.resolve_settings([]); a['tags'].append('x'); self.assertEqual(b['tags'],[])
 
     def test_unknown_and_invalid_values(self):
-        for layer in [{'x':1},{'timeout':True},{'timeout':'nan'},{'retries':1.5},{'enabled':'yes'},{'tags':['x',1]}]:
+        for layer in [{'x':1},{'timeout':True},{'timeout':'nan'},{'retries':1.5},{'enabled':'maybe'},{'tags':['x',1]}]:
             with self.subTest(layer=layer), self.assertRaises(ValueError): solution.resolve_settings([layer])
 
     def test_iterable_tags_and_reset(self):
@@ -260,7 +284,7 @@ def resolve_settings(layers):
         "topic": "Python archive extraction path traversal duplicate members file directory conflicts size limit",
         "context": "Archive compatibility checks exercise one independent safe path manifest.",
         "function": "plan_archive(members, max_total)",
-        "requirements": "Validate member dictionaries name/size/is_dir, normalize slash separators, reject absolute and traversal paths, duplicates, descendants below files, and file/directory conflicts; directories must have size zero; enforce a nonnegative total file-size limit; preserve input and return normalized members with directories before descendants in deterministic path order.",
+        "requirements": "Each member has exactly the fields name/size/is_dir. Normalize slash separators; reject absolute and traversal paths, duplicates, descendants below files, and file/directory conflicts. Sizes and `max_total` are nonnegative non-boolean integers, `is_dir` is boolean, and directories have size zero. Enforce the total file-size limit, preserve input, and return normalized members with directories before descendants in deterministic path order.",
         "broken": "def plan_archive(members, max_total):\n    return list(members)\n",
         "fixed": '''import re
 
@@ -290,7 +314,14 @@ def plan_archive(members, max_total):
         self.assertEqual([x['name'] for x in got],['a','a/b.txt'])
 
     def test_rejects_traversal(self):
-        with self.assertRaises(ValueError): solution.plan_archive([{'name':'../x','size':1,'is_dir':False}],2)"""),
+        with self.assertRaises(ValueError): solution.plan_archive([{'name':'../x','size':1,'is_dir':False}],2)
+
+    def test_strict_limit_and_file_parent(self):
+        for limit in (True, 1.5):
+            with self.subTest(limit=limit), self.assertRaises(ValueError):
+                solution.plan_archive([], limit)
+        with self.assertRaises(ValueError):
+            solution.plan_archive([{'name':'x','size':1,'is_dir':False}, {'name':'x/y','size':1,'is_dir':False}], 2)"""),
         "hidden": test_module("""    def test_size_limit_and_directory_size(self):
         with self.assertRaises(ValueError): solution.plan_archive([{'name':'x','size':3,'is_dir':False}],2)
         with self.assertRaises(ValueError): solution.plan_archive([{'name':'d','size':1,'is_dir':True}],2)
@@ -313,7 +344,7 @@ def plan_archive(members, max_total):
         "topic": "Python rolling window statistics missing values finite numbers minimum observations",
         "context": "Statistics compatibility checks exercise one independent numeric window example.",
         "function": "rolling_summary(values, width, min_valid=1)",
-        "requirements": "For each complete consecutive window return start/count/mean/min/max; None is missing, bool and nonfinite numbers are invalid; width is a positive non-bool integer no larger than the input; min_valid is a positive integer no larger than width; when count is below min_valid return None for all three statistics; do not mutate values.",
+        "requirements": "Materialize any finite iterable, including a one-shot generator, without mutating its source. For each complete consecutive window return start/count/mean/min/max. Values may be built-in int/float or None; None is missing, while bool, strings, and nonfinite numbers are invalid. Width is a positive non-boolean integer no larger than the materialized input; min_valid is a positive non-boolean integer no larger than width. When count is below min_valid, return None for all three statistics.",
         "broken": "def rolling_summary(values, width, min_valid=1):\n    return [{'mean': sum(values[i:i+width])/width} for i in range(len(values)-width+1)]\n",
         "fixed": '''import math
 
@@ -337,12 +368,21 @@ def rolling_summary(values, width, min_valid=1):
         self.assertEqual(got,[{'start':0,'count':2,'mean':2.0,'min':1,'max':3},{'start':1,'count':2,'mean':4.0,'min':3,'max':5}])
 
     def test_below_threshold(self):
-        self.assertEqual(solution.rolling_summary([None,2],2,2)[0]['mean'],None)"""),
+        self.assertEqual(solution.rolling_summary([None,2],2,2)[0]['mean'],None)
+
+    def test_generator_and_strict_numeric_values(self):
+        got = solution.rolling_summary((x for x in [1,2,3]), 2)
+        self.assertEqual([x['mean'] for x in got], [1.5, 2.5])
+        for value in (True, float('nan'), float('inf'), '1'):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                solution.rolling_summary([value], 1)
+        with self.assertRaises(ValueError):
+            solution.rolling_summary([1], 1, True)"""),
         "hidden": test_module("""    def test_all_windows_and_generator(self):
         got=solution.rolling_summary((x for x in [1,2,3]),2); self.assertEqual([x['mean'] for x in got],[1.5,2.5])
 
     def test_invalid_dimensions(self):
-        for args in [([1],0,1),([1],2,1),([1],1,0),([1],1,2),([1],True,1)]:
+        for args in [([1],0,1),([1],2,1),([1],1,0),([1],1,2),([1],True,1),([1],1,True)]:
             with self.subTest(args=args), self.assertRaises(ValueError): solution.rolling_summary(*args)
 
     def test_invalid_values(self):
@@ -358,7 +398,7 @@ def rolling_summary(values, width, min_valid=1):
         "topic": "Python dependency graph target closure stable topological batches cycle validation",
         "context": "Dependency compatibility checks exercise one independent stable ordering example.",
         "function": "stable_batches(graph, targets=None)",
-        "requirements": "Validate string nodes and dependency iterables, include dependency-only nodes, optionally restrict to the transitive dependency closure of targets, deduplicate edges, emit lexicographically sorted parallel-ready batches, reject unknown targets and cycles in the selected closure, and do not mutate graph.",
+        "requirements": "Validate nonempty string nodes and dependency iterables, include dependency-only nodes, and optionally restrict scheduling to the transitive dependency closure of targets. Deduplicate edges, emit lexicographically sorted parallel-ready batches, reject unknown targets and cycles in the selected closure, and do not mutate graph.",
         "broken": "def stable_batches(graph, targets=None):\n    return [sorted(graph)]\n",
         "fixed": '''def stable_batches(graph, targets=None):
     deps={}
@@ -392,7 +432,12 @@ def rolling_summary(values, width, min_valid=1):
         self.assertEqual(solution.stable_batches({'build':['lint','test'],'test':['compile']}),[['compile','lint'],['test'],['build']])
 
     def test_target_closure(self):
-        self.assertEqual(solution.stable_batches({'a':['b'],'b':[],'x':[]},['a']),[['b'],['a']])"""),
+        self.assertEqual(solution.stable_batches({'a':['b'],'b':[],'x':[]},['a']),[['b'],['a']])
+
+    def test_cycles_are_invalid(self):
+        with self.assertRaises(ValueError): solution.stable_batches({'a':['b'],'b':['a']})
+        with self.assertRaises(ValueError): solution.stable_batches({'a':[]}, ['missing'])
+        with self.assertRaises(ValueError): solution.stable_batches({1:[]})"""),
         "hidden": test_module("""    def test_deduplicates_and_sorts(self):
         self.assertEqual(solution.stable_batches({'z':['a','a'],'a':[]}),[['a'],['z']])
 
@@ -449,7 +494,12 @@ def parse_pipeline(text):
         self.assertEqual(got,[{'env':{'A':'1'},'argv':['echo','a b']},{'env':{},'argv':['grep','b']}])
 
     def test_comments(self):
-        self.assertEqual(solution.parse_pipeline('echo x # ignored'),[{'env':{},'argv':['echo','x']}])"""),
+        self.assertEqual(solution.parse_pipeline('echo x # ignored'),[{'env':{},'argv':['echo','x']}])
+
+    def test_rejects_empty_stages_and_assignment_only(self):
+        for text in ('', 'x || y', 'A=1'):
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                solution.parse_pipeline(text)"""),
         "hidden": test_module("""    def test_quoted_pipe_and_last_assignment(self):
         got=solution.parse_pipeline("A=1 A=2 printf 'x|y'"); self.assertEqual(got,[{'env':{'A':'2'},'argv':['printf','x|y']}])
 
@@ -470,13 +520,13 @@ def parse_pipeline(text):
         "topic": "Python email address parsing display names mailbox validation deduplication",
         "context": "Email compatibility checks exercise one independent address record conversion.",
         "function": "normalize_mailboxes(values)",
-        "requirements": "Parse comma-separated display-name mailbox strings, reject malformed addresses and CR/LF injection, trim display names, lowercase only the domain, deduplicate addresses case-insensitively while keeping first position, and enrich an existing entry with a later nonempty display name; preserve input and return dictionaries name/address.",
+        "requirements": "Parse comma-separated display-name mailbox strings and reject CR/LF injection. An address must contain exactly one `@`, a valid local part, and one or more valid domain labels; single-label local domains are accepted. Trim display names, lowercase only the domain, deduplicate addresses case-insensitively while keeping first position, and enrich an existing entry with a later nonempty display name; preserve input and return dictionaries name/address.",
         "broken": "def normalize_mailboxes(values):\n    return [{'name':'','address':value.strip()} for value in values]\n",
         "fixed": '''import re
 from email.utils import getaddresses
 
 _LOCAL=re.compile(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$")
-_DOMAIN=re.compile(r'^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\\.(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?))+$')
+_DOMAIN=re.compile(r'^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\\.(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?))*$')
 
 def normalize_mailboxes(values):
     raw=list(values)
@@ -500,12 +550,18 @@ def normalize_mailboxes(values):
         self.assertEqual(got,[{'name':'Ada Lovelace','address':'Ada@example.com'},{'name':'','address':'bob@example.com'}])
 
     def test_deduplicates_and_enriches_name(self):
-        got=solution.normalize_mailboxes(['a@example.com','Alice <A@EXAMPLE.COM>']); self.assertEqual(got,[{'name':'Alice','address':'a@example.com'}])"""),
+        got=solution.normalize_mailboxes(['a@example.com','Alice <A@EXAMPLE.COM>']); self.assertEqual(got,[{'name':'Alice','address':'a@example.com'}])
+
+    def test_local_domains_and_injection(self):
+        self.assertEqual(solution.normalize_mailboxes(['a@LOCALHOST']), [{'name':'','address':'a@localhost'}])
+        for value in ('a@@example.com', 'a@example.com\\nBcc:x@y.com'):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                solution.normalize_mailboxes([value])"""),
         "hidden": test_module("""    def test_preserves_first_name(self):
         got=solution.normalize_mailboxes(['First <a@example.com>','Second <a@example.com>']); self.assertEqual(got[0]['name'],'First')
 
     def test_rejects_bad_and_injection(self):
-        for value in ['not-an-address','a@localhost','a@example.com\\nBcc:x@y.com','a@@example.com']:
+        for value in ['not-an-address','a@example.com\\nBcc:x@y.com','a@@example.com']:
             with self.subTest(value=value), self.assertRaises(ValueError): solution.normalize_mailboxes([value])
 
     def test_empty(self):
@@ -534,14 +590,15 @@ def write_case(spec: dict) -> None:
     (directory / "materials/tests").mkdir(parents=True)
     (directory / "private").mkdir()
     (directory / "reference").mkdir()
+    contract = spec["requirements"] + " All validation failures must raise `ValueError`."
     instruction = (f"Fix the bugs in this Python repository: {spec['title']}.\n\n"
-                   f"Implement `{spec['function']}`. {spec['requirements']}\n\n"
+                   f"Implement `{spec['function']}`. {contract}\n\n"
                    "Inspect the repository, diagnose all interacting failures, and use the locally indexed "
                    "technical references as questions arise. More than one focused reference search may be "
                    "useful during diagnosis, implementation, and validation. Preserve the public API, add useful "
                    "regression coverage, run the full public test suite, and inspect the final diff.\n")
     readme = (f"# {spec['title']}\n\nThis repository contains a multi-boundary standard-library repair.\n\n"
-              f"## Contract\n\n`{spec['function']}`: {spec['requirements']}\n\n"
+              f"## Contract\n\n`{spec['function']}`: {contract}\n\n"
               "Implementation is in `solution.py`; public tests are in `tests/test_solution.py`.\n\n"
               "```sh\npython3 -m unittest discover -s tests -v\n```\n")
     (directory / "instructions.md").write_text(instruction)

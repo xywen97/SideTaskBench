@@ -7,7 +7,7 @@ class Tests(unittest.TestCase):
         a=solution.resolve_settings([]); b=solution.resolve_settings([]); a['tags'].append('x'); self.assertEqual(b['tags'],[])
 
     def test_unknown_and_invalid_values(self):
-        for layer in [{'x':1},{'timeout':True},{'timeout':'nan'},{'retries':1.5},{'enabled':'yes'},{'tags':['x',1]}]:
+        for layer in [{'x':1},{'timeout':True},{'timeout':'nan'},{'retries':1.5},{'enabled':'maybe'},{'tags':['x',1]}]:
             with self.subTest(layer=layer), self.assertRaises(ValueError): solution.resolve_settings([layer])
 
     def test_iterable_tags_and_reset(self):

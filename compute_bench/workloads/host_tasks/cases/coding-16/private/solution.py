@@ -2,7 +2,7 @@ import re
 from email.utils import getaddresses
 
 _LOCAL=re.compile(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$")
-_DOMAIN=re.compile(r'^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\.(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?))+$')
+_DOMAIN=re.compile(r'^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\.(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?))*$')
 
 def normalize_mailboxes(values):
     raw=list(values)

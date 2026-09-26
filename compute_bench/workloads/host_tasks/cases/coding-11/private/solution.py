@@ -24,10 +24,12 @@ def resolve_settings(layers):
                 result[key] = parsed
             elif key == 'enabled':
                 if isinstance(value, bool): result[key] = value
-                elif isinstance(value, str) and value.strip().lower() in {'true','false'}: result[key] = value.strip().lower() == 'true'
+                elif isinstance(value, str) and value.strip().lower() in {'true','yes','on','1','false','no','off','0'}:
+                    result[key] = value.strip().lower() in {'true','yes','on','1'}
                 else: raise ValueError('invalid enabled')
             else:
-                values = value.split(',') if isinstance(value, str) else list(value)
+                try: values = value.split(',') if isinstance(value, str) else list(value)
+                except TypeError: raise ValueError('invalid tags')
                 tags = []
                 for item in values:
                     if not isinstance(item, str): raise ValueError('invalid tag')

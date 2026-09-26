@@ -10,5 +10,12 @@ class Tests(unittest.TestCase):
     def test_rejects_traversal(self):
         with self.assertRaises(ValueError): solution.plan_archive([{'name':'../x','size':1,'is_dir':False}],2)
 
+    def test_strict_limit_and_file_parent(self):
+        for limit in (True, 1.5):
+            with self.subTest(limit=limit), self.assertRaises(ValueError):
+                solution.plan_archive([], limit)
+        with self.assertRaises(ValueError):
+            solution.plan_archive([{'name':'x','size':1,'is_dir':False}, {'name':'x/y','size':1,'is_dir':False}], 2)
+
 if __name__ == '__main__':
     unittest.main()
