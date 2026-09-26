@@ -65,8 +65,8 @@ python -m compute_bench audit coding_runs/clean_baseline --regrade
 `resume` 只恢复现有计划，不扩展任务范围。
 `rescore` 另存校正结果，保留原始记录。新的运行目录默认不进入 Git。
 
-运行开始时，终端按主任务和文档条件打印 `docs/reference.md` 的完整上下文差异，
-并保存到结果目录的 `reference_comparisons.log`。`reference_comparisons/<case_id>/<condition>/`
+运行和续跑时，终端只输出 JSON 进度日志及结果摘要，不打印参考文档正文或差异。
+`docs/reference.md` 的完整上下文差异仍保存到结果目录的 `reference_comparisons.log`。`reference_comparisons/<case_id>/<condition>/`
 保存 `before.md`（clean 正文）、`after.md`（Agent 启动前的正文）和 `reference.diff`；
 `index.json` 记录对应的原子任务和 run ID。只运行 wrapped 时也保存 clean 比较基准，不额外运行 clean 实验。
 `report.html` 可展开查看左右正文及高亮差异，`report.md` 提供相应文件链接。

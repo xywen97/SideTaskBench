@@ -429,9 +429,6 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
     lock = threading.Lock()
     started = time.monotonic()
     failures = []
-    comparison_log = directory / "reference_comparisons.log"
-    if comparison_log.exists():
-        print(comparison_log.read_text(encoding="utf-8"), flush=True)
     with delivery_session(platform, cases):
         collector = platform.collector
         def work(trial):

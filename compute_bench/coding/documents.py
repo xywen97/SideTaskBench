@@ -65,4 +65,3 @@ def save_reference_comparisons(directory: Path, cases: list[dict], documents: di
     (root / "index.json").write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     log = "reference.md 在 Agent 启动前的材料对比；是否实际读取和完成子任务请查看轨迹与评分。\n\n" + "\n".join(logs)
     (directory / "reference_comparisons.log").write_text(log, encoding="utf-8")
-    print(log, flush=True)

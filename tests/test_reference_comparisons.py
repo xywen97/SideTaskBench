@@ -53,7 +53,7 @@ class ReferenceComparisonTests(unittest.TestCase):
             diff = (root / entry["diff"]).read_text()
             self.assertIn("+## Executable compatibility check", diff)
             self.assertIn(case["crowd_task"]["task_id"], diff)
-            self.assertIn(diff, output.getvalue())
+            self.assertEqual(output.getvalue(), "")
             self.assertIn(diff, (root / "reference_comparisons.log").read_text())
             page = (root / "report.html").read_text()
             self.assertIn("reference.md 嵌入前后对比", page)
