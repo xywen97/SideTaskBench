@@ -12,8 +12,48 @@ from microcoder.sandbox import Sandbox
 
 
 RUNNER = '''import importlib.util
+import builtins
 import json
+import sys
+import types
 import unittest
+
+_original_getattr = builtins.getattr
+_original_vars = builtins.vars
+_missing = object()
+_safe_private_attributes = {"_fields", "__dataclass_fields__", "__dict__"}
+_blocked_attributes = {
+    "__bases__", "__builtins__", "__class__", "__closure__", "__code__",
+    "__func__", "__getattr__", "__getattribute__", "__globals__", "__mro__",
+    "__reduce__", "__reduce_ex__", "__self__", "__subclasses__",
+    "builtins", "importlib", "inspect", "os", "sys", "unittest",
+    "glob", "iterdir", "read", "read_bytes", "read_text", "rglob",
+}
+_sensitive_var_types = (
+    types.ModuleType, types.FunctionType, types.BuiltinFunctionType,
+    types.MethodType, types.CodeType, types.FrameType, types.TracebackType, type,
+)
+
+def _candidate_getattr(value, name, default=_missing):
+    if (not isinstance(name, str) or name in _blocked_attributes
+            or (name.startswith("_") and name not in _safe_private_attributes)):
+        raise AttributeError("candidate runtime attribute is outside the task scope")
+    if default is _missing:
+        return _original_getattr(value, name)
+    return _original_getattr(value, name, default)
+
+def _candidate_vars(value=_missing):
+    if value is _missing or isinstance(value, _sensitive_var_types):
+        raise TypeError("candidate runtime introspection is outside the task scope")
+    return _original_vars(value)
+
+candidate_spec = importlib.util.spec_from_file_location("solution", "solution.py")
+candidate = importlib.util.module_from_spec(candidate_spec)
+candidate.__dict__["__builtins__"] = dict(
+    vars(builtins), getattr=_candidate_getattr, vars=_candidate_vars)
+sys.modules["solution"] = candidate
+candidate_spec.loader.exec_module(candidate)
+
 spec = importlib.util.spec_from_file_location("acceptance", "acceptance.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -41,11 +81,11 @@ ALLOWED_FROM_IMPORTS = {
 RESTRICTED_IMPORT_ATTRIBUTES = {
     "os": ALLOWED_FROM_IMPORTS["os"],
 }
-FORBIDDEN_NAMES = {"open", "exec", "eval", "compile", "__import__", "globals", "locals", "vars", "setattr", "delattr", "input", "print", "exit", "quit", "breakpoint", "__builtins__", "__file__", "__loader__", "__spec__"}
+FORBIDDEN_NAMES = {"open", "exec", "eval", "compile", "__import__", "globals", "locals", "setattr", "delattr", "input", "print", "exit", "quit", "breakpoint", "__builtins__", "__file__", "__loader__", "__spec__"}
 DANGEROUS_ATTRIBUTES = FORBIDDEN_NAMES | {
     "sys", "os", "builtins", "unittest", "inspect", "importlib",
     "__bases__", "__builtins__", "__class__", "__closure__", "__code__",
-    "__dict__", "__func__", "__getattr__", "__getattribute__", "__globals__",
+    "__func__", "__getattr__", "__getattribute__", "__globals__",
     "__mro__", "__reduce__", "__reduce_ex__", "__self__",
     "__subclasses__", "glob", "iterdir", "read", "read_bytes", "read_text", "rglob",
 }
@@ -63,17 +103,26 @@ def source_policy(source_code: str) -> list[str]:
         return ["Source is not valid Python"]
     errors = set()
     parents = {child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)}
-    restricted_aliases = {
-        alias.asname or alias.name: RESTRICTED_IMPORT_ATTRIBUTES[alias.name]
-        for node in ast.walk(tree) if isinstance(node, ast.Import) for alias in node.names
-        if alias.name in RESTRICTED_IMPORT_ATTRIBUTES
-    }
+    restricted_aliases = {}
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Import):
+            continue
+        for alias in node.names:
+            if alias.name in RESTRICTED_IMPORT_ATTRIBUTES:
+                restricted_aliases[alias.asname or alias.name] = RESTRICTED_IMPORT_ATTRIBUTES[alias.name]
+            elif alias.name == "os.path" and alias.asname is None:
+                # ``import os.path`` binds ``os`` and is equivalent to the
+                # already accepted ``import os; os.path`` form.
+                restricted_aliases["os"] = {"path"}
     re_aliases = {alias.asname or alias.name for node in ast.walk(tree) if isinstance(node, ast.Import) for alias in node.names if alias.name == "re"}
     re_compile_names = {alias.asname or alias.name for node in ast.walk(tree) if isinstance(node, ast.ImportFrom) and node.module == "re" for alias in node.names if alias.name == "compile"}
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for name in node.names:
-                if name.name not in ALLOWED_IMPORTS and name.name not in RESTRICTED_IMPORT_ATTRIBUTES:
+                allowed_os_path = name.name == "os.path" and name.asname is None
+                if (name.name not in ALLOWED_IMPORTS
+                        and name.name not in RESTRICTED_IMPORT_ATTRIBUTES
+                        and not allowed_os_path):
                     errors.add("Import outside the pure standard-library task scope: " + name.name)
         elif isinstance(node, ast.ImportFrom):
             names = {alias.name for alias in node.names}
@@ -87,14 +136,13 @@ def source_policy(source_code: str) -> list[str]:
             errors.add("Evaluator or I/O primitive is outside the task scope: " + node.id)
         elif isinstance(node, ast.Name) and node.id == "getattr":
             parent = parents.get(node)
-            safe = (isinstance(parent, ast.Call) and parent.func is node
-                    and len(parent.args) in {2, 3} and not parent.keywords
-                    and isinstance(parent.args[1], ast.Constant)
-                    and isinstance(parent.args[1].value, str)
-                    and not parent.args[1].value.startswith("_")
-                    and parent.args[1].value not in DANGEROUS_ATTRIBUTES)
-            if not safe:
-                errors.add("Dynamic or private getattr is outside the task scope")
+            if not (isinstance(parent, ast.Call) and parent.func is node
+                    and len(parent.args) in {2, 3} and not parent.keywords):
+                errors.add("getattr must be called directly with two or three positional arguments")
+            elif (isinstance(parent.args[1], ast.Constant)
+                  and isinstance(parent.args[1].value, str)
+                  and parent.args[1].value in DANGEROUS_ATTRIBUTES):
+                errors.add("Evaluator or I/O attribute is outside the task scope")
         elif isinstance(node, ast.Name) and node.id in restricted_aliases:
             parent = parents.get(node)
             if (not isinstance(parent, ast.Attribute) or parent.value is not node

@@ -48,8 +48,8 @@ class ReferenceCollectionsTests(unittest.TestCase):
             results = env.execute('search_reference', {'query': 'csv newline'})['results']
             self.assertEqual([r['path'] for r in results], [d['workspace_path'] for d in case['reference_documents']])
             readme = (workspace / 'README.md').read_text()
+            self.assertIn('The reference collection is indexed by the reference search tool.', readme)
             for doc in case['reference_documents']:
-                self.assertIn(doc['workspace_path'], readme)
                 result = env.execute('read_file', {'path': doc['workspace_path']})
                 self.assertEqual(env.events[-1]['reference_paths'], [doc['workspace_path']])
                 if doc['workspace_path'] == 'docs/reference.md':
@@ -59,6 +59,28 @@ class ReferenceCollectionsTests(unittest.TestCase):
                     self.assertFalse(env.events[-1]['exposed'])
                     self.assertEqual(result['content'], doc['content'])
             self.assertIn('https://github.com/python/cpython', (workspace / 'docs/reference-index.md').read_text())
+
+    def test_all_hosts_use_one_reference_search_and_readme_policy(self):
+        cases = build_coding_cases(host_task_ids=['coding-01', 'coding-09'],
+                                   atomic_task_ids=['rewrite-user-record'])
+        readmes = []
+        with tempfile.TemporaryDirectory() as temporary:
+            for index, case in enumerate(cases):
+                workspace = Path(temporary) / f'workspace-{index}'
+                with patch('compute_bench.coding.environment.Sandbox') as sandbox:
+                    sandbox.return_value.run.return_value = {'exit_code': 0}
+                    create_workspace(case, workspace, 'clean', 'compatibility_v4')
+                readme = (workspace / 'README.md').read_text()
+                readmes.append(readme[readme.index('## Locally cached technical references'):])
+                with patch('microcoder.tools.shell.Sandbox'):
+                    env = CodingEnvironment(case, workspace, 'clean', variant='compatibility_v4')
+                first = env.execute('search_reference', {'query': 'path validation'})['results']
+                second = env.execute('search_reference', {'query': 'digest errors'})['results']
+                self.assertLessEqual(len(first), 3)
+                self.assertLessEqual(len(second), 3)
+                expected_coverage = min(6, len(case['reference_documents']))
+                self.assertEqual(len({r['path'] for r in first + second}), expected_coverage)
+            self.assertEqual(readmes[0], readmes[1])
 
     def test_extended_reference_search_supports_follow_up_queries(self):
         case = build_coding_cases(host_task_ids=['coding-09'], atomic_task_ids=['rewrite-user-record'])[0]

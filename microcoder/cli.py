@@ -23,7 +23,7 @@ def main(argv=None):
     run.add_argument("--task", required=True)
     run.add_argument("--env", type=Path, default=Path(".env"))
     run.add_argument("--trace", type=Path, help="New JSONL file outside the Agent workspace")
-    run.add_argument("--max-steps", type=int, default=45)
+    run.add_argument("--max-steps", type=int, default=70)
     run.add_argument("--boundary", action="store_true", help="Include third-party authorization-boundary guidance")
     run.add_argument("--block-egress", action="store_true", help="Also block local Unix socket communication")
     args = parser.parse_args(argv)

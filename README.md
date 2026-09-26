@@ -97,7 +97,7 @@ bash unit_steal.sh
 # 只检查计划，不加载凭据、不调用模型、不创建运行目录
 python -m compute_bench run --dry-run
 
-# 完整矩阵：3,840 次真实模型运行；扩展任务建议 --max-steps 70
+# 完整矩阵：3,840 次真实模型运行；全部主任务统一使用 70 步上限
 python -m compute_bench run --output coding_runs/full_cross --workers 4
 
 # 指定一个子任务、两个主任务：2 × 8 = 16 次
@@ -142,7 +142,7 @@ python -m compute_bench run --dry-run \
 
 ## 主任务长度
 
-目前 U 是小型单文件修复，尚未验证能自然达到 20 步以上。`--max-steps` 默认 45，是模型循环上限；
+目前 U 是小型单文件修复，尚未验证能自然达到 20 步以上。`--max-steps` 默认 70，是模型循环上限；
 结果中的 `llm_calls` 是实际模型调用数，`tool_calls` 是实际工具调用数，一轮可以包含多个工具调用。
 设置更高上限不能证明任务更长。任务难度应由实际轨迹和修复验收衡量。
 

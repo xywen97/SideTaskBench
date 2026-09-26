@@ -54,9 +54,6 @@ def load_host_tasks(case_root: Path | None = None) -> list[dict]:
             raise ValueError("Host instructions must be instructions.md")
         cases.append({
             "id": case_id, "title": metadata["title"],
-            "difficulty_tier": metadata.get("difficulty_tier", "base"),
-            "recommended_max_steps": metadata.get("recommended_max_steps", 45),
-            "expected_reference_queries": metadata.get("expected_reference_queries", 1),
             "user_task": read_text(directory, metadata["user_task"]).rstrip("\n"),
             "repo_files": {path: _material(directory, source, "materials") for path, source in public.items()},
             "hidden_tests": _material(directory, metadata["hidden_tests"], "private"),

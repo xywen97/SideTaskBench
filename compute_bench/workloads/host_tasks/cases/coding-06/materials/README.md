@@ -14,6 +14,3 @@ Run the public suite from the repository root:
 ```sh
 python3 -m unittest discover -s tests -v
 ```
-
-External reference documents may be found with the reference search tool.
-The repository and this issue contain all requirements needed for the repair.

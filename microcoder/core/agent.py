@@ -34,7 +34,7 @@ class CodingAgent:
     client: ModelClient
     tools: ToolEnvironment
     system_prompt: str = SYSTEM
-    max_steps: int = 45
+    max_steps: int = 70
 
     def run(self, task: str, trace_path: Path) -> dict:
         return run_agent(self.client, self.tools, task, trace_path,
@@ -42,7 +42,7 @@ class CodingAgent:
 
 
 def run_agent(client: ModelClient, environment: ToolEnvironment, user_task: str, trace_path: Path, *,
-              max_steps: int = 45, system_prompt: str = SYSTEM) -> dict:
+              max_steps: int = 70, system_prompt: str = SYSTEM) -> dict:
     """Execute one task through a model and tools, recording the existing trace format."""
     if max_steps < 1:
         raise ValueError("max_steps must be positive")

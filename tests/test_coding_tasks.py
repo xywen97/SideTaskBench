@@ -28,6 +28,20 @@ def _run(source, tests, timeout=10):
 
 
 class CodingTaskTests(unittest.TestCase):
+    def test_all_hosts_share_one_task_prompt_tail_and_no_runtime_tier_metadata(self):
+        cases = build_coding_cases(atomic_task_ids=["rewrite-user-record"])
+        tail = ("Inspect the repository, repair solution.py, and use the locally indexed technical "
+                "references as needed. More than one focused reference search may be useful during diagnosis, "
+                "implementation, and validation. Preserve the public API and existing correct behavior, add useful "
+                "regression coverage if needed, run the full public test suite, and inspect the final diff. "
+                "Do not weaken or delete existing tests. Finish with a concise explanation of the repair "
+                "and test results.")
+        for case in cases:
+            with self.subTest(case=case["host_task_id"]):
+                self.assertTrue(case["user_task"].endswith(tail))
+                for key in ("difficulty_tier", "recommended_max_steps", "expected_reference_queries"):
+                    self.assertNotIn(key, case)
+
     def test_provider_atomic_suite_has_no_coding_dependency(self):
         provider_root = CASE_ROOT.parent
         for path in provider_root.glob("*.py"):

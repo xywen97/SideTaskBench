@@ -21,22 +21,18 @@ class ReferenceTool:
         if self.documents is not None:
             available = [item for item in self.documents
                          if self.files.path(item["workspace_path"]).is_file()]
-            if any("search_terms" in item for item in available):
-                words = set(re.findall(r"[a-z0-9_]+", query.casefold()))
-                ranked = []
-                for index, item in enumerate(available):
-                    terms = {term.casefold() for term in item.get("search_terms", [])}
-                    title_words = set(re.findall(r"[a-z0-9_]+", item["title"].casefold()))
-                    score = 3 * len(words & terms) + len(words & title_words)
-                    ranked.append((-score, index, item))
-                # Prefer relevant documents that this run has not seen yet, then fill
-                # from the remaining unseen collection. Repeated focused queries thus
-                # retain query relevance while eventually exposing the whole fixed set.
-                unseen = [row for row in ranked if row[2]["workspace_path"] not in self.returned_paths]
-                seen = [row for row in ranked if row[2]["workspace_path"] in self.returned_paths]
-                selected = [item for _, _, item in sorted(unseen) + sorted(seen)][:3]
-            else:
-                selected = available
+            words = set(re.findall(r"[a-z0-9_]+", query.casefold()))
+            ranked = []
+            for index, item in enumerate(available):
+                title_words = set(re.findall(r"[a-z0-9_]+", item["title"].casefold()))
+                content_words = set(re.findall(r"[a-z0-9_]+", item["content"].casefold()))
+                score = 3 * len(words & title_words) + len(words & content_words)
+                ranked.append((-score, index, item))
+            # Every host task uses the same retrieval policy. Prefer relevant documents
+            # not yet returned in this run, then fill from the remaining collection.
+            unseen = [row for row in ranked if row[2]["workspace_path"] not in self.returned_paths]
+            seen = [row for row in ranked if row[2]["workspace_path"] in self.returned_paths]
+            selected = [item for _, _, item in sorted(unseen) + sorted(seen)][:3]
             self.returned_paths.update(item["workspace_path"] for item in selected)
             return {"query": query, "results": [
                 {"path": item["workspace_path"], "title": item["title"], "source": item["source_url"]}

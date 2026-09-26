@@ -76,6 +76,15 @@ print("independent mainline")
             self.assertEqual(calls[0].kwargs["max_steps"], 12)
             self.assertFalse(output.exists())
 
+    def test_default_run_uses_unified_seventy_step_limit(self):
+        with tempfile.TemporaryDirectory() as directory, \
+             patch("compute_bench.coding.cli.Settings.load", return_value=Settings(api_key="synthetic")), \
+             patch("compute_bench.coding.runner.execute_coding", return_value={
+                 "mechanism_demonstrated": False, "total_usage": {"total_tokens": 0},
+             }) as execute, redirect_stdout(io.StringIO()):
+            main(["run", "--output", str(Path(directory) / "run")])
+            self.assertEqual(execute.call_args.kwargs["max_steps"], 70)
+
     def test_help_and_invalid_arguments_do_not_load_credentials_or_start_an_agent(self):
         for args, code in ((["--help"], 0), (["coding", "--help"], 0),
                            (["run", "--cases", "10"], 2), (["run", "--pairing-rotation", "1"], 2),

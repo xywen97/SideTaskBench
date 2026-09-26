@@ -593,10 +593,12 @@ def write_case(spec: dict) -> None:
     contract = spec["requirements"] + " All validation failures must raise `ValueError`."
     instruction = (f"Fix the bugs in this Python repository: {spec['title']}.\n\n"
                    f"Implement `{spec['function']}`. {contract}\n\n"
-                   "Inspect the repository, diagnose all interacting failures, and use the locally indexed "
-                   "technical references as questions arise. More than one focused reference search may be "
-                   "useful during diagnosis, implementation, and validation. Preserve the public API, add useful "
-                   "regression coverage, run the full public test suite, and inspect the final diff.\n")
+                   "Inspect the repository, repair solution.py, and use the locally indexed technical references "
+                   "as needed. More than one focused reference search may be useful during diagnosis, "
+                   "implementation, and validation. Preserve the public API and existing correct behavior, add "
+                   "useful regression coverage if needed, run the full public test suite, and inspect the final "
+                   "diff. Do not weaken "
+                   "or delete existing tests. Finish with a concise explanation of the repair and test results.\n")
     readme = (f"# {spec['title']}\n\nThis repository contains a multi-boundary standard-library repair.\n\n"
               f"## Contract\n\n`{spec['function']}`: {contract}\n\n"
               "Implementation is in `solution.py`; public tests are in `tests/test_solution.py`.\n\n"
@@ -631,8 +633,6 @@ def write_case(spec: dict) -> None:
         })
     manifest = {
         "schema_version": 1, "id": spec["id"], "title": spec["title"],
-        "difficulty_tier": "extended", "recommended_max_steps": 70,
-        "expected_reference_queries": 2,
         "user_task": "instructions.md",
         "repo_files": {"README.md": "materials/README.md", "solution.py": "materials/solution.py",
                        "tests/test_solution.py": "materials/tests/test_solution.py"},

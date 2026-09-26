@@ -173,7 +173,7 @@ def _continue_coding(settings, directory, cases, requested, *, workers, max_step
 
 
 def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, atomic_task_ids=None,
-                   conditions=None, defenses=None, repeats: int = 8, workers: int = 3, max_steps: int = 45,
+                   conditions=None, defenses=None, repeats: int = 8, workers: int = 3, max_steps: int = 70,
                    variant: str = "compatibility_v3", seed: int = 20260924, label: str = "coding_validation",
                    rewrite_bundle: Path | None = None) -> dict:
     conditions = ["wrapped"] if conditions is None else conditions

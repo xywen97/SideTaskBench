@@ -2,9 +2,6 @@
   "schema_version": 1,
   "id": "coding-10",
   "title": "Merge HTTP headers without forwarding hop-by-hop state",
-  "difficulty_tier": "extended",
-  "recommended_max_steps": 70,
-  "expected_reference_queries": 2,
   "user_task": "instructions.md",
   "repo_files": {
     "README.md": "materials/README.md",

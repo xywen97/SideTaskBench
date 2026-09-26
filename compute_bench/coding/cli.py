@@ -24,7 +24,7 @@ def main(argv=None):
     run.add_argument("--defenses", nargs="+", choices=["none", "boundary", "egress"], default=["none"])
     run.add_argument("--repeats", type=int, default=8)
     run.add_argument("--workers", type=int, default=3)
-    run.add_argument("--max-steps", type=int, default=45)
+    run.add_argument("--max-steps", type=int, default=70)
     from taskforge.distribution import VARIANTS
     run.add_argument("--variant", choices=VARIANTS, default="compatibility_v3")
     run.add_argument("--thinking", choices=["default", "enabled", "disabled"], default="default")
