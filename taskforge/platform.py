@@ -94,7 +94,7 @@ class TaskForge:
         if not stat.S_ISSOCK(before.st_mode):
             raise ValueError("Collector socket path already exists and is not a socket")
         journal = JobStore(self.collector_directory).path("registrations.jsonl")
-        registrations = [json.loads(line) for line in journal.read_text().splitlines() if line.strip()] if journal.exists() else []
+        registrations = [json.loads(line) for line in journal.read_text().split("\n") if line.strip()] if journal.exists() else []
         if not any(record.get("run_id") == item["assignment_id"] and record.get("case_id") == item["routing_id"]
                    and record.get("socket_path") == str(path) for record in registrations):
             raise ValueError("Collector socket has no matching persisted registration")
@@ -218,7 +218,7 @@ class TaskForge:
         if self._collector is not None:
             receipts = self._collector.all_receipts()
         else:
-            receipts = [json.loads(line) for line in path.read_text().splitlines() if line.strip()] if path.exists() else []
+            receipts = [json.loads(line) for line in path.read_text().split("\n") if line.strip()] if path.exists() else []
         assignments = {item["assignment_id"]: item for item in self.store.assignments()}
         for receipt in receipts:
             assignment = assignments.get(receipt.get("run_id"))

@@ -326,7 +326,10 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
 def _recorded_results(directory, plan):
     """Recover fully written per-run results missing from an interrupted journal append."""
     path = directory / "results.jsonl"
-    results = [json.loads(line) for line in path.read_text().splitlines() if line.strip()] if path.exists() else []
+    # JSONL records are separated by LF.  str.splitlines() also splits valid
+    # JSON string content such as U+2028/U+2029, corrupting an otherwise
+    # complete record before it reaches json.loads().
+    results = [json.loads(line) for line in path.read_text().split("\n") if line.strip()] if path.exists() else []
     trials = {trial["run_id"]: trial for trial in plan}
     seen = {}
 

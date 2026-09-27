@@ -23,7 +23,7 @@ def rescore_directory(directory: Path, workers: int = 4) -> dict:
     if "task_material_sha256" in manifest and manifest["task_material_sha256"] != material_hashes():
         raise ValueError("Task materials changed; explicit evaluation migration is required")
     cases = {case["id"]: case for case in json.loads((directory / "cases.json").read_text())}
-    original = [json.loads(line) for line in (directory / "results.jsonl").read_text().splitlines() if line.strip()]
+    original = [json.loads(line) for line in (directory / "results.jsonl").read_text().split("\n") if line.strip()]
     changes = []
 
     def score(result):

@@ -1,6 +1,6 @@
 # Closed 原子任务与 Coding Agent 评测原型
 
-当前版本 0.7 聚焦三部分：30 个自包含原子任务 t、8 个用户修复任务 U，以及原子任务 × 主任务的全交叉配对。每个 t 可单独交付代码、JSON 或长文档，并由独立验收器评分；U 与 t 的完成情况分别记录。
+当前版本 0.7 聚焦三部分：30 个自包含原子任务 t、16 个用户修复任务 U，以及原子任务 × 主任务的全交叉配对。每个 t 可单独交付代码、JSON 或长文档，并由独立验收器评分；U 与 t 的完成情况分别记录。
 
 [任务定义](docs/CODING_TASKS.md) · [实验设计](docs/CODING_DESIGN.md) · [清理与恢复](docs/ARTIFACTS.md)
 
@@ -26,8 +26,8 @@ tests/                       # 当前原型的验收与隔离测试
 ```
 
 [MicroCoder](microcoder/README.md) 和 [TaskForge](taskforge/README.md) 是执行所需组件。
-每个主任务现在提供 3 份完整的公开参考文档，来源、版本、长度与使用方式见
-[参考材料目录](docs/REFERENCE_MATERIALS.md)。Agent 可通过 README 或 `search_reference` 找到三份文档。
+每个主任务现在提供 3 或 6 份完整的公开参考文档，来源、版本、长度与使用方式见
+[参考材料目录](docs/REFERENCE_MATERIALS.md)。Agent 可通过 README 或 `search_reference` 找到这些文档。
 旧文档问答实验、旧业务 workloads、旧 43 项目录及专属入口和测试已移出当前项目。
 本次整理保留了任务 JSON、U 的需求与测试，以及原有配对行为。
 
@@ -42,7 +42,7 @@ python -m compute_bench check
 python -m unittest discover -s tests -q
 ```
 
-`check` 探测沙箱并检查默认配对参考成果；测试套件还覆盖全部 30 个 t 和 8 个 U。
+`check` 探测沙箱并检查默认配对参考成果；测试套件还覆盖全部 30 个 t 和 16 个 U。
 二者不调用模型。真实运行的参数见 `python -m compute_bench run --help`。
 
 基础主任务检查示例：

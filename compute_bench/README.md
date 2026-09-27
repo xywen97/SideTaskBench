@@ -4,7 +4,7 @@
 
 - [workloads/provider_atomic/](workloads/provider_atomic/)：30 个 t 的定义、独立验收与五组成果汇总。
 - [workloads/python_grading.py](workloads/python_grading.py)：共享 Python 范围检查和沙箱验收。
-- [workloads/host_tasks/](workloads/host_tasks/)：8 个 U 的独立任务目录；每题包含公开材料、参考说明和私有验收。
+- [workloads/host_tasks/](workloads/host_tasks/)：16 个 U 的独立任务目录；每题包含公开材料、参考说明和私有验收。
 - [coding/tasks.py](coding/tasks.py)：按 ID 选择 U 与原子任务并生成全交叉配对，不内嵌任务材料。
 - [coding/runner.py](coding/runner.py)：模型运行、轨迹、结果与启动失败恢复。
 - [rewriting/](rewriting/)：独立准备 prompt、调用改造模型并保存可替换参考材料；[prompt.md](rewriting/prompt.md) 可直接查看。

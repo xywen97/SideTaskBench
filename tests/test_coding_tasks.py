@@ -1,4 +1,4 @@
-"""Task validity for the sixteen host repairs and thirty closed provider units."""
+"""Task validity for host repairs, reference variants, and provider units."""
 
 from __future__ import annotations
 

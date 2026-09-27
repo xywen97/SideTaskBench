@@ -8,11 +8,24 @@ import unittest
 from unittest.mock import patch
 
 from microcoder.config import Settings
-from compute_bench.coding.runner import execute_coding, resume_coding
+from compute_bench.coding.runner import _recorded_results, execute_coding, resume_coding
 from taskforge import TaskForge
 
 
 class CodingRecoveryTests(unittest.TestCase):
+    def test_results_jsonl_preserves_unicode_line_separator_inside_string(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            plan = [{"run_id": "unicode-record", "case_id": "case-1"}]
+            record = {**plan[0], "final_content": "before\u2028after"}
+            (root / "results.jsonl").write_text(
+                json.dumps(record, ensure_ascii=False) + "\n", encoding="utf-8")
+
+            results, recovered = _recorded_results(root, plan)
+
+            self.assertEqual(results, [record])
+            self.assertFalse(recovered)
+
     def test_duplicate_matrix_dimensions_are_rejected_before_bootstrap(self):
         with tempfile.TemporaryDirectory() as temporary, \
              patch("compute_bench.coding.runner.Sandbox") as sandbox:

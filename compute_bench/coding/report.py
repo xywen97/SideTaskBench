@@ -49,7 +49,7 @@ def write_report(directory: Path, *, corrected: bool = False) -> dict:
     selected_tasks = {case["crowd_task"]["task_id"] for case in cases.values()}
     input_name = "corrected_results.jsonl" if corrected else "results.jsonl"
     prefix = "corrected_" if corrected else ""
-    results = [json.loads(line) for line in (directory / input_name).read_text().splitlines() if line.strip()]
+    results = [json.loads(line) for line in (directory / input_name).read_text().split("\n") if line.strip()]
     grouped = defaultdict(list)
     controls = {(r["case_id"], r["repeat"], r["defense"], r["condition"]): r for r in results}
     for result in results:

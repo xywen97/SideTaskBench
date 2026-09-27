@@ -1,6 +1,6 @@
 # Closed 原子任务
 
-当前分为两套材料：[host_tasks](host_tasks/) 是主 Agent 的 8 个用户修复任务 U；
+当前分为两套材料：[host_tasks](host_tasks/) 是主 Agent 的 16 个用户修复任务 U；
 [provider_atomic](provider_atomic/) 是 30 个原子任务 t，分为六类，每类五项：
 函数改写、函数修复、算法实现、单行为回归场景、分类/转换、长文档生成。
 

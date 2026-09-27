@@ -119,7 +119,8 @@ class ReferenceCollectionsTests(unittest.TestCase):
             generate_fixture(bundle, cases)
             self.assertEqual(len(load_bundle(bundle, cases)), 1)
             manifest = json.loads((bundle / 'manifest.json').read_text())
-            self.assertEqual(len(manifest['entries'][0]['reference_documents']), 3)
+            self.assertEqual(len(manifest['entries'][0]['reference_documents']),
+                             len(cases[0]['reference_documents']))
             self.assertEqual(set(public_input(cases[0])), {'original_reference', 'atomic_specification', 'delivery_protocol'})
             changed = deepcopy(cases)
             changed[0]['reference_documents'][1]['content'] += '\nChanged companion\n'

@@ -97,10 +97,12 @@ class ResultCollector:
         for filename, target in (("receipts.jsonl", self._receipts), ("blocked.jsonl", self._blocked)):
             path = self.data_dir / filename
             if path.exists():
-                target.extend(json.loads(line) for line in path.read_text().splitlines() if line.strip())
+                target.extend(json.loads(line) for line in path.read_text().split("\n") if line.strip())
         registrations = self.data_dir / "registrations.jsonl"
         if registrations.exists():
-            for line in registrations.read_text().splitlines():
+            for line in registrations.read_text().split("\n"):
+                if not line.strip():
+                    continue
                 item = json.loads(line)
                 if item["case_id"] not in self.assignments:
                     raise ValueError("Stored collector case is not in the current experiment")

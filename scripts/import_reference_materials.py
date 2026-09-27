@@ -1,13 +1,13 @@
 """Refresh pinned, complete upstream documents; never execute downloaded content."""
 
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1] / 'compute_bench/workloads/host_tasks/cases'
+RETRIEVED = '2026-09-25T09:00:05.862699+00:00'
 SOURCES = {
     'python': ('python/cpython', 'cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69', 'Python 3.11.14', 'LICENSE', 'PSF license; documentation examples also under Zero-Clause BSD'),
     'aip': ('aip-dev/google.aip.dev', '23e176e7333ea3bc6b085f9950a5da03d2bbfc72', 'Pinned AIP snapshot', 'LICENSE.md', 'CC-BY-4.0; code samples Apache-2.0'),
@@ -66,7 +66,7 @@ def main():
     # Complete all downloads before changing task files.
     with ThreadPoolExecutor(max_workers=6) as executor:
         fetched = dict(executor.map(fetch, sorted(keys)))
-    retrieved = datetime.now(timezone.utc).isoformat()
+    retrieved = RETRIEVED
     for case_id, docs in CATALOG.items():
         root = ROOT / case_id
         metadata = json.loads((root / 'task.json').read_text())

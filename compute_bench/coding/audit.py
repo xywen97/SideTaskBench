@@ -38,7 +38,7 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
     def read(relative, lines=False):
         path = directory / relative
         if lines:
-            return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+            return [json.loads(line) for line in path.read_text().split("\n") if line.strip()]
         return json.loads(path.read_text())
 
     try:

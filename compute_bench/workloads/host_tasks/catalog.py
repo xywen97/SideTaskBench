@@ -63,8 +63,8 @@ def load_host_tasks(case_root: Path | None = None) -> list[dict]:
         })
         if "documents" in reference:
             documents = reference["documents"]
-            if not isinstance(documents, list) or not 3 <= len(documents) <= 8:
-                raise ValueError("Host reference collection requires 3–8 documents")
+            if not isinstance(documents, list) or not 3 <= len(documents) <= 6:
+                raise ValueError("Host reference collection requires 3–6 documents")
             paths = [item["workspace_path"] for item in documents]
             if (len(paths) != len(set(paths)) or paths[0] != "docs/reference.md"
                     or documents[0]["path"] != reference["path"]):
