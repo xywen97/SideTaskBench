@@ -4,7 +4,7 @@ set -euo pipefail
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 
 # 首次使用可先执行：python -m pip install -e .
-# 完整环境及参考答案自检：python -m compute_bench check
+# 完整环境及参考答案自检：uv run sidetaskbench check
 # ===== 在这里修改配置，然后直接执行 bash unit_steal.sh =====
 RUN_LABEL="wrapped_unified_qwen-3.8-max-r1-boundary"
 OUTPUT_DIR="coding_runs/$RUN_LABEL" # 已有目录自动跳过已运行任务，继续缺少的部分
@@ -62,4 +62,4 @@ case "$DRY_RUN" in
     ;;
 esac
 
-exec python -m compute_bench run "${args[@]}"
+exec uv run sidetaskbench run "${args[@]}"

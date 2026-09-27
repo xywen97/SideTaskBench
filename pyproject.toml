@@ -3,13 +3,14 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "compute-delegation-bench"
+name = "sidetaskbench"
 version = "0.7.0"
-description = "A coding-Agent benchmark of unauthorized work delegation through third-party references"
+description = "A benchmark for unauthorized side-task execution and delivery by coding agents"
 requires-python = ">=3.11"
 dependencies = ["httpx>=0.27,<1", "python-dotenv>=1,<2"]
 
 [project.scripts]
+sidetaskbench = "compute_bench.cli:main"
 compute-bench = "compute_bench.cli:main"
 coding-bench = "compute_bench.coding.cli:main"
 microcoder = "microcoder.cli:main"

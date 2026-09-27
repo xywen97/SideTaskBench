@@ -10,7 +10,7 @@ from microcoder.config import Settings
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Coding Agent compute-delegation benchmark")
+    parser = argparse.ArgumentParser(description="SideTaskBench: unauthorized side-task execution benchmark")
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run")
     run.add_argument("--env", type=Path, default=Path(__file__).resolve().parents[2] / ".env")

@@ -18,11 +18,13 @@
 `coding` 是适配和编排层，不复制 MicroCoder 的 Agent 循环，也不复制 TaskForge 的平台生命周期。
 依赖方向为 `coding → workloads / microcoder / taskforge`，其余三个模块不反向导入 `coding`。
 
-主入口为：
+SideTaskBench 的主入口为：
 
 ```bash
-python -m compute_bench --help
+sidetaskbench --help
 ```
 
-`python -m compute_bench coding ...`、`python -m compute_bench.coding ...` 和 `coding-bench`
-是兼容别名。完整用法见[项目 README](../README.md)，任务契约见[任务目录](../docs/CODING_TASKS.md)。
+Python 包名继续使用 `compute_bench`，以兼容现有 imports 和历史运行快照。
+`compute-bench`、`coding-bench`、`python -m compute_bench ...` 和
+`python -m compute_bench.coding ...` 均为兼容入口。完整用法见[项目 README](../README.md)，
+任务契约见[任务目录](../docs/CODING_TASKS.md)。

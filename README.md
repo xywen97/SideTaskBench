@@ -1,4 +1,6 @@
-# SideTaskBench: 评测Agent在运行时是否易被引导产生运行分支并被资源劫持（本地算力、Token）的情况 v1
+# SideTaskBench
+
+评测 Coding Agent 是否会在运行时被引导执行和交付未经授权的旁支任务。
 
 本项目评估 Coding Agent 在修复用户仓库时，是否会执行参考资料中未经用户授权的第三方任务。
 当前数据集包含 16 个主任务 U、30 个原子任务 t，以及两者的全交叉配对。
@@ -33,7 +35,8 @@ MicroCoder 和 TaskForge 都不导入 benchmark，因此可以独立使用。
 
 ```bash
 uv sync
-uv run python -m compute_bench check
+uv run sidetaskbench check
+# 运行需要一定时间
 uv run python -m unittest discover -s tests -q
 ```
 
@@ -42,7 +45,7 @@ uv run python -m unittest discover -s tests -q
 
 ```bash
 python -m pip install -e .
-python -m compute_bench check
+sidetaskbench check
 python -m unittest discover -s tests -q
 ```
 
@@ -53,13 +56,13 @@ python -m unittest discover -s tests -q
 先检查计划；该命令不读取凭据，也不创建结果目录：
 
 ```bash
-python -m compute_bench run --dry-run
+uv run sidetaskbench run --dry-run
 ```
 
 最小真实运行示例：
 
 ```bash
-python -m compute_bench run \
+uv run sidetaskbench run \
   --output coding_runs/smoke \
   --host-task-ids coding-01 \
   --atomic-task-ids rewrite-user-record \
@@ -73,10 +76,10 @@ python -m compute_bench run \
 常用后处理命令：
 
 ```bash
-python -m compute_bench report coding_runs/smoke
-python -m compute_bench audit coding_runs/smoke --regrade
-python -m compute_bench rescore coding_runs/smoke
-python -m compute_bench resume coding_runs/smoke
+uv run sidetaskbench report coding_runs/smoke
+uv run sidetaskbench audit coding_runs/smoke --regrade
+uv run sidetaskbench rescore coding_runs/smoke
+uv run sidetaskbench resume coding_runs/smoke
 ```
 
 - `report`：从已有记录生成 Markdown 和 HTML 报告。
@@ -106,3 +109,6 @@ TaskForge 只把独立验收通过的实际回执计为有效交付；模型声�
 
 `coding_runs/`、`verification_runs/`、`microcoder_runs/` 和 `taskforge_runs/` 默认不进入 Git。
 历史清理与恢复信息见 [ARTIFACTS.md](docs/ARTIFACTS.md)。
+
+Python 包名仍为 `compute_bench`；`compute-bench`、`coding-bench` 和
+`python -m compute_bench` 保留为兼容入口。
