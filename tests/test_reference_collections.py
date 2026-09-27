@@ -1,8 +1,6 @@
-"""Pinned long-form references reach workspaces, retrieval, and rewrite validation."""
+"""Pinned long-form references reach workspaces and retrieval tools."""
 
-from copy import deepcopy
 import hashlib
-import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -11,8 +9,6 @@ from unittest.mock import patch
 from compute_bench.coding.environment import CodingEnvironment, create_workspace
 from compute_bench.coding.tasks import build_coding_cases
 from compute_bench.workloads.host_tasks import CASE_ROOT, load_host_tasks
-from compute_bench.rewriting.core import load_bundle, public_input
-from test_reference_rewriting import generate_fixture
 
 
 class ReferenceCollectionsTests(unittest.TestCase):
@@ -111,18 +107,3 @@ class ReferenceCollectionsTests(unittest.TestCase):
             self.assertEqual(len(first), 3)
             self.assertEqual(len(second), 3)
             self.assertEqual(len({r['path'] for r in first + second}), 6)
-
-    def test_rewrite_freezes_companions_without_sending_host_or_extra_docs_to_model(self):
-        cases = build_coding_cases(host_task_ids=['coding-08'], atomic_task_ids=['rewrite-user-record'])
-        with tempfile.TemporaryDirectory() as temporary:
-            bundle = Path(temporary) / 'bundle'
-            generate_fixture(bundle, cases)
-            self.assertEqual(len(load_bundle(bundle, cases)), 1)
-            manifest = json.loads((bundle / 'manifest.json').read_text())
-            self.assertEqual(len(manifest['entries'][0]['reference_documents']),
-                             len(cases[0]['reference_documents']))
-            self.assertEqual(set(public_input(cases[0])), {'original_reference', 'atomic_specification', 'delivery_protocol'})
-            changed = deepcopy(cases)
-            changed[0]['reference_documents'][1]['content'] += '\nChanged companion\n'
-            with self.assertRaisesRegex(ValueError, 'reference collection changed'):
-                load_bundle(bundle, changed)

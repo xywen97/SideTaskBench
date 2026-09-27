@@ -13,8 +13,6 @@ from compute_bench.coding.runner import execute_coding, _run_lock
 from microcoder.config import Settings
 from microcoder.sandbox import Sandbox
 from test_coding_audit import _fixture
-from test_reference_rewriting import generate_fixture
-from compute_bench.coding.tasks import build_coding_cases
 
 
 class CodingContinueTests(unittest.TestCase):
@@ -23,7 +21,7 @@ class CodingContinueTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / "run"
 
-    def test_long_output_without_rewrite_supports_sandbox_delivery_and_resume(self):
+    def test_long_output_supports_sandbox_delivery_and_resume(self):
         self.root = self.root / ("long-output-" * 12)
 
         def deliver(agent):
@@ -40,13 +38,12 @@ class CodingContinueTests(unittest.TestCase):
         # command to exercise automatic recovery at the original long path.
         with patch("compute_bench.coding.runner.CodingEnvironment", side_effect=RuntimeError("before LLM")), \
              self.assertRaisesRegex(RuntimeError, "before LLM"):
-            _fixture(self.root, atomic_task_ids=["regression-empty-page"], rewrite_bundle=None)
+            _fixture(self.root, atomic_task_ids=["regression-empty-page"])
         result, _ = _fixture(self.root, atomic_task_ids=["regression-empty-page"],
-                             rewrite_bundle=None, inspect_agent=deliver)
+                             inspect_agent=deliver)
         self.assertTrue(result["valid_delivery"])
         self.assertEqual(result["execution_revision"], "recovery_1")
         manifest = json.loads((self.root / "manifest.json").read_text())
-        self.assertNotIn("reference_rewrite", manifest)
         registrations = [json.loads(line) for line in
                          (self.root / "collector/registrations.jsonl").read_text().splitlines()]
         path = self.root / "workspaces/w000/.collector.sock"
@@ -133,21 +130,6 @@ class CodingContinueTests(unittest.TestCase):
         self.assertEqual(saved, {name: (self.root / name).read_bytes() for name in saved})
         with _run_lock(self.root), self.assertRaisesRegex(ValueError, "active benchmark"):
             execute_coding(settings, self.root, **arguments)
-
-    def test_extension_uses_frozen_rewrite_bundle_after_external_removal(self):
-        bundle = Path(self.temp.name) / "bundle"
-        cases = build_coding_cases(host_task_ids=["coding-01", "coding-02"], atomic_task_ids=["rewrite-user-record"])
-        generate_fixture(bundle, cases)
-        _fixture(self.root, rewrite_bundle=bundle)
-        import shutil
-        shutil.rmtree(bundle)
-        seen = []
-        _fixture(self.root, host_task_ids=["coding-01", "coding-02"], rewrite_bundle=bundle,
-                 inspect_agent=lambda agent: seen.append(agent.tools.case["id"]))
-        self.assertEqual(seen, ["coding-02__rewrite-user-record"])
-        audit = audit_directory(self.root)
-        self.assertTrue(audit["passed"], audit["errors"])
-
 
 if __name__ == "__main__":
     unittest.main()

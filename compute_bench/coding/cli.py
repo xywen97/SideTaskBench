@@ -10,8 +10,7 @@ from microcoder.config import Settings
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Coding Agent compute-delegation benchmark",
-                                     epilog="Independent reference generation: python -m compute_bench rewrite --help")
+    parser = argparse.ArgumentParser(description="Coding Agent compute-delegation benchmark")
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run")
     run.add_argument("--env", type=Path, default=Path(__file__).resolve().parents[2] / ".env")
@@ -19,7 +18,6 @@ def main(argv=None):
     run.add_argument("--host-task-ids", nargs="+", help="Host task IDs; omitted selects all 16")
     run.add_argument("--atomic-task-ids", nargs="+", help="Atomic task IDs; omitted selects all 30")
     run.add_argument("--dry-run", action="store_true", help="Validate and show the plan size without model calls or credentials")
-    run.add_argument("--rewrite-bundle", type=Path, help="Replace wrapped references with a frozen generated bundle")
     run.add_argument("--conditions", nargs="+", choices=["clean", "length_control", "direct", "wrapped"], default=["wrapped"])
     run.add_argument("--defenses", nargs="+", choices=["none", "boundary", "egress"], default=["none"])
     run.add_argument("--repeats", type=int, default=8)
@@ -54,12 +52,6 @@ def main(argv=None):
         try:
             cases = build_coding_cases(host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids)
             plan = build_run_plan(cases, args.conditions, args.defenses, args.repeats, args.seed)
-            if args.rewrite_bundle is not None:
-                from compute_bench.rewriting.core import load_bundle
-                if "wrapped" not in args.conditions:
-                    raise ValueError("A rewrite bundle requires the wrapped condition")
-                frozen = args.output / "reference_rewrite" if args.output else None
-                load_bundle(frozen if frozen is not None and frozen.is_dir() else args.rewrite_bundle, cases)
         except (ValueError, OSError) as exc:
             parser.error(str(exc))
         if args.dry_run:
@@ -67,8 +59,7 @@ def main(argv=None):
                               "atomic_task_ids": list(dict.fromkeys(c["crowd_task"]["task_id"] for c in cases)),
                               "pair_count": len(cases), "repeats": args.repeats,
                               "conditions": args.conditions, "defenses": args.defenses,
-                              "planned_runs": len(plan), "seed": args.seed,
-                              "rewrite_bundle": str(args.rewrite_bundle.resolve()) if args.rewrite_bundle else None}, ensure_ascii=False, indent=2))
+                              "planned_runs": len(plan), "seed": args.seed}, ensure_ascii=False, indent=2))
             return
         from .runner import execute_coding
         settings = replace(Settings.load(args.env), thinking=args.thinking)
@@ -77,8 +68,7 @@ def main(argv=None):
             summary = execute_coding(settings, output, host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids,
                                      conditions=args.conditions, defenses=args.defenses,
                                      repeats=args.repeats, workers=args.workers, max_steps=args.max_steps,
-                                     variant=args.variant, label=args.label, seed=args.seed,
-                                     rewrite_bundle=args.rewrite_bundle)
+                                     variant=args.variant, label=args.label, seed=args.seed)
         except (ValueError, OSError) as exc:
             parser.error(str(exc))
         print(json.dumps({"report": str(output.resolve() / "report.html"), "mechanism_demonstrated": summary["mechanism_demonstrated"], "usage": summary["total_usage"],

@@ -61,10 +61,6 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
         documents, portfolio = read("documents.json"), read("collected_portfolio.json")
         platform_result = read("platform/result.json")
         expected_cases = cases_for_manifest(manifest)
-        if manifest.get("reference_rewrite") is not None:
-            from compute_bench.rewriting.core import frozen_cases
-            expected_cases = frozen_cases(directory, manifest, expected_cases)
-            check("frozen_rewrite_bundle", True)
         check("frozen_task_templates", cases == expected_cases)
         if manifest.get("pairing_design") == DESIGN:
             check("matrix_dimensions", manifest.get("pair_count") == manifest.get("case_count") == len(expected_cases)

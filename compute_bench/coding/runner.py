@@ -27,8 +27,6 @@ from .grading import grade_main, grade_crowd, read_candidate
 from .platform import EVALUATOR_ID, assemble_platform, delivery_session, open_platform
 from .provenance import SOURCE_LAYOUT_VERSION, snapshot_sources, material_hashes
 from .tasks import DESIGN, build_coding_cases, build_run_plan, extend_run_plan
-from compute_bench.rewriting.core import apply_documents, load_bundle, bundle_inventory, frozen_cases
-from compute_bench.workloads.resources import inventory
 
 
 def scan_work(case: dict, workspace: Path, events=(), *, include_workspace=True) -> list[dict]:
@@ -107,7 +105,7 @@ def _run_lock(directory):
 
 
 def _continue_coding(settings, directory, cases, requested, *, workers, max_steps, variant, seed,
-                     conditions, defenses, repeats, rewrite_bundle):
+                     conditions, defenses, repeats):
     required = ("manifest.json", "plan.json", "cases.json", "documents.json")
     if not all((directory / name).is_file() for name in required):
         raise ValueError("Existing output is not a complete coding experiment; use a new output directory")
@@ -121,14 +119,6 @@ def _continue_coding(settings, directory, cases, requested, *, workers, max_step
             raise ValueError("Existing experiment has a different " + key + "; use its original configuration or a new output directory")
     if manifest.get("task_material_sha256") != material_hashes():
         raise ValueError("Task materials changed; cannot resume the frozen experiment")
-    if manifest.get("reference_rewrite") is not None:
-        frozen = directory / "reference_rewrite"
-        if rewrite_bundle is not None and Path(rewrite_bundle).exists():
-            if bundle_inventory(rewrite_bundle) != manifest["reference_rewrite"]["sha256"]:
-                raise ValueError("Rewrite bundle differs from the frozen experiment; use the original bundle or a new output directory")
-        cases = frozen_cases(directory, manifest, cases)
-    elif rewrite_bundle is not None:
-        raise ValueError("Cannot add a rewrite bundle to an existing fixed-template experiment")
     current = {case["id"]: case for case in cases}
     if any(current.get(case["id"]) != case for case in old_cases):
         raise ValueError("Existing cases changed or were removed; preserve the original selection and materials")
@@ -174,8 +164,8 @@ def _continue_coding(settings, directory, cases, requested, *, workers, max_step
 
 def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, atomic_task_ids=None,
                    conditions=None, defenses=None, repeats: int = 8, workers: int = 3, max_steps: int = 70,
-                   variant: str = "compatibility_v3", seed: int = 20260924, label: str = "coding_validation",
-                   rewrite_bundle: Path | None = None) -> dict:
+                   variant: str = "compatibility_v3", seed: int = 20260924,
+                   label: str = "coding_validation") -> dict:
     conditions = ["wrapped"] if conditions is None else conditions
     defenses = ["none"] if defenses is None else defenses
     if any(type(value) is not int or value < 1 for value in (workers, max_steps)):
@@ -187,14 +177,7 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
         if any(output_dir.iterdir()):
             return _continue_coding(settings, output_dir, cases, plan, workers=workers, max_steps=max_steps,
                                     variant=variant, seed=seed, conditions=conditions, defenses=defenses,
-                                    repeats=repeats, rewrite_bundle=rewrite_bundle)
-        rewrite_files = None
-        if rewrite_bundle is not None:
-            if "wrapped" not in conditions:
-                raise ValueError("A rewrite bundle requires the wrapped condition")
-            rewritten = load_bundle(rewrite_bundle, cases)
-            rewrite_files = inventory(Path(rewrite_bundle))
-            cases = apply_documents(cases, rewritten)
+                                    repeats=repeats)
         output_dir.mkdir(parents=True, exist_ok=True)
         (output_dir / "results.jsonl").touch()
         isolation = Sandbox.probe()
@@ -212,18 +195,6 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
                     "platform_lifecycle": {"directory": "platform", "collector_directory": "collector", "evaluator_id": EVALUATOR_ID},
                     "grading_scope": "original public tests plus private tests against solution.py; pure-utility candidate policy"}
         manifest.update(snapshot_sources(output_dir))
-        if rewrite_files is not None:
-            for relative, content in rewrite_files.items():
-                target = output_dir / "reference_rewrite" / relative
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_bytes(content)
-            manifest["reference_rewrite"] = {"directory": "reference_rewrite",
-                "sha256": bundle_inventory(output_dir / "reference_rewrite"),
-                "treatment": "contextual_rewrite_v1"}
-            # Revalidate the copied bytes before opening any victim session.
-            base_cases = build_coding_cases(host_task_ids=host_task_ids, atomic_task_ids=atomic_task_ids)
-            if frozen_cases(output_dir, manifest, base_cases) != cases:
-                raise ValueError("Rewrite bundle changed while taking its snapshot")
         write_json(output_dir / "manifest.json", manifest)
         write_json(output_dir / "plan.json", plan)
         write_json(output_dir / "cases.json", cases)
@@ -379,11 +350,6 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
     manifest = json.loads((directory / "manifest.json").read_text())
     plan = json.loads((directory / "plan.json").read_text())
     cases = json.loads((directory / "cases.json").read_text())
-    if manifest.get("reference_rewrite") is not None:
-        from .tasks import cases_for_manifest
-        expected_cases = frozen_cases(directory, manifest, cases_for_manifest(manifest))
-        if cases != expected_cases:
-            raise ValueError("Frozen rewrite cases changed; cannot resume")
     results, recovered = _recorded_results(directory, plan)
     if recovered:
         manifest.update(completed_runs=len(results), total_usage={

@@ -9,7 +9,4 @@ def main(argv=None):
     arguments = list(sys.argv[1:] if argv is None else argv)
     if arguments[:1] == ["coding"]:
         arguments = arguments[1:]
-    if arguments[:1] == ["rewrite"]:
-        from .rewriting.cli import main as rewrite_main
-        return rewrite_main(arguments[1:])
     return coding_main(arguments)

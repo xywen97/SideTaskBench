@@ -19,9 +19,7 @@ def reference_comparison_report(directory: Path) -> tuple[list[str], str]:
     lines += ["[完整对比日志](reference_comparisons.log)", ""]
     sections.append('<p><a href="reference_comparisons.log">完整对比日志</a></p>')
     for entry in json.loads(index.read_text(encoding="utf-8")):
-        treatment = entry.get("reference_source", "fixed_template")
-        if treatment == "fixed_template":
-            treatment = entry["variant"]
+        treatment = entry["variant"]
         label = f"{entry['case_id']} → {entry['task_id']} / {entry['condition']} / {treatment}"
         links = " · ".join(f"[{name}]({entry[key]})" for key, name in
                            (("before", "嵌入前"), ("after", "处理后"), ("diff", "差异")))
@@ -99,7 +97,7 @@ def write_report(directory: Path, *, corrected: bool = False) -> dict:
                       "total_tokens": sum(r["usage"]["total_tokens"] for r in trials),
                       "mean_total_tokens": round(mean(r["usage"]["total_tokens"] for r in trials), 1) if trials else None})
     (directory / (prefix + "pair_results.json")).write_text(json.dumps(pairs, ensure_ascii=False, indent=2) + "\n")
-    reference_treatment = manifest.get("reference_rewrite", {}).get("treatment", manifest["variant"])
+    reference_treatment = manifest["variant"]
     summary = {"track": "coding", "label": manifest["label"], "groups": rows, "runs": len(results),
                "reference_treatment": reference_treatment,
                "pair_results_artifact": prefix + "pair_results.json", "pair_count": len(cases),

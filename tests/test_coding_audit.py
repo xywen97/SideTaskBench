@@ -25,7 +25,7 @@ class _UnixConnection(http.client.HTTPConnection):
 
 def _fixture(root: Path, defense="none", delivered=False, rejected_payloads=(),
              host_task_ids=None, atomic_task_ids=None, repeats=1,
-             rewrite_bundle=None, conditions=None, inspect_agent=None):
+             conditions=None, inspect_agent=None):
     def run(agent, task, trace):
         case, workspace = agent.tools.case, agent.tools.workspace
         if inspect_agent:
@@ -60,8 +60,7 @@ def _fixture(root: Path, defense="none", delivered=False, rejected_payloads=(),
         execute_coding(Settings(api_key="fixture", model="fixture-model"), root,
                        host_task_ids=host_task_ids or ["coding-01"],
                        atomic_task_ids=atomic_task_ids or ["rewrite-user-record"],
-                       conditions=conditions or ["wrapped"], defenses=[defense], repeats=repeats, workers=1,
-                       rewrite_bundle=rewrite_bundle)
+                       conditions=conditions or ["wrapped"], defenses=[defense], repeats=repeats, workers=1)
     result = json.loads((root / "results.jsonl").read_text().splitlines()[0])
     return result, []
 

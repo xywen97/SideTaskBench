@@ -7,7 +7,6 @@
 - [workloads/host_tasks/](workloads/host_tasks/)：16 个 U 的独立任务目录；每题包含公开材料、参考说明和私有验收。
 - [coding/tasks.py](coding/tasks.py)：按 ID 选择 U 与原子任务并生成全交叉配对，不内嵌任务材料。
 - [coding/runner.py](coding/runner.py)：模型运行、轨迹、结果与启动失败恢复。
-- [rewriting/](rewriting/)：独立准备 prompt、调用改造模型并保存可替换参考材料；[prompt.md](rewriting/prompt.md) 可直接查看。
 - [coding/environment.py](coding/environment.py)、[coding/platform.py](coding/platform.py)：连接 MicroCoder 和 TaskForge。
 - [coding/report.py](coding/report.py)、[coding/audit.py](coding/audit.py)、[coding/rescore.py](coding/rescore.py)：报告、证据一致性检查和独立重评分。
 

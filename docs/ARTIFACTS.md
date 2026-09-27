@@ -22,7 +22,7 @@
 旧记录中可能含原工作区的绝对路径，移动后不能直接假定原命令仍可复验。
 当前版本不再提供旧文档实验或旧业务 workloads 命令。
 
-新实验写入独立输出目录；`coding_runs/`、`rewrite_runs/`、`verification_runs/`、
+新实验写入独立输出目录；`coding_runs/`、`verification_runs/`、
 `microcoder_runs/` 和 `taskforge_runs/` 均不进入 Git，运行结果、轨迹和报告只保存在本地。
 自定义输出路径应放在这些目录下，或先将对应输出目录加入 `.gitignore`。
 本次精简没有发起真实模型实验。

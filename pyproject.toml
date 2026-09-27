@@ -20,6 +20,5 @@ include = ["compute_bench*", "microcoder*", "taskforge*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-"compute_bench.rewriting" = ["prompt.md"]
 "compute_bench.workloads.provider_atomic" = ["cases/catalog.json", "cases/*/*.json", "private/*/*.json", "private/*/*.py", "private/*/reference/*"]
 "compute_bench.workloads.host_tasks" = ["cases/catalog.json", "cases/*/*.json", "cases/*/*.md", "cases/*/materials/*", "cases/*/materials/tests/*.py", "cases/*/reference/*", "cases/*/private/*.py"]
