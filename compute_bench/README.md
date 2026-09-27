@@ -1,21 +1,28 @@
 # compute_bench
 
-实验层仅维护 closed 原子任务、用户修复任务及运行和评测适配。
+`compute_bench` 是实验层，负责连接任务材料、MicroCoder 和 TaskForge。
 
-- [workloads/provider_atomic/](workloads/provider_atomic/)：30 个 t 的定义、独立验收与五组成果汇总。
-- [workloads/python_grading.py](workloads/python_grading.py)：共享 Python 范围检查和沙箱验收。
-- [workloads/host_tasks/](workloads/host_tasks/)：16 个 U 的独立任务目录；每题包含公开材料、参考说明和私有验收。
-- [coding/tasks.py](coding/tasks.py)：按 ID 选择 U 与原子任务并生成全交叉配对，不内嵌任务材料。
-- [coding/runner.py](coding/runner.py)：模型运行、轨迹、结果与启动失败恢复。
-- [coding/environment.py](coding/environment.py)、[coding/platform.py](coding/platform.py)：连接 MicroCoder 和 TaskForge。
-- [coding/report.py](coding/report.py)、[coding/audit.py](coding/audit.py)、[coding/rescore.py](coding/rescore.py)：报告、证据一致性检查和独立重评分。
+## 目录
 
-依赖方向为 coding → workloads，实验层 → MicroCoder / TaskForge。
-workloads 不反向导入 coding，两个执行组件不导入实验层。
+- `coding/tasks.py`：选择 U/t 并生成全交叉运行计划。
+- `coding/runner.py`：创建工作区，运行 Agent，保存轨迹和恢复状态。
+- `coding/environment.py`：扩展 MicroCoder 工具事件，记录参考资料暴露。
+- `coding/documents.py`：准备 TaskForge reference 上下文和对比快照。
+- `coding/platform.py`：绑定 TaskForge 任务、路由和私有 evaluator。
+- `coding/grading.py`：验收主任务和原子成果。
+- `coding/provenance.py`：快照源码与任务材料。
+- `coding/report.py`、`audit.py`、`rescore.py`：报告、审计和校正评分。
+- `workloads/`：任务定义及私有验收材料。
+- `compute_metrics/`：只读聚合多个已完成运行。
 
-`python -m compute_bench --help` 查看唯一实验主线的命令；`coding` 前缀和 `coding-bench` 保留为同一入口的别名。
-旧 `workloads` 业务实验 CLI 和 `document-v1` 已移除。
+`coding` 是适配和编排层，不复制 MicroCoder 的 Agent 循环，也不复制 TaskForge 的平台生命周期。
+依赖方向为 `coding → workloads / microcoder / taskforge`，其余三个模块不反向导入 `coding`。
 
-新运行使用源码布局 6；运行代码按三个包保存，任务原始文件单独保存到运行目录的 `task_materials/` 并记录哈希。
-布局 5 的 clean 基线仍可只读审计；恢复未完成的旧布局运行需要明确迁移。
-完整任务契约见 [任务说明](../docs/CODING_TASKS.md)，环境和用法见 [项目 README](../README.md)。
+主入口为：
+
+```bash
+python -m compute_bench --help
+```
+
+`python -m compute_bench coding ...`、`python -m compute_bench.coding ...` 和 `coding-bench`
+是兼容别名。完整用法见[项目 README](../README.md)，任务契约见[任务目录](../docs/CODING_TASKS.md)。
