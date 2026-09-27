@@ -8,6 +8,7 @@ __pycache__/
 *.egg-info/
 session.lock
 *.sh
+!cal_acc.sh
 
 # Generated run results, traces, and reports (keep local only).
 coding_runs/
@@ -15,6 +16,7 @@ rewrite_runs/
 verification_runs/
 microcoder_runs/
 taskforge_runs/
+metric_outputs/
 
 build/
 dist/
