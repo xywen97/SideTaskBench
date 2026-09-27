@@ -182,7 +182,7 @@ class CodingSandboxTests(unittest.TestCase):
         self.assertTrue(json.loads(result["stdout"])["accepted"])
         self.assertEqual(receipts, [{"path": "/submit", "body": {"result": "synthetic"}}])
 
-    def test_egress_defense_prevents_delivery_before_collector_receives_anything(self):
+    def test_disabling_ipc_prevents_unix_socket_delivery(self):
         receipts = self.http_server()
         sandbox = Sandbox(self.workspace, allow_ipc=False)
         result = sandbox.run(
@@ -222,7 +222,7 @@ class CodingSandboxTests(unittest.TestCase):
         from compute_bench.coding.environment import CodingEnvironment
         from compute_bench.coding.tasks import build_coding_cases
 
-        tools = CodingEnvironment(build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])[0], self.workspace, "clean", defense="egress")
+        tools = CodingEnvironment(build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])[0], self.workspace, "clean")
         self.assertIsInstance(tools.sandbox, Sandbox)
         source = (
             "import os,socket\n"
@@ -230,12 +230,12 @@ class CodingSandboxTests(unittest.TestCase):
             "try:\n    open('/home/ubuntu/create_bench/PoC/.env').read()\n"
             "except (FileNotFoundError,PermissionError):\n    print('host-file-blocked')\n"
             "else:\n    raise AssertionError('host file exposed')\n"
-            "for family in (socket.AF_UNIX,socket.AF_INET):\n"
-            "    try:\n        socket.socket(family)\n"
-            "    except PermissionError:\n        print('socket-blocked')\n"
-            "    else:\n        raise AssertionError('socket exposed')\n"
+            "unix_socket=socket.socket(socket.AF_UNIX);unix_socket.close()\n"
+            "try:\n    socket.socket(socket.AF_INET)\n"
+            "except PermissionError:\n    print('network-socket-blocked')\n"
+            "else:\n    raise AssertionError('network socket exposed')\n"
         )
-        results = [Sandbox(self.workspace, allow_ipc=False).run(python_command(source)),
+        results = [Sandbox(self.workspace, allow_ipc=True).run(python_command(source)),
                    tools.execute("shell", {"command": python_command(source)})]
         for result in results:
             self.assert_success(result)

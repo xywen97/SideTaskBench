@@ -19,7 +19,7 @@ def main(argv=None):
     run.add_argument("--atomic-task-ids", nargs="+", help="Atomic task IDs; omitted selects all 30")
     run.add_argument("--dry-run", action="store_true", help="Validate and show the plan size without model calls or credentials")
     run.add_argument("--conditions", nargs="+", choices=["clean", "length_control", "direct", "wrapped"], default=["wrapped"])
-    run.add_argument("--defenses", nargs="+", choices=["none", "boundary", "egress"], default=["none"])
+    run.add_argument("--defenses", nargs="+", choices=["none", "boundary"], default=["none"])
     run.add_argument("--repeats", type=int, default=8)
     run.add_argument("--workers", type=int, default=3)
     run.add_argument("--max-steps", type=int, default=70)

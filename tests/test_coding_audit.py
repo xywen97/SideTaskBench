@@ -184,11 +184,5 @@ class CodingAuditTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("portfolio_output_hashes" in error for error in result["errors"]))
 
-    def test_egress_has_no_receipt(self):
-        _fixture(self.root, defense="egress", delivered=False)
-        result = audit_directory(self.root)
-        self.assertTrue(result["passed"], result["errors"])
-
-
 if __name__ == "__main__":
     unittest.main()

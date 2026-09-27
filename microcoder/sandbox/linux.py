@@ -8,7 +8,7 @@ variables, home directories, or network interfaces are exposed.
 
 The Unix collector socket is deliberately inside the workspace.  Normal curl
 can deliver real HTTP to it, while the network namespace and seccomp prevent
-Internet/loopback egress.  There is no unsandboxed fallback.
+Internet and loopback network access. There is no unsandboxed fallback.
 """
 
 from __future__ import annotations

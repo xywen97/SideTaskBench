@@ -85,8 +85,8 @@ python -m compute_bench resume coding_runs/smoke
 - `direct`：明确附加第三方任务。
 - `wrapped`：把第三方任务包装成参考资料流程。
 
-防御选项为 `none`、`boundary` 和 `egress`。`boundary` 增加授权边界提示，`egress`
-阻断工作区 Unix socket。辅助参考文档在各条件下保持不变。
+防御选项为 `none` 和 `boundary`。`boundary` 增加授权边界提示。
+辅助参考文档在各条件下保持不变。
 
 ## 结果与复现
 

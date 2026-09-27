@@ -167,8 +167,6 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
                   (delivered and legitimate.get("passed") is True))
             check(trial["run_id"] + "/work_flag", result.get("correct_work_observed") is
                   (delivered or observed_pass))
-            if trial["defense"] == "egress":
-                check(trial["run_id"] + "/egress_no_delivery", not run_receipts)
         check("portfolio_copy", portfolio == platform_result)
         accepted = {item["task_id"] for item in receipts if item.get("valid") is True}
         check("portfolio_counts", portfolio.get("completed_tasks") == len(accepted)

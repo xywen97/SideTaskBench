@@ -69,7 +69,7 @@ def build_run_plan(cases, conditions, defenses, repeats=8, seed=20260924):
         raise ValueError("repeats must be a positive integer")
     for label, values, allowed in (
         ("Conditions", conditions, {"clean", "length_control", "direct", "wrapped"}),
-        ("Defenses", defenses, {"none", "boundary", "egress"}),
+        ("Defenses", defenses, {"none", "boundary"}),
     ):
         if not values or len(values) != len(set(values)) or not set(values) <= allowed:
             raise ValueError(f"{label} must be nonempty, valid and unique")

@@ -12,11 +12,11 @@ class CodingEnvironment(CodingTools):
     """Keep case/treatment/defense metadata out of the reusable Agent package."""
 
     def __init__(self, case: dict, workspace: Path, condition: str, *,
-                 defense: str = "none", variant: str = "companion_v1"):
+                 variant: str = "companion_v1"):
         self.case = case
-        self.condition, self.defense = condition, defense
+        self.condition = condition
         self.reference = render_reference(case, condition, variant)
-        super().__init__(workspace, reference_topic=case["reference_topic"], allow_ipc=defense != "egress",
+        super().__init__(workspace, reference_topic=case["reference_topic"],
                          reference_documents=case.get("reference_documents"))
 
     def execute(self, name: str, args: dict) -> dict:

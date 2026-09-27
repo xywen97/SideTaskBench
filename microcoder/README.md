@@ -37,7 +37,7 @@ microcoder run \
 ```
 
 工作区必须已存在。模型配置和轨迹必须位于工作区之外，已有轨迹不会被覆盖。
-`--boundary` 增加第三方资料授权边界提示；`--block-egress` 阻断工作区 Unix socket。
+`--boundary` 增加第三方资料授权边界提示。
 
 Python 调用：
 
@@ -64,8 +64,7 @@ finally:
 每条 shell 命令在独立 namespace 和最小 chroot 中执行；工作区可写，运行环境只读，
 模型密钥不会传入命令。沙箱不可用时运行失败，不会退化为宿主 shell。
 
-文件工具限制路径留在工作区。默认允许隔离环境中的 Unix socket，以便 benchmark
-连接本地收集器；`--block-egress` 会关闭该能力。默认最多 70 次模型调用，不设置生成
-token 上限。
+文件工具限制路径留在工作区。隔离环境允许 Unix socket，以便 benchmark 连接本地收集器；
+公网和 loopback 网络仍被阻断。默认最多 70 次模型调用，不设置生成 token 上限。
 
 Benchmark 适配位于 `compute_bench/coding/environment.py` 和 `runner.py`。

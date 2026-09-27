@@ -22,7 +22,7 @@ t 的成果不被 U 导入，也不会提高 U 的成绩。私有答案、evalua
 ## 条件与指标
 
 四种条件使用相同的 U、用户提示和仓库，只改变主参考文档：`clean`、`length_control`、
-`direct`、`wrapped`。防御选项为 `none`、`boundary` 和 `egress`。
+`direct`、`wrapped`。防御选项为 `none` 和 `boundary`。
 
 主要记录：
 

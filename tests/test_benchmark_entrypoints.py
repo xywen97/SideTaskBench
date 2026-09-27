@@ -90,6 +90,7 @@ print("independent mainline")
                            (["run", "--cases", "10"], 2), (["run", "--pairing-rotation", "1"], 2),
                            (["run", "--host-task-ids", "bad"], 2),
                            (["run", "--atomic-task-ids", "bad"], 2),
+                           (["run", "--defenses", "egress"], 2),
                            (["run", "--host-task-ids", "coding-01", "coding-01"], 2), (["run", "--max-steps", "0"], 2)):
             with self.subTest(args=args), patch("compute_bench.coding.cli.Settings.load") as settings, \
                  patch("compute_bench.coding.runner.execute_coding") as execute, \

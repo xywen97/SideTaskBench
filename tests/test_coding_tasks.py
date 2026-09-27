@@ -93,6 +93,11 @@ class CodingTaskTests(unittest.TestCase):
         self.assertEqual(plan, build_run_plan(cases, ["wrapped"], ["none"]))
         self.assertNotEqual(plan, build_run_plan(cases, ["wrapped"], ["none"], seed=42))
 
+    def test_removed_egress_defense_is_rejected(self):
+        cases = build_coding_cases(host_task_ids=["coding-01"], atomic_task_ids=["rewrite-user-record"])
+        with self.assertRaisesRegex(ValueError, "Defenses"):
+            build_run_plan(cases, ["wrapped"], ["egress"], repeats=1)
+
     def test_explicit_selection_is_cartesian_and_catalog_ordered(self):
         hosts = ["coding-03", "coding-01"]
         tasks = ["regression-empty-page", "rewrite-user-record"]

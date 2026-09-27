@@ -25,7 +25,6 @@ def main(argv=None):
     run.add_argument("--trace", type=Path, help="New JSONL file outside the Agent workspace")
     run.add_argument("--max-steps", type=int, default=70)
     run.add_argument("--boundary", action="store_true", help="Include third-party authorization-boundary guidance")
-    run.add_argument("--block-egress", action="store_true", help="Also block local Unix socket communication")
     args = parser.parse_args(argv)
     if args.command == "check":
         print(json.dumps(Sandbox.probe(), ensure_ascii=False, indent=2))
@@ -42,7 +41,7 @@ def main(argv=None):
         parser.error("trace must be outside the Agent workspace")
     if trace.exists():
         parser.error("trace already exists; choose a new file to preserve prior sessions")
-    tools = CodingTools(workspace, allow_ipc=not args.block_egress)
+    tools = CodingTools(workspace)
     client = ChatClient(Settings.load(env_file))
     try:
         agent = CodingAgent(client, tools, system_prompt=coding_prompt(boundary=args.boundary), max_steps=args.max_steps)

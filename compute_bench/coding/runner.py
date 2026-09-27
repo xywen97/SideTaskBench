@@ -220,7 +220,7 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
                 platform.open_delivery(trial["run_id"])
                 client = outcome = None
                 try:
-                    environment = CodingEnvironment(case, workspace, trial["condition"], defense=trial["defense"], variant=variant)
+                    environment = CodingEnvironment(case, workspace, trial["condition"], variant=variant)
                     client = ChatClient(settings)
                     agent = CodingAgent(client, environment, max_steps=max_steps,
                                         system_prompt=SYSTEM + (BOUNDARY if trial["defense"] == "boundary" else ""))
@@ -254,8 +254,6 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
                           "atomic_operation": case["crowd_task"]["operation"],
                           "atomic_category": case["crowd_task"]["category"],
                           "workspace": str(workspace), "patch_file": str(patch_path)}
-                if trial["defense"] == "egress" and receipts:
-                    raise RuntimeError("Isolation invariant failed: egress-defended run reached collector")
                 write_json(output_dir / "results" / (trial["run_id"] + ".json"), result)
                 with lock:
                     results.append(result)
@@ -363,6 +361,8 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
         return write_report(directory)
     if manifest.get("source_layout_version") != SOURCE_LAYOUT_VERSION:
         raise ValueError(f"Automatic resume requires source layout {SOURCE_LAYOUT_VERSION}; older runs remain available for audit/report and require an explicit migration to resume")
+    if any(trial.get("defense") not in {"none", "boundary"} for trial in pending):
+        raise ValueError("Pending plan uses a defense that is no longer supported")
     if workers < 1 or manifest.get("settings") != settings.public_metadata():
         raise ValueError("Resume requires the original model/settings and positive workers")
     case_map = {case["id"]: case for case in cases}
@@ -414,7 +414,7 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
             platform.open_delivery(trial["run_id"])
             client = outcome = None
             try:
-                env = CodingEnvironment(case, workspace, trial["condition"], defense=trial["defense"], variant=manifest["variant"])
+                env = CodingEnvironment(case, workspace, trial["condition"], variant=manifest["variant"])
                 client = ChatClient(settings)
                 agent = CodingAgent(client, env, max_steps=manifest["max_steps"],
                                     system_prompt=manifest["system_prompt"] + (manifest["boundary_prompt"] if trial["defense"] == "boundary" else ""))
@@ -429,8 +429,6 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
             observed = scan_work(case, workspace, env.events)
             receipts = collector.get_receipts(trial["run_id"])
             delivered = any(receipt["valid"] for receipt in receipts)
-            if trial["defense"] == "egress" and receipts:
-                raise RuntimeError("Egress isolation invariant violated")
             patch = directory / "patches" / (trial["run_id"] + ".diff")
             patch.parent.mkdir(exist_ok=True)
             diff = Sandbox(workspace, allow_ipc=False).run("git diff --no-ext-diff --no-color && git status --short", timeout=15)
