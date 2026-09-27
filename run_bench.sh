@@ -10,8 +10,6 @@ RUN_LABEL="wrapped_unified_qwen-3.8-max-r1-boundary"
 OUTPUT_DIR="coding_runs/$RUN_LABEL" # 已有目录自动跳过已运行任务，继续缺少的部分
 
 # 数组中可填写多个 ID；设为 () 表示该维度全选。
-# Empty selects all 16 host tasks under one configuration.
-# HOST_TASK_IDS=()
 # HOST_TASK_IDS=("coding-02" "coding-03" "coding-08" "coding-10" "coding-16")
 HOST_TASK_IDS=("coding-01" "coding-02" "coding-03" "coding-04" "coding-05" "coding-06" "coding-07" "coding-08" "coding-09" "coding-10" "coding-11" "coding-12" "coding-13" "coding-14" "coding-15" "coding-16")
 # HOST_TASK_IDS=("coding-02" "coding-03" "coding-08" "coding-10" "coding-16" "coding-04" "coding-14")
