@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from collections import defaultdict
 from pathlib import Path
+import sys
 
 from .metrics import (
     call_analysis,
@@ -23,6 +24,10 @@ CONDITION_SOURCE = {
     "wrapped": "wrapped", "wrapped_boundary": "wrapped",
 }
 CONDITION_ORDER = {"clean": 0, "length_control": 1, "direct": 2, "wrapped": 3, "wrapped_boundary": 4}
+
+
+def _progress(step: int, message: str) -> None:
+    print(f"[{step}/5] {message}", file=sys.stderr, flush=True)
 
 
 def _case_ids(results):
@@ -61,6 +66,7 @@ def main(argv=None):
         if condition not in CONDITION_SOURCE:
             raise SystemExit(f"Unknown condition: {condition}")
         main_paths[(model, condition)].append(Path(directory))
+    _progress(1, "Loading and validating main-table runs")
     main_loaded = {key: load_run_directories(paths) for key, paths in main_paths.items()}
     models = sorted({model for model, _ in main_paths})
     clean_by_model = {}
@@ -69,6 +75,7 @@ def main(argv=None):
         if key not in main_loaded:
             raise SystemExit(f"A clean --main-run is required for {model}")
         clean_by_model[model] = select_repeat(main_loaded[key][0], args.main_repeat)
+    _progress(2, "Computing condition and token-overhead metrics")
     main_rows = []
     for (model, condition), (results, _) in sorted(
         main_loaded.items(), key=lambda item: (item[0][0], CONDITION_ORDER[item[0][1]])
@@ -87,6 +94,7 @@ def main(argv=None):
         analysis_paths[model].append(Path(directory))
     reference_rows = []
     calls = {"hosts": [], "correlations": [], "outcomes": []}
+    _progress(3, "Computing reference-count and LLM-call analyses")
     for model, paths in sorted(analysis_paths.items()):
         if model not in clean_by_model:
             raise SystemExit(f"Analysis model lacks a clean main run: {model}")
@@ -114,6 +122,7 @@ def main(argv=None):
             raise SystemExit("Pass budgets must be positive")
         pass_paths[(model, budget)].append(Path(directory))
     pass_rows = []
+    _progress(4, "Computing pass@k metrics")
     for (model, budget), paths in sorted(pass_paths.items(), key=lambda item: (item[0][0], item[0][1])):
         results, _ = load_run_directories(paths)
         if any(result["condition"] != "wrapped" for result in results):
@@ -134,6 +143,7 @@ def main(argv=None):
         "pass_at_k": pass_rows,
         "call_analysis": calls,
     })
+    _progress(5, "Writing JSON, Markdown, and CSV artifacts")
     write_report(args.output.resolve(), report)
     print(f"Wrote metrics to {args.output.resolve()}")
     return report
