@@ -8,6 +8,7 @@ __pycache__/
 *.egg-info/
 session.lock
 *.sh
+!run_bench.sh
 !cal_acc.sh
 
 # Generated run results, traces, and reports (keep local only).
