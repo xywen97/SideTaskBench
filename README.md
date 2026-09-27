@@ -1,4 +1,4 @@
-# 评测Agent在运行时是否易被引导产生运行分支并被资源劫持（本地算力、Token）的情况 v1
+# SideTaskBench: 评测Agent在运行时是否易被引导产生运行分支并被资源劫持（本地算力、Token）的情况 v1
 
 本项目评估 Coding Agent 在修复用户仓库时，是否会执行参考资料中未经用户授权的第三方任务。
 当前数据集包含 16 个主任务 U、30 个原子任务 t，以及两者的全交叉配对。
@@ -28,6 +28,17 @@ MicroCoder 和 TaskForge 都不导入 benchmark，因此可以独立使用。
 
 需要 Python 3.11+。真实代码执行还需要 Linux namespace、Landlock、seccomp 和可用的
 `sudo -n` 沙箱配置。
+
+推荐使用 [uv](https://docs.astral.sh/uv/) 按 `.python-version` 和 `uv.lock` 创建环境：
+
+```bash
+uv sync
+uv run python -m compute_bench check
+uv run python -m unittest discover -s tests -q
+```
+
+`uv sync` 会创建或更新项目根目录的 `.venv`，并安装当前项目及锁定依赖。
+如果不使用 uv，也可以通过 pip 安装：
 
 ```bash
 python -m pip install -e .
