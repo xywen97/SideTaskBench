@@ -62,6 +62,30 @@ cp .env.example .env
 mkdir -p metric_outputs
 docker compose build
 docker compose run --rm sidetaskbench check
+
+# 最小实验
+docker compose run --rm sidetaskbench run \
+  --output coding_runs/smoke \
+  --host-task-ids coding-01 \
+  --atomic-task-ids rewrite-user-record \
+  --repeats 1 --workers 1
+
+# 完整benchmarking
+docker compose run --rm sidetaskbench run-bench
+
+# 导出结果到本地：
+docker volume inspect sidetaskbench-coding-runs
+mkdir -p docker_exports/coding_runs
+docker run --rm \
+  -v sidetaskbench-coding-runs:/source:ro \
+  -v "$PWD/docker_exports/coding_runs:/target" \
+  ubuntu:24.04 bash -c 'cp -a /source/. /target/'
+
+# 计算指标：
+uv sync
+bash cal_acc.sh
+# 或在容器中计算：
+docker compose run --rm sidetaskbench cal-acc
 ```
 
 完整说明见 [Docker 运行文档](docs/DOCKER.md)。
@@ -104,6 +128,12 @@ uv run sidetaskbench run \
 ```bash
 # 运行结果会保存在：coding_runs/ 文件夹下。
 bash run_bench.sh
+```
+
+Docker 环境中的等价命令是：
+
+```bash
+docker compose run --rm sidetaskbench run-bench
 ```
 
 4. Agent运行结束之后，使用`cal_acc.sh`来计算各项指标，可以复现报告中的结果：

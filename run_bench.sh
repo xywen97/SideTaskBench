@@ -26,7 +26,7 @@ VARIANT="compatibility_v4" # companion_v1 / maintenance_v2 / compatibility_v3 / 
 ENV_FILE=".env"
 THINKING="default" # default / enabled / disabled
 SEED=20260924
-DRY_RUN=false # true：只检查计划和参考材料，不调用模型、不创建结果目录
+DRY_RUN="${DRY_RUN:-false}" # true：只检查计划和参考材料，不调用模型、不创建结果目录
 # ===== 配置结束 =====
 
 if (( $# > 0 )); then

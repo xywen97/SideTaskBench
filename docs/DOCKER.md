@@ -52,6 +52,19 @@ docker compose run --rm sidetaskbench run \
   --repeats 1 --workers 1
 ```
 
+按 `run_bench.sh` 的配置执行完整任务选择：
+
+```bash
+# 先检查计划，不调用模型
+docker compose run --rm -e DRY_RUN=true sidetaskbench run-bench
+
+# 确认脚本顶部配置和费用后，执行真实实验
+docker compose run --rm sidetaskbench run-bench
+```
+
+当前脚本选择 16 个 U、全部 30 个 t、每个配对重复 1 次，共 480 次模型运行。
+修改 `run_bench.sh` 后需要重新执行 `docker compose build`，因为源码在构建时写入镜像。
+
 结果保存在 Docker 的 `sidetaskbench-coding-runs` named volume。不能把运行工作区直接映射到
 macOS 目录：Docker Desktop 的文件共享层不支持内层沙箱再次 bind mount 后的完整 Git 写入语义。
 容器中的外层 benchmark 可以访问模型 API；模型生成的命令仍在无公网访问的内层沙箱执行。
@@ -62,6 +75,7 @@ macOS 目录：Docker Desktop 的文件共享层不支持内层沙箱再次 bind
 docker compose run --rm sidetaskbench report coding_runs/smoke
 docker compose run --rm sidetaskbench audit coding_runs/smoke --regrade
 docker compose run --rm sidetaskbench resume coding_runs/smoke
+docker compose run --rm sidetaskbench cal-acc
 ```
 
 查看和导出 named volume：
