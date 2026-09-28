@@ -69,13 +69,43 @@ docker compose run --rm sidetaskbench run-bench
 macOS 目录：Docker Desktop 的文件共享层不支持内层沙箱再次 bind mount 后的完整 Git 写入语义。
 容器中的外层 benchmark 可以访问模型 API；模型生成的命令仍在无公网访问的内层沙箱执行。
 
-## 常用命令
+## 计算指标
+
+推荐直接读取 named volume，在容器中运行 `cal_acc.sh`：
+
+```bash
+docker compose run --rm sidetaskbench cal-acc
+```
+
+`metric_outputs/` 是宿主机 bind mount，生成的 JSON、Markdown 和 CSV 会直接出现在本地目录。
+计算指标不调用模型，也不执行 Agent 生成的代码。
+
+`cal_acc.sh` 预先配置了多个 clean、length-control、direct、wrapped 和 pass@k 实验目录。
+这些目录必须存在；如果只完成了部分实验或 smoke 测试，应先修改脚本，只保留实际存在的
+`--main-run`、`--analysis-run` 和 `--pass-run`。每个模型的主表至少需要对应的 clean 运行。
+修改脚本后重新执行 `docker compose build`，再运行 `cal-acc`。
+
+也可以先把 named volume 导出到项目根目录的 `coding_runs/`，然后在 macOS 本地计算：
+
+```bash
+mkdir -p coding_runs
+docker run --rm \
+  -v sidetaskbench-coding-runs:/source:ro \
+  -v "$PWD/coding_runs:/target" \
+  ubuntu:24.04 bash -c 'cp -a /source/. /target/'
+
+uv sync
+bash cal_acc.sh
+```
+
+本地方式同样要求 `cal_acc.sh` 中引用的运行目录已经导出。
+
+## 常用维护命令
 
 ```bash
 docker compose run --rm sidetaskbench report coding_runs/smoke
 docker compose run --rm sidetaskbench audit coding_runs/smoke --regrade
 docker compose run --rm sidetaskbench resume coding_runs/smoke
-docker compose run --rm sidetaskbench cal-acc
 ```
 
 查看和导出 named volume：
