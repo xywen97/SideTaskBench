@@ -11,9 +11,13 @@ services:
     env_file:
       - .env
     volumes:
-      - type: bind
-        source: ./coding_runs
+      - type: volume
+        source: coding-runs
         target: /app/coding_runs
       - type: bind
         source: ./metric_outputs
         target: /app/metric_outputs
+
+volumes:
+  coding-runs:
+    name: ${SIDETASKBENCH_RUNS_VOLUME:-sidetaskbench-coding-runs}

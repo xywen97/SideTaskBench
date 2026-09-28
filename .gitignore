@@ -19,6 +19,7 @@ verification_runs/
 microcoder_runs/
 taskforge_runs/
 metric_outputs/
+docker_exports/
 
 build/
 dist/

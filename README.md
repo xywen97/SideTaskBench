@@ -55,11 +55,11 @@ sidetaskbench check
 python -m unittest discover -s tests -q
 ```
 
-macOS 用户应通过 Docker Desktop 运行 Linux 沙箱：
+macOS 用户应先安装并启动 Docker Desktop，再通过容器运行 Linux 沙箱：
 
 ```bash
 cp .env.example .env
-mkdir -p coding_runs metric_outputs
+mkdir -p metric_outputs
 docker compose build
 docker compose run --rm sidetaskbench check
 ```
