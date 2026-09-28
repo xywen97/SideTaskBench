@@ -1,0 +1,19 @@
+services:
+  sidetaskbench:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sidetaskbench:local
+    privileged: true
+    security_opt:
+      - seccomp=unconfined
+    init: true
+    env_file:
+      - .env
+    volumes:
+      - type: bind
+        source: ./coding_runs
+        target: /app/coding_runs
+      - type: bind
+        source: ./metric_outputs
+        target: /app/metric_outputs
