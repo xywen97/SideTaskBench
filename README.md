@@ -145,6 +145,10 @@ docker compose run --rm sidetaskbench run-bench
 bash cal_acc.sh
 ```
 
+### Todo
+
+- [x] single-query coding scenario
+- [ ] multi-turn interactive scenario
 
 
 ## 实验条件
