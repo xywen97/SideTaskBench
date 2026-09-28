@@ -27,14 +27,21 @@ tests/          单元测试与边界测试
 
 ## 安装与检查
 
+1. 克隆本项目到本地：
+```bash
+git clone --depth 1 https://github.com/xywen97/SideTaskBench.git
+cd SideTaskBench
+```
+
 需要 Python 3.11+。真实代码执行还需要 Linux namespace、Landlock、seccomp 和可用的
 `sudo -n` 沙箱配置。
 
-1. 推荐使用 [uv](https://docs.astral.sh/uv/) 按 `.python-version` 和 `uv.lock` 创建环境：
+2. 推荐使用 [uv](https://docs.astral.sh/uv/) 按 `.python-version` 和 `uv.lock` 创建环境：
 
 ```bash
 # 同步环境
 uv sync
+# `check` 和测试不会调用模型。
 uv run sidetaskbench check
 # 运行需要一定时间
 uv run python -m unittest discover -s tests -q
@@ -48,9 +55,7 @@ sidetaskbench check
 python -m unittest discover -s tests -q
 ```
 
-`check` 和测试不会调用模型。模型配置见 `.env.example`。
-
-1. 运行前，请配置LLM的环境，复制.env.example 为.env，并在其中填充模型名、base_url以及apikey：
+3. 模型配置见 `.env.example`。 运行前，请配置LLM的环境，复制.env.example 为.env，并在其中填充模型名、base_url以及apikey：
 
 ```bash
 # DEEPSEEK_API_KEY=your_api_key
