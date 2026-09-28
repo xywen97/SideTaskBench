@@ -21,6 +21,7 @@ compute_bench/
 microcoder/     模型循环、工具和 Linux 沙箱 （主Agent）
 taskforge/      任务计划、投放、回执、验收调用和成果组装（支撑外部任务的执行）
 tests/          单元测试与边界测试
+scripts/        参考文件引用入口
 ```
 
 依赖方向为 `compute_bench.coding → microcoder / taskforge / workloads`。
@@ -83,6 +84,7 @@ docker run --rm \
 
 # 计算指标：
 uv sync
+# 注意脚本中的要求，每次运行都需要clean这个condition，来作为base 对比。另外需要注意运行结果的路径。
 bash cal_acc.sh
 # 或在容器中计算：
 docker compose run --rm sidetaskbench cal-acc
