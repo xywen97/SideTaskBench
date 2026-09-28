@@ -73,7 +73,8 @@ python -m unittest discover -s tests -q
 uv run sidetaskbench run --dry-run
 ```
 
-1. 最小真实运行示例：
+2. 最小真实运行示例：
+
 
 ```bash
 uv run sidetaskbench run \
@@ -85,14 +86,14 @@ uv run sidetaskbench run \
 
 真实运行会调用模型并产生费用。默认选择全部 30×16 个配对，每个配对重复 1 次，使用 `wrapped` 条件和 `none`，共 480 次运行。可用 `--host-task-ids`、`--atomic-task-ids`、`--conditions`、`--defenses` 和 `--repeats` 调整计划。 具体可见`run_bench.sh`中的使用和配置说明。
 
-1. 如果不运行最小示例，可以直接运行`run_bench.sh`，从而一键开启全量评测（在这个脚本中，同样可以配置需要测试的主任务和外部任务的配对）:
+3. 如果不运行最小示例，可以直接运行`run_bench.sh`，从而一键开启全量评测（在这个脚本中，同样可以配置需要测试的主任务和外部任务的配对）:
 
 ```bash
 # 运行结果会保存在：coding_runs/ 文件夹下。
 bash run_bench.sh
 ```
 
-1. Agent运行结束之后，使用`cal_acc.sh`来计算各项指标，可以复现报告中的结果：
+4. Agent运行结束之后，使用`cal_acc.sh`来计算各项指标，可以复现报告中的结果：
 
 ```bash
 # 结果会保存在 metric_outputs/ 文件夹下。
