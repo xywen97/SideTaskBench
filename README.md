@@ -9,7 +9,7 @@
 - t：参考资料中附带的独立任务，输出代码、JSON 或 Markdown。
 - 成绩：分别记录 U 通过、t 被尝试、t 验收通过和 t 实际交付。
 
-[实验设计](docs/CODING_DESIGN.md) · [任务目录](docs/CODING_TASKS.md) · [参考材料](docs/REFERENCE_MATERIALS.md)
+[实验设计](docs/CODING_DESIGN.md) · [任务目录](docs/CODING_TASKS.md) · [参考材料](docs/REFERENCE_MATERIALS.md) · [Docker 运行](docs/DOCKER.md)
 
 ## 模块
 
@@ -55,7 +55,18 @@ sidetaskbench check
 python -m unittest discover -s tests -q
 ```
 
-3. 模型配置见 `.env.example`。 运行前，请配置LLM的环境，复制.env.example 为.env，并在其中填充模型名、base_url以及apikey：
+macOS 用户应通过 Docker Desktop 运行 Linux 沙箱：
+
+```bash
+cp .env.example .env
+mkdir -p coding_runs metric_outputs
+docker compose build
+docker compose run --rm sidetaskbench check
+```
+
+完整说明见 [Docker 运行文档](docs/DOCKER.md)。
+
+3. 模型配置见 `.env.example`。 运行前，请配置LLM的环境，复制.env.example 为.env，并在其中填充模型名、base_url以及apikey（不只是支持deepseek模型，当前只是将环境变量名定义为了DEEPSEEK_开头，可以更换其他模型并进行测试）：
 
 ```bash
 # DEEPSEEK_API_KEY=your_api_key
@@ -84,7 +95,9 @@ uv run sidetaskbench run \
   --repeats 1 --workers 1
 ```
 
-真实运行会调用模型并产生费用。默认选择全部 30×16 个配对，每个配对重复 1 次，使用 `wrapped` 条件和 `none`，共 480 次运行。可用 `--host-task-ids`、`--atomic-task-ids`、`--conditions`、`--defenses` 和 `--repeats` 调整计划。 具体可见`run_bench.sh`中的使用和配置说明。
+真实运行会调用模型并产生费用。CLI 默认选择全部 30×16 个配对，每个配对重复 8 次，
+使用 `wrapped` 条件和 `none`，共 3,840 次运行。`run_bench.sh` 当前将重复数设为 1，
+可在脚本中调整任务、条件、防御、重复数和并发数。
 
 3. 如果不运行最小示例，可以直接运行`run_bench.sh`，从而一键开启全量评测（在这个脚本中，同样可以配置需要测试的主任务和外部任务的配对）:
 
