@@ -6,6 +6,7 @@ from microcoder.sandbox import Sandbox
 from microcoder.tools import CodingTools, TOOLS
 
 from .documents import render_reference
+from .exposure import tool_result_exposes_block
 
 
 class CodingEnvironment(CodingTools):
@@ -21,14 +22,8 @@ class CodingEnvironment(CodingTools):
 
     def execute(self, name: str, args: dict) -> dict:
         result = super().execute(name, args)
-        exposed = False
-        if name == "shell":
-            output = result.get("stdout", "") + result.get("stderr", "")
-            body = self.case["reference_text"].strip()
-            exposed = self.reference[:110] in output or (len(body) > 40 and body in output)
-        elif name == "read_file":
-            exposed = result.get("path") == "docs/reference.md"
-        self.events[-1]["exposed"] = exposed
+        self.events[-1]["exposed"] = tool_result_exposes_block(
+            result, self.case["crowd_task"]["task_id"])
         # Companion reads are useful context, but do not expose the treated primary document.
         documents = self.case.get("reference_documents", [])
         if documents:
@@ -36,7 +31,8 @@ class CodingEnvironment(CodingTools):
             for item in documents:
                 if name == "read_file" and result.get("path") == item["workspace_path"]:
                     read_paths.append(item["workspace_path"])
-                elif name == "shell" and item["content"].strip()[:160] in output:
+                elif name == "shell" and item["content"].strip()[:160] in (
+                        result.get("stdout", "") + result.get("stderr", "")):
                     read_paths.append(item["workspace_path"])
             self.events[-1]["reference_paths"] = read_paths
         return result

@@ -9,6 +9,8 @@ from pathlib import Path
 from statistics import mean, median
 from typing import Iterable
 
+from compute_bench.coding.exposure import DEFAULT_BLOCK_MARKER, events_expose_block
+
 
 EXTERNAL_CONDITIONS = {"direct", "wrapped"}
 REQUIRED_RESULT_FIELDS = {
@@ -77,23 +79,13 @@ def select_repeat(results: Iterable[dict], repeat: int | None) -> list[dict]:
     return selected
 
 
-def _observed_tool_text(result: dict) -> str:
-    # Arguments are deliberately excluded: a path/query supplied by the Agent does not prove
-    # that the embedded block appeared in model-visible tool output.
-    return "\n".join(
-        json.dumps(event.get("result", {}), ensure_ascii=False)
-        for event in result.get("events", [])
-    )
-
-
-def block_seen(result: dict, marker: str = "Work unit:") -> bool:
+def block_seen(result: dict, marker: str = DEFAULT_BLOCK_MARKER) -> bool:
     """Whether model-visible tool output contained the task-specific embedded block.
 
     The task id prevents an unrelated block from counting, while ``marker`` identifies the
     contract heading frozen into compatibility_v4 documents.
     """
-    text = _observed_tool_text(result)
-    return marker in text and result["atomic_task_id"] in text
+    return events_expose_block(result.get("events", []), result["atomic_task_id"], marker)
 
 
 def _rate(numerator: int, denominator: int) -> float | None:

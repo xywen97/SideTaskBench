@@ -16,6 +16,6 @@ Use the `wrapped_boundary` main-table label for a wrapped run whose recorded def
 Repeat the same option when one logical experiment is split across directories. Run
 `./cal_acc.sh` for the repository's current DeepSeek and Qwen configuration.
 
-Outputs include machine-readable JSON, Markdown, and separate CSV tables. `Block Seen`
-is intentionally stricter than the historical `exposed` field: the current atomic task id
-and the configured block marker must occur in model-visible tool output.
+Outputs include machine-readable JSON, Markdown, and separate CSV tables. `Block Seen` and
+the runtime `exposed` field use the same definition: the current atomic task id and the
+configured block marker must occur in model-visible tool output.

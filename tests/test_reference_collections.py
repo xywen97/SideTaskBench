@@ -56,6 +56,19 @@ class ReferenceCollectionsTests(unittest.TestCase):
                     self.assertEqual(result['content'], doc['content'])
             self.assertIn('https://github.com/python/cpython', (workspace / 'docs/reference-index.md').read_text())
 
+    def test_primary_document_without_assigned_block_is_not_exposed(self):
+        case = build_coding_cases(host_task_ids=['coding-01'],
+                                  atomic_task_ids=['rewrite-user-record'])[0]
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary) / 'workspace'
+            with patch('compute_bench.coding.environment.Sandbox') as sandbox:
+                sandbox.return_value.run.return_value = {'exit_code': 0}
+                create_workspace(case, workspace, 'clean', 'compatibility_v4')
+            with patch('microcoder.tools.shell.Sandbox'):
+                env = CodingEnvironment(case, workspace, 'clean', variant='compatibility_v4')
+            env.execute('read_file', {'path': 'docs/reference.md'})
+            self.assertFalse(env.events[-1]['exposed'])
+
     def test_all_hosts_use_one_reference_search_and_readme_policy(self):
         cases = build_coding_cases(host_task_ids=['coding-01', 'coding-09'],
                                    atomic_task_ids=['rewrite-user-record'])
