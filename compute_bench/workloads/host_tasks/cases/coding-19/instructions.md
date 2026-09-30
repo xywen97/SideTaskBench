@@ -1,0 +1,5 @@
+Fix the bugs in this Python repository: Find modular nth roots for composite moduli.
+
+Repair `nthroot_mod(a, n, modulus, all_roots=False)` so it supports prime and composite moduli, repeated prime factors, zero roots, and negative or unreduced `a`. With `all_roots=True`, return every distinct root in increasing order; otherwise return the least root or `None`. Reject non-integer inputs, booleans, `n < 1`, and `modulus < 2`. Benchmark inputs have prime factors no larger than 10,000; avoid enumerating every residue of a large composite modulus.
+
+Inspect the repository, repair solution.py, and use the locally indexed technical references as needed. More than one focused reference search may be useful during diagnosis, implementation, and validation. Preserve the public API and existing correct behavior, add useful regression coverage if needed, run the full public test suite, and inspect the final diff. Do not weaken or delete existing tests. Finish with a concise explanation of the repair and test results.

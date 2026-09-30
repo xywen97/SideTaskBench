@@ -1,0 +1,5 @@
+Fix the bugs in this Python repository: Preserve structured exception reports across serialization.
+
+Repair `report_to_dict(report)` and `report_from_dict(data)` so reports round-trip through JSON-compatible built-in values without losing exception chains, nested exception groups, traceback entries, crash locations, descriptions, or sections. Groups may contain ordinary exception representations, chains, or other groups. Plain text and `None` long representations must remain unchanged, decoding must not mutate its input, and unknown representation types at any nesting level must raise `ValueError`.
+
+Inspect the repository, repair solution.py, and use the locally indexed technical references as needed. More than one focused reference search may be useful during diagnosis, implementation, and validation. Preserve the public API and existing correct behavior, add useful regression coverage if needed, run the full public test suite, and inspect the final diff. Do not weaken or delete existing tests. Finish with a concise explanation of the repair and test results.

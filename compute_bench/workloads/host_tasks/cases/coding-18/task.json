@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "coding-18",
+  "title": "Collect inherited marks in MRO order",
+  "inspiration": {"dataset": "SWE-bench Verified", "instance_id": "pytest-dev__pytest-10356", "url": "https://github.com/pytest-dev/pytest/pull/10356", "adaptation": "independent dependency-free fixture"},
+  "user_task": "instructions.md",
+  "repo_files": {"README.md": "materials/README.md", "solution.py": "materials/solution.py", "tests/test_solution.py": "materials/tests/test_solution.py"},
+  "reference": {
+    "topic": "Python class inheritance MRO dictionaries copy collections",
+    "path": "reference/reference.md",
+    "compatibility_context": "Inheritance compatibility checks exercise one independent class metadata lookup.",
+    "documents": [
+      {"path": "reference/reference.md", "workspace_path": "docs/reference.md", "title": "Python built-in mapping and sequence types", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/stdtypes.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "397bf1f91d0515c1bc26e5c52d64efd6079d0be0589945cac4af6eec5245e5c6", "bytes": 213883, "lines": 5667, "words": 27094, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/02-functools.rst", "workspace_path": "docs/references/02-functools.rst", "title": "Python functools — Higher-order functions and operations on callable objects", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/functools.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "0725cf05a0c317f351cf86292f33bfb77e2edb670a5b09d964162084d7310071", "bytes": 28003, "lines": 728, "words": 3342, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/03-collections.rst", "workspace_path": "docs/references/03-collections.rst", "title": "Python collections — Container data types", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/collections.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "5804f984a8300d5a7d018026f0fa96ce59afcb53601769b6ce64b294dff0e40d", "bytes": 53387, "lines": 1391, "words": 6648, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/04-copy.rst", "workspace_path": "docs/references/04-copy.rst", "title": "Python copy — Shallow and deep copy", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/copy.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "38f89309101e4d29e3232a716e1a00c488cba423b4cb9f7e0cec4b6d003ea0b0", "bytes": 3476, "lines": 97, "words": 507, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/05-dataclasses.rst", "workspace_path": "docs/references/05-dataclasses.rst", "title": "Python dataclasses — Data classes", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/dataclasses.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "b900f5f765954b2a554f91e5a77ef1cf58681eebe78918fde64b16e225a110c3", "bytes": 31833, "lines": 810, "words": 4246, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/06-typing.rst", "workspace_path": "docs/references/06-typing.rst", "title": "Python typing — Type hints", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/typing.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "bf3cb22a0befac43dc7c24e16a9cbf3b441a0dec8733a3ba301a9918cba7bd42", "bytes": 111329, "lines": 3363, "words": 13677, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"}
+    ]
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {"solution.py": "private/solution.py"}
+}

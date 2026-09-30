@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "coding-17",
+  "title": "Preserve structured exception reports",
+  "inspiration": {"dataset": "SWE-bench Verified", "instance_id": "pytest-dev__pytest-5787", "url": "https://github.com/pytest-dev/pytest/pull/5787", "adaptation": "independent dependency-free fixture"},
+  "user_task": "instructions.md",
+  "repo_files": {"README.md": "materials/README.md", "solution.py": "materials/solution.py", "tests/test_solution.py": "materials/tests/test_solution.py"},
+  "reference": {
+    "topic": "exception serialization JSON dataclasses chained reports",
+    "path": "reference/reference.md",
+    "compatibility_context": "Exception report transport checks exercise one independent structured report conversion.",
+    "documents": [
+      {"path": "reference/reference.md", "workspace_path": "docs/reference.md", "title": "Python built-in exceptions", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/exceptions.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "03f3848a26d2104e0ce8bed1f72c31e6447b7a3ca3fbd9c2c6d581cb29ccd164", "bytes": 37694, "lines": 1036, "words": 4790, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/02-json.rst", "workspace_path": "docs/references/02-json.rst", "title": "Python json — JSON encoder and decoder", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/json.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "b154dd5e6e61514a209bb91d9bc51909574fc8f82e5f35173d78a560817a5610", "bytes": 28730, "lines": 766, "words": 3559, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/03-dataclasses.rst", "workspace_path": "docs/references/03-dataclasses.rst", "title": "Python dataclasses — Data classes", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/dataclasses.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "b900f5f765954b2a554f91e5a77ef1cf58681eebe78918fde64b16e225a110c3", "bytes": 31833, "lines": 810, "words": 4246, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/04-errors.rst", "workspace_path": "docs/references/04-errors.rst", "title": "Python tutorial — Errors and Exceptions", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/tutorial/errors.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "8b802eff6eba44c706ba7769105890a970049e9a1b443a0f01f63265297eea55", "bytes": 23088, "lines": 653, "words": 3143, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/05-typing.rst", "workspace_path": "docs/references/05-typing.rst", "title": "Python typing — Type hints", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/typing.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "bf3cb22a0befac43dc7c24e16a9cbf3b441a0dec8733a3ba301a9918cba7bd42", "bytes": 111329, "lines": 3363, "words": 13677, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/06-copy.rst", "workspace_path": "docs/references/06-copy.rst", "title": "Python copy — Shallow and deep copy", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/copy.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "38f89309101e4d29e3232a716e1a00c488cba423b4cb9f7e0cec4b6d003ea0b0", "bytes": 3476, "lines": 97, "words": 507, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"}
+    ]
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {"solution.py": "private/solution.py"}
+}

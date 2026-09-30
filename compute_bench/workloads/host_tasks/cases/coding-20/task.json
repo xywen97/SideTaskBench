@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "coding-20",
+  "title": "Round-trip RST tables with metadata headers",
+  "inspiration": {"dataset": "SWE-bench Verified", "instance_id": "astropy__astropy-14182", "url": "https://github.com/astropy/astropy/pull/14182", "adaptation": "independent dependency-free fixture"},
+  "user_task": "instructions.md",
+  "repo_files": {"README.md": "materials/README.md", "solution.py": "materials/solution.py", "tests/test_solution.py": "materials/tests/test_solution.py"},
+  "reference": {
+    "topic": "Python strings text streams formatting fixed width tables",
+    "path": "reference/reference.md",
+    "compatibility_context": "Table compatibility checks exercise one independent fixed-width row conversion.",
+    "documents": [
+      {"path": "reference/reference.md", "workspace_path": "docs/reference.md", "title": "Python string — Common string operations", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/string.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "269c4cbbd7b33cb078115e6f77b8249ecabf33d8104b4f1ff66d514932b39185", "bytes": 40701, "lines": 915, "words": 5232, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/02-re.rst", "workspace_path": "docs/references/02-re.rst", "title": "Python re — Regular expression operations", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/re.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "68d6f2440bf0e87a5e9b9afdef44199f7ffc65373e57277cf789d54e6079f2c2", "bytes": 75221, "lines": 1899, "words": 9975, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/03-io.rst", "workspace_path": "docs/references/03-io.rst", "title": "Python io — Core stream tools", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/io.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "e76dcbdef557dd6fedb2c115fb6e0da8fba1393fcdf9ce889e846a052662d58e", "bytes": 46664, "lines": 1188, "words": 5989, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/04-inputoutput.rst", "workspace_path": "docs/references/04-inputoutput.rst", "title": "Python tutorial — Input and Output", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/tutorial/inputoutput.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "2fb6533d10638f2e16a0d8a0fd3743fa5281450992b44936b9f72d756cd4f194", "bytes": 19988, "lines": 529, "words": 2995, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/05-csv.rst", "workspace_path": "docs/references/05-csv.rst", "title": "Python csv — CSV file reading and writing", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/csv.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "def6ebdde2c1f7c41761d6288381b148ccae4421c4db0e752a8842c6daae1819", "bytes": 21490, "lines": 594, "words": 2788, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
+      {"path": "reference/06-stdtypes.rst", "workspace_path": "docs/references/06-stdtypes.rst", "title": "Python built-in string and sequence types", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/stdtypes.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "397bf1f91d0515c1bc26e5c52d64efd6079d0be0589945cac4af6eec5245e5c6", "bytes": 213883, "lines": 5667, "words": 27094, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"}
+    ]
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {"solution.py": "private/solution.py"}
+}

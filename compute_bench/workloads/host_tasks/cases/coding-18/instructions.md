@@ -1,0 +1,5 @@
+Fix the bugs in this Python repository: Collect inherited marks in Python MRO order.
+
+Repair `get_unpacked_marks(obj, consider_mro=True)` and `store_mark(obj, mark)`. Classes must expose their direct marks followed by base-class marks in MRO order, without duplicating a diamond ancestor; disabling MRO consideration must return direct marks only. A mark may be stored alone or in a list. Storing a mark must not copy or mutate inherited marks, and equal mark names with different arguments must remain distinct. Preserve normal attribute behavior for non-class objects.
+
+Inspect the repository, repair solution.py, and use the locally indexed technical references as needed. More than one focused reference search may be useful during diagnosis, implementation, and validation. Preserve the public API and existing correct behavior, add useful regression coverage if needed, run the full public test suite, and inspect the final diff. Do not weaken or delete existing tests. Finish with a concise explanation of the repair and test results.

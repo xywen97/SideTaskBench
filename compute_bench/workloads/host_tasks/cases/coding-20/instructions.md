@@ -1,0 +1,5 @@
+Fix the bugs in this Python repository: Round-trip fixed-width RST tables with metadata headers.
+
+Repair `write_rst_table(columns, header_rows=("name",))` and `read_rst_table(text, header_rows=("name",))`. Support one or more requested header rows, including empty metadata cells and tables with no data rows. Column widths must account for all headers and values; reading canonical output must reconstruct the input, repeated round-trips must be stable, and writing must not mutate its input. Reject missing fields, unequal column lengths, duplicate or reserved header names, multiline cells, inconsistent separators, and rows outside the declared widths.
+
+Inspect the repository, repair solution.py, and use the locally indexed technical references as needed. More than one focused reference search may be useful during diagnosis, implementation, and validation. Preserve the public API and existing correct behavior, add useful regression coverage if needed, run the full public test suite, and inspect the final diff. Do not weaken or delete existing tests. Finish with a concise explanation of the repair and test results.
