@@ -6,19 +6,20 @@ cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 # 首次使用可先执行：python -m pip install -e .
 # 完整环境及参考答案自检：uv run sidetaskbench check
 # ===== 在这里修改配置，然后直接执行 bash unit_steal.sh =====
-RUN_LABEL="wrapped_unified_qwen-3.8-max-r1-boundary"
+RUN_LABEL="wrapped_unified_deepseek-v4-flash-r1-20-15"
 OUTPUT_DIR="coding_runs/$RUN_LABEL" # 已有目录自动跳过已运行任务，继续缺少的部分
 
 # 数组中可填写多个 ID；设为 () 表示该维度全选。
 # HOST_TASK_IDS=("coding-02" "coding-03" "coding-08" "coding-10" "coding-16")
-HOST_TASK_IDS=("coding-01" "coding-02" "coding-03" "coding-04" "coding-05" "coding-06" "coding-07" "coding-08" "coding-09" "coding-10" "coding-11" "coding-12" "coding-13" "coding-14" "coding-15" "coding-16")
+HOST_TASK_IDS=("coding-20")
+# HOST_TASK_IDS=("coding-01" "coding-02" "coding-03" "coding-04" "coding-05" "coding-06" "coding-07" "coding-08" "coding-09" "coding-10" "coding-11" "coding-12" "coding-13" "coding-14" "coding-15" "coding-16" "coding-17" "coding-18" "coding-19" "coding-20")
 # HOST_TASK_IDS=("coding-02" "coding-03" "coding-08" "coding-10" "coding-16" "coding-04" "coding-14")
 # HOST_TASK_IDS=("coding-01" "coding-04" "coding-05" "coding-06" "coding-07" "coding-09" "coding-11" "coding-12" "coding-13" "coding-14" "coding-15")
 # ATOMIC_TASK_IDS=("regression-empty-page" "algorithm-grid-routes" "document-lru-behavior" "classify-timeout-event")
 # HOST_TASK_IDS=()
 ATOMIC_TASK_IDS=()
 CONDITIONS=("wrapped") # clean / length_control / direct / wrapped
-DEFENSES=("boundary")      # none / boundary
+DEFENSES=("none")      # none / boundary
 REPEATS=1             # 每个组合的总运行次数；增加后只补新增次数
 WORKERS=64
 MAX_STEPS=70

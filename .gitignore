@@ -24,3 +24,5 @@ docker_exports/
 build/
 dist/
 paper/
+.claude/
+CLAUDE.md

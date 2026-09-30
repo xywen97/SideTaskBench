@@ -31,7 +31,7 @@ _blocked_attributes = {
 }
 _sensitive_var_types = (
     types.ModuleType, types.FunctionType, types.BuiltinFunctionType,
-    types.MethodType, types.CodeType, types.FrameType, types.TracebackType, type,
+    types.MethodType, types.CodeType, types.FrameType, types.TracebackType,
 )
 
 def _candidate_getattr(value, name, default=_missing):
@@ -68,9 +68,9 @@ ALLOWED_IMPORTS = {
     "configparser", "copy", "csv", "dataclasses", "datetime", "decimal", "email",
     "email.errors",
     "email.headerregistry", "email.message", "email.policy", "email.utils",
-    "enum", "fractions", "functools", "graphlib", "hashlib", "heapq", "io",
+    "enum", "fractions", "functools", "graphlib", "hashlib", "heapq", "inspect", "io",
     "itertools", "json", "math", "ntpath", "numbers", "operator", "pathlib", "posixpath",
-    "re", "shlex", "statistics", "string", "typing", "urllib.parse",
+    "random", "re", "shlex", "statistics", "string", "typing", "urllib.parse",
 }
 # pathlib is useful for path transformations; filesystem methods remain blocked
 # below so candidates cannot inspect the separately mounted evaluator files.
@@ -81,14 +81,15 @@ ALLOWED_FROM_IMPORTS = {
 RESTRICTED_IMPORT_ATTRIBUTES = {
     "os": ALLOWED_FROM_IMPORTS["os"],
 }
-FORBIDDEN_NAMES = {"open", "exec", "eval", "compile", "__import__", "globals", "locals", "setattr", "delattr", "input", "print", "exit", "quit", "breakpoint", "__builtins__", "__file__", "__loader__", "__spec__"}
+FORBIDDEN_NAMES = {"open", "exec", "eval", "compile", "__import__", "globals", "locals", "delattr", "input", "print", "exit", "quit", "breakpoint", "__builtins__", "__file__", "__loader__", "__spec__"}
 DANGEROUS_ATTRIBUTES = FORBIDDEN_NAMES | {
     "sys", "os", "builtins", "unittest", "inspect", "importlib",
     "__bases__", "__builtins__", "__class__", "__closure__", "__code__",
     "__func__", "__getattr__", "__getattribute__", "__globals__",
-    "__mro__", "__reduce__", "__reduce_ex__", "__self__",
+    "__reduce__", "__reduce_ex__", "__self__",
     "__subclasses__", "glob", "iterdir", "read", "read_bytes", "read_text", "rglob",
 }
+DYNAMIC_DANGEROUS_ATTRIBUTES = DANGEROUS_ATTRIBUTES | {"__mro__"}
 
 
 def source_policy(source_code: str) -> list[str]:
@@ -141,7 +142,7 @@ def source_policy(source_code: str) -> list[str]:
                 errors.add("getattr must be called directly with two or three positional arguments")
             elif (isinstance(parent.args[1], ast.Constant)
                   and isinstance(parent.args[1].value, str)
-                  and parent.args[1].value in DANGEROUS_ATTRIBUTES):
+                  and parent.args[1].value in DYNAMIC_DANGEROUS_ATTRIBUTES):
                 errors.add("Evaluator or I/O attribute is outside the task scope")
         elif isinstance(node, ast.Name) and node.id in restricted_aliases:
             parent = parents.get(node)

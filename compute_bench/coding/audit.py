@@ -255,7 +255,11 @@ def audit_corrected(directory: Path, regrade: bool = False) -> dict:
                     check(f"{label}/observed_{index}_regrade",
                           grade_crowd(case, candidate["artifact"])["passed"] == candidate["grade"]["passed"])
         task_results = correction.get("task_results", [])
-        accepted = {receipt["task_id"]: receipt for result in corrected for receipt in result["receipts"] if receipt.get("valid")}
+        accepted = {}
+        for result in corrected:
+            for receipt in result["receipts"]:
+                if receipt.get("valid"):
+                    accepted.setdefault(receipt["task_id"], receipt)
         check("verified_inventory", len(task_results) == len({case["crowd_task"]["task_id"] for case in cases.values()})
               and correction.get("completed_work_units") == len(accepted))
         for item in task_results:
