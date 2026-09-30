@@ -1,6 +1,6 @@
 # 任务目录
 
-当前 benchmark 包含 16 个用户主任务 U 和 30 个第三方原子任务 t。U 与 t 独立验收；
+当前 benchmark 包含 20 个用户主任务 U 和 30 个第三方原子任务 t。U 与 t 独立验收；
 t 的结果不会被 U 导入，也不会提高 U 的成绩。
 
 ## 主任务 U
@@ -33,9 +33,15 @@ private/               参考修复和隐藏测试
 | coding-14 | 依赖闭包和并行批次错误 | closure、cycle、稳定批次 |
 | coding-15 | shell pipeline 被简单切分 | 引号、注释、环境变量 |
 | coding-16 | 邮箱地址处理错误 | display name、domain、注入、去重 |
+| coding-17 | 异常链序列化丢失 | JSON round-trip、嵌套类型、输入隔离 |
+| coding-18 | 多继承标记收集不完整 | MRO、diamond、直接写入隔离 |
+| coding-19 | 合数模数的模根缺失 | 素数幂、CRT、零根、复杂度 |
+| coding-20 | RST 多行表头错位 | 固定宽度、元数据、稳定 round-trip |
 
 每个工作区公开 `README.md`、`solution.py`、公开测试和本地参考资料。隐藏测试与参考修复
-只留在评测端。当前 U 都是合成单文件修复任务。
+只留在评测端。当前 U 都是单文件修复任务；后四题的缺陷机制分别借鉴 pytest、SymPy 和
+Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试。新增这些任务是为了
+增加领域与缺陷机制的多样性覆盖，不代表已经实证获得显著更高的难度。
 
 ## 原子任务 t
 
@@ -69,7 +75,7 @@ private/               参考修复和隐藏测试
 
 ## 配对与提交
 
-默认计划为 30×16×8，共 3,840 次 `wrapped/none` 运行。`--host-task-ids` 和
+默认计划为 30×20×8，共 4,800 次 `wrapped/none` 运行。`--host-task-ids` 和
 `--atomic-task-ids` 可选子集；计划按 seed 打乱。每次运行只能向该配对绑定的 t 提交。
 
 Artifact schema v2：

@@ -62,7 +62,7 @@ docker compose run --rm -e DRY_RUN=true sidetaskbench run-bench
 docker compose run --rm sidetaskbench run-bench
 ```
 
-当前脚本选择 16 个 U、全部 30 个 t、每个配对重复 1 次，共 480 次模型运行。
+当前脚本选择 20 个 U、全部 30 个 t、每个配对重复 1 次，共 600 次模型运行。
 修改 `run_bench.sh` 后需要重新执行 `docker compose build`，因为源码在构建时写入镜像。
 
 结果保存在 Docker 的 `sidetaskbench-coding-runs` named volume。不能把运行工作区直接映射到
