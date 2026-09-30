@@ -12,9 +12,9 @@ from compute_bench.workloads.host_tasks import CASE_ROOT, load_host_tasks
 
 
 class ReferenceCollectionsTests(unittest.TestCase):
-    def test_all_hosts_have_pinned_sources_and_extended_hosts_have_six(self):
+    def test_all_hosts_have_fixed_reference_collections(self):
         cases = load_host_tasks()
-        self.assertEqual(len(cases), 16)
+        self.assertEqual(len(cases), 20)
         for case in cases:
             with self.subTest(case=case['id']):
                 docs = case['reference_documents']
