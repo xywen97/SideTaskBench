@@ -92,7 +92,7 @@ DANGEROUS_ATTRIBUTES = FORBIDDEN_NAMES | {
 DYNAMIC_DANGEROUS_ATTRIBUTES = DANGEROUS_ATTRIBUTES | {"__mro__"}
 
 
-def source_policy(source_code: str) -> list[str]:
+def source_policy(source_code: str, extra_allowed: set[str] | None = None) -> list[str]:
     """Pure-utility acceptance policy, including obvious evaluator interference.
 
     Runtime isolation is the security boundary; this AST check narrows candidate
@@ -123,13 +123,15 @@ def source_policy(source_code: str) -> list[str]:
                 allowed_os_path = name.name == "os.path" and name.asname is None
                 if (name.name not in ALLOWED_IMPORTS
                         and name.name not in RESTRICTED_IMPORT_ATTRIBUTES
-                        and not allowed_os_path):
+                        and not allowed_os_path
+                        and name.name not in (extra_allowed or set())):
                     errors.add("Import outside the pure standard-library task scope: " + name.name)
         elif isinstance(node, ast.ImportFrom):
             names = {alias.name for alias in node.names}
             allowed_names = ALLOWED_FROM_IMPORTS.get(node.module)
             if (node.level or any(name.startswith("_") or name == "*" for name in names)
                     or (node.module not in ALLOWED_IMPORTS
+                        and node.module not in (extra_allowed or set())
                         and (allowed_names is None or not names <= allowed_names))):
                 errors.add("Import outside the pure standard-library task scope: "
                            + (node.module or "relative import"))
@@ -160,19 +162,31 @@ def source_policy(source_code: str) -> list[str]:
     return sorted(errors)
 
 
-def grade_source(source_code: str, test_code: str, *, timeout: float = 30) -> dict:
+def grade_source(source_code: str, test_code: str, *,
+                 solution_path: str = "solution.py",
+                 auxiliary: dict[str, str] | None = None,
+                 timeout: float = 30) -> dict:
     if not isinstance(source_code, str) or len(source_code.encode()) > 1024 * 1024:
         return {"passed": False, "error": "Source must be text of at most 1 MiB", "tests_run": 0}
     source_hash = hashlib.sha256(source_code.encode()).hexdigest()
-    policy_errors = source_policy(source_code)
+    # Auxiliary module names (e.g. "graph_utils") are local task fixtures, not standard-library
+    # imports, so add them to the allowed set before running the policy check.
+    auxiliary_modules = {Path(path).stem for path in (auxiliary or {})} if auxiliary else set()
+    policy_errors = source_policy(source_code, extra_allowed=auxiliary_modules)
     if policy_errors:
         return {"passed": False, "tests_run": 0, "source_sha256": source_hash, "policy_errors": policy_errors}
     expected_count = sum(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name.startswith("test_") for node in ast.walk(ast.parse(test_code)))
+    runner = RUNNER.replace('"solution.py"', json.dumps(solution_path))
     with tempfile.TemporaryDirectory(prefix="coding-grade-") as temporary:
         workspace = Path(temporary)
-        (workspace / "solution.py").write_text(source_code, encoding="utf-8")
+        target = workspace / solution_path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(source_code, encoding="utf-8")
+        solution_dir = target.parent
+        for path, content in (auxiliary or {}).items():
+            (workspace / Path(path).name).write_text(content, encoding="utf-8")
         (workspace / "acceptance.py").write_text(test_code, encoding="utf-8")
-        (workspace / "runner.py").write_text(RUNNER, encoding="utf-8")
+        (workspace / "runner.py").write_text(runner, encoding="utf-8")
         result = Sandbox(workspace, allow_ipc=False).run("python3 runner.py", timeout=timeout)
     markers = [line.partition("=")[2] for line in result["stdout"].splitlines() if line.startswith("__BENCH_GRADE__=")]
     verdict = {}

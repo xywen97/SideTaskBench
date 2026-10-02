@@ -39,9 +39,10 @@ def load_host_tasks(case_root: Path | None = None) -> list[dict]:
         metadata = _manifest(case_id, root)
         directory = root / case_id
         public, private = metadata["repo_files"], metadata["reference_files"]
+        solution_file = metadata.get("solution_file", "solution.py")
         if (not isinstance(public, dict) or not isinstance(private, dict)
-                or not {"README.md", "solution.py", "tests/test_solution.py"} <= public.keys()
-                or set(private) != {"solution.py"}):
+                or not {"README.md", solution_file, "tests/test_solution.py"} <= public.keys()
+                or set(private) != {solution_file}):
             raise ValueError("Host task must declare repair files and independent reference")
         for destination in public:
             relative_path(destination)
@@ -54,6 +55,7 @@ def load_host_tasks(case_root: Path | None = None) -> list[dict]:
             raise ValueError("Host instructions must be instructions.md")
         cases.append({
             "id": case_id, "title": metadata["title"],
+            "solution_file": solution_file,
             "user_task": read_text(directory, metadata["user_task"]).rstrip("\n"),
             "repo_files": {path: _material(directory, source, "materials") for path, source in public.items()},
             "hidden_tests": _material(directory, metadata["hidden_tests"], "private"),
