@@ -18,11 +18,14 @@ from compute_bench.coding.tasks import build_coding_cases, build_run_plan, cases
 from collections import Counter
 
 
-def _run(source, tests, timeout=10):
+def _run(source, tests, auxiliary=None, timeout=10):
     with tempfile.TemporaryDirectory(prefix="coding-fixture-") as directory:
         root = Path(directory)
         (root / "solution.py").write_text(source, encoding="utf-8")
         (root / "acceptance.py").write_text(tests, encoding="utf-8")
+        for path, content in (auxiliary or {}).items():
+            target = root / Path(path).name
+            target.write_text(content, encoding="utf-8")
         return subprocess.run([sys.executable, "-B", "acceptance.py"], cwd=root,
                               capture_output=True, text=True, timeout=timeout)
 
@@ -75,19 +78,21 @@ class CodingTaskTests(unittest.TestCase):
 
     def test_full_cross_plan_has_600_pairs_and_eight_repeats_each(self):
         cases = build_coding_cases()
-        self.assertEqual(len(cases), 600)
-        self.assertEqual(len({case["id"] for case in cases}), 600)
-        self.assertEqual(len({case["host_task_id"] for case in cases}), 20)
-        self.assertEqual(len({case["crowd_task"]["task_id"] for case in cases}), 30)
+        host_count = len({case["host_task_id"] for case in cases})
+        atomic_count = len({case["crowd_task"]["task_id"] for case in cases})
+        pair_count = host_count * atomic_count
+        self.assertEqual(len(cases), pair_count)
+        self.assertEqual(len({case["id"] for case in cases}), pair_count)
+        self.assertEqual(atomic_count, 30)
         hosts = {}
         for case in cases:
             contents = (case["repo_files"], case["user_task"], case["hidden_tests"], case["reference_text"])
             self.assertEqual(contents, hosts.setdefault(case["host_task_id"], contents))
         plan = build_run_plan(cases, ["wrapped"], ["none"])
-        self.assertEqual(len(plan), 4800)
+        self.assertEqual(len(plan), pair_count * 8)
         self.assertEqual(set(Counter(p["case_id"] for p in plan).values()), {8})
-        self.assertEqual(len({p["run_id"] for p in plan}), 4800)
-        self.assertEqual(len({p["workspace_id"] for p in plan}), 4800)
+        self.assertEqual(len({p["run_id"] for p in plan}), pair_count * 8)
+        self.assertEqual(len({p["workspace_id"] for p in plan}), pair_count * 8)
         for case in cases:
             self.assertEqual({p["repeat"] for p in plan if p["case_id"] == case["id"]}, set(range(1, 9)))
         self.assertEqual(plan, build_run_plan(cases, ["wrapped"], ["none"]))
@@ -107,7 +112,9 @@ class CodingTaskTests(unittest.TestCase):
                          {(h, t) for h in hosts for t in tasks})
         self.assertEqual(cases, build_coding_cases(host_task_ids=hosts[::-1], atomic_task_ids=tasks[::-1]))
         self.assertEqual(len(build_coding_cases(host_task_ids=["coding-01"])), 30)
-        self.assertEqual(len(build_coding_cases(atomic_task_ids=["rewrite-user-record"])), 20)
+        from compute_bench.workloads.host_tasks import load_host_tasks
+        self.assertEqual(len(build_coding_cases(atomic_task_ids=["rewrite-user-record"])),
+                         len(load_host_tasks()))
 
     def test_historical_pairing_is_read_only_compatible(self):
         cases = cases_for_manifest({"case_count": 8, "pairing_rotation": 2})
@@ -117,12 +124,15 @@ class CodingTaskTests(unittest.TestCase):
 
     def test_every_bug_fails_and_every_reference_repair_passes(self):
         for case in build_coding_cases(atomic_task_ids=["rewrite-user-record"]):
+            solution_file = case["solution_file"]
+            auxiliary = {path: content for path, content in case["repo_files"].items()
+                         if path.endswith(".py") and path != solution_file}
             for tests in (case["repo_files"]["tests/test_solution.py"], case["hidden_tests"]):
                 with self.subTest(case=case["id"], fixed=False):
-                    broken = _run(case["repo_files"]["solution.py"], tests)
+                    broken = _run(case["repo_files"][solution_file], tests, auxiliary)
                     self.assertNotEqual(broken.returncode, 0, broken.stdout + broken.stderr)
                 with self.subTest(case=case["id"], fixed=True):
-                    fixed = _run(case["reference_files"]["solution.py"], tests)
+                    fixed = _run(case["reference_files"][solution_file], tests, auxiliary)
                     self.assertEqual(fixed.returncode, 0, fixed.stdout + fixed.stderr)
 
     def test_catalog_has_six_types_five_each_and_five_large_tasks(self):

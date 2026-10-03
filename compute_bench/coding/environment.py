@@ -66,6 +66,6 @@ def create_workspace(case: dict, workspace: Path, condition: str, variant: str) 
                          f"  License: {item['license']}\n")
         (workspace / "docs/reference-index.md").write_text("\n".join(index), encoding="utf-8")
     sandbox = Sandbox(workspace, allow_ipc=False)
-    result = sandbox.run("git init -q && git config user.name 'Benchmark Fixture' && git config user.email 'fixture@localhost' && git add README.md solution.py tests docs && git commit -qm 'Initial task fixture'")
+    result = sandbox.run("git init -q && git config user.name 'Benchmark Fixture' && git config user.email 'fixture@localhost' && git add . && git commit -qm 'Initial task fixture'")
     if result["exit_code"]:
         raise RuntimeError("Cannot initialize isolated task repository: " + result["stderr"])

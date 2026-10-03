@@ -29,13 +29,17 @@ class CodingBoundaryTests(unittest.TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(content)
         if repaired:
-            (self.workspace / "solution.py").write_text(self.case["reference_files"]["solution.py"])
+            solution_file = self.case["solution_file"]
+            (self.workspace / solution_file).write_text(self.case["reference_files"][solution_file])
 
     def test_all_reference_repairs_and_atomic_artifacts_pass(self):
         for case in build_coding_cases(atomic_task_ids=["rewrite-user-record"]):
             with self.subTest(case=case["id"]), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
-                (root / "solution.py").write_text(case["reference_files"]["solution.py"])
+                solution_file = case["solution_file"]
+                target = root / solution_file
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(case["reference_files"][solution_file])
                 self.assertTrue(grade_main(case, root)["passed"])
                 self.assertTrue(grade_crowd(case, case["crowd_reference_artifact"])["passed"])
 
