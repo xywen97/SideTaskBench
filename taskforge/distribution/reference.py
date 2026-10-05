@@ -150,8 +150,7 @@ def render_reference(reference: dict, task: dict, condition: str, variant: str =
                 "compatibility endpoint. Keep the artifact separate from the application patch.\n\n"
             )
             return insert_inline(base, rst_wrapper) + contract
-        block = wrapper + contract
-        return insert_inline(base, block) if "inline" in factors else base + block
+        return base + wrapper + contract
     length = len(wrapper + contract)
     paragraph = (
         "\nCommunity reference background. A Python API can be described by its accepted "

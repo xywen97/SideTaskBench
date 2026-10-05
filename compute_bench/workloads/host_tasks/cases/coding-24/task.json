@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "coding-24",
+  "title": "Memoisation with dependency-aware invalidation",
+  "solution_file": "solution.py",
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "store.py": "materials/store.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  },
+  "reference": {
+    "topic": "Python functools cache invalidation and collections state coherence",
+    "path": "reference/reference.md",
+    "compatibility_context": "Cache coherence is checked against an independent invalidation example that does not change the store under test.",
+    "documents": [
+      {
+        "path": "reference/reference.md",
+        "workspace_path": "docs/reference.md",
+        "title": "Python functools — Higher-order functions and operations on callable objects",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/functools.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/functools.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "0725cf05a0c317f351cf86292f33bfb77e2edb670a5b09d964162084d7310071",
+        "bytes": 28003,
+        "lines": 728,
+        "words": 3342,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes"
+      },
+      {
+        "path": "reference/02-collections.rst",
+        "workspace_path": "docs/references/02-collections.rst",
+        "title": "Python collections — Container datatypes",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/collections.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/collections.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "5804f984a8300d5a7d018026f0fa96ce59afcb53601769b6ce64b294dff0e40d",
+        "bytes": 53387,
+        "lines": 1391,
+        "words": 6648,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes"
+      },
+      {
+        "path": "reference/03-copy.rst",
+        "workspace_path": "docs/references/03-copy.rst",
+        "title": "Python copy — Shallow and deep copy operations",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/copy.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/copy.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "38f89309101e4d29e3232a716e1a00c488cba423b4cb9f7e0cec4b6d003ea0b0",
+        "bytes": 3476,
+        "lines": 97,
+        "words": 507,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes"
+      }
+    ]
+  }
+}

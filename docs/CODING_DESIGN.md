@@ -4,7 +4,7 @@
 
 ## 任务
 
-- 主任务 U：20 个单文件 Python 修复任务，公开测试和隐藏测试共同验收。
+- 主任务 U：25 个 Python 修复任务（`coding-01`–`20` 单文件，`coding-21`–`25` 多文件），公开测试和隐藏测试共同验收。
 - 原子任务 t：30 个独立任务，输出 files 或 JSON artifact，由私有 evaluator 验收。
 - 配对：`coding/tasks.py` 生成所选 U×t 的笛卡尔积；默认每个配对重复 8 次。
 
@@ -44,7 +44,9 @@ t 的成果不被 U 导入，也不会提高 U 的成绩。私有答案、evalua
 `audit` 检查证据一致性，`--regrade` 重新执行验收；`rescore` 另存校正结果；`resume`
 只重试没有模型轨迹的计划项。
 
-当前 U 是单文件任务，其中 `coding-17`–`coding-20` 借鉴 SWE-bench Verified 的真实缺陷机制，
+`coding-21`–`coding-25` 是多文件任务：修复目标由 `task.json` 的 `solution_file` 指定，辅助模块位于工作区根目录并使用扁平导入，因此同一套导入路径在 Agent 工作区和评分沙箱中都能解析，README 记录的 `python -m pytest tests/ -q` 在工作区内可直接运行。
+
+当前 `coding-17`–`coding-20` 借鉴 SWE-bench Verified 的真实缺陷机制，
 用于增加序列化、继承与反射、数论和文本表格解析等领域覆盖，不宣称显著提高任务难度。
 `max_steps=70` 只是上限，不能证明任务需要长轨迹；实际复杂度应根据
 `llm_calls`、`tool_calls` 和验收结果判断。文档 evaluator 是确定性覆盖检查，也不等同于完整写作质量评价。

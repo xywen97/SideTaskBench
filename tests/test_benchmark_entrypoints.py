@@ -18,7 +18,7 @@ from microcoder.config import Settings
 
 class BenchmarkEntrypointTests(unittest.TestCase):
     def test_dry_run_validates_full_and_selected_plans_without_credentials(self):
-        for arguments, expected in (([], (600, 4800)),
+        for arguments, expected in (([], (750, 6000)),
                                     (["--host-task-ids", "coding-03", "coding-01",
                                       "--atomic-task-ids", "regression-empty-page"], (2, 16))):
             with self.subTest(arguments=arguments), \

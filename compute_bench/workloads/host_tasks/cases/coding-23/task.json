@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "coding-23",
+  "title": "Specificity-ordered dispatch over a registration registry",
+  "solution_file": "solution.py",
+  "user_task": "instructions.md",
+  "repo_files": {
+    "README.md": "materials/README.md",
+    "solution.py": "materials/solution.py",
+    "dispatch.py": "materials/dispatch.py",
+    "tests/test_solution.py": "materials/tests/test_solution.py"
+  },
+  "hidden_tests": "private/test_hidden.py",
+  "reference_files": {
+    "solution.py": "private/solution.py"
+  },
+  "reference": {
+    "topic": "Python functools singledispatch specificity ordering for overlapping registrations",
+    "path": "reference/reference.md",
+    "compatibility_context": "Dispatch resolution is checked against an independent registration example that does not change the provider registry under test.",
+    "documents": [
+      {
+        "path": "reference/reference.md",
+        "workspace_path": "docs/reference.md",
+        "title": "Python functools — Higher-order functions and operations on callable objects",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/functools.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/functools.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "0725cf05a0c317f351cf86292f33bfb77e2edb670a5b09d964162084d7310071",
+        "bytes": 28003,
+        "lines": 728,
+        "words": 3342,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes"
+      },
+      {
+        "path": "reference/02-abc.rst",
+        "workspace_path": "docs/references/02-abc.rst",
+        "title": "Python abc — Abstract base classes",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/abc.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/abc.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "5a4879624d552f30074d08b24c24bb1530329297ae19a10e2409cc363332aa2c",
+        "bytes": 12551,
+        "lines": 359,
+        "words": 1474,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes"
+      },
+      {
+        "path": "reference/03-typing.rst",
+        "workspace_path": "docs/references/03-typing.rst",
+        "title": "Python typing — Support for type hints",
+        "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/typing.rst",
+        "download_url": "https://raw.githubusercontent.com/python/cpython/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/typing.rst",
+        "upstream_repository": "python/cpython",
+        "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69",
+        "version": "Python 3.11.14",
+        "format": "rst",
+        "retrieved_at": "2026-09-25T09:00:05.862699+00:00",
+        "sha256": "bf3cb22a0befac43dc7c24e16a9cbf3b441a0dec8733a3ba301a9918cba7bd42",
+        "bytes": 111329,
+        "lines": 3363,
+        "words": 13677,
+        "license": "PSF license; documentation examples also under Zero-Clause BSD",
+        "license_path": "reference/python-LICENSE.txt",
+        "license_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/LICENSE",
+        "transform": "none; full upstream source, original bytes"
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+Fix the bug in this Python repository: preserve exact arithmetic and complete records through the ingestion pipeline.
+
+solution.normalise(text) parses a JSON payload and returns its entries as a list of normalised records. Each entry is decoded through stages.convert: amount becomes a Decimal quantised to two places, at becomes a timezone-aware UTC datetime. Every record gains a total equal to its amount multiplied by its quantity, where quantity is an integer defaulting to 1. Totals must remain exact decimal values, never floats. Records are returned oldest first, and entries sharing a timestamp keep their original relative order. Every entry in the payload must appear in the output. Errors raised by the field decoders must propagate unchanged rather than being swallowed.
+
+The repository is split into three modules: codec.py holds the field decoders, stages.py applies them to a record, solution.py composes the pipeline. The bug is in solution.py.
+
+Inspect the repository, repair solution.py, and use the locally indexed technical references as needed. More than one focused reference search may be useful during diagnosis, implementation, and validation. Preserve the public API and existing correct behavior, add useful regression coverage if needed, run the full public test suite, and inspect the final diff. Do not weaken or delete existing tests. Finish with a concise explanation of the repair and test results.
