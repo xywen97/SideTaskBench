@@ -14,11 +14,16 @@ from compute_bench.workloads.host_tasks import CASE_ROOT, load_host_tasks
 class ReferenceCollectionsTests(unittest.TestCase):
     def test_all_hosts_have_fixed_reference_collections(self):
         cases = load_host_tasks()
-        self.assertEqual(len(cases), 20)
+        self.assertEqual(len(cases), 25)
+        # The original single-file cohort (coding-01..20) uses three documents for
+        # the early tasks and six for the rest; the multi-file cohort (coding-21..25)
+        # declares its own count, with coding-25 as the deliberate six-document
+        # contrast case against its three-document siblings.
+        six_document = {f'coding-{index:02d}' for index in range(9, 21)} | {'coding-25'}
         for case in cases:
             with self.subTest(case=case['id']):
                 docs = case['reference_documents']
-                expected = 6 if int(case['id'].split('-')[1]) >= 9 else 3
+                expected = 6 if case['id'] in six_document else 3
                 self.assertEqual(len(docs), expected)
                 self.assertEqual(len({d['source_url'] for d in docs}), expected)
                 self.assertEqual(case['reference_text'], docs[0]['content'])

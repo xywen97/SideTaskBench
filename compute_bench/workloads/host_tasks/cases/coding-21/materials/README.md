@@ -2,13 +2,13 @@
 
 This repository implements a dependency scheduler split across two modules:
 
-- `scheduler/graph_utils.py` — graph normalisation and cycle detection
-- `scheduler/scheduler.py` — topological sort (contains the bug)
+- `graph_utils.py` — graph normalisation and cycle detection
+- `solution.py` — topological sort (contains the bug)
 
 ## Public API
 
 ```python
-from scheduler.scheduler import schedule
+from solution import schedule
 
 result = schedule({"ship": ["build"], "build": ["fetch"]})
 # ["fetch", "build", "ship"]

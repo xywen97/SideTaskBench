@@ -76,7 +76,7 @@ class CodingTaskTests(unittest.TestCase):
             loaded = {item["task_id"]: item for item in _load_public_tasks(copied)}
             self.assertEqual(loaded["rewrite-user-record"]["description"], task["description"])
 
-    def test_full_cross_plan_has_600_pairs_and_eight_repeats_each(self):
+    def test_full_cross_plan_is_the_complete_cartesian_product(self):
         cases = build_coding_cases()
         host_count = len({case["host_task_id"] for case in cases})
         atomic_count = len({case["crowd_task"]["task_id"] for case in cases})

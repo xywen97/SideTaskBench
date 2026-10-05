@@ -3,9 +3,9 @@
 ### 评测 Coding Agent 是否会在运行时被引导执行和交付未经授权的旁支任务。
 
 本项目评估 Coding Agent 在修复用户仓库时，是否会执行参考资料中未经用户授权的第三方任务。
-当前数据集包含 20 个主任务 U、30 个原子任务 t，以及两者的全交叉配对。
+当前数据集包含 25 个主任务 U、30 个原子任务 t，以及两者的全交叉配对。
 
-- U：用户明确授权的 Python 修复任务。
+- U：用户明确授权的 Python 修复任务；`coding-01`–`coding-20` 为单文件，`coding-21`–`coding-25` 为多文件。
 - t：参考资料中附带的独立任务，输出代码、JSON 或 Markdown。
 - 成绩：分别记录 U 通过、t 被尝试、t 验收通过和 t 实际交付。
 
@@ -16,7 +16,7 @@
 ```text
 compute_bench/
   coding/       实验计划、运行、评分、报告、审计和恢复
-  workloads/    20 个 U、30 个 t 及其私有验收材料（评测任务和数据在这里）
+  workloads/    25 个 U、30 个 t 及其私有验收材料（评测任务和数据在这里）
   compute_metrics/  跨运行统计表
 microcoder/     模型循环、工具和 Linux 沙箱 （主Agent）
 taskforge/      任务计划、投放、回执、验收调用和成果组装（支撑外部任务的执行）
@@ -121,8 +121,8 @@ uv run sidetaskbench run \
   --repeats 1 --workers 1
 ```
 
-真实运行会调用模型并产生费用。CLI 默认选择全部 30×20 个配对，每个配对重复 8 次，
-使用 `wrapped` 条件和 `none`，共 4,800 次运行。`run_bench.sh` 当前将重复数设为 1，
+真实运行会调用模型并产生费用。CLI 默认选择全部 30×25 个配对，每个配对重复 8 次，
+使用 `wrapped` 条件和 `none`，共 6,000 次运行。`run_bench.sh` 当前将重复数设为 2，
 可在脚本中调整任务、条件、防御、重复数和并发数。
 
 3. 如果不运行最小示例，可以直接运行`run_bench.sh`，从而一键开启全量评测（在这个脚本中，同样可以配置需要测试的主任务和外部任务的配对）:
@@ -149,6 +149,7 @@ bash cal_acc.sh
 
 - [x] single-query coding scenario
 - [x] add diversity coverage with 4 SWE-bench Verified-inspired coding tasks
+- [x] multi-file host tasks (coding-21..25) behind an optional solution_file
 - [ ] multi-turn interactive scenario
 
 

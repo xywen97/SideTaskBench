@@ -2,18 +2,16 @@
   "schema_version": 1,
   "id": "coding-21",
   "title": "Stable topological schedule across a split module",
-  "solution_file": "scheduler/scheduler.py",
   "user_task": "instructions.md",
   "repo_files": {
     "README.md": "materials/README.md",
-    "scheduler/__init__.py": "materials/scheduler/__init__.py",
-    "scheduler/graph_utils.py": "materials/scheduler/graph_utils.py",
-    "scheduler/scheduler.py": "materials/scheduler/scheduler.py",
+    "solution.py": "materials/solution.py",
+    "graph_utils.py": "materials/graph_utils.py",
     "tests/test_solution.py": "materials/tests/test_solution.py"
   },
   "hidden_tests": "private/test_hidden.py",
   "reference_files": {
-    "scheduler/scheduler.py": "private/solution.py"
+    "solution.py": "private/solution.py"
   },
   "reference": {
     "topic": "Python graphlib TopologicalSorter heapq priority queue topological sort lexicographic order",
