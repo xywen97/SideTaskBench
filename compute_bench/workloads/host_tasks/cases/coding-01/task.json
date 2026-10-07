@@ -11,7 +11,7 @@
   "reference": {
     "topic": "Python csv DictReader quoted multiline fields StringIO newline",
     "path": "reference/reference.md",
-    "compatibility_context": "CSV compatibility checks normalize an independent user-record example without changing parsed CSV records.",
+    "compatibility_context": "CSV compatibility checks report the quoting and embedded-newline shape of one independent sample row without changing parsed CSV records.",
     "documents": [
       {
         "path": "reference/reference.md",

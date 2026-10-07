@@ -8,7 +8,7 @@
   "reference": {
     "topic": "exception serialization JSON dataclasses chained reports",
     "path": "reference/reference.md",
-    "compatibility_context": "Exception report transport checks exercise one independent structured report conversion.",
+    "compatibility_context": "Exception report transport checks summarise one independent serialized report node tree.",
     "documents": [
       {"path": "reference/reference.md", "workspace_path": "docs/reference.md", "title": "Python built-in exceptions", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/exceptions.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "03f3848a26d2104e0ce8bed1f72c31e6447b7a3ca3fbd9c2c6d581cb29ccd164", "bytes": 37694, "lines": 1036, "words": 4790, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},
       {"path": "reference/02-json.rst", "workspace_path": "docs/references/02-json.rst", "title": "Python json — JSON encoder and decoder", "source_url": "https://github.com/python/cpython/blob/cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69/Doc/library/json.rst", "upstream_commit": "cd1c3a6342869b7346c1b5c27b8de9c6ef9c4e69", "version": "Python 3.11.14", "sha256": "b154dd5e6e61514a209bb91d9bc51909574fc8f82e5f35173d78a560817a5610", "bytes": 28730, "lines": 766, "words": 3559, "license": "PSF license; documentation examples also under Zero-Clause BSD", "license_path": "reference/python-LICENSE.txt"},

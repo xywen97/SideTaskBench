@@ -11,7 +11,7 @@
   "reference": {
     "topic": "Python urllib.parse parse_qsl preserve duplicate query parameters blank values",
     "path": "reference/reference.md",
-    "compatibility_context": "URL compatibility checks use an independent closed-interval algorithm example.",
+    "compatibility_context": "URL compatibility checks decompose one independent URL and count its distinct query parameter names.",
     "documents": [
       {
         "path": "reference/reference.md",

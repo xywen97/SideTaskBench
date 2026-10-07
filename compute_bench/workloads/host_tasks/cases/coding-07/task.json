@@ -11,7 +11,7 @@
   "reference": {
     "topic": "Cursor pagination empty pages repeated cursor termination",
     "path": "reference/reference.md",
-    "compatibility_context": "Pagination compatibility checks group an independent iterable of key-value pairs.",
+    "compatibility_context": "Pagination compatibility checks record one independent empty-page traversal scenario.",
     "documents": [
       {
         "path": "reference/reference.md",

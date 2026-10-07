@@ -11,29 +11,72 @@
     "dependencies": [],
     "external_context": false
   },
-  "operation": "classify_event",
+  "operation": "summarize_manifest",
   "runtime": "json",
   "input": {
-    "events": [
-      {"code": "E101", "message": "disk full", "severity": "fatal"},
-      {"code": "W202", "message": "retry limit reached", "severity": "recoverable"},
-      {"code": "E103", "message": "null pointer", "severity": "fatal"},
-      {"code": "W204", "message": "timeout on read", "severity": "recoverable"},
-      {"code": "W205", "message": "deprecated api called", "severity": "recoverable"}
-    ]
+    "longrepr": {
+      "type": "group",
+      "message": "2 errors in setup",
+      "exceptions": [
+        {
+          "type": "exception",
+          "crash": {
+            "path": "tests/test_db.py",
+            "lineno": 14,
+            "message": "ValueError: bad port"
+          }
+        },
+        {
+          "type": "chain",
+          "chain": [
+            {
+              "crash": {
+                "path": "app/config.py",
+                "lineno": 8,
+                "message": "KeyError: 'host'"
+              },
+              "description": "During handling of the above exception, another exception occurred:"
+            },
+            {
+              "crash": {
+                "path": "app/config.py",
+                "lineno": 21,
+                "message": "RuntimeError: config unavailable"
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "message": "teardown",
+          "exceptions": [
+            {
+              "type": "exception",
+              "crash": {
+                "path": "tests/conftest.py",
+                "lineno": 33,
+                "message": "OSError: socket closed"
+              }
+            }
+          ]
+        }
+      ]
+    }
   },
   "output": {
     "artifact_kind": "json",
     "schema": {
-      "fatal": "list",
-      "recoverable": "list"
+      "node_types": "list",
+      "crash_messages": "list",
+      "max_group_depth": "int"
     }
   },
   "resource_profile": {
     "class": "small",
     "expected_output": "small_json"
   },
-  "description": "Group a flat list of error events by severity, collecting the message string of each event under its severity label and preserving the original order within each group.",
+  "description": "Walk one serialized exception-report node tree (node types exception, chain and group) in pre-order. Report the type label of every node visited, the crash messages in encounter order (each chain link contributes its own crash message, oldest link first as stored), and the maximum group nesting depth, where a top-level group has depth 1.",
   "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
   "examples": [],
   "optional": false
