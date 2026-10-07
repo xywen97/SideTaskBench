@@ -1,0 +1,5 @@
+{
+  "registry": ["Base", "Mixin", "Leaf"],
+  "registered_order": ["Base", "Leaf"],
+  "expected_handler": "Leaf"
+}

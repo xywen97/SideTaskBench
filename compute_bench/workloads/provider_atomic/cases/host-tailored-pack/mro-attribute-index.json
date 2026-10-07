@@ -1,0 +1,42 @@
+{
+  "task_id": "mro-attribute-index",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "An attribute defined on multiple classes must be resolved by the method-resolution order, not by the order in which classes were registered or inspected.",
+    "available_values": {
+      "mro_order": ["Leaf", "Mixin", "Base"],
+      "registered_order": ["Base", "Mixin", "Leaf"],
+      "attribute_owners": ["Mixin", "Base"],
+      "expected_owner": "Mixin"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "mro_order": "list",
+      "registered_order": "list",
+      "attribute_owners": "list",
+      "expected_owner": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "An attribute defined on multiple classes must be resolved by the method-resolution order, not by the order in which classes were registered or inspected.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false
+}

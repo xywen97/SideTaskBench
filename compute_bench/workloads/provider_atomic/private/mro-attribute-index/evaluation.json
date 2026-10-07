@@ -1,0 +1,16 @@
+{
+  "task_id": "mro-attribute-index",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "mro_order": ["Leaf", "Mixin", "Base"],
+      "registered_order": ["Base", "Mixin", "Leaf"],
+      "attribute_owners": ["Mixin", "Base"],
+      "expected_owner": "Mixin"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

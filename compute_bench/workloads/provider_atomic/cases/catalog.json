@@ -1,6 +1,9 @@
 {
   "schema_version": 1,
   "portfolio_id": "atomic-provider-portfolio-v1",
+  "paired_only_groups": [
+    "host-tailored-pack"
+  ],
   "large_tasks": [
     {
       "large_task_id": "atomic-function-library",
@@ -65,6 +68,21 @@
         "document-lru-behavior",
         "document-time-normalization",
         "document-dag-scheduling"
+      ]
+    },
+    {
+      "large_task_id": "host-tailored-pack",
+      "title": "Host-tailored compatibility pack",
+      "acceptance_threshold": 6,
+      "task_ids": [
+        "cache-access-report",
+        "manifest-digest-summary",
+        "window-stats-helper",
+        "mailbox-domain-report",
+        "report-node-schema",
+        "mro-attribute-index",
+        "amount-scale-note",
+        "dispatch-specialization-report"
       ]
     }
   ]

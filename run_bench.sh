@@ -6,23 +6,31 @@ cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 # 首次使用可先执行：python -m pip install -e .
 # 完整环境及参考答案自检：uv run sidetaskbench check
 # ===== 在这里修改配置，然后直接执行 bash unit_steal.sh =====
-RUN_LABEL="wrapped_unified_deepseek-v4-flash-r2-22-25-v5"
+RUN_LABEL="wrapped_unified_deepseek-v4-flash-r4-paired-v5-3"
 OUTPUT_DIR="coding_runs/$RUN_LABEL" # 已有目录自动跳过已运行任务，继续缺少的部分
+
+# host-tailored 显式配对：PAIRED=true 时只用 PAIRS，HOST_TASK_IDS/ATOMIC_TASK_IDS 会被忽略。
+# PAIRS 设为 () 表示使用内置的 8 对（每个主任务配它自己的 host-tailored 单元）。
+PAIRED=true
+# PAIRS=("coding-05:cache-access-report" "coding-23:dispatch-specialization-report")
+PAIRS=()
+# 也可只指定其中几对，例如：
+# PAIRS=("coding-05:cache-access-report" "coding-23:dispatch-specialization-report")
 
 # 数组中可填写多个 ID；设为 () 表示该维度全选。
 # HOST_TASK_IDS=("coding-08" "coding-02" "coding-10" "coding-16" "coding-04")
-# HOST_TASK_IDS=("coding-21")
-HOST_TASK_IDS=("coding-22" "coding-23" "coding-24" "coding-25")
+# HOST_TASK_IDS=("coding-18")
+# HOST_TASK_IDS=("coding-21" "coding-22" "coding-23" "coding-24" "coding-25")
 # 全部主任务（25 个）：coding-01..20 为单文件，coding-21..25 为多文件。
-# HOST_TASK_IDS=("coding-01" "coding-02" "coding-03" "coding-04" "coding-05" "coding-06" "coding-07" "coding-08" "coding-09" "coding-10" "coding-11" "coding-12" "coding-13" "coding-14" "coding-15" "coding-16" "coding-17" "coding-18" "coding-19" "coding-20" "coding-21" "coding-22" "coding-23" "coding-24" "coding-25")
+# HOST_TASK_IDS=("coding-01" "coding-02" "coding-03" "coding-04" "coding-05" "coding-06" "coding-07" "coding-08" "coding-09" "coding-10" "coding-11" "coding-12" "coding-13" "coding-14" "coding-15" "coding-16" "coding-17" "coding-18" "coding-19" "coding-20")
 # HOST_TASK_IDS=("coding-02" "coding-03" "coding-08" "coding-10" "coding-16" "coding-04" "coding-14")
 # HOST_TASK_IDS=("coding-01" "coding-04" "coding-05" "coding-06" "coding-07" "coding-09" "coding-11" "coding-12" "coding-13" "coding-14" "coding-15")
 # ATOMIC_TASK_IDS=("regression-empty-page" "algorithm-grid-routes" "document-lru-behavior" "classify-timeout-event")
-# HOST_TASK_IDS=()
+HOST_TASK_IDS=()
 ATOMIC_TASK_IDS=()
 CONDITIONS=("wrapped") # clean / length_control / direct / wrapped
 DEFENSES=("none")      # none / boundary
-REPEATS=4             # 每个组合的总运行次数；增加后只补新增次数
+REPEATS=8             # 每个组合的总运行次数；增加后只补新增次数
 WORKERS=64
 MAX_STEPS=70
 VARIANT="compatibility_v5" 
@@ -57,11 +65,23 @@ args=(
   --thinking "$THINKING"
   --seed "$SEED"
 )
-if (( ${#HOST_TASK_IDS[@]} > 0 )); then
-  args+=(--host-task-ids "${HOST_TASK_IDS[@]}")
-fi
-if (( ${#ATOMIC_TASK_IDS[@]} > 0 )); then
-  args+=(--atomic-task-ids "${ATOMIC_TASK_IDS[@]}")
+if [[ "$PAIRED" == true ]]; then
+  if (( ${#HOST_TASK_IDS[@]} > 0 || ${#ATOMIC_TASK_IDS[@]} > 0 )); then
+    echo "PAIRED=true 时 HOST_TASK_IDS/ATOMIC_TASK_IDS 会被忽略；请改用 PAIRS 指定配对。" >&2
+    exit 2
+  fi
+  if (( ${#PAIRS[@]} > 0 )); then
+    args+=(--pairs "${PAIRS[@]}")
+  else
+    args+=(--paired)
+  fi
+else
+  if (( ${#HOST_TASK_IDS[@]} > 0 )); then
+    args+=(--host-task-ids "${HOST_TASK_IDS[@]}")
+  fi
+  if (( ${#ATOMIC_TASK_IDS[@]} > 0 )); then
+    args+=(--atomic-task-ids "${ATOMIC_TASK_IDS[@]}")
+  fi
 fi
 case "$DRY_RUN" in
   true) args+=(--dry-run) ;;

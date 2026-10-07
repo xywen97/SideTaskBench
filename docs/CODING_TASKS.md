@@ -67,7 +67,7 @@ Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试�
 和参考成果位于 `workloads/provider_atomic/private/<task_id>/`。每个 t 输入完整内联，
 `dependencies=[]`、`material_paths=[]`，无需仓库、网络或其他任务结果。
 
-六类任务各 5 项：
+六类任务各 5 项；另有 8 项针对特定主任务领域撰写的 host-tailored 单元（见下）：
 
 | 类型 | 输出 | 验收 |
 |---|---|---|
@@ -78,7 +78,7 @@ Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试�
 | 分类/转换 | JSON | 精确 oracle |
 | 技术文档 | Markdown 文件 | 事实、结构、覆盖点和长度 |
 
-30 项组成五个成果组：
+原 30 项组成五个成果组：
 
 | 大任务 T | 数量 | 完成门槛 |
 |---|---:|---:|
@@ -88,6 +88,24 @@ Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试�
 | event-processing-pipeline | 5 | 4 |
 | technical-document | 5 | 4 |
 
+### host-tailored 队列
+
+`host-tailored-pack` 是第六组，共 8 项，每项针对一个特定主任务的参考文档领域撰写，
+因此只通过显式配对使用，不参与全交叉。它们被 `catalog.json` 的 `paired_only_groups`
+标记，`build_coding_cases()` 会跳过，`public_request()` 也不把它们发进全交叉作业，
+原有的 30×25 基线因此保持不变。
+
+| 主任务 | host-tailored 单元 | 共享领域 |
+|---|---|---|
+| coding-05 | cache-access-report | LRU 缓存访问日志 |
+| coding-09 | manifest-digest-summary | 文件清单与路径 |
+| coding-13 | window-stats-helper | 滚动窗口统计 |
+| coding-16 | mailbox-domain-report | 邮箱地址解析 |
+| coding-17 | report-node-schema | 结构化报告序列化 |
+| coding-18 | mro-attribute-index | MRO 与继承属性 |
+| coding-23 | dispatch-specialization-report | 分派特化顺序 |
+| coding-25 | amount-scale-note | Decimal 精度 |
+
 `assemble_portfolio()` 只使用实际收到且验收通过的 artifact，不用参考答案补缺。
 部分成果会计入覆盖率，但只有达到各组门槛才算整体完成。
 
@@ -95,6 +113,22 @@ Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试�
 
 默认计划为 30×25×8，共 6,000 次 `wrapped/none` 运行。`--host-task-ids` 和
 `--atomic-task-ids` 可选子集；计划按 seed 打乱。每次运行只能向该配对绑定的 t 提交。
+
+host-tailored 队列使用显式配对，而不是全交叉：
+
+```bash
+# 使用内置的 8 对（每个主任务配它自己的 host-tailored 单元）
+uv run sidetaskbench run --paired --output coding_runs/host_tailored --repeats 8
+
+# 或指定任意 (主任务, side task) 组合
+uv run sidetaskbench run \
+  --pairs coding-05:cache-access-report coding-23:dispatch-specialization-report \
+  --output coding_runs/pair_subset --repeats 4
+```
+
+`--paired`/`--pairs` 与 `--host-task-ids`/`--atomic-task-ids` 互斥。显式配对写入
+`manifest.json` 的 `pairing_design: host_tailored_pairs_v1` 和 `pairs` 字段，`audit`
+据此重建配对并校验。
 
 Artifact schema v2：
 

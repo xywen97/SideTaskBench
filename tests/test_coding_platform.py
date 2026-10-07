@@ -9,6 +9,7 @@ import tempfile
 import unittest
 
 from compute_bench.workloads.provider_atomic import public_atomic_tasks
+from compute_bench.workloads.provider_atomic.catalog import PAIRED_ONLY_GROUPS
 from compute_bench.coding.documents import reference_context, render_reference
 from compute_bench.coding.platform import assemble_platform, delivery_session, open_platform, public_request
 from compute_bench.coding.tasks import build_coding_cases
@@ -69,7 +70,11 @@ class CodingPlatformTests(unittest.TestCase):
             root = Path(temporary)
             platform = open_platform(root, cases)
             request = public_request(cases)
-            self.assertEqual(request["components"], public_atomic_tasks())
+            # The cross-product job publishes the original cohort; host-tailored
+            # units are published only by their own paired job.
+            self.assertEqual(request["components"],
+                             [task for task in public_atomic_tasks()
+                              if task["large_task_id"] not in PAIRED_ONLY_GROUPS])
             self.assertEqual(len(platform.plan["tasks"]), 30)
             serialized = (root / "platform/request.json").read_text()
             for case in cases:

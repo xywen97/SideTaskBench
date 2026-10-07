@@ -14,7 +14,10 @@ from compute_bench.workloads.provider_atomic.catalog import (
     CASE_ROOT, LARGE_TASKS, _load_public_tasks, assemble_portfolio,
     atomic_task_catalog, grade_atomic,
 )
-from compute_bench.coding.tasks import build_coding_cases, build_run_plan, cases_for_manifest
+from compute_bench.coding.pairing import HOST_TAILORED_PAIRS
+from compute_bench.coding.tasks import (
+    PAIRED_DESIGN, build_coding_cases, build_paired_cases, build_run_plan, cases_for_manifest,
+)
 from collections import Counter
 
 
@@ -54,7 +57,7 @@ class CodingTaskTests(unittest.TestCase):
 
     def test_atomic_tasks_are_one_json_each_grouped_by_large_task(self):
         task_files = sorted(CASE_ROOT.glob("*/*.json"))
-        self.assertEqual(len(task_files), 30)
+        self.assertEqual(len(task_files), sum(value["total"] for value in LARGE_TASKS.values()))
         counts = {}
         for path in task_files:
             task = json.loads(path.read_text(encoding="utf-8"))
@@ -122,6 +125,48 @@ class CodingTaskTests(unittest.TestCase):
         self.assertEqual(cases[3]["crowd_task"]["task_id"], "rewrite-retry-config")
         self.assertNotIn("host_task_id", cases[0])
 
+    def test_host_tailored_pairs_bind_one_side_task_per_host(self):
+        cases = build_paired_cases()
+        self.assertEqual(len(cases), len(HOST_TAILORED_PAIRS))
+        self.assertEqual([(c["host_task_id"], c["crowd_task"]["task_id"]) for c in cases],
+                         list(HOST_TAILORED_PAIRS))
+        self.assertEqual(len({c["id"] for c in cases}), len(cases))
+        for case in cases:
+            self.assertEqual(case["crowd_task"]["large_task_id"], "host-tailored-pack")
+        plan = build_run_plan(cases, ["wrapped"], ["none"], repeats=2)
+        self.assertEqual(len(plan), len(cases) * 2)
+        self.assertEqual({(t["host_task_id"], t["atomic_task_id"]) for t in plan},
+                         set(HOST_TAILORED_PAIRS))
+
+    def test_paired_design_round_trips_through_the_manifest(self):
+        cases = build_paired_cases()
+        manifest = {"pairing_design": PAIRED_DESIGN,
+                    "pairs": [list(pair) for pair in HOST_TAILORED_PAIRS]}
+        rebuilt = cases_for_manifest(manifest)
+        self.assertEqual([c["id"] for c in rebuilt], [c["id"] for c in cases])
+        with self.assertRaisesRegex(ValueError, "Unknown pairing design"):
+            cases_for_manifest({"pairing_design": "made_up"})
+
+    def test_explicit_pairs_reject_unknown_ids_and_duplicates(self):
+        with self.assertRaisesRegex(ValueError, "Unknown host task ID"):
+            build_paired_cases([("coding-99", "cache-access-report")])
+        with self.assertRaisesRegex(ValueError, "Unknown atomic task ID"):
+            build_paired_cases([("coding-05", "no-such-task")])
+        with self.assertRaisesRegex(ValueError, "unique"):
+            build_paired_cases([("coding-05", "cache-access-report"),
+                                ("coding-05", "cache-access-report")])
+        with self.assertRaisesRegex(ValueError, "nonempty"):
+            build_paired_cases([])
+
+    def test_full_cross_product_excludes_host_tailored_units(self):
+        # The original matrix must stay 25×30 so historical baselines remain comparable.
+        cross_ids = {c["crowd_task"]["task_id"] for c in build_coding_cases()}
+        tailored_ids = {task for _, task in HOST_TAILORED_PAIRS}
+        self.assertFalse(cross_ids & tailored_ids)
+        self.assertEqual(len(cross_ids), 30)
+        every = {entry["task"]["task_id"] for entry in atomic_task_catalog()}
+        self.assertEqual(every - cross_ids, tailored_ids)
+
     def test_every_bug_fails_and_every_reference_repair_passes(self):
         for case in build_coding_cases(atomic_task_ids=["rewrite-user-record"]):
             solution_file = case["solution_file"]
@@ -137,7 +182,7 @@ class CodingTaskTests(unittest.TestCase):
 
     def test_catalog_has_six_types_five_each_and_five_large_tasks(self):
         entries = atomic_task_catalog()
-        self.assertEqual(len(entries), 30)
+        self.assertEqual(len(entries), sum(value["total"] for value in LARGE_TASKS.values()))
         counts, groups = {}, {}
         for entry in entries:
             task = entry["task"]
@@ -148,7 +193,11 @@ class CodingTaskTests(unittest.TestCase):
             self.assertFalse(task["atomicity"]["external_context"])
             self.assertTrue(task["input"])
             self.assertTrue(task["output"])
-        self.assertEqual(set(counts.values()), {5})
+        # Every category keeps the original five units; additions are permitted.
+        self.assertEqual(set(counts), {"function_rewrite", "function_debug", "algorithm",
+                                       "single_behavior_regression", "classification_conversion",
+                                       "long_text_generation"})
+        self.assertTrue(all(value >= 5 for value in counts.values()), counts)
         self.assertEqual(groups, {key: value["total"] for key, value in LARGE_TASKS.items()})
 
     def test_all_reference_artifacts_pass_and_wrong_shapes_fail(self):
@@ -167,20 +216,21 @@ class CodingTaskTests(unittest.TestCase):
 
     def test_portfolio_reports_units_coverage_threshold_and_value(self):
         entries = atomic_task_catalog()
+        catalog_size = len(entries)
         plan = {"tasks": [entry["task"] for entry in entries]}
         receipts = [{"task_id": entry["task"]["task_id"], "valid": True,
                      "artifact": entry["reference_artifact"]} for entry in entries]
         with tempfile.TemporaryDirectory() as directory:
             complete = assemble_portfolio(plan, receipts, Path(directory))
             self.assertTrue(complete["final_grade"]["passed"])
-            self.assertEqual(complete["completed_work_units"], 30)
+            self.assertEqual(complete["completed_work_units"], catalog_size)
             self.assertEqual(complete["coverage"], 1)
-            self.assertEqual(complete["value_units_delivered"], 30)
+            self.assertEqual(complete["value_units_delivered"], catalog_size)
         with tempfile.TemporaryDirectory() as directory:
             partial = assemble_portfolio(plan, receipts[:3], Path(directory))
             self.assertFalse(partial["final_grade"]["passed"])
             self.assertEqual(partial["completed_work_units"], 3)
-            self.assertEqual(partial["coverage"], .1)
+            self.assertEqual(partial["coverage"], 3 / catalog_size)
 
     def test_deterministic_json_and_valid_limits(self):
         original = build_coding_cases()

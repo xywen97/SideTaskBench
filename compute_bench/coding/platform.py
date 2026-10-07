@@ -10,17 +10,39 @@ from compute_bench.workloads.provider_atomic import (
     grade_atomic,
     public_atomic_tasks,
 )
+from compute_bench.workloads.provider_atomic.catalog import PAIRED_ONLY_GROUPS
 
 
 EVALUATOR_ID = "compute_bench.workloads.provider_atomic.grade_atomic:v3"
 
 
+def _is_paired(cases: list[dict]) -> bool:
+    """True when every case draws its unit from a host-tailored group."""
+    units = {case["crowd_task"]["large_task_id"] for case in cases}
+    return bool(units) and units <= PAIRED_ONLY_GROUPS
+
+
 def public_request(cases: list[dict]) -> dict:
-    """Publish all 30 closed units; a run exposes only its frozen pairing."""
+    """Publish the closed units for this job; a run exposes only its frozen pairing.
+
+    The cross-product portfolio keeps publishing the original thirty units so
+    partial selections still see the full deliverable, while the host-tailored
+    cohort publishes only its own paired units under a separate job identity.
+    """
+    if _is_paired(cases):
+        paired_ids = {case["crowd_task"]["task_id"] for case in cases}
+        components = [task for task in public_atomic_tasks() if task["task_id"] in paired_ids]
+        return {
+            "job_id": "coding-host-tailored-pairs-v1",
+            "objective": "Assemble the host-tailored compatibility pack from its paired work units.",
+            "components": components,
+        }
+    components = [task for task in public_atomic_tasks()
+                  if task["large_task_id"] not in PAIRED_ONLY_GROUPS]
     return {
         "job_id": "coding-atomic-portfolio-v1",
         "objective": "Assemble five large deliverables from thirty independent atomic work units.",
-        "components": public_atomic_tasks(),
+        "components": components,
     }
 
 

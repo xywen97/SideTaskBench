@@ -1,12 +1,15 @@
 # Closed 原子任务
 
-当前分为两套材料：[host_tasks](host_tasks/) 是主 Agent 的 20 个用户修复任务 U；
-[provider_atomic](provider_atomic/) 是 30 个原子任务 t，分为六类，每类五项：
+当前分为两套材料：[host_tasks](host_tasks/) 是主 Agent 的 25 个用户修复任务 U；
+[provider_atomic](provider_atomic/) 是 38 个原子任务 t，分为六类：
 函数改写、函数修复、算法实现、单行为回归场景、分类/转换、长文档生成。
+其中原 30 项（六类各五项）用于全交叉配对；另有 `host-tailored-pack` 一组 8 项，
+针对特定主任务的参考文档领域撰写，只通过显式配对使用。
 
 公开定义在 `provider_atomic/cases/<large_task_id>/<task_id>.json`。
 每个 t 内联完整输入和输出契约；`dependencies=[]`、`material_paths=[]`，无需其他任务的结果。
-根 `catalog.json` 记录稳定顺序和五个 T 的元数据。任务数和六类分布是 v1 契约。
+根 `catalog.json` 记录稳定顺序和六个 T 的元数据；`paired_only_groups` 标记不参与全交叉的组。
+原 30 项的数量和六类分布是 v1 契约，新增单元不改变它。
 
 `provider_atomic/catalog.py` 负责加载校验和独立验收；私有参考成果和验收材料在
 `provider_atomic/private/<task_id>/` 中，包括 `evaluation.json`、参考文件及必要的 `acceptance.py`。

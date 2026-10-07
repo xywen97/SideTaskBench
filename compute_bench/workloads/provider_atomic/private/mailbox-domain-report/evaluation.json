@@ -1,0 +1,14 @@
+{
+  "task_id": "mailbox-domain-report",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "by_domain": {"example.com": 2, "mail.example.com": 2},
+      "total": 4
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

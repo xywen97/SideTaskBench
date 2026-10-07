@@ -1,0 +1,4 @@
+{
+  "fatal": ["disk full", "null pointer"],
+  "recoverable": ["retry limit reached", "timeout on read", "deprecated api called"]
+}
