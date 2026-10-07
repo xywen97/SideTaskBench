@@ -1,7 +1,7 @@
 # Closed 原子任务
 
 当前分为两套材料：[host_tasks](host_tasks/) 是主 Agent 的 25 个用户修复任务 U；
-[provider_atomic](provider_atomic/) 是 38 个原子任务 t，分为六类：
+[provider_atomic](provider_atomic/) 是 55 个原子任务 t，分为六类：
 函数改写、函数修复、算法实现、单行为回归场景、分类/转换、长文档生成。
 其中原 30 项（六类各五项）用于全交叉配对；另有 `host-tailored-pack` 一组 25 项，
 针对每个主任务的参考文档领域各自撰写，只通过显式配对使用。

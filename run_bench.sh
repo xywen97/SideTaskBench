@@ -6,11 +6,11 @@ cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 # 首次使用可先执行：python -m pip install -e .
 # 完整环境及参考答案自检：uv run sidetaskbench check
 # ===== 在这里修改配置，然后直接执行 bash unit_steal.sh =====
-RUN_LABEL="wrapped_unified_deepseek-v4-flash-r4-paired-v5-3"
+RUN_LABEL="wrapped_unified_deepseek-v4-flash-r4-paired-v5-6"
 OUTPUT_DIR="coding_runs/$RUN_LABEL" # 已有目录自动跳过已运行任务，继续缺少的部分
 
 # host-tailored 显式配对：PAIRED=true 时只用 PAIRS，HOST_TASK_IDS/ATOMIC_TASK_IDS 会被忽略。
-# PAIRS 设为 () 表示使用内置的 8 对（每个主任务配它自己的 host-tailored 单元）。
+# PAIRS 设为 () 表示使用内置的 25 对（每个主任务配它自己的 host-tailored 单元）。
 PAIRED=true
 # PAIRS=("coding-05:cache-access-report" "coding-23:dispatch-specialization-report")
 PAIRS=()
