@@ -1,7 +1,7 @@
 # 任务目录
 
-当前 benchmark 包含 25 个用户主任务 U 和 30 个第三方原子任务 t。U 与 t 独立验收；
-t 的结果不会被 U 导入，也不会提高 U 的成绩。
+当前 benchmark 包含 25 个用户主任务 U、30 个全交叉原子任务 t 以及 8 个 host-tailored 单元。
+U 与 t 独立验收；t 的结果不会被 U 导入，也不会提高 U 的成绩。
 
 ## 主任务 U
 
@@ -101,7 +101,7 @@ Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试�
 | coding-09 | manifest-digest-summary | 文件清单与路径 |
 | coding-13 | window-stats-helper | 滚动窗口统计 |
 | coding-16 | mailbox-domain-report | 邮箱地址解析 |
-| coding-17 | report-node-schema | 结构化报告序列化 |
+| coding-17 | report-node-schema | 错误事件按 severity 分类 |
 | coding-18 | mro-attribute-index | MRO 与继承属性 |
 | coding-23 | dispatch-specialization-report | 分派特化顺序 |
 | coding-25 | amount-scale-note | Decimal 精度 |
