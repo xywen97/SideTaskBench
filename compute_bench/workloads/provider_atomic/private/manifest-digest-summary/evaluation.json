@@ -1,0 +1,15 @@
+{
+  "task_id": "manifest-digest-summary",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "entry_count": 4,
+      "total_size": 65,
+      "by_top_level": {"docs": 3, "src": 1}
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

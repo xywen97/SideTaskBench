@@ -1,0 +1,55 @@
+{
+  "task_id": "amount-scale-note",
+  "evaluator": {
+    "kind": "document",
+    "path": "amount-scaling.md",
+    "minimum_characters": 1500,
+    "facts": [
+      "Multiplying a Decimal by an int keeps exact decimal precision.",
+      "Converting a Decimal to float before multiplying can introduce rounding error.",
+      "A zero amount multiplies to a zero total and must still be reported."
+    ],
+    "headings": [
+      "## Scaling rule",
+      "## Worked example",
+      "## Precision failures"
+    ],
+    "fact_paraphrases": [
+      [
+        "An int multiplier preserves a Decimal's exact precision.",
+        "Decimal times int stays exact."
+      ],
+      [
+        "Coercing the Decimal to float before the multiplication can round the result.",
+        "Calling float on the Decimal first may lose precision."
+      ],
+      [
+        "A zero amount produces a zero total that is still reported.",
+        "Zero-value totals are not dropped."
+      ]
+    ],
+    "required_term_groups": [
+      [
+        "example",
+        "examples"
+      ],
+      [
+        "error",
+        "errors",
+        "failure",
+        "failures",
+        "invalid",
+        "reject",
+        "rejects",
+        "rejected",
+        "rejection"
+      ]
+    ]
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "amount-scaling.md": "reference/amount-scaling.md"
+    }
+  }
+}

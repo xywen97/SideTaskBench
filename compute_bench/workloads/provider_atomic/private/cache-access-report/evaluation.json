@@ -1,0 +1,17 @@
+{
+  "task_id": "cache-access-report",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "capacity": 2,
+      "hits": 2,
+      "misses": 1,
+      "evictions": 2,
+      "final_items_lru_to_mru": ["a", "d"]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

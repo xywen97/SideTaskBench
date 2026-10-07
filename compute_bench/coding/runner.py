@@ -25,8 +25,9 @@ from .documents import reference_context, render_reference, save_reference_compa
 from .environment import CodingEnvironment, create_workspace, TOOLS
 from .grading import grade_main, grade_crowd, read_candidate
 from .platform import EVALUATOR_ID, assemble_platform, delivery_session, open_platform
+from .pairing import normalize_pairs
 from .provenance import SOURCE_LAYOUT_VERSION, snapshot_sources, material_hashes
-from .tasks import DESIGN, build_coding_cases, build_run_plan, extend_run_plan
+from .tasks import DESIGN, PAIRED_DESIGN, build_coding_cases, build_paired_cases, build_run_plan, extend_run_plan
 
 
 def scan_work(case: dict, workspace: Path, events=(), *, include_workspace=True) -> list[dict]:
@@ -105,7 +106,7 @@ def _run_lock(directory):
 
 
 def _continue_coding(settings, directory, cases, requested, *, workers, max_steps, variant, seed,
-                     conditions, defenses, repeats):
+                     conditions, defenses, repeats, pairing_design=DESIGN, pairs=None):
     required = ("manifest.json", "plan.json", "cases.json", "documents.json")
     if not all((directory / name).is_file() for name in required):
         raise ValueError("Existing output is not a complete coding experiment; use a new output directory")
@@ -117,6 +118,10 @@ def _continue_coding(settings, directory, cases, requested, *, workers, max_step
     for key, value in (("max_steps", max_steps), ("variant", variant), ("seed", seed)):
         if manifest.get(key) != value:
             raise ValueError("Existing experiment has a different " + key + "; use its original configuration or a new output directory")
+    if manifest.get("pairing_design", DESIGN) != pairing_design:
+        raise ValueError("Existing experiment has a different pairing design; use its original configuration or a new output directory")
+    if pairs is not None and [tuple(pair) for pair in manifest.get("pairs", [])] != [tuple(pair) for pair in pairs]:
+        raise ValueError("Existing experiment has a different pair list; use its original configuration or a new output directory")
     if manifest.get("task_material_sha256") != material_hashes():
         raise ValueError("Task materials changed; cannot resume the frozen experiment")
     current = {case["id"]: case for case in cases}
@@ -148,7 +153,12 @@ def _continue_coding(settings, directory, cases, requested, *, workers, max_step
             manifest.update(case_count=len(cases), pair_count=len(cases), planned_runs=len(plan),
                             host_task_ids=list(dict.fromkeys(case["host_task_id"] for case in cases)),
                             atomic_task_ids=list(dict.fromkeys(case["crowd_task"]["task_id"] for case in cases)),
+                            pairing_design=pairing_design,
                             conditions=conditions, defenses=defenses, repeats=repeats)
+            if pairs is not None:
+                manifest["pairs"] = [list(pair) for pair in pairs]
+            else:
+                manifest.pop("pairs", None)
             documents = {case["id"]: {condition: render_reference(case, condition, variant)
                                       for condition in dict.fromkeys(["clean", *conditions])} for case in cases}
             write_json(directory / "plan.json", plan)
@@ -163,6 +173,7 @@ def _continue_coding(settings, directory, cases, requested, *, workers, max_step
 
 
 def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, atomic_task_ids=None,
+                   pairs=None,
                    conditions=None, defenses=None, repeats: int = 8, workers: int = 3, max_steps: int = 70,
                    variant: str = "compatibility_v3", seed: int = 20260924,
                    label: str = "coding_validation") -> dict:
@@ -170,20 +181,30 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
     defenses = ["none"] if defenses is None else defenses
     if any(type(value) is not int or value < 1 for value in (workers, max_steps)):
         raise ValueError("workers/max-steps must be positive integers")
-    cases = build_coding_cases(host_task_ids=host_task_ids, atomic_task_ids=atomic_task_ids)
+    # Explicit pairing selects one side task per host; otherwise every host is
+    # crossed with every unit as before.
+    if pairs is not None:
+        if host_task_ids or atomic_task_ids:
+            raise ValueError("Explicit pairs cannot be combined with --host-task-ids/--atomic-task-ids")
+        stored_pairs = [list(pair) for pair in normalize_pairs(pairs)]
+        cases = build_paired_cases(stored_pairs)
+        pairing_design = PAIRED_DESIGN
+    else:
+        cases = build_coding_cases(host_task_ids=host_task_ids, atomic_task_ids=atomic_task_ids)
+        pairing_design, stored_pairs = DESIGN, None
     plan = build_run_plan(cases, conditions, defenses, repeats, seed)
     output_dir = output_dir.resolve()
     with _run_lock(output_dir):
         if any(output_dir.iterdir()):
             return _continue_coding(settings, output_dir, cases, plan, workers=workers, max_steps=max_steps,
                                     variant=variant, seed=seed, conditions=conditions, defenses=defenses,
-                                    repeats=repeats)
+                                    repeats=repeats, pairing_design=pairing_design, pairs=stored_pairs)
         output_dir.mkdir(parents=True, exist_ok=True)
         (output_dir / "results.jsonl").touch()
         isolation = Sandbox.probe()
         manifest = {"schema_version": 2, "track": "coding", "label": label,
                     "started_at": datetime.now(timezone.utc).isoformat(), "settings": settings.public_metadata(),
-                    "case_count": len(cases), "pair_count": len(cases), "pairing_design": DESIGN,
+                    "case_count": len(cases), "pair_count": len(cases), "pairing_design": pairing_design,
                     "host_task_ids": list(dict.fromkeys(case["host_task_id"] for case in cases)),
                     "atomic_task_ids": list(dict.fromkeys(case["crowd_task"]["task_id"] for case in cases)),
                     "conditions": conditions, "defenses": defenses, "repeats": repeats,
@@ -194,6 +215,8 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
                     "transport": "ordinary shell HTTP over isolated workspace Unix socket",
                     "platform_lifecycle": {"directory": "platform", "collector_directory": "collector", "evaluator_id": EVALUATOR_ID},
                     "grading_scope": "original public tests plus private tests against solution.py; pure-utility candidate policy"}
+        if stored_pairs is not None:
+            manifest["pairs"] = [list(pair) for pair in stored_pairs]
         manifest.update(snapshot_sources(output_dir))
         write_json(output_dir / "manifest.json", manifest)
         write_json(output_dir / "plan.json", plan)

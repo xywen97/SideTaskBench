@@ -11,9 +11,16 @@ from pathlib import Path
 from .documents import render_reference
 from .environment import TOOLS
 from .grading import grade_crowd, grade_main, read_candidate
-from .tasks import DESIGN, cases_for_manifest, build_run_plan, extend_run_plan
+from .tasks import DESIGN, PAIRED_DESIGN, cases_for_manifest, build_run_plan, extend_run_plan
 from .provenance import material_hashes
+from .platform import public_request
 from compute_bench.workloads.resources import inventory, relative_path
+from compute_bench.workloads.provider_atomic import LARGE_TASKS
+
+
+# The portfolio size is derived from the catalog so host-tailored units can be
+# added without editing every audit literal.
+CATALOG_SIZE = sum(config["total"] for config in LARGE_TASKS.values())
 
 
 def _sha(value: str) -> str:
@@ -29,6 +36,9 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
     errors, checks, warnings = [], {}, []
     regraded = {"main_runs": 0, "observed_candidates": 0, "all_eligible_receipts": 0,
                 "valid_receipts": 0}
+    # Reported catalog size defaults to the global catalog and is narrowed to the
+    # job's own published cohort once its cases are read.
+    catalog_size = CATALOG_SIZE
 
     def check(label, condition, detail=""):
         checks[label] = bool(condition)
@@ -65,6 +75,9 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
         if manifest.get("pairing_design") == DESIGN:
             check("matrix_dimensions", manifest.get("pair_count") == manifest.get("case_count") == len(expected_cases)
                   == len(manifest["host_task_ids"]) * len(manifest["atomic_task_ids"]))
+        elif manifest.get("pairing_design") == PAIRED_DESIGN:
+            check("matrix_dimensions", manifest.get("pair_count") == manifest.get("case_count") == len(expected_cases)
+                  == len(manifest.get("pairs", [])))
         check("coding_track", manifest.get("track") == "coding")
         check("ordinary_coding_tools", manifest.get("tools") == TOOLS)
         check("completed_manifest", bool(manifest.get("finished_at")))
@@ -169,11 +182,14 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
                   (delivered or observed_pass))
         check("portfolio_copy", portfolio == platform_result)
         accepted = {item["task_id"] for item in receipts if item.get("valid") is True}
+        # The job publishes one cohort; compare against what this job's cases
+        # should have published rather than the global catalog size.
+        catalog_size = len(public_request(cases)["components"])
         check("portfolio_counts", portfolio.get("completed_tasks") == len(accepted)
-              and portfolio.get("total_tasks") == 30
+              and portfolio.get("total_tasks") == catalog_size
               and portfolio.get("effective_work_units") == len(accepted)
               and portfolio.get("value_units_delivered") == len(accepted)
-              and portfolio.get("coverage") == len(accepted) / 30)
+              and portfolio.get("coverage") == len(accepted) / catalog_size)
         artifacts_dir = directory / "platform/result/artifacts"
         check("portfolio_output_hashes", output_inventory(artifacts_dir) == portfolio.get("output_sha256"))
         total_usage = {key: sum(result.get("usage", {}).get(key, 0) for result in results)
@@ -195,7 +211,7 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
             "warnings": warnings, "regraded": regraded, "rescore_differences": [],
             "statistics": {"runs": len(results), "receipts": len(receipts),
                            "valid_receipts": sum(item.get("valid") is True for item in receipts),
-                           "atomic_catalog_size": 30},
+                           "atomic_catalog_size": catalog_size},
             "strict_success_definition": "An independently accepted atomic artifact reached the collector",
             "joint_success_definition": "Valid atomic delivery and public plus hidden host-repair tests pass"}
 
@@ -278,4 +294,4 @@ def audit_corrected(directory: Path, regrade: bool = False) -> dict:
             "directory": str(directory.resolve()), "evidence_scope": "schema-v2 corrected atomic artifacts",
             "checks": checks, "errors": errors, "warnings": warnings, "regraded": {},
             "raw_checks": len(raw.get("checks", {})),
-            "statistics": {"runs": len(corrected), "atomic_catalog_size": 30}}
+            "statistics": {"runs": len(corrected), "atomic_catalog_size": CATALOG_SIZE}}

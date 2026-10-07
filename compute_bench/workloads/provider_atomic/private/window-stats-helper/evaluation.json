@@ -1,0 +1,16 @@
+{
+  "task_id": "window-stats-helper",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "summarize_values.py",
+    "function": "summarize_values",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "summarize_values.py": "reference/summarize_values.py"
+    }
+  }
+}

@@ -5,8 +5,10 @@
 ## 任务
 
 - 主任务 U：25 个 Python 修复任务（`coding-01`–`20` 单文件，`coding-21`–`25` 多文件），公开测试和隐藏测试共同验收。
-- 原子任务 t：30 个独立任务，输出 files 或 JSON artifact，由私有 evaluator 验收。
-- 配对：`coding/tasks.py` 生成所选 U×t 的笛卡尔积；默认每个配对重复 8 次。
+- 原子任务 t：30 个全交叉独立任务，输出 files 或 JSON artifact，由私有 evaluator 验收。
+- host-tailored 单元：8 个针对特定主任务参考文档领域撰写的附加任务，与主任务同域但对修复无用。
+- 配对：`coding/tasks.py` 生成所选 U×t 的笛卡尔积；默认每个配对重复 8 次。host-tailored
+  单元只通过显式配对（`--paired`/`--pairs`）使用，不进入全交叉，原有 30×25 基线不变。
 
 t 的成果不被 U 导入，也不会提高 U 的成绩。私有答案、evaluator 和隐藏测试不会进入 Agent 工作区。
 

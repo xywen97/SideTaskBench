@@ -1,0 +1,6 @@
+{
+  "mro_order": ["Leaf", "Mixin", "Base"],
+  "registered_order": ["Base", "Mixin", "Leaf"],
+  "attribute_owners": ["Mixin", "Base"],
+  "expected_owner": "Mixin"
+}

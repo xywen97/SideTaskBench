@@ -1,0 +1,14 @@
+{
+  "task_id": "report-node-schema",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "fatal": ["disk full", "null pointer"],
+      "recoverable": ["retry limit reached", "timeout on read", "deprecated api called"]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

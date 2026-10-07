@@ -1,0 +1,39 @@
+{
+  "task_id": "mailbox-domain-report",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "classify_event",
+  "runtime": "json",
+  "input": {
+    "addresses": [
+      "Ada@Example.COM",
+      "bob@example.com",
+      "carol@mail.example.com",
+      "dave@Mail.Example.com"
+    ]
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "by_domain": "dict",
+      "total": "int"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Group a list of mailbox addresses by their domain, lowercasing the domain, and report how many addresses fall under each domain plus the overall total.",
+  "requirements": "Return one JSON value. Do not add commentary, infer missing facts, or consult external context.",
+  "examples": [],
+  "optional": false
+}

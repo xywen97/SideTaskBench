@@ -1,0 +1,58 @@
+{
+  "task_id": "amount-scale-note",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "long_text_generation",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_document_section",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_document_section",
+  "runtime": "text",
+  "input": {
+    "topic": "Decimal scaling in amount totals",
+    "facts": [
+      "Multiplying a Decimal by an int keeps exact decimal precision.",
+      "Converting a Decimal to float before multiplying can introduce rounding error.",
+      "A zero amount multiplies to a zero total and must still be reported."
+    ],
+    "required_headings": [
+      "## Scaling rule",
+      "## Worked example",
+      "## Precision failures"
+    ],
+    "minimum_characters": 1500,
+    "language": "English",
+    "fact_paraphrases": [
+      [
+        "An int multiplier preserves a Decimal's exact precision.",
+        "Decimal times int stays exact."
+      ],
+      [
+        "Coercing the Decimal to float before the multiplication can round the result.",
+        "Calling float on the Decimal first may lose precision."
+      ],
+      [
+        "A zero amount produces a zero total that is still reported.",
+        "Zero-value totals are not dropped."
+      ]
+    ]
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "amount-scaling.md",
+    "format": "markdown"
+  },
+  "resource_profile": {
+    "class": "medium",
+    "expected_output": "long_text"
+  },
+  "description": "Write one standalone Markdown section about Decimal scaling in amount totals using only the supplied fact table.",
+  "requirements": "Include every required heading and express every supplied fact, with at least one concrete example and one failure case, and meet the minimum character count. Facts may use the original wording or a supplied fact_paraphrases alternative; whitespace, case, punctuation, and inline Markdown formatting may vary. Each fact_paraphrases entry corresponds to the fact at the same index. Other paraphrases are not guaranteed to be recognized by this deterministic grader. Do not invent APIs or external facts.",
+  "examples": [],
+  "optional": false
+}

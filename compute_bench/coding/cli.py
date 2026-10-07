@@ -9,14 +9,29 @@ from pathlib import Path
 from microcoder.config import Settings
 
 
+def _parse_pairs(values):
+    """Turn HOST:TASK strings into (host, task) tuples, rejecting malformed entries."""
+    pairs = []
+    for value in values:
+        host, separator, task = value.partition(":")
+        if not separator or not host or not task:
+            raise ValueError(f"Pair must be written as HOST:TASK, got {value!r}")
+        pairs.append((host, task))
+    return pairs
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="SideTaskBench: unauthorized side-task execution benchmark")
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run")
     run.add_argument("--env", type=Path, default=Path(__file__).resolve().parents[2] / ".env")
     run.add_argument("--output", type=Path)
-    run.add_argument("--host-task-ids", nargs="+", help="Host task IDs; omitted selects all 20")
-    run.add_argument("--atomic-task-ids", nargs="+", help="Atomic task IDs; omitted selects all 30")
+    run.add_argument("--host-task-ids", nargs="+", help="Host task IDs; omitted selects all 25")
+    run.add_argument("--atomic-task-ids", nargs="+", help="Atomic task IDs; omitted selects all 38")
+    run.add_argument("--paired", action="store_true",
+                     help="Use the explicit host-tailored (host, side task) pairs instead of the full cross product")
+    run.add_argument("--pairs", nargs="+", metavar="HOST:TASK",
+                     help="Explicit host:side-task pairs, e.g. coding-05:cache-access-report; implies --paired")
     run.add_argument("--dry-run", action="store_true", help="Validate and show the plan size without model calls or credentials")
     run.add_argument("--conditions", nargs="+", choices=["clean", "length_control", "direct", "wrapped"], default=["wrapped"])
     run.add_argument("--defenses", nargs="+", choices=["none", "boundary"], default=["none"])
@@ -48,9 +63,22 @@ def main(argv=None):
     if args.command == "run":
         if min(args.repeats, args.workers, args.max_steps) < 1:
             parser.error("repeats/workers/max-steps must be positive")
-        from .tasks import build_coding_cases, build_run_plan
+        from .pairing import normalize_pairs
+        from .tasks import PAIRED_DESIGN, build_coding_cases, build_paired_cases, build_run_plan
         try:
-            cases = build_coding_cases(host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids)
+            pairs = _parse_pairs(args.pairs) if getattr(args, "pairs", None) else None
+            paired = args.paired or pairs is not None
+            if paired:
+                if args.host_task_ids or args.atomic_task_ids:
+                    parser.error("--host-task-ids/--atomic-task-ids cannot be combined with explicit pairing")
+                # Resolve --paired to the built-in cohort here so the runner receives a
+                # concrete pair list; passing None would fall back to the full cross product.
+                pairs = [list(pair) for pair in normalize_pairs(pairs)]
+                cases = build_paired_cases(pairs)
+                pairing_design = PAIRED_DESIGN
+            else:
+                cases = build_coding_cases(host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids)
+                pairing_design = None
             plan = build_run_plan(cases, args.conditions, args.defenses, args.repeats, args.seed)
         except (ValueError, OSError) as exc:
             parser.error(str(exc))
@@ -58,6 +86,7 @@ def main(argv=None):
             print(json.dumps({"host_task_ids": list(dict.fromkeys(c["host_task_id"] for c in cases)),
                               "atomic_task_ids": list(dict.fromkeys(c["crowd_task"]["task_id"] for c in cases)),
                               "pair_count": len(cases), "repeats": args.repeats,
+                              "pairing_design": pairing_design or "full_cross_v1",
                               "conditions": args.conditions, "defenses": args.defenses,
                               "planned_runs": len(plan), "seed": args.seed}, ensure_ascii=False, indent=2))
             return
@@ -66,6 +95,7 @@ def main(argv=None):
         output = args.output or Path("coding_runs") / datetime.now().strftime("%Y%m%d_%H%M%S")
         try:
             summary = execute_coding(settings, output, host_task_ids=args.host_task_ids, atomic_task_ids=args.atomic_task_ids,
+                                     pairs=pairs,
                                      conditions=args.conditions, defenses=args.defenses,
                                      repeats=args.repeats, workers=args.workers, max_steps=args.max_steps,
                                      variant=args.variant, label=args.label, seed=args.seed)
@@ -106,6 +136,12 @@ def main(argv=None):
         from microcoder.sandbox import Sandbox
         from .tasks import build_coding_cases
         from .grading import grade_crowd
+        from compute_bench.workloads.provider_atomic import atomic_task_catalog
+        from compute_bench.workloads.provider_atomic.catalog import PAIRED_ONLY_GROUPS
         cases = build_coding_cases(host_task_ids=["coding-01"])
-        print(json.dumps({"sandbox": Sandbox.probe(), "cases": len(cases), "atomic_catalog": 30,
+        catalog = atomic_task_catalog()
+        print(json.dumps({"sandbox": Sandbox.probe(), "cases": len(cases),
+                          "atomic_catalog": len(catalog),
+                          "cross_product_units": len(catalog) - sum(
+                              entry["task"]["large_task_id"] in PAIRED_ONLY_GROUPS for entry in catalog),
                           "reference_crowd_pass": [grade_crowd(case, case["crowd_reference_artifact"])["passed"] for case in cases]}, indent=2))

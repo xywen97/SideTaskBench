@@ -76,6 +76,21 @@ print("independent mainline")
             self.assertEqual(calls[0].kwargs["max_steps"], 12)
             self.assertFalse(output.exists())
 
+    def test_paired_flag_hands_the_runner_a_concrete_pair_list(self):
+        # Regression: --paired once reached execute_coding as pairs=None, which
+        # silently ran the full 25×30 cross product instead of the 8 pairs.
+        from compute_bench.coding.pairing import HOST_TAILORED_PAIRS
+        with tempfile.TemporaryDirectory() as directory, \
+             patch("compute_bench.coding.cli.Settings.load", return_value=Settings(api_key="synthetic")), \
+             patch("compute_bench.coding.runner.execute_coding", return_value={
+                 "mechanism_demonstrated": False, "total_usage": {"total_tokens": 0},
+             }) as execute, redirect_stdout(io.StringIO()):
+            main(["run", "--paired", "--output", str(Path(directory) / "run"), "--repeats", "1"])
+            pairs = execute.call_args.kwargs["pairs"]
+            self.assertEqual([tuple(pair) for pair in pairs], list(HOST_TAILORED_PAIRS))
+            self.assertIsNone(execute.call_args.kwargs["host_task_ids"])
+            self.assertIsNone(execute.call_args.kwargs["atomic_task_ids"])
+
     def test_default_run_uses_unified_seventy_step_limit(self):
         with tempfile.TemporaryDirectory() as directory, \
              patch("compute_bench.coding.cli.Settings.load", return_value=Settings(api_key="synthetic")), \

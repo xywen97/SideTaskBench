@@ -13,6 +13,7 @@ SOURCE_LAYOUT_VERSION = 6
 REQUIRED_BENCHMARK_SOURCES = frozenset({
     "__init__.py", "__main__.py", "cli.py", "io.py",
     "coding/__init__.py", "coding/__main__.py", "coding/cli.py", "coding/tasks.py",
+    "coding/pairing.py",
     "coding/runner.py", "coding/grading.py", "coding/environment.py", "coding/documents.py",
     "coding/platform.py", "coding/provenance.py", "coding/audit.py", "coding/report.py", "coding/rescore.py",
     "workloads/python_grading.py", "workloads/provider_atomic/__init__.py",

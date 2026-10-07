@@ -5,9 +5,13 @@ import random
 
 from compute_bench.workloads.host_tasks import load_host_tasks
 from compute_bench.workloads.provider_atomic import atomic_task_catalog
+from compute_bench.workloads.provider_atomic.catalog import cross_product_units
+
+from .pairing import HOST_TAILORED_PAIRS, normalize_pairs, pairs_from_manifest
 
 
 DESIGN = "full_cross_v1"
+PAIRED_DESIGN = "host_tailored_pairs_v1"
 
 
 def _select(items, requested, key, label):
@@ -25,25 +29,53 @@ def _select(items, requested, key, label):
     return [item for item in items if key(item) in requested]
 
 
+def _bind(host: dict, unit: dict) -> dict:
+    """Compose one host task with one atomic unit, matching the cross-product shape."""
+    case = deepcopy(host)
+    case.update(id=f"{host['id']}__{unit['task']['task_id']}", host_task_id=host["id"],
+                crowd_task=deepcopy(unit["task"]),
+                crowd_reference_artifact=deepcopy(unit["reference_artifact"]),
+                crowd_evaluator=deepcopy(unit["evaluator"]))
+    return case
+
+
 def build_coding_cases(*, host_task_ids=None, atomic_task_ids=None) -> list[dict]:
-    """Return every selected atomic × host pair; omitted axes select all IDs."""
+    """Return every selected atomic × host pair; omitted axes select all IDs.
+
+    Host-tailored units are excluded: they are authored for one specific host
+    and are consumed through ``build_paired_cases`` instead.
+    """
     hosts = _select(load_host_tasks(), host_task_ids, lambda item: item["id"], "host task")
-    units = _select(atomic_task_catalog(), atomic_task_ids,
+    units = _select(cross_product_units(), atomic_task_ids,
                     lambda item: item["task"]["task_id"], "atomic task")
+    return [_bind(host, unit) for unit in units for host in hosts]
+
+
+def build_paired_cases(pairs=None) -> list[dict]:
+    """Return one case per explicit (host_task_id, atomic_task_id) pair.
+
+    Unlike the full cross product, each host appears with exactly the side task
+    authored for it.  Unknown IDs fail loudly rather than being dropped.
+    """
+    requested = normalize_pairs(pairs)
+    hosts = {item["id"]: item for item in load_host_tasks()}
+    units = {item["task"]["task_id"]: item for item in atomic_task_catalog()}
     cases = []
-    for unit in units:
-        for host in hosts:
-            case = deepcopy(host)
-            case.update(id=f"{host['id']}__{unit['task']['task_id']}", host_task_id=host["id"],
-                        crowd_task=deepcopy(unit["task"]),
-                        crowd_reference_artifact=deepcopy(unit["reference_artifact"]),
-                        crowd_evaluator=deepcopy(unit["evaluator"]))
-            cases.append(case)
+    for host_id, task_id in requested:
+        if host_id not in hosts:
+            raise ValueError("Unknown host task ID: " + host_id)
+        if task_id not in units:
+            raise ValueError("Unknown atomic task ID: " + task_id)
+        cases.append(_bind(hosts[host_id], units[task_id]))
+    if len({case["id"] for case in cases}) != len(cases):
+        raise ValueError("Explicit pairs must not repeat a host/side-task combination")
     return cases
 
 
 def cases_for_manifest(manifest: dict) -> list[dict]:
     """Reconstruct new matrices and read historical plans without rewriting them."""
+    if manifest.get("pairing_design") == PAIRED_DESIGN:
+        return build_paired_cases(pairs_from_manifest(manifest))
     if manifest.get("pairing_design") == DESIGN:
         return build_coding_cases(host_task_ids=manifest["host_task_ids"],
                                   atomic_task_ids=manifest["atomic_task_ids"])
@@ -57,7 +89,9 @@ def cases_for_manifest(manifest: dict) -> list[dict]:
     catalog = atomic_task_catalog()
     cases = load_host_tasks()[:count]
     for index, case in enumerate(cases):
-        unit = catalog[([0, 5, 10, 15, 20, 25, 2, 7][index] + rotation * count) % len(catalog)]
+        # Historical reconstruction predates the host-tailored cohort, so the
+        # rotation index is frozen at the original 30-unit catalog length.
+        unit = catalog[([0, 5, 10, 15, 20, 25, 2, 7][index] + rotation * count) % 30]
         case.update(crowd_task=deepcopy(unit["task"]),
                     crowd_reference_artifact=deepcopy(unit["reference_artifact"]),
                     crowd_evaluator=deepcopy(unit["evaluator"]))

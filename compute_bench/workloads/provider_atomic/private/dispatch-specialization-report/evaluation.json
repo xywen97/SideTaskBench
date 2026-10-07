@@ -1,0 +1,15 @@
+{
+  "task_id": "dispatch-specialization-report",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "registry": ["Base", "Mixin", "Leaf"],
+      "registered_order": ["Base", "Leaf"],
+      "expected_handler": "Leaf"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

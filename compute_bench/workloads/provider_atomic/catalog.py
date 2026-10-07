@@ -32,13 +32,26 @@ def _read_json_object(path: Path) -> dict:
 
 
 # Public catalog.json is the single source of large-task metadata.
+_CATALOG_INDEX = _read_json_object(CASE_ROOT / "catalog.json")
+
 LARGE_TASKS = {
     item["large_task_id"]: {
         "title": item["title"], "threshold": item["acceptance_threshold"],
         "total": len(item["task_ids"]),
     }
-    for item in _read_json_object(CASE_ROOT / "catalog.json")["large_tasks"]
+    for item in _CATALOG_INDEX["large_tasks"]
 }
+
+# Groups whose units are authored for one specific host task. They are only
+# meaningful through explicit pairing, so the full cross product skips them and
+# the original 30-unit matrix stays intact.
+PAIRED_ONLY_GROUPS = frozenset(_CATALOG_INDEX.get("paired_only_groups", ()))
+
+
+def cross_product_units(entries: list[dict] | None = None) -> list[dict]:
+    """Return the catalog entries the full cross product should use."""
+    source = atomic_task_catalog() if entries is None else entries
+    return [entry for entry in source if entry["task"]["large_task_id"] not in PAIRED_ONLY_GROUPS]
 
 
 def _load_public_tasks(case_root: Path | None = None) -> list[dict]:
@@ -79,8 +92,9 @@ def _load_public_tasks(case_root: Path | None = None) -> list[dict]:
     if expected_groups != list(LARGE_TASKS):
         raise ValueError("Atomic catalog index has missing, duplicate, or reordered large tasks")
     ordered_ids = [task_id for _, task_id, _ in ordered_locations]
-    if len(ordered_ids) != 30 or len(set(ordered_ids)) != 30:
-        raise ValueError("Atomic catalog index must contain 30 unique task IDs")
+    expected_total = sum(config["total"] for config in LARGE_TASKS.values())
+    if len(ordered_ids) != expected_total or len(set(ordered_ids)) != expected_total:
+        raise ValueError(f"Atomic catalog index must contain {expected_total} unique task IDs")
 
     discovered = set()
     for child in root.iterdir():
@@ -162,8 +176,9 @@ def public_atomic_tasks() -> list[dict]:
 
 
 def _validate_catalog(entries: list[dict]) -> None:
-    if len(entries) != 30:
-        raise ValueError("The v1 atomic catalog must contain exactly 30 tasks")
+    expected_total = sum(config["total"] for config in LARGE_TASKS.values())
+    if len(entries) != expected_total:
+        raise ValueError(f"The v1 atomic catalog must contain exactly {expected_total} tasks")
     ids = set()
     categories = {}
     large_counts = {}
@@ -180,11 +195,11 @@ def _validate_catalog(entries: list[dict]) -> None:
             raise ValueError("Atomic task is not closed")
         if task["artifact_kind"] != task["output"]["artifact_kind"]:
             raise ValueError("Artifact output kind mismatch")
-    expected_categories = {name: 5 for name in ("function_rewrite", "function_debug", "algorithm",
-                                                 "single_behavior_regression", "classification_conversion",
-                                                 "long_text_generation")}
-    if categories != expected_categories:
-        raise ValueError("Each atomic category must contain five tasks")
+    # Six categories, each carrying the original five units plus any host-tailored additions.
+    known_categories = {"function_rewrite", "function_debug", "algorithm", "single_behavior_regression",
+                        "classification_conversion", "long_text_generation"}
+    if set(categories) != known_categories or any(count < 5 for count in categories.values()):
+        raise ValueError("Each atomic category must contain at least five tasks")
     if large_counts != {key: value["total"] for key, value in LARGE_TASKS.items()}:
         raise ValueError("Large-task inventory does not match catalog")
 
@@ -288,6 +303,10 @@ def assemble_portfolio(plan: dict, receipts: list[dict], directory: Path) -> dic
     groups = {}
     for large_id, config in LARGE_TASKS.items():
         members = [task for task in task_map.values() if task["large_task_id"] == large_id]
+        # A job publishes one cohort; groups absent from its plan are not "failed
+        # deliverables" but simply not part of this job.
+        if not members:
+            continue
         completed = [task for task in members if task["task_id"] in accepted]
         groups[large_id] = {
             "title": config["title"], "completed_work_units": len(completed), "total_work_units": len(members),
