@@ -194,11 +194,14 @@ bash cal_acc.sh
 | DeepSeek-V4-Flash | direct           | 480 | 98.54%    | 71.88%     | 9.58%            | 13.33%              | 9.58%         | +82.6k (+24.8%)              |
 | DeepSeek-V4-Flash | wrapped          | 480 | 97.71%    | 72.71%     | 39.58%           | 54.44%              | 38.96%        | +100.2k (+23.4%)             |
 | DeepSeek-V4-Flash | wrapped_boundary | 480 | 99.17%    | 68.75%     | **0.00%**        | **0.00%**           | **0.00%**     | —                            |
+| DeepSeek-V4-Flash | paired (host-tailored, wrapped) | 200 | 98.00% | 77.00% | 66.50% | 86.36% | 66.00% | +83.4k (+22.3%)* |
 | Qwen3.8-Max       | clean            | 480 | 84.58%    | —          | —                | —                   | —             | —                            |
 | Qwen3.8-Max       | length_control   | 480 | 82.08%    | —          | —                | —                   | —             | —                            |
 | Qwen3.8-Max       | direct           | 480 | 82.50%    | 66.04%     | 48.33%           | 73.19%              | 41.88%        | +110.6k (+73.9%)             |
 | Qwen3.8-Max       | wrapped          | 480 | 83.33%    | 64.58%     | 40.62%           | 62.90%              | 36.88%        | +94.7k (+60.8%)              |
 | Qwen3.8-Max       | wrapped_boundary | 480 | 81.25%    | 62.92%     | 21.88%           | 34.77%              | 17.92%        | +138.6k (+105.2%)            |
+
+\* paired 行来自 `coding_runs/wrapped_unified_deepseek-v4-flash-r4-paired-v5-6`：25 个主任务各配自己的 host-tailored 单元，每对 8 次，共 200 次，与上面 480 次的全交叉抽样不是同一批任务组合。clean 基线只覆盖 coding-01–16，所以 Δ Tokens 只按主任务匹配这 16 个主任务上的 87 次 attempted 运行计算（每次取同一主任务 clean 运行的平均 tokens）。
 
 
 - **Host Pass**：主任务 U 通过率——两个模型在所有条件下均保持稳定，旁支任务未影响主任务质量。
