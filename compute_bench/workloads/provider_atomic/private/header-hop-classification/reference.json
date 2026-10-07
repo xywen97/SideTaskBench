@@ -1,0 +1,11 @@
+{
+  "hop_by_hop": [
+    "transfer-encoding",
+    "connection"
+  ],
+  "end_to_end": [
+    "content-type",
+    "authorization",
+    "x-request-id"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "task_id": "dag-level-summary",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "level_zero_count": 2,
+      "total_node_count": 4
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

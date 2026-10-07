@@ -19,6 +19,23 @@ HOST_TAILORED_PAIRS = (
     ("coding-18", "mro-attribute-index"),
     ("coding-23", "dispatch-specialization-report"),
     ("coding-25", "amount-scale-note"),
+    ("coding-01", "csv-dialect-report"),
+    ("coding-02", "jsonl-line-report"),
+    ("coding-03", "url-component-summary"),
+    ("coding-04", "retry-last-attempt"),
+    ("coding-06", "timestamp-offset-report"),
+    ("coding-07", "cursor-empty-page-continues"),
+    ("coding-08", "dag-level-summary"),
+    ("coding-10", "header-hop-classification"),
+    ("coding-11", "config-layer-merge"),
+    ("coding-12", "archive-member-summary"),
+    ("coding-14", "reachable-nodes"),
+    ("coding-15", "pipeline-stage-summary"),
+    ("coding-19", "prime-power-factors"),
+    ("coding-20", "rst-column-widths"),
+    ("coding-21", "dag-lexicographic-order"),
+    ("coding-22", "template-token-summary"),
+    ("coding-24", "cache-transitive-invalidation"),
 )
 
 

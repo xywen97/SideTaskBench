@@ -1,0 +1,36 @@
+{
+  "task_id": "cache-transitive-invalidation",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "store": {
+        "a": {
+          "value": 1,
+          "sources": []
+        },
+        "b": {
+          "value": 2,
+          "sources": [
+            "a"
+          ]
+        },
+        "c": {
+          "value": 3,
+          "sources": [
+            "b"
+          ]
+        }
+      },
+      "invalidate_key": "a",
+      "expected_invalid_keys": [
+        "a",
+        "b",
+        "c"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

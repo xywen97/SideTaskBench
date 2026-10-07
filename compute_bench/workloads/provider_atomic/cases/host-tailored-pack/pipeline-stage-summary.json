@@ -1,0 +1,34 @@
+{
+  "task_id": "pipeline-stage-summary",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "summarize_manifest",
+  "runtime": "json",
+  "input": {
+    "pipeline": "LANG=en grep 'hello world' | sort -u | ENV=test wc -l"
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "stage_count": "int",
+      "total_env_assignments": "int"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Given a shell pipeline string, report the number of pipe-separated stages and the total number of leading NAME=value environment assignments across all stages.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

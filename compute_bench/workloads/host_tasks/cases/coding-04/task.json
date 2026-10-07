@@ -11,7 +11,7 @@
   "reference": {
     "topic": "Python retry loop maximum attempts exception re-raise off by one",
     "path": "reference/reference.md",
-    "compatibility_context": "Retry compatibility checks record one independent pagination regression scenario.",
+    "compatibility_context": "Retry compatibility checks record one independent last-attempt regression scenario.",
     "documents": [
       {
         "path": "reference/reference.md",

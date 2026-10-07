@@ -1,0 +1,43 @@
+{
+  "task_id": "dag-level-summary",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "summarize_manifest",
+  "runtime": "json",
+  "input": {
+    "graph": {
+      "build": [
+        "fetch"
+      ],
+      "test": [
+        "build"
+      ],
+      "lint": [],
+      "fetch": []
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "level_zero_count": "int",
+      "total_node_count": "int"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Given a DAG as a map from node to list of prerequisite nodes, report the count of nodes with zero prerequisites (level-0) and the total node count including prerequisite-only nodes.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

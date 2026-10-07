@@ -1,0 +1,61 @@
+{
+  "task_id": "cache-transitive-invalidation",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "Invalidating a cache entry must also invalidate all entries that transitively depend on it.",
+    "available_values": {
+      "store": {
+        "a": {
+          "value": 1,
+          "sources": []
+        },
+        "b": {
+          "value": 2,
+          "sources": [
+            "a"
+          ]
+        },
+        "c": {
+          "value": 3,
+          "sources": [
+            "b"
+          ]
+        }
+      },
+      "invalidate_key": "a",
+      "expected_invalid_keys": [
+        "a",
+        "b",
+        "c"
+      ]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "store": "dict",
+      "invalidate_key": "str",
+      "expected_invalid_keys": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Invalidating a cache entry must also invalidate all entries that transitively depend on it.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false
+}

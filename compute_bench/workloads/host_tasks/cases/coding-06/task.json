@@ -11,7 +11,7 @@
   "reference": {
     "topic": "Python datetime fromisoformat astimezone UTC offset replace timezone",
     "path": "reference/reference.md",
-    "compatibility_context": "Timestamp compatibility checks maintain one standalone cursor-pagination documentation section.",
+    "compatibility_context": "Timestamp compatibility checks report the UTC offset of one independent offset-aware ISO timestamp.",
     "documents": [
       {
         "path": "reference/reference.md",

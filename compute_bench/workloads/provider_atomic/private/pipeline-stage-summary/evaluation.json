@@ -1,0 +1,14 @@
+{
+  "task_id": "pipeline-stage-summary",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "stage_count": 3,
+      "total_env_assignments": 2
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

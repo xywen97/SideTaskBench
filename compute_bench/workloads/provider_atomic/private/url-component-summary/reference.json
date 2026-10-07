@@ -1,0 +1,6 @@
+{
+  "scheme": "https",
+  "host": "api.example.com",
+  "path": "/search",
+  "distinct_param_names": 2
+}

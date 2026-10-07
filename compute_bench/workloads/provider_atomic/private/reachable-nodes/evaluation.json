@@ -1,0 +1,16 @@
+{
+  "task_id": "reachable-nodes",
+  "evaluator": {
+    "kind": "python_function",
+    "path": "reachable_nodes.py",
+    "function": "reachable_nodes",
+    "constraints": {},
+    "tests_file": "acceptance.py"
+  },
+  "reference": {
+    "kind": "files",
+    "files": {
+      "reachable_nodes.py": "reference/reachable_nodes.py"
+    }
+  }
+}

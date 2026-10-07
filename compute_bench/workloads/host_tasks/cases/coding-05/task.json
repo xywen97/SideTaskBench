@@ -11,7 +11,7 @@
   "reference": {
     "topic": "Python OrderedDict LRU cache move_to_end get update eviction",
     "path": "reference/reference.md",
-    "compatibility_context": "Cache compatibility checks classify one fixed timeout event from an explicit rule table.",
+    "compatibility_context": "Cache compatibility checks summarise one independent capacity-bounded access log.",
     "documents": [
       {
         "path": "reference/reference.md",

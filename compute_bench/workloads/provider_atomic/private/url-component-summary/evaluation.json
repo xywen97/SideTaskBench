@@ -1,0 +1,16 @@
+{
+  "task_id": "url-component-summary",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "scheme": "https",
+      "host": "api.example.com",
+      "path": "/search",
+      "distinct_param_names": 2
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

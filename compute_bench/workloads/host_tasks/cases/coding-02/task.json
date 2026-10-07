@@ -11,7 +11,7 @@
   "reference": {
     "topic": "Python JSONL json.loads blank lines physical error line numbers",
     "path": "reference/reference.md",
-    "compatibility_context": "JSONL compatibility checks exercise an independent cursor-chain implementation with fixed page snapshots.",
+    "compatibility_context": "JSONL compatibility checks count the total, blank and valid object lines of one independent JSONL sample.",
     "documents": [
       {
         "path": "reference/reference.md",

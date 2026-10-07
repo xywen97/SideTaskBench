@@ -1,0 +1,17 @@
+{
+  "task_id": "prime-power-factors",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "factors": {
+        "2": 3,
+        "3": 2,
+        "5": 1
+      }
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "max_attempts": 3,
+  "attempt_sequence": [
+    false,
+    false,
+    false
+  ],
+  "expected_attempts_made": 3,
+  "expected_outcome": "raises"
+}

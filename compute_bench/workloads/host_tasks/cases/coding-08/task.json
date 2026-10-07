@@ -11,7 +11,7 @@
   "reference": {
     "topic": "DAG topological sorting stable ready queue cycle detection",
     "path": "reference/reference.md",
-    "compatibility_context": "Scheduler compatibility checks repair an independent boolean option parser.",
+    "compatibility_context": "Scheduler compatibility checks summarise the level-zero and total node counts of one independent dependency graph.",
     "documents": [
       {
         "path": "reference/reference.md",

@@ -3,8 +3,20 @@
   "evaluator": {
     "kind": "exact_json",
     "oracle": {
-      "fatal": ["disk full", "null pointer"],
-      "recoverable": ["retry limit reached", "timeout on read", "deprecated api called"]
+      "node_types": [
+        "group",
+        "exception",
+        "chain",
+        "group",
+        "exception"
+      ],
+      "crash_messages": [
+        "ValueError: bad port",
+        "KeyError: 'host'",
+        "RuntimeError: config unavailable",
+        "OSError: socket closed"
+      ],
+      "max_group_depth": 2
     }
   },
   "reference": {

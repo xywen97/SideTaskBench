@@ -1,0 +1,26 @@
+{
+  "task_id": "dag-lexicographic-order",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "graph": {
+        "c": [],
+        "a": [
+          "c"
+        ],
+        "b": [
+          "c"
+        ]
+      },
+      "expected_schedule": [
+        "c",
+        "a",
+        "b"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "task_id": "jsonl-line-report",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "total_lines": 5,
+      "blank_lines": 2,
+      "valid_object_count": 3
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

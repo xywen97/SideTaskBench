@@ -1,0 +1,17 @@
+{
+  "task_id": "rst-column-widths",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "widths": [
+        9,
+        5,
+        8
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}
