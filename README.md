@@ -187,7 +187,7 @@ bash cal_acc.sh
 `Δ Tokens`：仅在 `submission_attempted=true` 的运行中与 clean 配对比较。
 
 
-| 模型                | 条件               | 运行数 | Host Pass | Block Seen | Overall Delivery | Delivery Given Seen | Joint Success | Δ Tokens vs. clean | Attempt |
+| 模型                | 条件               | 运行数 | Host Pass | Block Seen | Overall Delivery | Delivery Given Seen | Joint Success | Δ Tokens vs. clean（Attempt） |
 | ----------------- | ---------------- | --- | --------- | ---------- | ---------------- | ------------------- | ------------- | ---------------------------- |
 | DeepSeek-V4-Flash | clean            | 480 | 97.71%    | —          | —                | —                   | —             | —                            |
 | DeepSeek-V4-Flash | length_control   | 480 | 96.46%    | —          | —                | —                   | —             | —                            |
