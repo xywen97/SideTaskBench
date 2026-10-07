@@ -1,0 +1,35 @@
+{
+  "task_id": "cursor-empty-page-continues",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "pages": {
+        "start": {
+          "items": [
+            1
+          ],
+          "next": "p2"
+        },
+        "p2": {
+          "items": [],
+          "next": "p3"
+        },
+        "p3": {
+          "items": [
+            2
+          ],
+          "next": null
+        }
+      },
+      "start_cursor": "start",
+      "expected_items": [
+        1,
+        2
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

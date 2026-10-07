@@ -1,0 +1,15 @@
+{
+  "task_id": "csv-dialect-report",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "has_embedded_newline": true,
+      "has_quoted_field": true,
+      "field_count": 3
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

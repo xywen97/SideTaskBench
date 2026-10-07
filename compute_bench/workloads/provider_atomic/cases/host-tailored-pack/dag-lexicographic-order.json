@@ -1,0 +1,50 @@
+{
+  "task_id": "dag-lexicographic-order",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "Each batch of simultaneously-ready nodes must be yielded in lexicographic order, regardless of the order nodes become ready.",
+    "available_values": {
+      "graph": {
+        "c": [],
+        "a": [
+          "c"
+        ],
+        "b": [
+          "c"
+        ]
+      },
+      "expected_schedule": [
+        "c",
+        "a",
+        "b"
+      ]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "graph": "dict",
+      "expected_schedule": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Each batch of simultaneously-ready nodes must be yielded in lexicographic order, regardless of the order nodes become ready.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false
+}

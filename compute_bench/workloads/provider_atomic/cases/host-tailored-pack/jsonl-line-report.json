@@ -1,0 +1,35 @@
+{
+  "task_id": "jsonl-line-report",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "summarize_manifest",
+  "runtime": "json",
+  "input": {
+    "text": "{\"a\": 1}\n\n{\"b\": 2}\n   \n{\"c\": 3}\n"
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "total_lines": "int",
+      "blank_lines": "int",
+      "valid_object_count": "int"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Given a JSONL text, report the total line count, blank line count, and valid-JSON object count.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

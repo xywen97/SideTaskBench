@@ -1,0 +1,20 @@
+{
+  "task_id": "retry-last-attempt",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "max_attempts": 3,
+      "attempt_sequence": [
+        false,
+        false,
+        false
+      ],
+      "expected_attempts_made": 3,
+      "expected_outcome": "raises"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

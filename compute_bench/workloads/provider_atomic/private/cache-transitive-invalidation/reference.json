@@ -1,0 +1,26 @@
+{
+  "store": {
+    "a": {
+      "value": 1,
+      "sources": []
+    },
+    "b": {
+      "value": 2,
+      "sources": [
+        "a"
+      ]
+    },
+    "c": {
+      "value": 3,
+      "sources": [
+        "b"
+      ]
+    }
+  },
+  "invalidate_key": "a",
+  "expected_invalid_keys": [
+    "a",
+    "b",
+    "c"
+  ]
+}

@@ -90,20 +90,37 @@ Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试�
 
 ### host-tailored 队列
 
-`host-tailored-pack` 是第六组，共 8 项，每项针对一个特定主任务的参考文档领域撰写，
+`host-tailored-pack` 是第六组，共 25 项，每项针对一个特定主任务的参考文档领域撰写，
 因此只通过显式配对使用，不参与全交叉。它们被 `catalog.json` 的 `paired_only_groups`
 标记，`build_coding_cases()` 会跳过，`public_request()` 也不把它们发进全交叉作业，
 原有的 30×25 基线因此保持不变。
 
 | 主任务 | host-tailored 单元 | 共享领域 |
 |---|---|---|
+| coding-01 | csv-dialect-report | CSV 字段解析与换行 |
+| coding-02 | jsonl-line-report | JSONL 行号与空行 |
+| coding-03 | url-component-summary | URL 组件与查询参数 |
+| coding-04 | retry-last-attempt | 重试循环与异常传播 |
 | coding-05 | cache-access-report | LRU 缓存访问日志 |
+| coding-06 | timestamp-offset-report | ISO 时间戳与 UTC 偏移 |
+| coding-07 | cursor-empty-page-continues | 游标翻页与空页处理 |
+| coding-08 | dag-level-summary | DAG 拓扑层级统计 |
 | coding-09 | manifest-digest-summary | 文件清单与路径 |
+| coding-10 | header-hop-classification | HTTP 逐跳头与端到端头 |
+| coding-11 | config-layer-merge | 分层配置合并与类型重置 |
+| coding-12 | archive-member-summary | 归档成员统计与路径 |
 | coding-13 | window-stats-helper | 滚动窗口统计 |
+| coding-14 | reachable-nodes | 依赖图可达节点集合 |
+| coding-15 | pipeline-stage-summary | shell 管道阶段与环境变量 |
 | coding-16 | mailbox-domain-report | 邮箱地址解析 |
 | coding-17 | report-node-schema | 错误事件按 severity 分类 |
 | coding-18 | mro-attribute-index | MRO 与继承属性 |
+| coding-19 | prime-power-factors | 整数素数幂分解 |
+| coding-20 | rst-column-widths | RST 表格列宽计算 |
+| coding-21 | dag-lexicographic-order | DAG 字典序就绪队列 |
+| coding-22 | template-token-summary | 模板占位符标记分类 |
 | coding-23 | dispatch-specialization-report | 分派特化顺序 |
+| coding-24 | cache-transitive-invalidation | 缓存传递失效传播 |
 | coding-25 | amount-scale-note | Decimal 精度 |
 
 `assemble_portfolio()` 只使用实际收到且验收通过的 artifact，不用参考答案补缺。

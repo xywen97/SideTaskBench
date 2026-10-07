@@ -1,0 +1,15 @@
+{
+  "task_id": "archive-member-summary",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "total_count": 4,
+      "total_size": 570,
+      "directory_count": 2
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

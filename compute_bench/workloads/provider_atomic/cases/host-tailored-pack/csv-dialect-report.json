@@ -1,0 +1,35 @@
+{
+  "task_id": "csv-dialect-report",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "classify_event",
+  "runtime": "json",
+  "input": {
+    "row": "Alice,\"123 Main St\nApt 2\",\"new york\""
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "has_embedded_newline": "bool",
+      "has_quoted_field": "bool",
+      "field_count": "int"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Given a sample CSV row, report whether the row contains embedded newlines, whether any field is quoted, and the total field count.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

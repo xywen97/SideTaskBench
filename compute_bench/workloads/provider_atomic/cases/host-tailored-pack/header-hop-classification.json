@@ -1,0 +1,40 @@
+{
+  "task_id": "header-hop-classification",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "classify_event",
+  "runtime": "json",
+  "input": {
+    "headers": [
+      "content-type",
+      "transfer-encoding",
+      "authorization",
+      "connection",
+      "x-request-id"
+    ]
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "hop_by_hop": "list",
+      "end_to_end": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Classify a list of HTTP header names into hop-by-hop and end-to-end groups, using the standard RFC 7230 hop-by-hop set: connection, keep-alive, proxy-authenticate, proxy-authorization, te, trailer, transfer-encoding, upgrade.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

@@ -1,0 +1,35 @@
+{
+  "task_id": "timestamp-offset-report",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "classify_event",
+  "runtime": "json",
+  "input": {
+    "timestamp": "2024-03-15T14:30:00+05:30",
+    "utc_reference": "2024-03-15T09:00:00+00:00"
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "offset_minutes": "int",
+      "equals_utc_reference": "bool"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Given an ISO timestamp string, report the UTC offset in total minutes (positive = east of UTC, negative = west) and whether the instant is equal to the given UTC reference.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

@@ -1,0 +1,15 @@
+{
+  "task_id": "template-token-summary",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "text_count": 5,
+      "placeholder_count": 2,
+      "invalid_count": 2
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

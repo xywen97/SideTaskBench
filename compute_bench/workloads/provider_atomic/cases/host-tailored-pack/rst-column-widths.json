@@ -1,0 +1,58 @@
+{
+  "task_id": "rst-column-widths",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "summarize_manifest",
+  "runtime": "json",
+  "input": {
+    "columns": [
+      {
+        "header": "name",
+        "values": [
+          "Alice",
+          "Bob",
+          "Charlotte"
+        ]
+      },
+      {
+        "header": "score",
+        "values": [
+          "100",
+          "85",
+          "92"
+        ]
+      },
+      {
+        "header": "status",
+        "values": [
+          "active",
+          "inactive",
+          "active"
+        ]
+      }
+    ]
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "widths": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Given a list of column data (each column is a list of strings including its header), compute the minimum column width needed for each column as the length of the longest string in that column, and return them in order.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

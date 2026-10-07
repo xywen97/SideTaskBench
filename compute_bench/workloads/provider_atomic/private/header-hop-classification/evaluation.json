@@ -1,0 +1,21 @@
+{
+  "task_id": "header-hop-classification",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "hop_by_hop": [
+        "transfer-encoding",
+        "connection"
+      ],
+      "end_to_end": [
+        "content-type",
+        "authorization",
+        "x-request-id"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

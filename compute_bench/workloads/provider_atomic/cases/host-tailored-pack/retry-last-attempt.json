@@ -1,0 +1,46 @@
+{
+  "task_id": "retry-last-attempt",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "The last allowed attempt must still run and its exception must propagate when no attempt succeeds.",
+    "available_values": {
+      "max_attempts": 3,
+      "attempt_sequence": [
+        false,
+        false,
+        false
+      ],
+      "expected_attempts_made": 3,
+      "expected_outcome": "raises"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "max_attempts": "int",
+      "attempt_sequence": "list",
+      "expected_attempts_made": "int",
+      "expected_outcome": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "The last allowed attempt must still run and its exception must propagate when no attempt succeeds.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false
+}

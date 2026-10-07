@@ -1,0 +1,51 @@
+{
+  "task_id": "config-layer-merge",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "convert_object",
+  "runtime": "json",
+  "input": {
+    "base": {
+      "timeout": 10.0,
+      "retries": 5,
+      "enabled": true,
+      "tags": [
+        "prod",
+        "v2"
+      ]
+    },
+    "override": {
+      "timeout": null,
+      "tags": [
+        "staging"
+      ],
+      "unknown_key": "ignored"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "timeout": "float",
+      "retries": "int",
+      "enabled": "bool",
+      "tags": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Merge two configuration layers (base then override) for the four known keys: timeout (float), retries (int), enabled (bool), tags (list of strings). A null value in the override resets the key to its default: timeout=5.0, retries=3, enabled=True, tags=[]. Unknown keys are ignored. The override's tags list replaces (does not extend) the base list.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

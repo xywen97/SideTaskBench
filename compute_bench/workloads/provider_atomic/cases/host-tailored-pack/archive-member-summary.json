@@ -1,0 +1,56 @@
+{
+  "task_id": "archive-member-summary",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "host-tailored-pack",
+  "category": "classification_conversion",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_json_result",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "summarize_manifest",
+  "runtime": "json",
+  "input": {
+    "members": [
+      {
+        "name": "docs/",
+        "size": 0,
+        "is_dir": true
+      },
+      {
+        "name": "docs/readme.txt",
+        "size": 120,
+        "is_dir": false
+      },
+      {
+        "name": "src/main.py",
+        "size": 450,
+        "is_dir": false
+      },
+      {
+        "name": "src/",
+        "size": 0,
+        "is_dir": true
+      }
+    ]
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "total_count": "int",
+      "total_size": "int",
+      "directory_count": "int"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Given a list of archive members, report the total member count, total size in bytes (directories have size 0), and the count of members that are directories.",
+  "requirements": "Return one JSON value. Do not add commentary or infer missing facts.",
+  "examples": [],
+  "optional": false
+}

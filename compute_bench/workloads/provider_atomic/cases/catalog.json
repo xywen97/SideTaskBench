@@ -73,7 +73,7 @@
     {
       "large_task_id": "host-tailored-pack",
       "title": "Host-tailored compatibility pack",
-      "acceptance_threshold": 6,
+      "acceptance_threshold": 20,
       "task_ids": [
         "cache-access-report",
         "manifest-digest-summary",
@@ -82,7 +82,24 @@
         "report-node-schema",
         "mro-attribute-index",
         "amount-scale-note",
-        "dispatch-specialization-report"
+        "dispatch-specialization-report",
+        "csv-dialect-report",
+        "jsonl-line-report",
+        "url-component-summary",
+        "retry-last-attempt",
+        "timestamp-offset-report",
+        "cursor-empty-page-continues",
+        "dag-level-summary",
+        "header-hop-classification",
+        "config-layer-merge",
+        "archive-member-summary",
+        "reachable-nodes",
+        "pipeline-stage-summary",
+        "prime-power-factors",
+        "rst-column-widths",
+        "dag-lexicographic-order",
+        "template-token-summary",
+        "cache-transitive-invalidation"
       ]
     }
   ]

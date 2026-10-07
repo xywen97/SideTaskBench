@@ -1,0 +1,18 @@
+{
+  "task_id": "config-layer-merge",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "timeout": 5.0,
+      "retries": 5,
+      "enabled": true,
+      "tags": [
+        "staging"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

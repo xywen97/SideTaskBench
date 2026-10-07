@@ -1,0 +1,14 @@
+{
+  "task_id": "timestamp-offset-report",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "offset_minutes": 330,
+      "equals_utc_reference": true
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}
