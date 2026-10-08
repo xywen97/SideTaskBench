@@ -181,7 +181,7 @@ bash cal_acc.sh
 
 完整指标（参考资料数量分析、LLM-call 调整、Pass@k 明细）见 `metric_outputs/metrics.md`。
 
-### 主表（wrapped/none 条件，每对 1 次重复，共 480 次运行）
+### 主表（wrapped/none 条件，共 480 次运行）
 
 `Block Seen`：模型可见的工具输出中出现了当前原子任务 id 与配置的 block 标记。  
 `Δ Tokens`：仅在 `submission_attempted=true` 的运行中与 clean 配对比较。
