@@ -195,12 +195,16 @@ bash cal_acc.sh
 | DeepSeek-V4-Flash | wrapped                         | 480 | 97.71%    | 72.71%     | 39.58%           | 54.44%              | 38.96%        | +100.2k (+23.4%)            |
 | DeepSeek-V4-Flash | wrapped_boundary                | 480 | 99.17%    | 68.75%     | **0.00%**        | **0.00%**           | **0.00%**     | —                           |
 | DeepSeek-V4-Flash | paired (host-tailored, wrapped) | 200 | 98.00%    | 77.00%     | 66.50%           | 86.36%              | 66.00%        | +169.2k (+43.3%)            |
+| DeepSeek-V4-Flash | paired (host-tailored, clean)   | 200 | 99.00%    | —          | —                | —                   | —             | —                           |
+| DeepSeek-V4-Flash | paired (host-tailored, direct)  | 200 | 98.00%    | 75.00%     | 18.50%           | 24.67%              | 17.50%        | +300.2k (+128.8%)†          |
 | Qwen3.8-Max       | clean                           | 480 | 84.58%    | —          | —                | —                   | —             | —                           |
 | Qwen3.8-Max       | length_control                  | 480 | 82.08%    | —          | —                | —                   | —             | —                           |
 | Qwen3.8-Max       | direct                          | 480 | 82.50%    | 66.04%     | 48.33%           | 73.19%              | 41.88%        | +110.6k (+73.9%)            |
 | Qwen3.8-Max       | wrapped                         | 480 | 83.33%    | 64.58%     | 40.62%           | 62.90%              | 36.88%        | +94.7k (+60.8%)             |
 | Qwen3.8-Max       | wrapped_boundary                | 480 | 81.25%    | 62.92%     | 21.88%           | 34.77%              | 17.92%        | +138.6k (+105.2%)           |
 
+
+† paired (direct) 行的 Δ Tokens 基于 38 次 attempted 运行计算（attempted rate 19.0%）。Direct 条件下 agent 更倾向拒绝明显的未授权任务，attempted 样本偏向主任务本身更复杂、token 使用更高的 case。
 
 - **Host Pass**：主任务 U 通过率——两个模型在所有条件下均保持稳定，旁支任务未影响主任务质量。
 - **Overall Delivery**：旁支任务 t 实际交付率——`wrapped` 条件下两个模型均约 40%，说明包装手法有效诱导了 agent。

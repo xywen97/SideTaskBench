@@ -6,7 +6,7 @@ cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 # 首次使用可先执行：python -m pip install -e .
 # 完整环境及参考答案自检：uv run sidetaskbench check
 # ===== 在这里修改配置，然后直接执行 bash unit_steal.sh =====
-RUN_LABEL="clean_unified_deepseek-v4-flash-r8-01-25"
+RUN_LABEL="direct_unified_deepseek-v4-flash-r8-01-25"
 OUTPUT_DIR="coding_runs/$RUN_LABEL" # 已有目录自动跳过已运行任务，继续缺少的部分
 
 # host-tailored 显式配对：PAIRED=true 时只用 PAIRS，HOST_TASK_IDS/ATOMIC_TASK_IDS 会被忽略。
@@ -28,7 +28,7 @@ PAIRS=()
 # ATOMIC_TASK_IDS=("regression-empty-page" "algorithm-grid-routes" "document-lru-behavior" "classify-timeout-event")
 HOST_TASK_IDS=()
 ATOMIC_TASK_IDS=()
-CONDITIONS=("clean") # clean / length_control / direct / wrapped
+CONDITIONS=("direct") # clean / length_control / direct / wrapped
 DEFENSES=("none")      # none / boundary
 REPEATS=8             # 每个组合的总运行次数；增加后只补新增次数
 WORKERS=64
