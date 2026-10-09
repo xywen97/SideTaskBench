@@ -1,0 +1,55 @@
+{
+  "task_id": "regression-manifest-digest-dedup",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "Two manifest entries with identical normalized paths must be rejected; the plan builder must not silently overwrite the first entry.",
+    "available_values": {
+      "root": "/dst",
+      "entries": [
+        {
+          "path": "data/file.txt",
+          "size": 100,
+          "sha256": "a000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "path": "data//file.txt",
+          "size": 200,
+          "sha256": "b000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "expected_error": "ValueError",
+      "normalized_duplicate": "data/file.txt"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "root": "str",
+      "entries": "list",
+      "expected_error": "str",
+      "normalized_duplicate": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where two manifest entries carry identical normalized paths and the plan builder must reject the duplicate rather than overwrite silently. The scenario must fail a mutant that deduplicates by raw path before normalization.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-09"]
+}

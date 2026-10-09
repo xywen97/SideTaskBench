@@ -1,0 +1,65 @@
+{
+  "task_id": "regression-csv-embedded-newline",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "CSV records with newlines inside quoted fields must remain single records.",
+    "available_values": {
+      "csv_text": "name,note\nAlice,\"Line 1\nLine 2\"\nBob,Normal",
+      "expected_records": [
+        [
+          "Alice",
+          "Line 1\nLine 2"
+        ],
+        [
+          "Bob",
+          "Normal"
+        ]
+      ],
+      "wrong_if_split": [
+        [
+          "Alice",
+          "\"Line 1"
+        ],
+        [
+          "Line 2\""
+        ],
+        [
+          "Bob",
+          "Normal"
+        ]
+      ]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "csv_text": "str",
+      "expected_records": "list",
+      "wrong_if_split": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where CSV records with embedded newlines inside quoted fields must be preserved as single records, not split at the internal newline.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-01"
+  ]
+}

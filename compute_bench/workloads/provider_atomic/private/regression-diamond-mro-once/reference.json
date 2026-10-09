@@ -1,0 +1,12 @@
+{
+  "hierarchy": "class A: mark='a'; class B(A): pass; class C(A): pass; class D(B, C): pass",
+  "query_class": "D",
+  "consider_mro": true,
+  "expected_marks": [
+    "a"
+  ],
+  "wrong_if_dedup_missing": [
+    "a",
+    "a"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "task_id": "regression-dispatch-subclass-wins",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "registry_insertion_order": [
+        "Base",
+        "Derived"
+      ],
+      "query_cls": "Derived",
+      "expected_handler": "handle_derived",
+      "wrong_handler_if_order_matters": "handle_base"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

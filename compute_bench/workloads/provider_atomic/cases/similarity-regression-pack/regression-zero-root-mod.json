@@ -1,0 +1,46 @@
+{
+  "task_id": "regression-zero-root-mod",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "When a is congruent to 0 mod modulus, the only nth root is 0 and it must be included in the result.",
+    "available_values": {
+      "a": 0,
+      "n": 2,
+      "modulus": 7,
+      "all_roots": true,
+      "expected": [0]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "a": "int",
+      "n": "int",
+      "modulus": "int",
+      "all_roots": "bool",
+      "expected": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where a is 0; the only root must be 0 and the result must include it. The scenario must fail a mutant that starts the search from x=1 and misses the zero root.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-19"]
+}

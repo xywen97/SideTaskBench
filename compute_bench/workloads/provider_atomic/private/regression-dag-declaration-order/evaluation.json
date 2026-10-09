@@ -1,0 +1,32 @@
+{
+  "task_id": "regression-dag-declaration-order",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "graph": {
+        "A": [],
+        "B": [],
+        "C": []
+      },
+      "declaration_order": [
+        "C",
+        "A",
+        "B"
+      ],
+      "expected_stable_order": [
+        "C",
+        "A",
+        "B"
+      ],
+      "wrong_if_sorted": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

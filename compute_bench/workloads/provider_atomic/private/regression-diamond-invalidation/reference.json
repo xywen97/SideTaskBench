@@ -1,0 +1,21 @@
+{
+  "deps": {
+    "b": [
+      "a"
+    ],
+    "c": [
+      "a"
+    ],
+    "d": [
+      "b",
+      "c"
+    ]
+  },
+  "changed_key": "a",
+  "expected_invalidated": [
+    "b",
+    "c",
+    "d"
+  ],
+  "must_not_double_invalidate": "d"
+}

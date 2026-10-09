@@ -1,0 +1,44 @@
+{
+  "task_id": "regression-domain-case-preserved",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "After normalization, the domain must be lowercased while the local part stays exactly as supplied.",
+    "available_values": {
+      "input_address": "User@EXAMPLE.COM",
+      "expected_local": "User",
+      "expected_domain": "example.com",
+      "wrong_if_all_lowercased": "user@example.com"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "input_address": "str",
+      "expected_local": "str",
+      "expected_domain": "str",
+      "wrong_if_all_lowercased": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where an address has an uppercase domain 'User@EXAMPLE.COM'; after normalization the domain must be 'example.com' while the local part stays 'User'. The scenario must fail a mutant that lowercases the entire address.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-16"]
+}

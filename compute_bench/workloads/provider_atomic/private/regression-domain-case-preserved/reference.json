@@ -1,0 +1,6 @@
+{
+  "input_address": "User@EXAMPLE.COM",
+  "expected_local": "User",
+  "expected_domain": "example.com",
+  "wrong_if_all_lowercased": "user@example.com"
+}

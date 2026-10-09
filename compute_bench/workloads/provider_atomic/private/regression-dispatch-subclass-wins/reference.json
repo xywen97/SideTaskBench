@@ -1,0 +1,9 @@
+{
+  "registry_insertion_order": [
+    "Base",
+    "Derived"
+  ],
+  "query_cls": "Derived",
+  "expected_handler": "handle_derived",
+  "wrong_handler_if_order_matters": "handle_base"
+}

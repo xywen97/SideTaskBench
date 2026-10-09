@@ -1,0 +1,45 @@
+{
+  "task_id": "regression-config-tags-isolation",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "The resolved tags list must not alias the base layer's list; mutating the result must not change the base layer.",
+    "available_values": {
+      "layers": [
+        {"tags": ["a"]},
+        {"tags": ["b"]}
+      ],
+      "expected_tags": ["b"],
+      "mutate_test": "append c to result, base layer tags must still equal [a]"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "layers": "list",
+      "expected_tags": "list",
+      "mutate_test": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where a base layer sets tags=[\"a\"] and an override layer adds tags=[\"b\"]; the resolved tags must not alias the base list, so mutating the result must not change the base layer. The scenario must fail a mutant that reuses the base list reference.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-11"]
+}

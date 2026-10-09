@@ -1,0 +1,15 @@
+{
+  "graph": {
+    "B": [
+      "C"
+    ]
+  },
+  "expected_order": [
+    "C",
+    "B"
+  ],
+  "implicit_node": "C",
+  "wrong_if_implicit_skipped": [
+    "B"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "text": "[{\"amount\": \"0.00\", \"currency\": \"USD\"}, {\"amount\": \"1.50\", \"currency\": \"USD\"}]",
+  "expected_record_count": 2,
+  "zero_amount_index": 0
+}

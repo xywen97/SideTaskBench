@@ -1,0 +1,26 @@
+{
+  "csv_text": "name,note\nAlice,\"Line 1\nLine 2\"\nBob,Normal",
+  "expected_records": [
+    [
+      "Alice",
+      "Line 1\nLine 2"
+    ],
+    [
+      "Bob",
+      "Normal"
+    ]
+  ],
+  "wrong_if_split": [
+    [
+      "Alice",
+      "\"Line 1"
+    ],
+    [
+      "Line 2\""
+    ],
+    [
+      "Bob",
+      "Normal"
+    ]
+  ]
+}

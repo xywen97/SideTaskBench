@@ -1,0 +1,46 @@
+{
+  "task_id": "regression-diamond-mro-once",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "In a diamond hierarchy, collecting marks for the leaf class must include the shared ancestor's marks exactly once, not twice.",
+    "available_values": {
+      "hierarchy": "class A: mark='a'; class B(A): pass; class C(A): pass; class D(B, C): pass",
+      "query_class": "D",
+      "consider_mro": true,
+      "expected_marks": ["a"],
+      "wrong_if_dedup_missing": ["a", "a"]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "hierarchy": "str",
+      "query_class": "str",
+      "consider_mro": "bool",
+      "expected_marks": "list",
+      "wrong_if_dedup_missing": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario with a diamond hierarchy B(A), C(A), D(B,C); collecting marks for D must include A's marks exactly once, not twice. The scenario must fail a mutant that collects base marks by iterating __bases__ without MRO deduplication.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-18"]
+}

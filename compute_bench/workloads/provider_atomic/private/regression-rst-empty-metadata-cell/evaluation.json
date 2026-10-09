@@ -1,0 +1,36 @@
+{
+  "task_id": "regression-rst-empty-metadata-cell",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "columns": [
+        [
+          "id",
+          "1",
+          "2"
+        ],
+        [
+          "label",
+          "alpha",
+          "beta"
+        ]
+      ],
+      "header_rows": [
+        "name",
+        "label"
+      ],
+      "expected_round_trip_row0": [
+        "",
+        "label"
+      ],
+      "expected_round_trip_row1": [
+        "id",
+        "label"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "task_id": "regression-connection-header-removal",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "After merging, both the Connection header itself and any header it names must be absent from the result.",
+    "available_values": {
+      "base": [["connection", "x-custom-hop"], ["x-custom-hop", "secret"], ["content-type", "text/plain"]],
+      "updates": [],
+      "must_be_absent": ["connection", "x-custom-hop"],
+      "must_be_present": ["content-type"]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "base": "list",
+      "updates": "list",
+      "must_be_absent": "list",
+      "must_be_present": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where the Connection header names a custom hop-by-hop field; after merging, both the Connection header itself and the named field must be absent from the result. The scenario must fail a mutant that only strips the standard hop-by-hop set.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-10"]
+}

@@ -1,0 +1,27 @@
+{
+  "task_id": "regression-archive-traversal-reject",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "members": [
+        {
+          "name": "safe/file.txt",
+          "size": 10,
+          "is_dir": false
+        },
+        {
+          "name": "evil/../../../etc/passwd",
+          "size": 42,
+          "is_dir": false
+        }
+      ],
+      "max_total": 1000,
+      "expected_error": "ValueError",
+      "rejected_name": "evil/../../../etc/passwd"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

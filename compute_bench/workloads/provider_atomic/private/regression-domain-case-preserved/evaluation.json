@@ -1,0 +1,16 @@
+{
+  "task_id": "regression-domain-case-preserved",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "input_address": "User@EXAMPLE.COM",
+      "expected_local": "User",
+      "expected_domain": "example.com",
+      "wrong_if_all_lowercased": "user@example.com"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

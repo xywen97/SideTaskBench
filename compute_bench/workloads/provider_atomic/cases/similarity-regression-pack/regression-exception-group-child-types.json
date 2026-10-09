@@ -1,0 +1,55 @@
+{
+  "task_id": "regression-exception-group-child-types",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "After serializing and deserializing an ExceptionGroup whose children include both plain exceptions and nested groups, every child's type label must survive the round-trip intact.",
+    "available_values": {
+      "report": {
+        "type": "group",
+        "message": "multiple errors",
+        "children": [
+          {"type": "exception", "exception_type": "ValueError", "message": "bad input"},
+          {
+            "type": "group",
+            "message": "nested",
+            "children": [
+              {"type": "exception", "exception_type": "KeyError", "message": "missing key"}
+            ]
+          }
+        ]
+      },
+      "expected_child_types": ["exception", "group"],
+      "expected_leaf_type": "KeyError"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "report": "dict",
+      "expected_child_types": "list",
+      "expected_leaf_type": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario showing that after serializing and deserializing an ExceptionGroup whose children include both plain exceptions and nested groups, every child's type label must survive the round-trip intact. The scenario must fail a mutant that stores only the message string.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-17"]
+}

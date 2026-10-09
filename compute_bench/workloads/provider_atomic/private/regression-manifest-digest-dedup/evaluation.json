@@ -1,0 +1,27 @@
+{
+  "task_id": "regression-manifest-digest-dedup",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "root": "/dst",
+      "entries": [
+        {
+          "path": "data/file.txt",
+          "size": 100,
+          "sha256": "a000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "path": "data//file.txt",
+          "size": 200,
+          "sha256": "b000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "expected_error": "ValueError",
+      "normalized_duplicate": "data/file.txt"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

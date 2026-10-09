@@ -1,0 +1,19 @@
+{
+  "task_id": "regression-zero-root-mod",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "a": 0,
+      "n": 2,
+      "modulus": 7,
+      "all_roots": true,
+      "expected": [
+        0
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

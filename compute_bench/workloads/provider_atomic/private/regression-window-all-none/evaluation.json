@@ -1,0 +1,20 @@
+{
+  "task_id": "regression-window-all-none",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "values": [
+        null,
+        null,
+        null
+      ],
+      "width": 2,
+      "min_valid": 1,
+      "expected_results": []
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

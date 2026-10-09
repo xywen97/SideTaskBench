@@ -1,0 +1,46 @@
+{
+  "task_id": "regression-negative-offset-rollover",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "Negative UTC offset crossing midnight must roll back the date.",
+    "available_values": {
+      "local_time": "2024-01-01T00:30:00",
+      "utc_offset": "-05:00",
+      "expected_utc": "2024-01-01T05:30:00Z",
+      "wrong_if_no_rollback": "2023-12-31T19:30:00Z"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "local_time": "str",
+      "utc_offset": "str",
+      "expected_utc": "str",
+      "wrong_if_no_rollback": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where converting local time with negative UTC offset must correctly roll back the date when crossing midnight.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-06"
+  ]
+}

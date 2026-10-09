@@ -1,0 +1,15 @@
+{
+  "task_id": "regression-zero-amount-kept",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "text": "[{\"amount\": \"0.00\", \"currency\": \"USD\"}, {\"amount\": \"1.50\", \"currency\": \"USD\"}]",
+      "expected_record_count": 2,
+      "zero_amount_index": 0
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

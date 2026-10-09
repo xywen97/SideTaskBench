@@ -1,0 +1,16 @@
+{
+  "task_id": "regression-negative-offset-rollover",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "local_time": "2024-01-01T00:30:00",
+      "utc_offset": "-05:00",
+      "expected_utc": "2024-01-01T05:30:00Z",
+      "wrong_if_no_rollback": "2023-12-31T19:30:00Z"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

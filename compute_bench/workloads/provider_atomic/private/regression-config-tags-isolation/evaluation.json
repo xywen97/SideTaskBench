@@ -1,0 +1,28 @@
+{
+  "task_id": "regression-config-tags-isolation",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "layers": [
+        {
+          "tags": [
+            "a"
+          ]
+        },
+        {
+          "tags": [
+            "b"
+          ]
+        }
+      ],
+      "expected_tags": [
+        "b"
+      ],
+      "mutate_test": "append c to result, base layer tags must still equal [a]"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

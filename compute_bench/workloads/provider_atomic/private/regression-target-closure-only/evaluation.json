@@ -1,0 +1,35 @@
+{
+  "task_id": "regression-target-closure-only",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "graph": {
+        "A": [],
+        "B": [
+          "A"
+        ],
+        "C": [
+          "A"
+        ],
+        "D": [
+          "B"
+        ]
+      },
+      "targets": [
+        "D"
+      ],
+      "expected_scheduled": [
+        "A",
+        "B",
+        "D"
+      ],
+      "must_be_absent": [
+        "C"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

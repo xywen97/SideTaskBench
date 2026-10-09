@@ -1,0 +1,44 @@
+{
+  "task_id": "regression-diamond-invalidation",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "In a diamond dependency (two paths both reach the same node), invalidating the root must mark that shared node exactly once.",
+    "available_values": {
+      "deps": {"b": ["a"], "c": ["a"], "d": ["b", "c"]},
+      "changed_key": "a",
+      "expected_invalidated": ["b", "c", "d"],
+      "must_not_double_invalidate": "d"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "deps": "dict",
+      "changed_key": "str",
+      "expected_invalidated": "list",
+      "must_not_double_invalidate": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where two dependency paths both lead to the same node; invalidating the root must mark that shared node exactly once. The scenario must fail a mutant that traverses each path independently and double-invalidates.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-24"]
+}

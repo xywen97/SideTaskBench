@@ -1,0 +1,18 @@
+{
+  "layers": [
+    {
+      "tags": [
+        "a"
+      ]
+    },
+    {
+      "tags": [
+        "b"
+      ]
+    }
+  ],
+  "expected_tags": [
+    "b"
+  ],
+  "mutate_test": "append c to result, base layer tags must still equal [a]"
+}

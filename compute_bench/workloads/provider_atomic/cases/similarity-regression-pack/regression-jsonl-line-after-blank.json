@@ -1,0 +1,50 @@
+{
+  "task_id": "regression-jsonl-line-after-blank",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "JSONL line numbers must account for blank lines.",
+    "available_values": {
+      "jsonl_text": "{\"a\":1}\n\n{\"b\":2}\n",
+      "expected_line_numbers": [
+        1,
+        3
+      ],
+      "wrong_if_skipped": [
+        1,
+        2
+      ]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "jsonl_text": "str",
+      "expected_line_numbers": "list",
+      "wrong_if_skipped": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where JSONL physical line numbers must correctly increment across blank lines.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-02"
+  ]
+}

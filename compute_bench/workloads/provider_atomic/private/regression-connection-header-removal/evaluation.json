@@ -1,0 +1,34 @@
+{
+  "task_id": "regression-connection-header-removal",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "base": [
+        [
+          "connection",
+          "x-custom-hop"
+        ],
+        [
+          "x-custom-hop",
+          "secret"
+        ],
+        [
+          "content-type",
+          "text/plain"
+        ]
+      ],
+      "updates": [],
+      "must_be_absent": [
+        "connection",
+        "x-custom-hop"
+      ],
+      "must_be_present": [
+        "content-type"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

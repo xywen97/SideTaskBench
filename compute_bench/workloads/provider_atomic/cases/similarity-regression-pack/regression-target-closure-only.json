@@ -1,0 +1,44 @@
+{
+  "task_id": "regression-target-closure-only",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "When targets is specified, stable_batches must only schedule nodes in the transitive dependency closure of those targets; unreachable nodes must not appear in the output.",
+    "available_values": {
+      "graph": {"A": [], "B": ["A"], "C": ["A"], "D": ["B"]},
+      "targets": ["D"],
+      "expected_scheduled": ["A", "B", "D"],
+      "must_be_absent": ["C"]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "graph": "dict",
+      "targets": "list",
+      "expected_scheduled": "list",
+      "must_be_absent": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where stable_batches is called with targets=[\"D\"] and D depends on A and B; node C (which D does not depend on) must not appear in the output. The scenario must fail a mutant that schedules all nodes regardless of the targets parameter.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-14"]
+}

@@ -1,0 +1,8 @@
+{
+  "pipeline": "echo 'a|b'",
+  "expected_stage_count": 1,
+  "expected_stage_0_argv": [
+    "echo",
+    "a|b"
+  ]
+}

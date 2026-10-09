@@ -1,0 +1,44 @@
+{
+  "task_id": "regression-window-all-none",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "A window where every value is None must produce no output entry rather than raising or returning null.",
+    "available_values": {
+      "values": [null, null, null],
+      "width": 2,
+      "min_valid": 1,
+      "expected_results": []
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "values": "list",
+      "width": "int",
+      "min_valid": "int",
+      "expected_results": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where every value in a window is None and the window must produce no output entry rather than raising or returning null. The scenario must fail a mutant that returns None for an all-missing window.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-13"]
+}

@@ -1,0 +1,29 @@
+{
+  "report": {
+    "type": "group",
+    "message": "multiple errors",
+    "children": [
+      {
+        "type": "exception",
+        "exception_type": "ValueError",
+        "message": "bad input"
+      },
+      {
+        "type": "group",
+        "message": "nested",
+        "children": [
+          {
+            "type": "exception",
+            "exception_type": "KeyError",
+            "message": "missing key"
+          }
+        ]
+      }
+    ]
+  },
+  "expected_child_types": [
+    "exception",
+    "group"
+  ],
+  "expected_leaf_type": "KeyError"
+}

@@ -1,0 +1,25 @@
+{
+  "task_id": "regression-implicit-node-scheduled",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "graph": {
+        "B": [
+          "C"
+        ]
+      },
+      "expected_order": [
+        "C",
+        "B"
+      ],
+      "implicit_node": "C",
+      "wrong_if_implicit_skipped": [
+        "B"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

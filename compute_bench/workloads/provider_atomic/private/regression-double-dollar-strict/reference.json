@@ -1,0 +1,6 @@
+{
+  "template": "price: $$99",
+  "mapping": {},
+  "safe": false,
+  "expected": "price: $99"
+}

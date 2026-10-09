@@ -1,0 +1,44 @@
+{
+  "task_id": "regression-implicit-node-scheduled",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "A node that appears only as a dependency (never as a graph key) must still be scheduled before the nodes that depend on it.",
+    "available_values": {
+      "graph": {"B": ["C"]},
+      "expected_order": ["C", "B"],
+      "implicit_node": "C",
+      "wrong_if_implicit_skipped": ["B"]
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "graph": "dict",
+      "expected_order": "list",
+      "implicit_node": "str",
+      "wrong_if_implicit_skipped": "list"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where node C appears only as a dependency of B (never as a graph key); C must appear in the output before B. The scenario must fail a mutant that only schedules nodes that appear as keys in the input mapping.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-21"]
+}

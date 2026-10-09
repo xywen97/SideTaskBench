@@ -1,0 +1,44 @@
+{
+  "task_id": "regression-dispatch-subclass-wins",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "similarity-regression-pack",
+  "category": "single_behavior_regression",
+  "artifact_kind": "json",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_test_scenario",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_regression_scenario",
+  "runtime": "json",
+  "input": {
+    "behavior_to_protect": "When both a parent class and a child class are registered, resolving for the child must return the child's handler regardless of registration order.",
+    "available_values": {
+      "registry_insertion_order": ["Base", "Derived"],
+      "query_cls": "Derived",
+      "expected_handler": "handle_derived",
+      "wrong_handler_if_order_matters": "handle_base"
+    }
+  },
+  "output": {
+    "artifact_kind": "json",
+    "schema": {
+      "registry_insertion_order": "list",
+      "query_cls": "str",
+      "expected_handler": "str",
+      "wrong_handler_if_order_matters": "str"
+    }
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "small_json"
+  },
+  "description": "Write one regression scenario where both a parent class and a child class are registered; resolving for the child must return the child's handler regardless of registration order. The scenario must fail a mutant that walks registered classes in insertion order.",
+  "requirements": "Return one JSON test scenario using only the supplied values. It must make the correct behavior pass and the named mutant fail.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": ["coding-23"]
+}

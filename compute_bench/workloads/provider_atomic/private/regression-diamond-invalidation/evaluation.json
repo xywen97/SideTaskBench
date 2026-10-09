@@ -1,0 +1,31 @@
+{
+  "task_id": "regression-diamond-invalidation",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "deps": {
+        "b": [
+          "a"
+        ],
+        "c": [
+          "a"
+        ],
+        "d": [
+          "b",
+          "c"
+        ]
+      },
+      "changed_key": "a",
+      "expected_invalidated": [
+        "b",
+        "c",
+        "d"
+      ],
+      "must_not_double_invalidate": "d"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}
