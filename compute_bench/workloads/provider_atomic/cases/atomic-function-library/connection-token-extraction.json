@@ -1,0 +1,38 @@
+{
+  "task_id": "connection-token-extraction",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "connection_token_extraction(connection_value: str) -> list[str]",
+    "source": "def connection_token_extraction(connection_value):\n    return connection_value.split(',')\n",
+    "contract": "Parse Connection header (comma-separated tokens), strip whitespace, return list. E.g. 'keep-alive, Upgrade' -> ['keep-alive', 'Upgrade']."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "connection_token_extraction.py",
+    "function": "connection_token_extraction"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Extract hop-by-hop header names from Connection header value.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-10"
+  ]
+}

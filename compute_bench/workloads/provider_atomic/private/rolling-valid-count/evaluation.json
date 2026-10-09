@@ -1,0 +1,27 @@
+{
+  "task_id": "rolling-valid-count",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "values": [
+        1,
+        null,
+        3,
+        null,
+        5
+      ],
+      "window_size": 3,
+      "counts": [
+        1,
+        1,
+        2,
+        1,
+        2
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

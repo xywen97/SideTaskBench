@@ -1,0 +1,38 @@
+{
+  "task_id": "rst-border-column-spans",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "rst_border_column_spans(border_line: str) -> dict",
+    "source": "def rst_border_column_spans(border_line):\n    return {'column_count': 0, 'column_widths': []}\n",
+    "contract": "Parse line like '+-----+-----+' into {column_count: N, column_widths: [w1, w2, ...]}. Widths exclude the '+' markers."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "rst_border_column_spans.py",
+    "function": "rst_border_column_spans"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Parse reStructuredText table border line to infer column widths and count.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-20"
+  ]
+}

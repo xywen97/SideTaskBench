@@ -1,0 +1,38 @@
+{
+  "task_id": "rolling-valid-count",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "rolling_valid_count(values: list, window_size: int) -> list[int]",
+    "source": "def rolling_valid_count(values, window_size):\n    return [window_size] * len(values)\n",
+    "contract": "Return list of counts of non-None values in each window. Window slides one position at a time. Edge windows may be smaller."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "rolling_valid_count.py",
+    "function": "rolling_valid_count"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Count non-None values in each rolling window position.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-13"
+  ]
+}

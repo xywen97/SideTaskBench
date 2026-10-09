@@ -1,0 +1,38 @@
+{
+  "task_id": "shell-quote-span-classify",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "classification_conversion",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "classify_convert",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "shell_quote_span_classify(command: str) -> list[tuple[int, int]]",
+    "source": "def shell_quote_span_classify(command):\n    return []\n",
+    "contract": "Return list of (start, end) inclusive spans for quoted regions. Handle both single and double quotes. Ignore escaped quotes."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "shell_quote_span_classify.py",
+    "function": "shell_quote_span_classify"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Identify character spans protected by single or double quotes in shell command.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-15"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "task_id": "rst-border-column-spans",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "border_line": "+-----+-----+-----+",
+      "column_widths": [
+        5,
+        5,
+        5
+      ],
+      "column_count": 3
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

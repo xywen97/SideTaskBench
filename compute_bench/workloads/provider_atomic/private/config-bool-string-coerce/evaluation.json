@@ -1,0 +1,22 @@
+{
+  "task_id": "config-bool-string-coerce",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "input": {
+        "enabled": "true",
+        "debug": "false",
+        "count": "5"
+      },
+      "output": {
+        "enabled": true,
+        "debug": false,
+        "count": "5"
+      }
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

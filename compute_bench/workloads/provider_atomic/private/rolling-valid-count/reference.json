@@ -1,0 +1,17 @@
+{
+  "values": [
+    1,
+    null,
+    3,
+    null,
+    5
+  ],
+  "window_size": 3,
+  "counts": [
+    1,
+    1,
+    2,
+    1,
+    2
+  ]
+}

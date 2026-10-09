@@ -1,0 +1,25 @@
+{
+  "task_id": "placeholder-boundary-scan",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "template": "Hello ${name}, your ${item} is ready",
+      "placeholders": [
+        {
+          "start": 6,
+          "end": 13,
+          "name": "name"
+        },
+        {
+          "start": 20,
+          "end": 27,
+          "name": "item"
+        }
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

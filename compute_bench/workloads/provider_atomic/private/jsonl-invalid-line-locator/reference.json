@@ -1,0 +1,6 @@
+{
+  "jsonl_text": "{\"a\":1}\n{invalid\n{\"b\":2}\n",
+  "invalid_lines": [
+    2
+  ]
+}

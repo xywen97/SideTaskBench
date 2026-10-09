@@ -1,0 +1,12 @@
+{
+  "valid_examples": [
+    "user",
+    "user.name",
+    "user+tag"
+  ],
+  "invalid_examples": [
+    ".start",
+    "end.",
+    "double..dot"
+  ]
+}

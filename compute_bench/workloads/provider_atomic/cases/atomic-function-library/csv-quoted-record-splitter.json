@@ -1,0 +1,38 @@
+{
+  "task_id": "csv-quoted-record-splitter",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "csv_quoted_record_splitter(csv_text: str) -> list[str]",
+    "source": "def csv_quoted_record_splitter(csv_text):\n    return csv_text.strip().split('\\n')\n",
+    "contract": "Split CSV text by record boundaries, preserving quoted fields. Input is valid CSV text; output is list of record strings."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "csv_quoted_record_splitter.py",
+    "function": "csv_quoted_record_splitter"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Split CSV text into records, respecting quoted fields that may contain delimiters.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-01"
+  ]
+}

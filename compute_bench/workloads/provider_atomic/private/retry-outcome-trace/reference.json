@@ -1,0 +1,9 @@
+{
+  "max_attempts": 3,
+  "outcomes": [
+    "timeout",
+    "error",
+    "success"
+  ],
+  "final_status": "succeeded_on_attempt_3"
+}

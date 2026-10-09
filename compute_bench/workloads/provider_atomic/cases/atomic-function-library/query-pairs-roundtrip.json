@@ -1,0 +1,38 @@
+{
+  "task_id": "query-pairs-roundtrip",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_debug",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "debug_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "query_pairs_roundtrip(pairs: list[tuple[str, str]]) -> list[tuple[str, str]]",
+    "source": "def query_pairs_roundtrip(pairs):\n    import urllib.parse\n    encoded = '&'.join(f'{k}={v}' for k, v in pairs)\n    decoded = urllib.parse.parse_qsl(encoded)\n    return decoded\n",
+    "contract": "Encode pairs to query string, then decode. Must preserve special characters through proper percent-encoding."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "query_pairs_roundtrip.py",
+    "function": "query_pairs_roundtrip"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Encode key-value pairs to URL query string and decode back, verifying roundtrip.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-03"
+  ]
+}

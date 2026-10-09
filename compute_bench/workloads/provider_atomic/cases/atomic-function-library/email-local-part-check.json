@@ -1,0 +1,38 @@
+{
+  "task_id": "email-local-part-check",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "classification_conversion",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "classify_convert",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "email_local_part_check(local_part: str) -> bool",
+    "source": "def email_local_part_check(local_part):\n    return True\n",
+    "contract": "Return True if valid. Invalid: starts/ends with dot, contains consecutive dots, or has invalid characters. Allow alphanumeric, dot, plus, dash."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "email_local_part_check.py",
+    "function": "email_local_part_check"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Check if email local-part (before @) follows basic format rules.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-16"
+  ]
+}

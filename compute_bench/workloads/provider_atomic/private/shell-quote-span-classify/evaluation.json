@@ -1,0 +1,23 @@
+{
+  "task_id": "shell-quote-span-classify",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "command": "echo 'hello world' | grep \"pattern\"",
+      "quoted_spans": [
+        [
+          5,
+          18
+        ],
+        [
+          27,
+          36
+        ]
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

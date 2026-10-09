@@ -1,0 +1,38 @@
+{
+  "task_id": "config-bool-string-coerce",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_debug",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "debug_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "config_bool_string_coerce(config: dict) -> dict",
+    "source": "def config_bool_string_coerce(config):\n    return {k: bool(v) if v in ('true', 'false') else v for k, v in config.items()}\n",
+    "contract": "Convert 'true' -> True, 'false' -> False (case-sensitive). Leave other values unchanged. Return new dict."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "config_bool_string_coerce.py",
+    "function": "config_bool_string_coerce"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Coerce string boolean values ('true'/'false') in config dict to actual bool type.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-11"
+  ]
+}

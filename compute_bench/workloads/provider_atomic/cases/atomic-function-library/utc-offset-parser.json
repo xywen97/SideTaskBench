@@ -1,0 +1,38 @@
+{
+  "task_id": "utc-offset-parser",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "utc_offset_parser(offset_str: str) -> dict",
+    "source": "def utc_offset_parser(offset_str):\n    return {'hours': 0, 'minutes': 0}\n",
+    "contract": "Parse offset like '-05:30' into {hours: -5, minutes: -30, total_minutes: -330}. Both components carry the sign."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "utc_offset_parser.py",
+    "function": "utc_offset_parser"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Parse ISO 8601 UTC offset (+HH:MM or -HH:MM) into hours and minutes components.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-06"
+  ]
+}

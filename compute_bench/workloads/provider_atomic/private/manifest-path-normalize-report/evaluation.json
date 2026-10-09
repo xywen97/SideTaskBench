@@ -1,0 +1,19 @@
+{
+  "task_id": "manifest-path-normalize-report",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "paths": [
+        "a/b",
+        "a//b",
+        "a/./b"
+      ],
+      "normalized": "a/b",
+      "duplicate_count": 3
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

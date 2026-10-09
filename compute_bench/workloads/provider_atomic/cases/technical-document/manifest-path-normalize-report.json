@@ -1,0 +1,38 @@
+{
+  "task_id": "manifest-path-normalize-report",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "technical-document",
+  "category": "long_text_generation",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_document",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "manifest_path_normalize_report(paths: list[str]) -> str",
+    "source": "def manifest_path_normalize_report(paths):\n    return f'Analyzed {len(paths)} paths.'\n",
+    "contract": "Return markdown report listing normalized paths and which original paths map to them. Highlight duplicates."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "manifest_path_normalize_report.py",
+    "function": "manifest_path_normalize_report"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Generate a report identifying paths in a manifest that normalize to duplicates.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-09"
+  ]
+}

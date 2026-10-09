@@ -1,0 +1,24 @@
+{
+  "task_id": "crt-combine-residues",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "residues": [
+        2,
+        3,
+        2
+      ],
+      "moduli": [
+        3,
+        5,
+        7
+      ],
+      "combined": 23,
+      "combined_modulus": 105
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "connection-token-extraction",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "connection_value": "keep-alive, Upgrade",
+      "tokens": [
+        "keep-alive",
+        "Upgrade"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

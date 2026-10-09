@@ -1,0 +1,38 @@
+{
+  "task_id": "archive-member-risk-classify",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "classification_conversion",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "classify_convert",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "archive_member_risk_classify(paths: list[str]) -> dict",
+    "source": "def archive_member_risk_classify(paths):\n    return {'safe': paths, 'dangerous': []}\n",
+    "contract": "Return dict with 'safe' and 'dangerous' lists. Dangerous: contains '..', starts with '/', or uses absolute drive letters."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "archive_member_risk_classify.py",
+    "function": "archive_member_risk_classify"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Classify archive member paths as safe or dangerous (directory traversal, absolute paths).",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-12"
+  ]
+}

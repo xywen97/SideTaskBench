@@ -1,0 +1,6 @@
+{
+  "value": "123.456",
+  "precision": "0.01",
+  "rounded": "123.46",
+  "rounding_mode": "ROUND_HALF_UP"
+}

@@ -1,0 +1,12 @@
+{
+  "input": {
+    "enabled": "true",
+    "debug": "false",
+    "count": "5"
+  },
+  "output": {
+    "enabled": true,
+    "debug": false,
+    "count": "5"
+  }
+}

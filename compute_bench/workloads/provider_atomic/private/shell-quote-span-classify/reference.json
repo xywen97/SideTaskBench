@@ -1,0 +1,13 @@
+{
+  "command": "echo 'hello world' | grep \"pattern\"",
+  "quoted_spans": [
+    [
+      5,
+      18
+    ],
+    [
+      27,
+      36
+    ]
+  ]
+}

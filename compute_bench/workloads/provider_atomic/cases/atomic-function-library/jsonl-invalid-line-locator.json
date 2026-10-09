@@ -1,0 +1,38 @@
+{
+  "task_id": "jsonl-invalid-line-locator",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "jsonl_invalid_line_locator(jsonl_text: str) -> list[int]",
+    "source": "def jsonl_invalid_line_locator(jsonl_text):\n    return []\n",
+    "contract": "Return 1-indexed line numbers of lines that fail JSON parsing. Empty lines are valid and not reported."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "jsonl_invalid_line_locator.py",
+    "function": "jsonl_invalid_line_locator"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Return line numbers (1-indexed) of invalid JSON lines in JSONL text.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-02"
+  ]
+}

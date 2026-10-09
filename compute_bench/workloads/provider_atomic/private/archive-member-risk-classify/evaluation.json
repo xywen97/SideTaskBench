@@ -1,0 +1,26 @@
+{
+  "task_id": "archive-member-risk-classify",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "paths": [
+        "safe.txt",
+        "../escape",
+        "/absolute",
+        "ok/file"
+      ],
+      "safe": [
+        "safe.txt",
+        "ok/file"
+      ],
+      "dangerous": [
+        "../escape",
+        "/absolute"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

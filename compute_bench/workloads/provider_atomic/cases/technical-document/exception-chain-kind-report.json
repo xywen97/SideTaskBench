@@ -1,0 +1,38 @@
+{
+  "task_id": "exception-chain-kind-report",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "technical-document",
+  "category": "long_text_generation",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "generate_document",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "exception_chain_kind_report(chain: list[dict]) -> str",
+    "source": "def exception_chain_kind_report(chain):\n    return 'Exception chain report'\n",
+    "contract": "Each dict has 'type' and 'cause_type' ('explicit', 'implicit_context', or 'direct'). Return markdown report explaining the chain."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "exception_chain_kind_report.py",
+    "function": "exception_chain_kind_report"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Generate report documenting exception chain types (explicit __cause__, implicit __context__).",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-17"
+  ]
+}

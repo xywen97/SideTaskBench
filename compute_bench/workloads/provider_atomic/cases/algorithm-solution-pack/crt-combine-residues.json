@@ -1,0 +1,38 @@
+{
+  "task_id": "crt-combine-residues",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "algorithm-solution-pack",
+  "category": "algorithm",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "solve_algorithm",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "crt_combine_residues(residues: list[int], moduli: list[int]) -> tuple[int, int]",
+    "source": "def crt_combine_residues(residues, moduli):\n    return (0, 1)\n",
+    "contract": "Given x \u2261 residues[i] (mod moduli[i]), return (combined_residue, combined_modulus). Moduli are pairwise coprime."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "crt_combine_residues.py",
+    "function": "crt_combine_residues"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Solve system of congruences using Chinese Remainder Theorem.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-19"
+  ]
+}

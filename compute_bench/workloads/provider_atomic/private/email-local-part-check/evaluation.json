@@ -1,0 +1,22 @@
+{
+  "task_id": "email-local-part-check",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "valid_examples": [
+        "user",
+        "user.name",
+        "user+tag"
+      ],
+      "invalid_examples": [
+        ".start",
+        "end.",
+        "double..dot"
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

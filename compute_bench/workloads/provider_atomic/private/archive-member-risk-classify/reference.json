@@ -1,0 +1,16 @@
+{
+  "paths": [
+    "safe.txt",
+    "../escape",
+    "/absolute",
+    "ok/file"
+  ],
+  "safe": [
+    "safe.txt",
+    "ok/file"
+  ],
+  "dangerous": [
+    "../escape",
+    "/absolute"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "pairs": [
+    [
+      "key",
+      "value"
+    ],
+    [
+      "a",
+      "b=c"
+    ]
+  ],
+  "encoded": "key=value&a=b%3Dc",
+  "decoded_pairs": [
+    [
+      "key",
+      "value"
+    ],
+    [
+      "a",
+      "b=c"
+    ]
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "task_id": "retry-outcome-trace",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "max_attempts": 3,
+      "outcomes": [
+        "timeout",
+        "error",
+        "success"
+      ],
+      "final_status": "succeeded_on_attempt_3"
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

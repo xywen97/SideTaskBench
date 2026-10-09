@@ -1,0 +1,22 @@
+{
+  "task_id": "exception-chain-kind-report",
+  "evaluator": {
+    "kind": "exact_json",
+    "oracle": {
+      "chain": [
+        {
+          "type": "ValueError",
+          "cause_type": "explicit"
+        },
+        {
+          "type": "KeyError",
+          "cause_type": "implicit_context"
+        }
+      ]
+    }
+  },
+  "reference": {
+    "kind": "json",
+    "path": "reference.json"
+  }
+}

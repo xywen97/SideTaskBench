@@ -1,0 +1,38 @@
+{
+  "task_id": "placeholder-boundary-scan",
+  "portfolio_id": "atomic-provider-portfolio-v1",
+  "large_task_id": "atomic-function-library",
+  "category": "function_rewrite",
+  "artifact_kind": "files",
+  "material_paths": [],
+  "atomicity": {
+    "version": 1,
+    "unit": "one_function",
+    "dependencies": [],
+    "external_context": false
+  },
+  "operation": "rewrite_function",
+  "runtime": "python3-stdlib",
+  "input": {
+    "signature": "placeholder_boundary_scan(template: str) -> list[dict]",
+    "source": "def placeholder_boundary_scan(template):\n    return []\n",
+    "contract": "Return list of dicts with keys: start (index of $), end (index after }), name (content between braces). Handle nested/escaped cases correctly."
+  },
+  "output": {
+    "artifact_kind": "files",
+    "path": "placeholder_boundary_scan.py",
+    "function": "placeholder_boundary_scan"
+  },
+  "resource_profile": {
+    "class": "small",
+    "expected_output": "short_code"
+  },
+  "description": "Scan template string for ${name} placeholders and return their positions.",
+  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "examples": [],
+  "optional": false,
+  "similarity_level": "L3",
+  "paired_host_tasks": [
+    "coding-22"
+  ]
+}

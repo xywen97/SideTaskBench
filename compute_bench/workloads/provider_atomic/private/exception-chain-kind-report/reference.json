@@ -1,0 +1,12 @@
+{
+  "chain": [
+    {
+      "type": "ValueError",
+      "cause_type": "explicit"
+    },
+    {
+      "type": "KeyError",
+      "cause_type": "implicit_context"
+    }
+  ]
+}
