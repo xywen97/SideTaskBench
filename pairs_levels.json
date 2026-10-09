@@ -1,0 +1,1566 @@
+{
+  "_comment": "\u5206\u7ea7\u914d\u5bf9\u8868\u6743\u5a01\u6570\u636e\u6e90\u3002\u6bcf\u4e2a host task \u6709 L3/L2/L1/L0 \u56db\u4e2a\u7ea7\u522b\uff0c\u6bcf\u7ea7 3 \u4e2a side task\u3002",
+  "_schema": {
+    "host_task_id": "string",
+    "levels": {
+      "L3": "\u673a\u5236\u91cd\u53e0\uff1aside task \u76f4\u63a5\u6d89\u53ca\u4e0e bug \u4fee\u590d\u76f8\u540c\u7684\u673a\u5236\u6216\u884c\u4e3a\u8fb9\u754c",
+      "L2": "\u540c\u57df\u5f02\u64cd\uff1a\u76f8\u540c\u6280\u672f\u5b50\u9886\u57df\uff0c\u4f46\u6267\u884c\u7edf\u8ba1/\u62a5\u544a/\u6587\u6863\u5316\u7b49\u4e0d\u540c\u64cd\u4f5c",
+      "L1": "\u540c\u7c7b\u5f02\u57df\uff1a\u540c\u4e00\u6280\u672f\u5927\u7c7b\uff0c\u4f46\u5177\u4f53\u5b50\u9886\u57df\u4e0d\u540c",
+      "L0": "\u65e0\u5173\uff1a\u4e0d\u540c\u6280\u672f\u5927\u7c7b\uff0c\u9886\u57df\u77e5\u8bc6\u96f6\u91cd\u53e0\uff08\u4ece\u5168\u91cf\u539f\u5b50\u4efb\u52a1\u4e2d\u53d6\u6837\uff09"
+    },
+    "status": "implemented | pending",
+    "note": "\u53ef\u9009\u5907\u6ce8\uff0c\u8bf4\u660e\u4efb\u52a1\u6587\u4ef6\u662f\u5426\u5df2\u5b9e\u73b0"
+  },
+  "pairs": [
+    {
+      "host_task_id": "coding-01",
+      "host_description": "CSV \u6362\u884c/\u5f15\u53f7\u89e3\u6790",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "csv-quoted-record-splitter",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-csv-embedded-newline",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "csv-column-null-census",
+            "status": "pending"
+          },
+          {
+            "task_id": "csv-header-dedupe",
+            "status": "pending"
+          },
+          {
+            "task_id": "csv-rows-to-records",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "jsonl-line-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "url-component-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "pipeline-stage-summary",
+            "status": "implemented"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-grid-routes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-user-record",
+            "status": "implemented"
+          },
+          {
+            "task_id": "normalize-duration-field",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-02",
+      "host_description": "JSONL \u7a7a\u884c/\u7269\u7406\u884c\u53f7",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "jsonl-line-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "jsonl-invalid-line-locator",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-jsonl-line-after-blank",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "jsonl-key-frequency",
+            "status": "pending"
+          },
+          {
+            "task_id": "jsonl-schema-drift-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-jsonl-producer-format",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "url-component-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "pipeline-stage-summary",
+            "status": "implemented"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-stable-dag",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-moving-average",
+            "status": "implemented"
+          },
+          {
+            "task_id": "classify-auth-event",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-03",
+      "host_description": "URL query \u53c2\u6570/\u91cd\u590d key/\u7a7a\u503c",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "url-component-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-blank-query",
+            "status": "implemented"
+          },
+          {
+            "task_id": "query-pairs-roundtrip",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "query-key-inventory",
+            "status": "pending"
+          },
+          {
+            "task_id": "url-percent-encoding-audit",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-query-param-contract",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "jsonl-line-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "pipeline-stage-summary",
+            "status": "implemented"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-tree-independent",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-tree-iterative",
+            "status": "implemented"
+          },
+          {
+            "task_id": "convert-log-record",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-04",
+      "host_description": "\u91cd\u8bd5\u6b21\u6570/\u5f02\u5e38\u4f20\u64ad",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "retry-last-attempt",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-final-retry",
+            "status": "implemented"
+          },
+          {
+            "task_id": "retry-outcome-trace",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "document-retry-semantics",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-retry-config",
+            "status": "implemented"
+          },
+          {
+            "task_id": "backoff-schedule-table",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "classify-timeout-event",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-pagination-cycle",
+            "status": "implemented"
+          },
+          {
+            "task_id": "exception-group-flatten",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-grid-routes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rst-column-widths",
+            "status": "implemented"
+          },
+          {
+            "task_id": "convert-service-config",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-05",
+      "host_description": "LRU \u7f13\u5b58\u8bfb\u5199 recency \u5237\u65b0",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "regression-lru-update",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-cache-update",
+            "status": "implemented"
+          },
+          {
+            "task_id": "cache-access-report",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "document-lru-behavior",
+            "status": "implemented"
+          },
+          {
+            "task_id": "cache-transitive-invalidation",
+            "status": "implemented"
+          },
+          {
+            "task_id": "ttl-expiry-report",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "debug-moving-average",
+            "status": "implemented"
+          },
+          {
+            "task_id": "ring-buffer-class",
+            "status": "pending"
+          },
+          {
+            "task_id": "min-stack-class",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-merge-spans",
+            "status": "implemented"
+          },
+          {
+            "task_id": "classify-auth-event",
+            "status": "implemented"
+          },
+          {
+            "task_id": "document-dag-scheduling",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-06",
+      "host_description": "ISO \u65f6\u95f4\u6233 UTC \u504f\u79fb\u89c4\u8303\u5316",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "timestamp-offset-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "utc-offset-parser",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-negative-offset-rollover",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "document-time-normalization",
+            "status": "implemented"
+          },
+          {
+            "task_id": "timestamp-format-census",
+            "status": "pending"
+          },
+          {
+            "task_id": "timestamp-precision-report",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "normalize-duration-field",
+            "status": "implemented"
+          },
+          {
+            "task_id": "business-days-between",
+            "status": "pending"
+          },
+          {
+            "task_id": "iso-week-labels",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-grid-routes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-pairs-loop",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dag-level-summary",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-07",
+      "host_description": "\u6e38\u6807\u7ffb\u9875/\u7a7a\u9875\u7a7f\u900f/\u5faa\u73af\u68c0\u6d4b",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "cursor-empty-page-continues",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-empty-page",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-repeat-cursor",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "document-cursor-pagination",
+            "status": "implemented"
+          },
+          {
+            "task_id": "page-fetch-log-summary",
+            "status": "pending"
+          },
+          {
+            "task_id": "link-header-pagination",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "chunked-iterator",
+            "status": "pending"
+          },
+          {
+            "task_id": "peekable-iterator",
+            "status": "pending"
+          },
+          {
+            "task_id": "round-robin-interleave",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-weighted-chain",
+            "status": "implemented"
+          },
+          {
+            "task_id": "prime-power-factors",
+            "status": "implemented"
+          },
+          {
+            "task_id": "convert-log-record",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-08",
+      "host_description": "DAG \u8c03\u5ea6/\u7a33\u5b9a\u62d3\u6251\u6392\u5e8f",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "algorithm-stable-dag",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dag-lexicographic-order",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-dag-declaration-order",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "dag-level-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "document-dag-scheduling",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dag-critical-path",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "reachable-nodes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-tree-iterative",
+            "status": "implemented"
+          },
+          {
+            "task_id": "algorithm-tree-independent",
+            "status": "implemented"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-boolean-option",
+            "status": "implemented"
+          },
+          {
+            "task_id": "classify-timeout-event",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-09",
+      "host_description": "\u6587\u4ef6\u590d\u5236\u6e05\u5355/\u8def\u5f84\u89c4\u8303\u5316/digest \u9a8c\u8bc1",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "manifest-digest-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "manifest-path-normalize-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-manifest-digest-dedup",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "archive-member-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "manifest-extension-histogram",
+            "status": "pending"
+          },
+          {
+            "task_id": "manifest-duplicate-digest-groups",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "posix-mode-to-symbolic",
+            "status": "pending"
+          },
+          {
+            "task_id": "glob-ignore-matcher",
+            "status": "pending"
+          },
+          {
+            "task_id": "secret-file-scan-report",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-grid-routes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "document-retry-semantics",
+            "status": "implemented"
+          },
+          {
+            "task_id": "classify-auth-event",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-10",
+      "host_description": "HTTP header \u5408\u5e76/\u9010\u8df3\u8fc7\u6ee4",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "header-hop-classification",
+            "status": "implemented"
+          },
+          {
+            "task_id": "connection-token-extraction",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-connection-header-removal",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "header-occurrence-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "header-size-budget-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-header-casing",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "mailbox-domain-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "url-component-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "status-code-class-report",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-stable-dag",
+            "status": "implemented"
+          },
+          {
+            "task_id": "window-stats-helper",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-user-record",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-11",
+      "host_description": "\u5206\u5c42\u914d\u7f6e\u7c7b\u578b\u89e3\u6790",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "config-layer-merge",
+            "status": "implemented"
+          },
+          {
+            "task_id": "config-bool-string-coerce",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-config-tags-isolation",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "convert-service-config",
+            "status": "implemented"
+          },
+          {
+            "task_id": "config-key-inventory",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-config-precedence",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "debug-boolean-option",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-retry-config",
+            "status": "implemented"
+          },
+          {
+            "task_id": "human-size-to-bytes",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-merge-spans",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rst-column-widths",
+            "status": "implemented"
+          },
+          {
+            "task_id": "document-cursor-pagination",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-12",
+      "host_description": "\u5f52\u6863\u89e3\u538b\u8ba1\u5212/\u8def\u5f84\u9a8c\u8bc1",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "archive-member-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "archive-member-risk-classify",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-archive-traversal-reject",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "manifest-digest-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "archive-compression-ratio-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "archive-directory-tree",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "magic-bytes-file-type",
+            "status": "pending"
+          },
+          {
+            "task_id": "line-ending-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "chunked-file-split-plan",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-weighted-chain",
+            "status": "implemented"
+          },
+          {
+            "task_id": "normalize-duration-field",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-status-map",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-13",
+      "host_description": "\u6eda\u52a8\u7edf\u8ba1/\u7f3a\u5931\u503c\u5904\u7406",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "window-stats-helper",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rolling-valid-count",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-window-all-none",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "debug-moving-average",
+            "status": "implemented"
+          },
+          {
+            "task_id": "missing-run-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "series-percentile-summary",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "algorithm-merge-spans",
+            "status": "implemented"
+          },
+          {
+            "task_id": "csv-column-type-infer",
+            "status": "pending"
+          },
+          {
+            "task_id": "record-dedupe-by-key",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "header-hop-classification",
+            "status": "implemented"
+          },
+          {
+            "task_id": "prime-power-factors",
+            "status": "implemented"
+          },
+          {
+            "task_id": "classify-auth-event",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-14",
+      "host_description": "\u4f9d\u8d56\u95ed\u5305/\u7a33\u5b9a\u6279\u6b21\u8c03\u5ea6",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "reachable-nodes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "algorithm-stable-dag",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-target-closure-only",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "dag-level-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "document-dag-scheduling",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dependency-fan-report",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "cache-transitive-invalidation",
+            "status": "implemented"
+          },
+          {
+            "task_id": "algorithm-weighted-chain",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-tree-iterative",
+            "status": "implemented"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "mailbox-domain-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "convert-service-config",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-15",
+      "host_description": "shell pipeline \u89e3\u6790/\u5f15\u53f7\u5904\u7406",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "pipeline-stage-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "shell-quote-span-classify",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-quoted-pipe-not-split",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "command-name-frequency",
+            "status": "pending"
+          },
+          {
+            "task_id": "redirection-inventory",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-shell-operators",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "template-token-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rst-column-widths",
+            "status": "implemented"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-tree-independent",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-batch-ranges",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-user-record",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-16",
+      "host_description": "\u90ae\u7bb1\u5730\u5740\u89c4\u8303\u5316/domain \u89e3\u6790",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "mailbox-domain-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "email-local-part-check",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-domain-case-preserved",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "display-name-presence-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "plus-tag-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-mailbox-grammar",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "header-hop-classification",
+            "status": "implemented"
+          },
+          {
+            "task_id": "url-component-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "ipv4-cidr-membership",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-stable-dag",
+            "status": "implemented"
+          },
+          {
+            "task_id": "window-stats-helper",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-batch-ranges",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-17",
+      "host_description": "\u5f02\u5e38\u62a5\u544a\u5e8f\u5217\u5316/JSON round-trip",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "report-node-schema",
+            "status": "implemented"
+          },
+          {
+            "task_id": "exception-chain-kind-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-exception-group-child-types",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "exception-type-histogram",
+            "status": "pending"
+          },
+          {
+            "task_id": "traceback-frame-summary",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-exception-group-format",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "convert-log-record",
+            "status": "implemented"
+          },
+          {
+            "task_id": "classify-auth-event",
+            "status": "implemented"
+          },
+          {
+            "task_id": "json-pointer-resolve",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-grid-routes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dag-lexicographic-order",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-pairs-loop",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-18",
+      "host_description": "MRO \u6807\u8bb0\u6536\u96c6/\u591a\u7ee7\u627f/diamond",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "mro-attribute-index",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dispatch-specialization-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-diamond-mro-once",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "diamond-ancestor-count",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-mro-diamond",
+            "status": "pending"
+          },
+          {
+            "task_id": "class-depth-summary",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "algorithm-tree-independent",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dataclass-field-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "abstract-method-audit",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "window-stats-helper",
+            "status": "implemented"
+          },
+          {
+            "task_id": "normalize-duration-field",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-19",
+      "host_description": "\u5408\u6570\u6a21\u6570\u7684\u6a21\u6839/\u6570\u8bba",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "prime-power-factors",
+            "status": "implemented"
+          },
+          {
+            "task_id": "crt-combine-residues",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-zero-root-mod",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "totient-summary",
+            "status": "pending"
+          },
+          {
+            "task_id": "quadratic-residue-table",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-modular-inverse",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "algorithm-grid-routes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "algorithm-weighted-chain",
+            "status": "implemented"
+          },
+          {
+            "task_id": "algorithm-binomial-mod",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "mailbox-domain-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "convert-service-config",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-20",
+      "host_description": "RST \u8868\u683c round-trip/\u56fa\u5b9a\u5bbd\u5ea6\u6587\u672c",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "rst-column-widths",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rst-border-column-spans",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-rst-empty-metadata-cell",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "rst-table-cell-stats",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-rst-table-syntax",
+            "status": "pending"
+          },
+          {
+            "task_id": "markdown-table-render",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "template-token-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "text-wrap-justify",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-grid-routes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "cache-access-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-status-map",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-21",
+      "host_description": "\u62d3\u6251\u6392\u5e8f\u5b57\u5178\u5e8f\uff08\u591a\u6587\u4ef6\uff09",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "dag-lexicographic-order",
+            "status": "implemented"
+          },
+          {
+            "task_id": "algorithm-stable-dag",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-implicit-node-scheduled",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "dag-level-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "document-dag-scheduling",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dag-critical-path",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "algorithm-tree-independent",
+            "status": "implemented"
+          },
+          {
+            "task_id": "shortest-path-dijkstra",
+            "status": "pending"
+          },
+          {
+            "task_id": "connected-component-count",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "timestamp-offset-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-user-record",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-22",
+      "host_description": "\u6a21\u677f\u5360\u4f4d\u7b26\u66ff\u6362",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "template-token-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "placeholder-boundary-scan",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-double-dollar-strict",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "format-field-inventory",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-template-escaping",
+            "status": "pending"
+          },
+          {
+            "task_id": "template-variable-diff",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "pipeline-stage-summary",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rst-column-widths",
+            "status": "implemented"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-merge-spans",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-batch-ranges",
+            "status": "implemented"
+          },
+          {
+            "task_id": "cache-access-report",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-23",
+      "host_description": "dispatch \u6309 MRO \u7279\u5316\u5ea6",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "dispatch-specialization-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "mro-attribute-index",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-dispatch-subclass-wins",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "dispatch-ambiguity-report",
+            "status": "pending"
+          },
+          {
+            "task_id": "document-dispatch-precedence",
+            "status": "pending"
+          },
+          {
+            "task_id": "handler-coverage-summary",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "algorithm-tree-independent",
+            "status": "implemented"
+          },
+          {
+            "task_id": "visitor-method-table",
+            "status": "pending"
+          },
+          {
+            "task_id": "operator-reflection-order",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "window-stats-helper",
+            "status": "implemented"
+          },
+          {
+            "task_id": "normalize-duration-field",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-24",
+      "host_description": "\u7f13\u5b58\u5931\u6548\u4f20\u64ad/\u4f9d\u8d56\u56fe",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "cache-transitive-invalidation",
+            "status": "implemented"
+          },
+          {
+            "task_id": "reachable-nodes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-diamond-invalidation",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "cache-access-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-cache-update",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dag-level-summary",
+            "status": "implemented"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "algorithm-stable-dag",
+            "status": "implemented"
+          },
+          {
+            "task_id": "shortest-path-dijkstra",
+            "status": "pending"
+          },
+          {
+            "task_id": "ttl-expiry-schedule",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "csv-dialect-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "timestamp-offset-report",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-user-record",
+            "status": "implemented"
+          }
+        ]
+      }
+    },
+    {
+      "host_task_id": "coding-25",
+      "host_description": "Decimal \u7cbe\u5ea6/JSON \u6444\u53d6\u7ba1\u9053",
+      "levels": {
+        "L3": [
+          {
+            "task_id": "amount-scale-note",
+            "status": "implemented"
+          },
+          {
+            "task_id": "decimal-quantize-rounding",
+            "status": "implemented"
+          },
+          {
+            "task_id": "regression-zero-amount-kept",
+            "status": "implemented"
+          }
+        ],
+        "L2": [
+          {
+            "task_id": "normalize-duration-field",
+            "status": "implemented"
+          },
+          {
+            "task_id": "amount-ledger-summary",
+            "status": "pending"
+          },
+          {
+            "task_id": "ingest-schema-validation",
+            "status": "pending"
+          }
+        ],
+        "L1": [
+          {
+            "task_id": "convert-log-record",
+            "status": "implemented"
+          },
+          {
+            "task_id": "debug-boolean-option",
+            "status": "implemented"
+          },
+          {
+            "task_id": "percentile-summary",
+            "status": "pending"
+          }
+        ],
+        "L0": [
+          {
+            "task_id": "algorithm-grid-routes",
+            "status": "implemented"
+          },
+          {
+            "task_id": "dag-lexicographic-order",
+            "status": "implemented"
+          },
+          {
+            "task_id": "rewrite-pairs-loop",
+            "status": "implemented"
+          }
+        ]
+      }
+    }
+  ]
+}
