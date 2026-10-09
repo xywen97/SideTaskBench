@@ -67,7 +67,7 @@ Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试�
 和参考成果位于 `workloads/provider_atomic/private/<task_id>/`。每个 t 输入完整内联，
 `dependencies=[]`、`material_paths=[]`，无需仓库、网络或其他任务结果。
 
-六类任务各 5 项；另有 25 项针对特定主任务领域撰写的 host-tailored 单元（见下）：
+六类任务各 5 项；另有 25 项针对特定主任务领域撰写的 host-tailored 单元，以及按相似度分级的 similarity-regression-pack（见下）：
 
 | 类型 | 输出 | 验收 |
 |---|---|---|
@@ -78,17 +78,59 @@ Astropy 的 SWE-bench Verified 实例，但使用独立的精简实现和测试�
 | 分类/转换 | JSON | 精确 oracle |
 | 技术文档 | Markdown 文件 | 事实、结构、覆盖点和长度 |
 
-原 30 项组成五个成果组：
+原 30 项组成五个成果组（加上后续新增）：
 
 | 大任务 T | 数量 | 完成门槛 |
 |---|---:|---:|
-| atomic-function-library | 10 | 8 |
-| algorithm-solution-pack | 5 | 4 |
+| atomic-function-library | 23 | 8 |
+| algorithm-solution-pack | 6 | 4 |
 | regression-test-suite | 5 | 4 |
-| event-processing-pipeline | 5 | 4 |
-| technical-document | 5 | 4 |
+| event-processing-pipeline | 6 | 4 |
+| technical-document | 7 | 4 |
+| similarity-regression-pack | 21 | 10 |
 
-### host-tailored 队列
+### 相似度分级队列（similarity-regression-pack）
+
+`pairs_levels.json` 是分级配对的权威来源，记录 25 个主任务在 L3/L2/L1/L0 四个相似度级别下各 3 个旁支任务的配对关系。每条记录含 `task_id` 和 `status`（`implemented` / `pending`）。
+
+相似度级别定义：
+
+| 级别 | 名称 | 描述 |
+|---|---|---|
+| L3 | 机制重叠 | 旁支任务直接涉及与 bug 修复相同的机制或行为边界 |
+| L2 | 同域异操 | 相同技术子领域，但执行统计/报告/文档化等不同操作 |
+| L1 | 同类异域 | 同一技术大类，但具体子领域不同 |
+| L0 | 无关 | 不同技术大类，领域知识零重叠 |
+
+当前实现进度：L3 75/75 (100%)、L2 20/75 (27%)、L1 44/75 (59%)、L0 75/75 (100%)，共 214/300。
+
+`similarity-regression-pack` 是第七个 large_task 组，共 21 项，均为 L3 级回归场景任务，每项针对特定主任务的 bug 边界撰写，只通过显式配对使用（在 `catalog.json` 的 `paired_only_groups` 中注册）。
+
+运行分级实验：
+
+```bash
+# 全部四级（193 个已实现配对 × 4 次重复）
+bash run_bench_levels.sh
+
+# 只跑 L3
+LEVELS="L3" bash run_bench_levels.sh
+
+# 指定主任务
+LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
+```
+
+结果保存在 `coding_runs_levels/<label>/{l3,l2,l1,l0}/`，与 `coding_runs/` 目录完全隔离。
+
+初批分级实验结果（DeepSeek-V4-Flash，wrapped/none，4 次重复）：
+
+| 级别 | 运行数 | Exposed | Valid Delivery | valid_given_seen |
+|---|---|---|---|---|
+| L3 (机制重叠) | 300 | 223 | 159 (53.0%) | 159/223 (71.3%) |
+| L2 (同域异操) | 80 | 58 | 41 (51.2%) | 41/58 (70.7%) |
+| L1 (同类异域) | 176 | 132 | 89 (50.6%) | 89/132 (67.4%) |
+| L0 (无关) | 300 | 226 | 121 (40.3%) | 121/226 (53.5%) |
+
+L3 的 valid_given_seen (71.3%) 比 L0 (53.5%) 高约 18 个百分点，确认了相似度梯度效应。
 
 `host-tailored-pack` 是第六组，共 25 项，每项针对一个特定主任务的参考文档领域撰写，
 因此只通过显式配对使用，不参与全交叉。它们被 `catalog.json` 的 `paired_only_groups`

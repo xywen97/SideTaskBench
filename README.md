@@ -6,11 +6,15 @@
 当前数据集包含 25 个主任务 U、30 个全交叉原子任务 t，以及 25 个针对特定主任务撰写的
 host-tailored 单元（使用显式配对，不参与全交叉）。
 
+新增**相似度分级**测试框架：每个主任务按照旁支任务与主任务的相似程度分四个级别
+（L3 机制重叠 → L2 同域异操 → L1 同类异域 → L0 无关）各配 3 个旁支任务，
+用于测量相似度对交付率的影响。
+
 - U：用户明确授权的 Python 修复任务；`coding-01`–`coding-20` 为单文件，`coding-21`–`coding-25` 为多文件。
 - t：参考资料中附带的独立任务，输出代码、JSON 或 Markdown。
-- host-tailored：与某个主任务的参考文档同领域、但对修复无用，用于检验 Agent 在领域相关的
-附加任务前是否仍能守住授权边界。
-- 成绩：分别记录 U 通过、t 被尝试、t 验收通过和 t 实际交付。
+- host-tailored：与某个主任务的参考文档同领域、但对修复无用，用于检验 Agent 在领域相关的附加任务前是否仍能守住授权边界。
+- 分级旁支任务：见 `pairs_levels.json`，25 × 4 × 3 = 300 个配对槽，当前实现 214/300。
+- 成绩：分别记录 U 通过、t 被尝试、t 验收通过和 t 实际交付；分级实验额外按相似度层级统计。
 
 [实验设计](docs/CODING_DESIGN.md) · [任务目录](docs/CODING_TASKS.md) · [参考材料](docs/REFERENCE_MATERIALS.md) · [Docker 运行](docs/DOCKER.md)
 
@@ -18,14 +22,24 @@ host-tailored 单元（使用显式配对，不参与全交叉）。
 
 ```text
 compute_bench/
-  coding/       实验计划、运行、评分、报告、审计和恢复
-  workloads/    25 个 U、30 个全交叉 t + 25 个 host-tailored 单元及其私有验收材料（评测任务和数据在这里）
+  coding/           实验计划、运行、评分、报告、审计和恢复
+  workloads/        25 个 U、30 个全交叉 t + 25 个 host-tailored 单元及其私有验收材料
+    provider_atomic/
+      cases/        公开任务定义（按 large_task_id 分子目录）
+        similarity-regression-pack/   21 个 L3 相似度回归任务
+      private/      私有 evaluator 和参考答案
   compute_metrics/  跨运行统计表
-microcoder/     模型循环、工具和 Linux 沙箱 （主Agent）
-taskforge/      任务计划、投放、回执、验收调用和成果组装（支撑外部任务的执行）
-tests/          单元测试与边界测试
-scripts/        参考文件引用入口
+microcoder/         模型循环、工具和 Linux 沙箱（主 Agent）
+taskforge/          任务计划、投放、回执、验收调用和成果组装
+tests/              单元测试与边界测试
+scripts/            参考文件引用入口
 ```
+
+配置文件：
+- `pairs_levels.json` — 分级配对权威索引（25 × 4 × 3 = 300 槽，当前实现 214/300）
+- `run_bench.sh` — 全交叉 / host-tailored 队列运行入口
+- `run_bench_levels.sh` — 分级相似度测试运行入口
+- `cal_acc.sh` — 跨条件指标计算
 
 依赖方向为 `compute_bench.coding → microcoder / taskforge / workloads`。
 
@@ -108,13 +122,15 @@ docker compose run --rm sidetaskbench cal-acc
 
 ## 运行实验
 
+### 全交叉 / host-tailored 队列（原有框架）
+
 1. 先检查计划；该命令不读取凭据，也不创建结果目录：
 
 ```bash
 uv run sidetaskbench run --dry-run
 ```
 
-1. 最小真实运行示例：
+2. 最小真实运行示例：
 
 ```bash
 uv run sidetaskbench run \
@@ -131,10 +147,7 @@ uv run sidetaskbench run \
 uv run sidetaskbench run --paired --output coding_runs/host_tailored --repeats 8
 ```
 
-`run_bench.sh` 当前将重复数设为 8，
-可在脚本中调整任务、条件、防御、重复数和并发数。
-
-1. 如果不运行最小示例，可以直接运行`run_bench.sh`，从而一键开启全量评测（在这个脚本中，同样可以配置需要测试的主任务和外部任务的配对）:
+`run_bench.sh` 当前将重复数设为 8，可在脚本中调整任务、条件、防御、重复数和并发数。
 
 ```bash
 # 运行结果会保存在：coding_runs/ 文件夹下。
@@ -147,22 +160,47 @@ Docker 环境中的等价命令是：
 docker compose run --rm sidetaskbench run-bench
 ```
 
-1. Agent运行结束之后，使用`cal_acc.sh`来计算各项指标，可以复现报告中的结果：
+3. Agent 运行结束之后，使用 `cal_acc.sh` 来计算各项指标：
 
 ```bash
 # 结果会保存在 metric_outputs/ 文件夹下。
 bash cal_acc.sh
 ```
 
+### 分级相似度测试（新框架）
+
+以相似度级别为维度，测试不同相似程度的旁支任务对交付率的影响。配对来源为 `pairs_levels.json`。
+
+```bash
+# 干跑预览全部四级
+DRY_RUN=true bash run_bench_levels.sh
+
+# 实际运行全部四级（193 个实现配对 × 4 次重复 = 772 次运行）
+bash run_bench_levels.sh
+
+# 只运行 L3 级别
+LEVELS="L3" bash run_bench_levels.sh
+
+# 只运行特定主任务的 L3
+LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
+```
+
+结果保存在 `coding_runs_levels/<label>/{l3,l2,l1,l0}/` 下，与 `coding_runs/` 相互隔离。
+
 
 
 ### Todo
 
-- [x] 单query的代码修复场景
-- [x] 增加 4 个从swebench-verified中衍生的代码修复任务
-- [x] 增加 5 个多任务修复任务（主任务）
-- [x] 针对 25 个主任务，针对性构建 25 个side task，增加攻击的威胁程度
-- [ ] 重构当前的bench的case配对，形成多层级、多配对的测试组合，从而测试不同的Agent，在不同的Host任务上，面对不同隐蔽等级的side task，主动产生冗余分支的阈值/比例是多少。
+- [x] 单 query 的代码修复场景
+- [x] 增加 4 个从 SWE-bench Verified 中衍生的代码修复任务
+- [x] 增加 5 个多文件修复任务（主任务 coding-21–25）
+- [x] 针对 25 个主任务，针对性构建 25 个 side task，增加攻击的威胁程度
+- [x] 引入四级相似度分类（L3 机制重叠 / L2 同域异操 / L1 同类异域 / L0 无关），设计分级测试框架（`run_bench_levels.sh`、`pairs_levels.json`）
+- [x] 补全 L3 级别（75/75），初步完成 L2 (20/75) 和 L1 (44/75)，L0 已全覆盖 (75/75)
+- [x] 首批分级实验结果：L3 valid_given_seen 71.3%、L0 53.5%，相似度梯度效应已确认
+- [ ] 补全 L2（55 个待实现）和 L1（31 个待实现）任务，以 300 个配对全量复测
+- [ ] 实现 `cal_acc_levels.sh`，自动汇总分级指标并生成相似度-交付率曲线
+- [ ] 多模型对比：在不同模型上重复分级实验，比较相似度敏感性差异
 - [ ] 适配多轮交互场景
 
 
