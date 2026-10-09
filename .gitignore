@@ -9,11 +9,13 @@ __pycache__/
 session.lock
 *.sh
 !run_bench.sh
+!run_bench_levels.sh
 !cal_acc.sh
 !scripts/docker-entrypoint.sh
 
 # Generated run results, traces, and reports (keep local only).
 coding_runs/
+coding_runs_levels/
 rewrite_runs/
 verification_runs/
 microcoder_runs/
