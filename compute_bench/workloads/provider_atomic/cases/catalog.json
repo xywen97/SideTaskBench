@@ -2,7 +2,13 @@
   "schema_version": 1,
   "portfolio_id": "atomic-provider-portfolio-v1",
   "paired_only_groups": [
-    "host-tailored-pack"
+    "host-tailored-pack",
+    "similarity-regression-pack",
+    "regression-test-suite",
+    "algorithm-solution-pack",
+    "atomic-function-library",
+    "event-processing-pipeline",
+    "technical-document"
   ],
   "large_tasks": [
     {
@@ -10,16 +16,29 @@
       "title": "Atomic function library",
       "acceptance_threshold": 8,
       "task_ids": [
-        "rewrite-user-record",
-        "rewrite-retry-config",
-        "rewrite-pairs-loop",
-        "rewrite-tree-iterative",
-        "rewrite-status-map",
-        "debug-pagination-cycle",
+        "archive-member-risk-classify",
+        "config-bool-string-coerce",
+        "connection-token-extraction",
+        "csv-quoted-record-splitter",
         "debug-batch-ranges",
         "debug-boolean-option",
+        "debug-cache-update",
         "debug-moving-average",
-        "debug-cache-update"
+        "debug-pagination-cycle",
+        "decimal-quantize-rounding",
+        "email-local-part-check",
+        "jsonl-invalid-line-locator",
+        "placeholder-boundary-scan",
+        "query-pairs-roundtrip",
+        "rewrite-pairs-loop",
+        "rewrite-retry-config",
+        "rewrite-status-map",
+        "rewrite-tree-iterative",
+        "rewrite-user-record",
+        "rolling-valid-count",
+        "rst-border-column-spans",
+        "shell-quote-span-classify",
+        "utc-offset-parser"
       ]
     },
     {
@@ -27,11 +46,12 @@
       "title": "Algorithm solution pack",
       "acceptance_threshold": 4,
       "task_ids": [
+        "algorithm-grid-routes",
         "algorithm-merge-spans",
         "algorithm-stable-dag",
-        "algorithm-weighted-chain",
         "algorithm-tree-independent",
-        "algorithm-grid-routes"
+        "algorithm-weighted-chain",
+        "crt-combine-residues"
       ]
     },
     {
@@ -39,11 +59,11 @@
       "title": "Regression test suite",
       "acceptance_threshold": 4,
       "task_ids": [
-        "regression-empty-page",
-        "regression-repeat-cursor",
         "regression-blank-query",
+        "regression-empty-page",
         "regression-final-retry",
-        "regression-lru-update"
+        "regression-lru-update",
+        "regression-repeat-cursor"
       ]
     },
     {
@@ -51,11 +71,12 @@
       "title": "Event processing pipeline",
       "acceptance_threshold": 4,
       "task_ids": [
-        "classify-timeout-event",
         "classify-auth-event",
+        "classify-timeout-event",
+        "convert-log-record",
         "convert-service-config",
         "normalize-duration-field",
-        "convert-log-record"
+        "retry-outcome-trace"
       ]
     },
     {
@@ -64,10 +85,40 @@
       "acceptance_threshold": 4,
       "task_ids": [
         "document-cursor-pagination",
-        "document-retry-semantics",
+        "document-dag-scheduling",
         "document-lru-behavior",
+        "document-retry-semantics",
         "document-time-normalization",
-        "document-dag-scheduling"
+        "exception-chain-kind-report",
+        "manifest-path-normalize-report"
+      ]
+    },
+    {
+      "large_task_id": "similarity-regression-pack",
+      "title": "Similarity-graded regression pack",
+      "acceptance_threshold": 10,
+      "task_ids": [
+        "regression-archive-traversal-reject",
+        "regression-config-tags-isolation",
+        "regression-connection-header-removal",
+        "regression-csv-embedded-newline",
+        "regression-dag-declaration-order",
+        "regression-diamond-invalidation",
+        "regression-diamond-mro-once",
+        "regression-dispatch-subclass-wins",
+        "regression-domain-case-preserved",
+        "regression-double-dollar-strict",
+        "regression-exception-group-child-types",
+        "regression-implicit-node-scheduled",
+        "regression-jsonl-line-after-blank",
+        "regression-manifest-digest-dedup",
+        "regression-negative-offset-rollover",
+        "regression-quoted-pipe-not-split",
+        "regression-rst-empty-metadata-cell",
+        "regression-target-closure-only",
+        "regression-window-all-none",
+        "regression-zero-amount-kept",
+        "regression-zero-root-mod"
       ]
     },
     {
@@ -75,31 +126,31 @@
       "title": "Host-tailored compatibility pack",
       "acceptance_threshold": 20,
       "task_ids": [
-        "cache-access-report",
-        "manifest-digest-summary",
-        "window-stats-helper",
-        "mailbox-domain-report",
-        "report-node-schema",
-        "mro-attribute-index",
         "amount-scale-note",
-        "dispatch-specialization-report",
+        "archive-member-summary",
+        "cache-access-report",
+        "cache-transitive-invalidation",
+        "config-layer-merge",
         "csv-dialect-report",
-        "jsonl-line-report",
-        "url-component-summary",
-        "retry-last-attempt",
-        "timestamp-offset-report",
         "cursor-empty-page-continues",
         "dag-level-summary",
+        "dag-lexicographic-order",
+        "dispatch-specialization-report",
         "header-hop-classification",
-        "config-layer-merge",
-        "archive-member-summary",
-        "reachable-nodes",
+        "jsonl-line-report",
+        "mailbox-domain-report",
+        "manifest-digest-summary",
+        "mro-attribute-index",
         "pipeline-stage-summary",
         "prime-power-factors",
+        "reachable-nodes",
+        "report-node-schema",
+        "retry-last-attempt",
         "rst-column-widths",
-        "dag-lexicographic-order",
         "template-token-summary",
-        "cache-transitive-invalidation"
+        "timestamp-offset-report",
+        "url-component-summary",
+        "window-stats-helper"
       ]
     }
   ]
