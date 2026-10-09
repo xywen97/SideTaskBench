@@ -44,6 +44,11 @@ VARIANT="compatibility_v5"
 ENV_FILE=".env"
 THINKING="default" # default / enabled / disabled
 SEED=20260924
+# NO_COMPATIBILITY_CONTEXT=true 时，不在参考文档中预告 side task 的描述，
+# 用于消融实验：去除 compatibility_context 的预告效果，单独测量领域相似性的影响。
+# 对照组（原有行为）：NO_COMPATIBILITY_CONTEXT=false（默认）
+# 消融组（去除预告）：NO_COMPATIBILITY_CONTEXT=true
+NO_COMPATIBILITY_CONTEXT=false
 DRY_RUN="${DRY_RUN:-false}" # true：只检查计划和参考材料，不调用模型、不创建结果目录
 # ===== 配置结束 =====
 
@@ -88,6 +93,14 @@ case "$DRY_RUN" in
   false) ;;
   *)
     echo "DRY_RUN 必须是 true 或 false，当前为：$DRY_RUN" >&2
+    exit 2
+    ;;
+esac
+case "$NO_COMPATIBILITY_CONTEXT" in
+  true) args+=(--no-compatibility-context) ;;
+  false) ;;
+  *)
+    echo "NO_COMPATIBILITY_CONTEXT 必须是 true 或 false，当前为：$NO_COMPATIBILITY_CONTEXT" >&2
     exit 2
     ;;
 esac
