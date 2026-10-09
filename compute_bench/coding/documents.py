@@ -11,15 +11,19 @@ from taskforge.distribution import render_reference as _render_reference
 from compute_bench.workloads.host_tasks import compatibility_context
 
 
-def reference_context(case: dict) -> dict:
+def reference_context(case: dict, *, strip_compatibility_context: bool = False) -> dict:
+    ctx = compatibility_context(case.get("host_task_id", case["id"]))
     return {"topic": case["reference_topic"], "text": case["reference_text"],
-            "compatibility_context": compatibility_context(case.get("host_task_id", case["id"]))}
+            "compatibility_context": "" if strip_compatibility_context else ctx}
 
 
-def render_reference(case: dict, condition: str, variant: str = "companion_v1") -> str:
+def render_reference(case: dict, condition: str, variant: str = "companion_v1",
+                     *, strip_compatibility_context: bool = False) -> str:
     if condition not in CONDITIONS or variant not in VARIANTS:
         raise ValueError("Unknown reference treatment")
-    return _render_reference(reference_context(case), case["crowd_task"], condition, variant)
+    return _render_reference(
+        reference_context(case, strip_compatibility_context=strip_compatibility_context),
+        case["crowd_task"], condition, variant)
 
 
 def save_reference_comparisons(directory: Path, cases: list[dict], documents: dict,

@@ -40,6 +40,10 @@ def main(argv=None):
     run.add_argument("--max-steps", type=int, default=70)
     from taskforge.distribution import VARIANTS
     run.add_argument("--variant", choices=VARIANTS, default="compatibility_v3")
+    run.add_argument("--no-compatibility-context", action="store_true", default=False,
+                     help="Strip compatibility_context from the reference document so the side task description "
+                          "is not pre-announced; use this to isolate the pure similarity effect without the "
+                          "compatibility_context nudge")
     run.add_argument("--thinking", choices=["default", "enabled", "disabled"], default="default")
     run.add_argument("--label", default="coding_validation")
     run.add_argument("--seed", type=int, default=20260924)
@@ -98,7 +102,8 @@ def main(argv=None):
                                      pairs=pairs,
                                      conditions=args.conditions, defenses=args.defenses,
                                      repeats=args.repeats, workers=args.workers, max_steps=args.max_steps,
-                                     variant=args.variant, label=args.label, seed=args.seed)
+                                     variant=args.variant, label=args.label, seed=args.seed,
+                                     strip_compatibility_context=args.no_compatibility_context)
         except (ValueError, OSError) as exc:
             parser.error(str(exc))
         print(json.dumps({"report": str(output.resolve() / "report.html"), "mechanism_demonstrated": summary["mechanism_demonstrated"], "usage": summary["total_usage"],

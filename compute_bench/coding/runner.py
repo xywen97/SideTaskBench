@@ -106,7 +106,8 @@ def _run_lock(directory):
 
 
 def _continue_coding(settings, directory, cases, requested, *, workers, max_steps, variant, seed,
-                     conditions, defenses, repeats, pairing_design=DESIGN, pairs=None):
+                     conditions, defenses, repeats, pairing_design=DESIGN, pairs=None,
+                     strip_compatibility_context=False):
     required = ("manifest.json", "plan.json", "cases.json", "documents.json")
     if not all((directory / name).is_file() for name in required):
         raise ValueError("Existing output is not a complete coding experiment; use a new output directory")
@@ -159,7 +160,8 @@ def _continue_coding(settings, directory, cases, requested, *, workers, max_step
                 manifest["pairs"] = [list(pair) for pair in pairs]
             else:
                 manifest.pop("pairs", None)
-            documents = {case["id"]: {condition: render_reference(case, condition, variant)
+            documents = {case["id"]: {condition: render_reference(case, condition, variant,
+                                                                  strip_compatibility_context=strip_compatibility_context)
                                       for condition in dict.fromkeys(["clean", *conditions])} for case in cases}
             write_json(directory / "plan.json", plan)
             write_json(directory / "cases.json", cases)
@@ -176,7 +178,8 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
                    pairs=None,
                    conditions=None, defenses=None, repeats: int = 8, workers: int = 3, max_steps: int = 70,
                    variant: str = "compatibility_v3", seed: int = 20260924,
-                   label: str = "coding_validation") -> dict:
+                   label: str = "coding_validation",
+                   strip_compatibility_context: bool = False) -> dict:
     conditions = ["wrapped"] if conditions is None else conditions
     defenses = ["none"] if defenses is None else defenses
     if any(type(value) is not int or value < 1 for value in (workers, max_steps)):
@@ -198,7 +201,8 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
         if any(output_dir.iterdir()):
             return _continue_coding(settings, output_dir, cases, plan, workers=workers, max_steps=max_steps,
                                     variant=variant, seed=seed, conditions=conditions, defenses=defenses,
-                                    repeats=repeats, pairing_design=pairing_design, pairs=stored_pairs)
+                                    repeats=repeats, pairing_design=pairing_design, pairs=stored_pairs,
+                                    strip_compatibility_context=strip_compatibility_context)
         output_dir.mkdir(parents=True, exist_ok=True)
         (output_dir / "results.jsonl").touch()
         isolation = Sandbox.probe()
@@ -209,6 +213,7 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
                     "atomic_task_ids": list(dict.fromkeys(case["crowd_task"]["task_id"] for case in cases)),
                     "conditions": conditions, "defenses": defenses, "repeats": repeats,
                     "workers": workers, "max_steps": max_steps, "variant": variant, "seed": seed,
+                    "strip_compatibility_context": strip_compatibility_context,
                     "planned_runs": len(plan), "system_prompt": SYSTEM, "boundary_prompt": BOUNDARY,
                     "tools": TOOLS, "sandbox": isolation, "output_token_limit": None,
                     "exposure_design": "README links a third-party reference; fixed research workflow asks to inspect available reference; obeying it is never required",
@@ -221,7 +226,8 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
         write_json(output_dir / "manifest.json", manifest)
         write_json(output_dir / "plan.json", plan)
         write_json(output_dir / "cases.json", cases)
-        documents = {case["id"]: {condition: render_reference(case, condition, variant)
+        documents = {case["id"]: {condition: render_reference(case, condition, variant,
+                                                                strip_compatibility_context=strip_compatibility_context)
                                  for condition in dict.fromkeys(["clean", *conditions])} for case in cases}
         write_json(output_dir / "documents.json", documents)
         save_reference_comparisons(output_dir, cases, documents, plan, variant)
@@ -237,9 +243,11 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
                 case = case_map[trial["case_id"]]
                 workspace = output_dir / "workspaces" / trial["workspace_id"]
                 create_workspace(case, workspace, trial["condition"], variant)
-                platform.assign(case["crowd_task"]["task_id"], trial["run_id"], workspace, reference_context(case),
+                platform.assign(case["crowd_task"]["task_id"], trial["run_id"], workspace,
+                                reference_context(case, strip_compatibility_context=strip_compatibility_context),
                                 condition=trial["condition"], variant=variant, routing_id=case["id"],
-                                reference_text=render_reference(case, trial["condition"], variant))
+                                reference_text=render_reference(case, trial["condition"], variant,
+                                                                strip_compatibility_context=strip_compatibility_context))
                 platform.open_delivery(trial["run_id"])
                 client = outcome = None
                 try:
@@ -371,6 +379,7 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
     manifest = json.loads((directory / "manifest.json").read_text())
     plan = json.loads((directory / "plan.json").read_text())
     cases = json.loads((directory / "cases.json").read_text())
+    strip_compatibility_context = manifest.get("strip_compatibility_context", False)
     results, recovered = _recorded_results(directory, plan)
     if recovered:
         manifest.update(completed_runs=len(results), total_usage={
@@ -431,9 +440,11 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
                 archive.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(workspace), archive)
             create_workspace(case, workspace, trial["condition"], manifest["variant"])
-            platform.assign(case["crowd_task"]["task_id"], trial["run_id"], workspace, reference_context(case),
+            platform.assign(case["crowd_task"]["task_id"], trial["run_id"], workspace,
+                            reference_context(case, strip_compatibility_context=strip_compatibility_context),
                             condition=trial["condition"], variant=manifest["variant"], routing_id=case["id"],
-                            reference_text=render_reference(case, trial["condition"], manifest["variant"]))
+                            reference_text=render_reference(case, trial["condition"], manifest["variant"],
+                                                            strip_compatibility_context=strip_compatibility_context))
             platform.open_delivery(trial["run_id"])
             client = outcome = None
             try:
