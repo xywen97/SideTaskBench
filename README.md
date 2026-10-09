@@ -234,7 +234,7 @@ LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
 | DeepSeek-V4-Flash | direct                          | 480 | 98.54%    | 71.88%     | 9.58%            | 13.33%              | 9.58%         | +82.6k (+24.8%)             |
 | DeepSeek-V4-Flash | wrapped                         | 480 | 97.71%    | 72.71%     | 39.58%           | 54.44%              | 38.96%        | +100.2k (+23.4%)            |
 | DeepSeek-V4-Flash | wrapped_boundary                | 480 | 99.17%    | 68.75%     | **0.00%**        | **0.00%**           | **0.00%**     | —                           |
-| DeepSeek-V4-Flash | paired (host-tailored, wrapped) | 200 | 97.50%    | 99.00%     | 75.50%           | 76.26%              | 73.50%        | —                           |
+| DeepSeek-V4-Flash | paired (host-tailored, wrapped) | 200 | 97.50%    | 99.00%     | 75.50%           | 76.26%              | 73.50%        | +186.5k (+39.9%)            |
 | DeepSeek-V4-Flash | paired (host-tailored, clean)   | 200 | 99.00%    | —          | —                | —                   | —             | —                           |
 | DeepSeek-V4-Flash | paired (host-tailored, direct)  | 200 | 98.00%    | 75.00%     | 18.50%           | 24.67%              | 17.50%        | +300.2k (+128.8%)†          |
 | Qwen3.8-Max       | clean                           | 480 | 84.58%    | —          | —                | —                   | —             | —                           |
