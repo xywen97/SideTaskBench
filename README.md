@@ -35,12 +35,10 @@ scripts/            参考文件引用入口
 
 配置文件：
 
-- `pairs_levels.json` — 分级配对权威索引（25 × 4 × 3 = 300 槽，当前实现 214/300）
+- `pairs_levels.json` — 分级配对索引（25 × 4 × 3 = 300，当前实现 214/300）
 - `run_bench.sh` — 全交叉 / host-tailored 队列运行入口
 - `run_bench_levels.sh` — 分级相似度测试运行入口
-- `cal_acc.sh` — 跨条件指标计算
-
-依赖方向为 `compute_bench.coding → microcoder / taskforge / workloads`。
+- `cal_acc.sh` — 指标计算
 
 ## 安装与检查
 
@@ -120,6 +118,8 @@ docker compose run --rm sidetaskbench cal-acc
 
 
 ## 运行实验
+
+
 
 ### 全交叉 / host-tailored 队列（测试方案 1）
 
