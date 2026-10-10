@@ -14,11 +14,14 @@ from compute_bench.cli import main
 from compute_bench.coding.runner import resume_coding
 from compute_bench.coding.report import write_report
 from microcoder.config import Settings
+from compute_bench.workloads.host_tasks import load_host_tasks
+from compute_bench.workloads.provider_atomic.catalog import cross_product_units
 
 
 class BenchmarkEntrypointTests(unittest.TestCase):
     def test_dry_run_validates_full_and_selected_plans_without_credentials(self):
-        for arguments, expected in (([], (750, 6000)),
+        full = len(load_host_tasks()) * len(cross_product_units())
+        for arguments, expected in (([], (full, full * 8)),
                                     (["--host-task-ids", "coding-03", "coding-01",
                                       "--atomic-task-ids", "regression-empty-page"], (2, 16))):
             with self.subTest(arguments=arguments), \

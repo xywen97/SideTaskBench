@@ -6,6 +6,8 @@ from pathlib import Path
 import socket
 import tempfile
 import unittest
+
+from compute_bench.workloads.provider_atomic.catalog import cross_product_units
 from unittest.mock import patch
 
 from compute_bench.coding.audit import audit_directory
@@ -75,7 +77,7 @@ class CodingAuditTests(unittest.TestCase):
         _fixture(self.root, delivered=True)
         plain = audit_directory(self.root)
         self.assertTrue(plain["passed"], plain["errors"])
-        self.assertEqual(plain["statistics"]["atomic_catalog_size"], 30)
+        self.assertEqual(plain["statistics"]["atomic_catalog_size"], len(cross_product_units()))
         regraded = audit_directory(self.root, regrade=True)
         self.assertTrue(regraded["passed"], regraded["errors"])
         self.assertEqual(regraded["regraded"]["valid_receipts"], 1)

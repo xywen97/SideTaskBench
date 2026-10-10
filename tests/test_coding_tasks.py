@@ -12,11 +12,11 @@ import unittest
 
 from compute_bench.workloads.provider_atomic.catalog import (
     CASE_ROOT, LARGE_TASKS, _load_public_tasks, assemble_portfolio,
-    atomic_task_catalog, grade_atomic,
+    PAIRED_ONLY_TASK_IDS, atomic_task_catalog, cross_product_units, grade_atomic,
 )
 from compute_bench.coding.pairing import HOST_TAILORED_PAIRS
 from compute_bench.coding.tasks import (
-    PAIRED_DESIGN, build_coding_cases, build_paired_cases, build_run_plan, cases_for_manifest,
+    HISTORICAL_UNIT_IDS, PAIRED_DESIGN, build_coding_cases, build_paired_cases, build_run_plan, cases_for_manifest,
 )
 from collections import Counter
 
@@ -86,7 +86,7 @@ class CodingTaskTests(unittest.TestCase):
         pair_count = host_count * atomic_count
         self.assertEqual(len(cases), pair_count)
         self.assertEqual(len({case["id"] for case in cases}), pair_count)
-        self.assertEqual(atomic_count, 30)
+        self.assertEqual(atomic_count, len(cross_product_units()))
         hosts = {}
         for case in cases:
             contents = (case["repo_files"], case["user_task"], case["hidden_tests"], case["reference_text"])
@@ -114,7 +114,7 @@ class CodingTaskTests(unittest.TestCase):
         self.assertEqual({(c["host_task_id"], c["crowd_task"]["task_id"]) for c in cases},
                          {(h, t) for h in hosts for t in tasks})
         self.assertEqual(cases, build_coding_cases(host_task_ids=hosts[::-1], atomic_task_ids=tasks[::-1]))
-        self.assertEqual(len(build_coding_cases(host_task_ids=["coding-01"])), 30)
+        self.assertEqual(len(build_coding_cases(host_task_ids=["coding-01"])), len(cross_product_units()))
         from compute_bench.workloads.host_tasks import load_host_tasks
         self.assertEqual(len(build_coding_cases(atomic_task_ids=["rewrite-user-record"])),
                          len(load_host_tasks()))
@@ -158,14 +158,16 @@ class CodingTaskTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "nonempty"):
             build_paired_cases([])
 
-    def test_full_cross_product_excludes_host_tailored_units(self):
-        # The original matrix must stay 25×30 so historical baselines remain comparable.
+    def test_full_cross_product_is_every_non_paired_only_unit(self):
+        # Membership is per task ID; large_task_id folders never decide what runs,
+        # and the cross product grows with the catalog rather than staying fixed.
         cross_ids = {c["crowd_task"]["task_id"] for c in build_coding_cases()}
         tailored_ids = {task for _, task in HOST_TAILORED_PAIRS}
         self.assertFalse(cross_ids & tailored_ids)
-        self.assertEqual(len(cross_ids), 30)
+        self.assertFalse(cross_ids & PAIRED_ONLY_TASK_IDS)
         every = {entry["task"]["task_id"] for entry in atomic_task_catalog()}
-        self.assertEqual(every - cross_ids, tailored_ids)
+        self.assertEqual(every - cross_ids, PAIRED_ONLY_TASK_IDS)
+        self.assertTrue(set(HISTORICAL_UNIT_IDS) <= cross_ids)
 
     def test_every_bug_fails_and_every_reference_repair_passes(self):
         for case in build_coding_cases(atomic_task_ids=["rewrite-user-record"]):

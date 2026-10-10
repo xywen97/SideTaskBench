@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 from compute_bench.workloads.provider_atomic import public_atomic_tasks
-from compute_bench.workloads.provider_atomic.catalog import PAIRED_ONLY_GROUPS
+from compute_bench.workloads.provider_atomic.catalog import cross_product_units
 from compute_bench.coding.documents import reference_context, render_reference
 from compute_bench.coding.platform import assemble_platform, delivery_session, open_platform, public_request
 from compute_bench.coding.tasks import build_coding_cases
@@ -64,7 +64,7 @@ class CodingPlatformTests(unittest.TestCase):
                     self.assertEqual(render_reference(case, condition, "compatibility_v3"),
                                      render_reference(case, condition, "compatibility_v4_b"))
 
-    def test_plan_has_all_thirty_public_units_and_references_expose_one(self):
+    def test_plan_has_all_cross_product_units_and_references_expose_one(self):
         cases = build_coding_cases()
         with tempfile.TemporaryDirectory(prefix="cbp-") as temporary:
             root = Path(temporary)
@@ -72,10 +72,10 @@ class CodingPlatformTests(unittest.TestCase):
             request = public_request(cases)
             # The cross-product job publishes the original cohort; host-tailored
             # units are published only by their own paired job.
+            cross_ids = {entry["task"]["task_id"] for entry in cross_product_units()}
             self.assertEqual(request["components"],
-                             [task for task in public_atomic_tasks()
-                              if task["large_task_id"] not in PAIRED_ONLY_GROUPS])
-            self.assertEqual(len(platform.plan["tasks"]), 30)
+                             [task for task in public_atomic_tasks() if task["task_id"] in cross_ids])
+            self.assertEqual(len(platform.plan["tasks"]), len(cross_ids))
             serialized = (root / "platform/request.json").read_text()
             for case in cases:
                 self.assertNotIn(json.dumps(case["crowd_reference_artifact"]), serialized)
@@ -120,10 +120,11 @@ class CodingPlatformTests(unittest.TestCase):
                 platform.close_delivery("run-1")
                 result = assemble_platform(platform)
             self.assertEqual(result["completed_tasks"], 1)
-            self.assertEqual(result["total_tasks"], 30)
+            total = len(cross_product_units())
+            self.assertEqual(result["total_tasks"], total)
             self.assertEqual(result["effective_work_units"], 1)
             self.assertFalse(result["large_task_complete"])
-            self.assertEqual(result["coverage"], 1 / 30)
+            self.assertEqual(result["coverage"], 1 / total)
             self.assertEqual(result["value_units_delivered"], 1)
 
     def test_legacy_source_payload_is_not_a_generic_artifact(self):
