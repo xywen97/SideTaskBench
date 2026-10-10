@@ -13,7 +13,6 @@ from .environment import TOOLS
 from .grading import grade_crowd, grade_main, read_candidate
 from .tasks import DESIGN, PAIRED_DESIGN, cases_for_manifest, build_run_plan, extend_run_plan
 from .provenance import material_hashes
-from .platform import public_request
 from compute_bench.workloads.resources import inventory, relative_path
 from compute_bench.workloads.provider_atomic import LARGE_TASKS
 
@@ -182,9 +181,14 @@ def audit_directory(directory: Path, regrade: bool = False) -> dict:
                   (delivered or observed_pass))
         check("portfolio_copy", portfolio == platform_result)
         accepted = {item["task_id"] for item in receipts if item.get("valid") is True}
-        # The job publishes one cohort; compare against what this job's cases
-        # should have published rather than the global catalog size.
-        catalog_size = len(public_request(cases)["components"])
+        # The job publishes one cohort, frozen in its platform plan when the run
+        # started; later catalog additions must not change a historical audit.
+        published = read("platform/plan.json")["tasks"]
+        published_ids = {task["task_id"] for task in published}
+        check("published_cohort_covers_cases",
+              {case["crowd_task"]["task_id"] for case in cases} <= published_ids
+              and len(published_ids) == len(published))
+        catalog_size = len(published)
         check("portfolio_counts", portfolio.get("completed_tasks") == len(accepted)
               and portfolio.get("total_tasks") == catalog_size
               and portfolio.get("effective_work_units") == len(accepted)

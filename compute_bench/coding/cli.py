@@ -142,11 +142,17 @@ def main(argv=None):
         from .tasks import build_coding_cases
         from .grading import grade_crowd
         from compute_bench.workloads.provider_atomic import atomic_task_catalog
-        from compute_bench.workloads.provider_atomic.catalog import PAIRED_ONLY_GROUPS
+        from compute_bench.workloads.provider_atomic.catalog import grade_atomic
         cases = build_coding_cases(host_task_ids=["coding-01"])
         catalog = atomic_task_catalog()
+        # Every unit, paired-only included, must accept its own reference answer.
+        reference_failures = [entry["task"]["task_id"] for entry in catalog
+                              if not grade_atomic(entry["task"], entry["reference_artifact"])["passed"]]
         print(json.dumps({"sandbox": Sandbox.probe(), "cases": len(cases),
                           "atomic_catalog": len(catalog),
-                          "cross_product_units": len(catalog) - sum(
-                              entry["task"]["large_task_id"] in PAIRED_ONLY_GROUPS for entry in catalog),
+                          "cross_product_units": len(cases),
+                          "paired_only_units": len(catalog) - len(cases),
+                          "reference_failures": reference_failures,
                           "reference_crowd_pass": [grade_crowd(case, case["crowd_reference_artifact"])["passed"] for case in cases]}, indent=2))
+        if reference_failures:
+            raise SystemExit(1)

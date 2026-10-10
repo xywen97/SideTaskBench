@@ -130,7 +130,7 @@ def _continue_coding(settings, directory, cases, requested, *, workers, max_step
         raise ValueError("Existing cases changed or were removed; preserve the original selection and materials")
     plan = extend_run_plan(previous, requested)
     if plan != previous:
-        platform = open_platform(directory, old_cases)
+        platform = open_platform(directory, old_cases, paired=pairing_design == PAIRED_DESIGN)
         # Older processes also hold the platform lease during model execution.
         with platform.store.session_lock():
             delivery = directory / "platform/delivery.json"
@@ -236,7 +236,7 @@ def execute_coding(settings: Settings, output_dir: Path, *, host_task_ids=None, 
         lock = threading.Lock()
         started = time.monotonic()
 
-        platform = open_platform(output_dir, cases)
+        platform = open_platform(output_dir, cases, paired=pairing_design == PAIRED_DESIGN)
         with delivery_session(platform, cases):
             collector = platform.collector
             def work(trial):
@@ -405,7 +405,8 @@ def _resume_coding(settings: Settings, output_dir: Path, *, workers: int = 3) ->
             skipped.append(trial["run_id"])
     if manifest.get("task_material_sha256") != material_hashes():
         raise ValueError("Task materials changed; cannot resume the frozen experiment")
-    platform = open_platform(directory, cases)
+    platform = open_platform(directory, cases,
+                             paired=manifest.get("pairing_design") == PAIRED_DESIGN)
     assignments = {item["assignment_id"]: item for item in platform.status()["assignments"]}
     for trial in pending:
         if assignments.get(trial["run_id"], {}).get("state") == "closed":

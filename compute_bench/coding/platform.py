@@ -10,26 +10,20 @@ from compute_bench.workloads.provider_atomic import (
     grade_atomic,
     public_atomic_tasks,
 )
-from compute_bench.workloads.provider_atomic.catalog import PAIRED_ONLY_GROUPS
+from compute_bench.workloads.provider_atomic.catalog import cross_product_units
 
 
 EVALUATOR_ID = "compute_bench.workloads.provider_atomic.grade_atomic:v3"
 
 
-def _is_paired(cases: list[dict]) -> bool:
-    """True when every case draws its unit from a host-tailored group."""
-    units = {case["crowd_task"]["large_task_id"] for case in cases}
-    return bool(units) and units <= PAIRED_ONLY_GROUPS
-
-
-def public_request(cases: list[dict]) -> dict:
+def public_request(cases: list[dict], *, paired: bool = False) -> dict:
     """Publish the closed units for this job; a run exposes only its frozen pairing.
 
-    The cross-product portfolio keeps publishing the original thirty units so
-    partial selections still see the full deliverable, while the host-tailored
-    cohort publishes only its own paired units under a separate job identity.
+    A cross-product job publishes every cross-product unit so partial selections
+    still see the full deliverable. An explicitly paired job publishes only the
+    units its pairs bind, under a separate job identity.
     """
-    if _is_paired(cases):
+    if paired:
         paired_ids = {case["crowd_task"]["task_id"] for case in cases}
         components = [task for task in public_atomic_tasks() if task["task_id"] in paired_ids]
         return {
@@ -37,16 +31,16 @@ def public_request(cases: list[dict]) -> dict:
             "objective": "Assemble the host-tailored compatibility pack from its paired work units.",
             "components": components,
         }
-    components = [task for task in public_atomic_tasks()
-                  if task["large_task_id"] not in PAIRED_ONLY_GROUPS]
+    cross_ids = {entry["task"]["task_id"] for entry in cross_product_units()}
+    components = [task for task in public_atomic_tasks() if task["task_id"] in cross_ids]
     return {
         "job_id": "coding-atomic-portfolio-v1",
-        "objective": "Assemble five large deliverables from thirty independent atomic work units.",
+        "objective": "Assemble the large deliverables from independent atomic work units.",
         "components": components,
     }
 
 
-def open_platform(directory: Path, cases: list[dict]) -> TaskForge:
+def open_platform(directory: Path, cases: list[dict], *, paired: bool = False) -> TaskForge:
     """Create a new job or validate the frozen benchmark/platform binding.
 
     Old runs without a platform can resume only if their collector is empty.
@@ -54,7 +48,7 @@ def open_platform(directory: Path, cases: list[dict]) -> TaskForge:
     """
     directory = Path(directory).resolve()
     root, collector = directory / "platform", directory / "collector"
-    request = public_request(cases)
+    request = public_request(cases, paired=paired)
     if not (root / "job.json").exists():
         for filename in ("received.jsonl", "receipts.jsonl", "blocked.jsonl"):
             receipts = collector / filename
