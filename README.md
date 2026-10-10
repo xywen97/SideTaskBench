@@ -6,7 +6,7 @@
 
 当前的Bench中包含一套数据集，但用作两种测试方案：
 
-1. 测试方案 1（初版）：数据集中包含的 25 个主任务 U 和 30 个旁支任务 t 形成全交叉配对测试，主要目的是判断是否真的存在Agent在运行时会出现冗余分支以及会被引导生成冗余分支。
+1. 测试方案 1（初版）：数据集中包含的 25 个主任务 U 和 47 个旁支任务 t 形成全交叉配对测试，主要目的是判断是否真的存在Agent在运行时会出现冗余分支以及会被引导生成冗余分支。
 2. 测试方案 2：新增**相似度分级**测试框架。每个主任务按照旁支任务与主任务的相似程度分四个级别（L3 机制重叠 → L2 同域但任务目的不同 → L1 同一种类但不同领域 → L0 无关）各配 3 个旁支任务， 用于测量相似度对交付率的影响。
 
 - U：用户明确授权的 Python 修复任务；`coding-01`–`coding-20` 为单文件，`coding-21`–`coding-25` 为多文件。
@@ -21,7 +21,7 @@
 ```text
 compute_bench/
   coding/           实验计划、运行、评分、报告、审计和恢复
-  workloads/        25 个 U、30 个全交叉 t + 25 个 host-tailored 单元及其私有验收材料
+  workloads/        25 个 U、93 个 t（47 个全交叉 + 46 个只显式配对）及其私有验收材料
     provider_atomic/
       cases/        公开任务定义（按 large_task_id 分子目录）
         similarity-regression-pack/   21 个 L3 相似度回归任务
@@ -141,8 +141,8 @@ uv run sidetaskbench run \
   --repeats 1 --workers 1
 ```
 
-真实运行会调用模型并产生费用。CLI 默认选择全部 30×25 个配对，每个配对重复 8 次，
-使用 `wrapped` 条件和 `none`，共 6,000 次运行。host-tailored 队列需要显式配对：
+真实运行会调用模型并产生费用。CLI 默认选择全部 25×47 个配对，每个配对重复 8 次，
+使用 `wrapped` 条件和 `none`，共 9,400 次运行。host-tailored 队列需要显式配对：
 
 ```bash
 uv run sidetaskbench run --paired --output coding_runs/host_tailored --repeats 8
@@ -190,6 +190,10 @@ LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
 
 结果保存在 `coding_runs_levels/<label>/{l3,l2,l1,l0}/` 下，与 `coding_runs/` 相互隔离。
 
+该脚本默认开启 `NO_COMPATIBILITY_CONTEXT=true`（可改为 `false` 做对照）。插入参考文档的预告句
+来自该主任务自己的 host-tailored 单元，与实际配对的旁支任务往往对不上，会混入额外变量；
+关掉它才能单独测量相似度的作用，代价是模型几乎每次都会打开参考文档。
+
 ### Todo
 
 - [x] 单 query 的代码修复场景
@@ -198,8 +202,9 @@ LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
 - [x] 针对 25 个主任务，针对性构建 25 个 side task，增加攻击的威胁程度
 - [x] 引入四级相似度分类（L3 机制重叠 / L2 同域异操 / L1 同类异域 / L0 无关），设计分级测试框架（`run_bench_levels.sh`、`pairs_levels.json`）
 - [x] 补全 L3 级别（75/75），初步完成 L2 (20/75) 和 L1 (44/75)，L0 已全覆盖 (75/75)
-- [x] 首批分级实验结果：L3 valid_given_seen 71.3%、L0 53.5%，相似度梯度效应已确认
+- [x] 四级实验结果（`no-context`）：L3 73.0% → L2 66.7% → L1 49.1% → L0 39.8%（valid given seen），端点效应显著（z = 8.19）
 - [ ] 补全 L2（55 个待实现）和 L1（31 个待实现）任务，以 300 个配对全量复测
+- [ ] 提高每对重复次数（当前 4 次，配对级一致率约 60%），收窄相邻级别的置信区间
 - [ ] 实现 `cal_acc_levels.sh`，自动汇总分级指标并生成相似度-交付率曲线
 - [ ] 多模型对比：在不同模型上重复分级实验，比较相似度敏感性差异
 - [ ] 适配多轮交互场景

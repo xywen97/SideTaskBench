@@ -5,10 +5,13 @@
 ## 任务
 
 - 主任务 U：25 个 Python 修复任务（`coding-01`–`20` 单文件，`coding-21`–`25` 多文件），公开测试和隐藏测试共同验收。
-- 原子任务 t：30 个全交叉独立任务，输出 files 或 JSON artifact，由私有 evaluator 验收。
+- 原子任务 t：47 个参与全交叉的独立任务，输出 files 或 JSON artifact，由私有 evaluator 验收。
+- 只用于显式配对的单元：46 个（25 个 host-tailored + 21 个 similarity-regression），它们的 task_id 记在 `catalog.json` 的 `paired_only_task_ids` 中。
 - host-tailored 单元：25 个针对特定主任务参考文档领域撰写的附加任务，与主任务同域但对修复无用。
 - 相似度分级单元：按 L3/L2/L1/L0 四个层级对旁支任务与主任务的相似程度进行分类，每个主任务每级配 3 个单元，用于测量相似度对交付率的影响。当前实现 214/300。
-- 配对：`coding/tasks.py` 生成所选 U×t 的笛卡尔积；默认每个配对重复 8 次。host-tailored 与相似度分级单元只通过显式配对（`--paired`/`--pairs`）使用，不进入全交叉，原有 30×25 基线不变。
+- 配对：`coding/tasks.py` 生成所选 U×t 的笛卡尔积（25×47）；默认每个配对重复 8 次。`paired_only_task_ids` 中的单元只通过显式配对（`--paired`/`--pairs`）使用，不进入全交叉。
+
+`cases/` 下的 `large_task_id` 子目录只用于整理和统计，不决定单元是否参与运行；是否参与运行由 `paired_only_task_ids` 按任务 ID 决定，因此全交叉随 catalog 增长，不固定在某个数量。
 
 t 的成果不被 U 导入，也不会提高 U 的成绩。私有答案、evaluator 和隐藏测试不会进入 Agent 工作区。
 
