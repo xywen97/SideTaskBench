@@ -39,6 +39,7 @@ scripts/            参考文件引用入口
 - `run_bench.sh` — 全交叉 / host-tailored 队列运行入口
 - `run_bench_levels.sh` — 分级相似度测试运行入口
 - `cal_acc.sh` — 指标计算
+- `cal_acc_levels.sh` — 分级指标计算（分级 × 类别矩阵、类别标准化、跨级别对照）
 
 ## 安装与检查
 
@@ -188,6 +189,14 @@ LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
 
 结果保存在 `coding_runs_levels/<label>/{l3,l2,l1,l0}/` 下，与 `coding_runs/` 相互隔离。
 
+运行结束后计算分级指标：
+
+```bash
+bash cal_acc_levels.sh
+```
+
+报告输出到 `metric_outputs_levels/<label>/levels_metrics.md`，包含分级总表、**分级 × 类别矩阵**、按类别构成的标准化结果。
+
 ### Todo
 
 - [x] 单 query 的代码修复场景
@@ -198,7 +207,7 @@ LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
 - [x] 补全 L3 级别（75/75），初步完成 L2 (20/75) 和 L1 (44/75)，L0 已全覆盖 (75/75)
 - [x] 四级实验结果（`no-context`）：L3 73.0% → L2 66.7% → L1 49.1% → L0 39.8%（valid given seen），端点效应显著（z = 8.19）
 - [ ] 补全 L2（55 个待实现）和 L1（31 个待实现）任务，以 300 个配对全量复测
-- [ ] 实现 `cal_acc_levels.sh`，自动汇总分级指标并生成相似度-交付率曲线
+- [x] 实现 `cal_acc_levels.sh`：分级 x 类别矩阵分布、支持跨级别对照
 - [ ] 多模型对比：在不同模型上重复分级实验，比较相似度敏感性差异
 - [ ] 适配多轮交互场景
 
