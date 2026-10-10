@@ -42,16 +42,17 @@ LARGE_TASKS = {
     for item in _CATALOG_INDEX["large_tasks"]
 }
 
-# Groups whose units are authored for one specific host task. They are only
-# meaningful through explicit pairing, so the full cross product skips them and
-# the original 30-unit matrix stays intact.
-PAIRED_ONLY_GROUPS = frozenset(_CATALOG_INDEX.get("paired_only_groups", ()))
+# Units authored for one specific host task are only meaningful through explicit
+# pairing, so the full cross product skips them. Membership is per task: the
+# large_task_id folders are an organizational grouping and never decide whether
+# a unit runs.
+PAIRED_ONLY_TASK_IDS = frozenset(_CATALOG_INDEX.get("paired_only_task_ids", ()))
 
 
 def cross_product_units(entries: list[dict] | None = None) -> list[dict]:
     """Return the catalog entries the full cross product should use."""
     source = atomic_task_catalog() if entries is None else entries
-    return [entry for entry in source if entry["task"]["large_task_id"] not in PAIRED_ONLY_GROUPS]
+    return [entry for entry in source if entry["task"]["task_id"] not in PAIRED_ONLY_TASK_IDS]
 
 
 def _load_public_tasks(case_root: Path | None = None) -> list[dict]:
@@ -160,6 +161,9 @@ def atomic_task_catalog() -> list[dict]:
                "evaluator": private[task["task_id"]]["evaluator"]} for task in tasks]
     for entry in result:
         public, evaluator = entry["task"]["input"], entry["evaluator"]
+        task_id, kind = entry["task"]["task_id"], entry["task"]["artifact_kind"]
+        if entry["reference_artifact"]["kind"] != kind:
+            raise ValueError(f"{task_id}: reference artifact kind does not match artifact_kind")
         if evaluator["kind"] == "document":
             if (evaluator["facts"] != public["facts"]
                     or evaluator["fact_paraphrases"] != public["fact_paraphrases"]
@@ -195,6 +199,18 @@ def _validate_catalog(entries: list[dict]) -> None:
             raise ValueError("Atomic task is not closed")
         if task["artifact_kind"] != task["output"]["artifact_kind"]:
             raise ValueError("Artifact output kind mismatch")
+        evaluator = entry.get("evaluator")
+        if evaluator is None:
+            continue
+        # A mismatch makes the unit impossible to pass however good the submission.
+        if EVALUATOR_ARTIFACT_KINDS[evaluator["kind"]] != task["artifact_kind"]:
+            raise ValueError(f"{task['task_id']}: artifact_kind {task['artifact_kind']!r} cannot be "
+                             f"graded by a {evaluator['kind']} evaluator")
+        # A unit whose shape disagrees with its category reads as different work.
+        expected = CATEGORY_EVALUATOR_KINDS.get(task["category"])
+        if expected is not None and evaluator["kind"] != expected:
+            raise ValueError(f"{task['task_id']}: category {task['category']!r} expects a "
+                             f"{expected} unit, not {evaluator['kind']}")
     # Six categories, each carrying the original five units plus any host-tailored additions.
     known_categories = {"function_rewrite", "function_debug", "algorithm", "single_behavior_regression",
                         "classification_conversion", "long_text_generation"}
@@ -202,6 +218,27 @@ def _validate_catalog(entries: list[dict]) -> None:
         raise ValueError("Each atomic category must contain at least five tasks")
     if large_counts != {key: value["total"] for key, value in LARGE_TASKS.items()}:
         raise ValueError("Large-task inventory does not match catalog")
+    unknown_paired = PAIRED_ONLY_TASK_IDS - ids
+    if unknown_paired:
+        raise ValueError("paired_only_task_ids names unknown tasks: " + ", ".join(sorted(unknown_paired)))
+    if ids <= PAIRED_ONLY_TASK_IDS:
+        raise ValueError("The full cross product must contain at least one atomic task")
+
+
+# Which public artifact kind each private evaluator can actually accept.
+EVALUATOR_ARTIFACT_KINDS = {"python_function": "files", "document": "files", "exact_json": "json"}
+
+# Each category carries one shape: a pure-utility code task, a generated Markdown
+# section, or one exact JSON result. A unit whose shape disagrees with its own
+# category reads as a different kind of work than its neighbours.
+CATEGORY_EVALUATOR_KINDS = {
+    "function_rewrite": "python_function",
+    "function_debug": "python_function",
+    "algorithm": "python_function",
+    "long_text_generation": "document",
+    "classification_conversion": "exact_json",
+    "single_behavior_regression": "exact_json",
+}
 
 
 def _constraint_errors(source: str, function: str, constraints: dict) -> list[str]:
