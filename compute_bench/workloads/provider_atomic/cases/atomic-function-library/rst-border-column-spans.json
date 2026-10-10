@@ -29,7 +29,44 @@
   },
   "description": "Parse reStructuredText table border line to infer column widths and count.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        "+-----+-----+-----+"
+      ],
+      "expected": {
+        "column_count": 3,
+        "column_widths": [
+          5,
+          5,
+          5
+        ]
+      }
+    },
+    {
+      "args": [
+        "+--+------+"
+      ],
+      "expected": {
+        "column_count": 2,
+        "column_widths": [
+          2,
+          6
+        ]
+      }
+    },
+    {
+      "args": [
+        "+===+"
+      ],
+      "expected": {
+        "column_count": 1,
+        "column_widths": [
+          3
+        ]
+      }
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

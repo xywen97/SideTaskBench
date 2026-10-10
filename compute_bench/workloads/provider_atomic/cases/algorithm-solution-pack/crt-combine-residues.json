@@ -16,7 +16,7 @@
   "input": {
     "signature": "crt_combine_residues(residues: list[int], moduli: list[int]) -> tuple[int, int]",
     "source": "def crt_combine_residues(residues, moduli):\n    return (0, 1)\n",
-    "contract": "Given x \u2261 residues[i] (mod moduli[i]), return (combined_residue, combined_modulus). Moduli are pairwise coprime."
+    "contract": "Given x ≡ residues[i] (mod moduli[i]), return (combined_residue, combined_modulus). Moduli are pairwise coprime."
   },
   "output": {
     "artifact_kind": "files",
@@ -29,7 +29,72 @@
   },
   "description": "Solve system of congruences using Chinese Remainder Theorem.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        [
+          2,
+          3,
+          2
+        ],
+        [
+          3,
+          5,
+          7
+        ]
+      ],
+      "expected": [
+        23,
+        105
+      ]
+    },
+    {
+      "args": [
+        [
+          1
+        ],
+        [
+          4
+        ]
+      ],
+      "expected": [
+        1,
+        4
+      ]
+    },
+    {
+      "args": [
+        [
+          0,
+          0
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "expected": [
+        0,
+        15
+      ]
+    },
+    {
+      "args": [
+        [
+          1,
+          2
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "expected": [
+        16,
+        35
+      ]
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

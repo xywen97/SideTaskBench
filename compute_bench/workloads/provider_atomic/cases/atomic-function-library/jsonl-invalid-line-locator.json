@@ -29,7 +29,39 @@
   },
   "description": "Return line numbers (1-indexed) of invalid JSON lines in JSONL text.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        "{\"a\":1}\n{invalid\n{\"b\":2}\n"
+      ],
+      "expected": [
+        2
+      ]
+    },
+    {
+      "args": [
+        "{\"a\":1}\n\n[1,\n{\"c\":3}\n"
+      ],
+      "expected": [
+        3
+      ]
+    },
+    {
+      "args": [
+        "x\n\ny\n"
+      ],
+      "expected": [
+        1,
+        3
+      ]
+    },
+    {
+      "args": [
+        ""
+      ],
+      "expected": []
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

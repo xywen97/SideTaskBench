@@ -29,7 +29,40 @@
   },
   "description": "Apply Decimal quantization with specified precision and rounding mode.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        "123.456",
+        "0.01",
+        "ROUND_HALF_UP"
+      ],
+      "expected": "123.46"
+    },
+    {
+      "args": [
+        "2.5",
+        "1",
+        "ROUND_HALF_EVEN"
+      ],
+      "expected": "2"
+    },
+    {
+      "args": [
+        "2.5",
+        "1",
+        "ROUND_HALF_UP"
+      ],
+      "expected": "3"
+    },
+    {
+      "args": [
+        "1.009",
+        "0.01",
+        "ROUND_DOWN"
+      ],
+      "expected": "1.00"
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

@@ -1,22 +1,16 @@
 {
   "task_id": "config-bool-string-coerce",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "input": {
-        "enabled": "true",
-        "debug": "false",
-        "count": "5"
-      },
-      "output": {
-        "enabled": true,
-        "debug": false,
-        "count": "5"
-      }
-    }
+    "kind": "python_function",
+    "path": "config_bool_string_coerce.py",
+    "function": "config_bool_string_coerce",
+    "constraints": {},
+    "tests_file": "acceptance.py"
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "config_bool_string_coerce.py": "reference/config_bool_string_coerce.py"
+    }
   }
 }

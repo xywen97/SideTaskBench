@@ -29,7 +29,43 @@
   },
   "description": "Scan template string for ${name} placeholders and return their positions.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        "Hello ${name}, your ${item} is ready"
+      ],
+      "expected": [
+        {
+          "start": 6,
+          "end": 13,
+          "name": "name"
+        },
+        {
+          "start": 20,
+          "end": 27,
+          "name": "item"
+        }
+      ]
+    },
+    {
+      "args": [
+        "cost $${price} for ${user}"
+      ],
+      "expected": [
+        {
+          "start": 19,
+          "end": 26,
+          "name": "user"
+        }
+      ]
+    },
+    {
+      "args": [
+        "no placeholders"
+      ],
+      "expected": []
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

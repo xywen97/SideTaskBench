@@ -1,16 +1,16 @@
 {
   "task_id": "jsonl-invalid-line-locator",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "jsonl_text": "{\"a\":1}\n{invalid\n{\"b\":2}\n",
-      "invalid_lines": [
-        2
-      ]
-    }
+    "kind": "python_function",
+    "path": "jsonl_invalid_line_locator.py",
+    "function": "jsonl_invalid_line_locator",
+    "constraints": {},
+    "tests_file": "acceptance.py"
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "jsonl_invalid_line_locator.py": "reference/jsonl_invalid_line_locator.py"
+    }
   }
 }

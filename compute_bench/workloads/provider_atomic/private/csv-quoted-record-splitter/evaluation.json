@@ -1,17 +1,16 @@
 {
   "task_id": "csv-quoted-record-splitter",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "csv_text": "a,b\n\"x,y\",z\n",
-      "expected_records": [
-        "a,b",
-        "\"x,y\",z"
-      ]
-    }
+    "kind": "python_function",
+    "path": "csv_quoted_record_splitter.py",
+    "function": "csv_quoted_record_splitter",
+    "constraints": {},
+    "tests_file": "acceptance.py"
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "csv_quoted_record_splitter.py": "reference/csv_quoted_record_splitter.py"
+    }
   }
 }

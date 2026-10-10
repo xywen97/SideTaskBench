@@ -29,7 +29,88 @@
   },
   "description": "Encode key-value pairs to URL query string and decode back, verifying roundtrip.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        [
+          [
+            "key",
+            "value"
+          ],
+          [
+            "a",
+            "b=c"
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "key",
+          "value"
+        ],
+        [
+          "a",
+          "b=c"
+        ]
+      ]
+    },
+    {
+      "args": [
+        [
+          [
+            "q",
+            "x&y"
+          ],
+          [
+            "sp ace",
+            "50%"
+          ],
+          [
+            "empty",
+            ""
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "q",
+          "x&y"
+        ],
+        [
+          "sp ace",
+          "50%"
+        ],
+        [
+          "empty",
+          ""
+        ]
+      ]
+    },
+    {
+      "args": [
+        [
+          [
+            "k",
+            "a+b"
+          ],
+          [
+            "k",
+            "é"
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "k",
+          "a+b"
+        ],
+        [
+          "k",
+          "é"
+        ]
+      ]
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

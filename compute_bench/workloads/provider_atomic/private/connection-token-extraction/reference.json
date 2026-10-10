@@ -1,7 +1,0 @@
-{
-  "connection_value": "keep-alive, Upgrade",
-  "tokens": [
-    "keep-alive",
-    "Upgrade"
-  ]
-}

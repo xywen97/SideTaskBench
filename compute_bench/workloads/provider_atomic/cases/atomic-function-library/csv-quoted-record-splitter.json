@@ -29,7 +29,36 @@
   },
   "description": "Split CSV text into records, respecting quoted fields that may contain delimiters.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        "a,b\n\"x,y\",z\n"
+      ],
+      "expected": [
+        "a,b",
+        "\"x,y\",z"
+      ]
+    },
+    {
+      "args": [
+        "id,note\n1,\"line one\nline two\"\n2,plain\n"
+      ],
+      "expected": [
+        "id,note",
+        "1,\"line one\nline two\"",
+        "2,plain"
+      ]
+    },
+    {
+      "args": [
+        "a,\"say \"\"hi\"\"\"\nb,c"
+      ],
+      "expected": [
+        "a,\"say \"\"hi\"\"\"",
+        "b,c"
+      ]
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

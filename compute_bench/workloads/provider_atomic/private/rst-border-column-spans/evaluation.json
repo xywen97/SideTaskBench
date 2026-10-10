@@ -1,19 +1,16 @@
 {
   "task_id": "rst-border-column-spans",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "border_line": "+-----+-----+-----+",
-      "column_widths": [
-        5,
-        5,
-        5
-      ],
-      "column_count": 3
-    }
+    "kind": "python_function",
+    "path": "rst_border_column_spans.py",
+    "function": "rst_border_column_spans",
+    "constraints": {},
+    "tests_file": "acceptance.py"
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "rst_border_column_spans.py": "reference/rst_border_column_spans.py"
+    }
   }
 }

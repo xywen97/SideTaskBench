@@ -1,33 +1,16 @@
 {
   "task_id": "query-pairs-roundtrip",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "pairs": [
-        [
-          "key",
-          "value"
-        ],
-        [
-          "a",
-          "b=c"
-        ]
-      ],
-      "encoded": "key=value&a=b%3Dc",
-      "decoded_pairs": [
-        [
-          "key",
-          "value"
-        ],
-        [
-          "a",
-          "b=c"
-        ]
-      ]
-    }
+    "kind": "python_function",
+    "path": "query_pairs_roundtrip.py",
+    "function": "query_pairs_roundtrip",
+    "constraints": {},
+    "tests_file": "acceptance.py"
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "query_pairs_roundtrip.py": "reference/query_pairs_roundtrip.py"
+    }
   }
 }

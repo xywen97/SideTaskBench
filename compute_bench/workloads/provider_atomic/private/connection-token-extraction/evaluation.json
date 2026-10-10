@@ -1,17 +1,16 @@
 {
   "task_id": "connection-token-extraction",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "connection_value": "keep-alive, Upgrade",
-      "tokens": [
-        "keep-alive",
-        "Upgrade"
-      ]
-    }
+    "kind": "python_function",
+    "path": "connection_token_extraction.py",
+    "function": "connection_token_extraction",
+    "constraints": {},
+    "tests_file": "acceptance.py"
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "connection_token_extraction.py": "reference/connection_token_extraction.py"
+    }
   }
 }

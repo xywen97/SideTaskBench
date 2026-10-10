@@ -29,7 +29,48 @@
   },
   "description": "Parse ISO 8601 UTC offset (+HH:MM or -HH:MM) into hours and minutes components.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        "-05:30"
+      ],
+      "expected": {
+        "hours": -5,
+        "minutes": -30,
+        "total_minutes": -330
+      }
+    },
+    {
+      "args": [
+        "+02:00"
+      ],
+      "expected": {
+        "hours": 2,
+        "minutes": 0,
+        "total_minutes": 120
+      }
+    },
+    {
+      "args": [
+        "+00:45"
+      ],
+      "expected": {
+        "hours": 0,
+        "minutes": 45,
+        "total_minutes": 45
+      }
+    },
+    {
+      "args": [
+        "-00:15"
+      ],
+      "expected": {
+        "hours": 0,
+        "minutes": -15,
+        "total_minutes": -15
+      }
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

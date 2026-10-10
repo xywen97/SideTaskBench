@@ -29,7 +29,40 @@
   },
   "description": "Coerce string boolean values ('true'/'false') in config dict to actual bool type.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        {
+          "enabled": "true",
+          "debug": "false",
+          "count": "5"
+        }
+      ],
+      "expected": {
+        "enabled": true,
+        "debug": false,
+        "count": "5"
+      }
+    },
+    {
+      "args": [
+        {
+          "a": "True",
+          "b": "FALSE",
+          "c": true,
+          "d": 0,
+          "e": ""
+        }
+      ],
+      "expected": {
+        "a": "True",
+        "b": "FALSE",
+        "c": true,
+        "d": 0,
+        "e": ""
+      }
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

@@ -1,27 +1,16 @@
 {
   "task_id": "rolling-valid-count",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "values": [
-        1,
-        null,
-        3,
-        null,
-        5
-      ],
-      "window_size": 3,
-      "counts": [
-        1,
-        1,
-        2,
-        1,
-        2
-      ]
-    }
+    "kind": "python_function",
+    "path": "rolling_valid_count.py",
+    "function": "rolling_valid_count",
+    "constraints": {},
+    "tests_file": "acceptance.py"
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "rolling_valid_count.py": "reference/rolling_valid_count.py"
+    }
   }
 }

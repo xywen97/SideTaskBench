@@ -29,7 +29,35 @@
   },
   "description": "Extract hop-by-hop header names from Connection header value.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        "keep-alive, Upgrade"
+      ],
+      "expected": [
+        "keep-alive",
+        "Upgrade"
+      ]
+    },
+    {
+      "args": [
+        "  close  "
+      ],
+      "expected": [
+        "close"
+      ]
+    },
+    {
+      "args": [
+        "a,b ,  c"
+      ],
+      "expected": [
+        "a",
+        "b",
+        "c"
+      ]
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

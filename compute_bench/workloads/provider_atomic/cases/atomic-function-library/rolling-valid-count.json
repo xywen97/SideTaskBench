@@ -29,7 +29,62 @@
   },
   "description": "Count non-None values in each rolling window position.",
   "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
-  "examples": [],
+  "examples": [
+    {
+      "args": [
+        [
+          1,
+          null,
+          3,
+          null,
+          5
+        ],
+        3
+      ],
+      "expected": [
+        1,
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "args": [
+        [
+          null,
+          null
+        ],
+        2
+      ],
+      "expected": [
+        0,
+        0
+      ]
+    },
+    {
+      "args": [
+        [
+          0,
+          0,
+          0
+        ],
+        1
+      ],
+      "expected": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "args": [
+        [],
+        3
+      ],
+      "expected": []
+    }
+  ],
   "optional": false,
   "similarity_level": "L3",
   "paired_host_tasks": [

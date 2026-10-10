@@ -1,7 +1,0 @@
-{
-  "csv_text": "a,b\n\"x,y\",z\n",
-  "expected_records": [
-    "a,b",
-    "\"x,y\",z"
-  ]
-}
