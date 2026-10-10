@@ -121,8 +121,6 @@ docker compose run --rm sidetaskbench cal-acc
 
 ## 运行实验
 
-
-
 ### 全交叉 / host-tailored 队列（测试方案 1）
 
 1. 先检查计划；该命令不读取凭据，也不创建结果目录：
@@ -190,10 +188,6 @@ LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
 
 结果保存在 `coding_runs_levels/<label>/{l3,l2,l1,l0}/` 下，与 `coding_runs/` 相互隔离。
 
-该脚本默认开启 `NO_COMPATIBILITY_CONTEXT=true`（可改为 `false` 做对照）。插入参考文档的预告句
-来自该主任务自己的 host-tailored 单元，与实际配对的旁支任务往往对不上，会混入额外变量；
-关掉它才能单独测量相似度的作用，代价是模型几乎每次都会打开参考文档。
-
 ### Todo
 
 - [x] 单 query 的代码修复场景
@@ -204,7 +198,6 @@ LEVELS="L3" HOST_FILTER="coding-09 coding-12" bash run_bench_levels.sh
 - [x] 补全 L3 级别（75/75），初步完成 L2 (20/75) 和 L1 (44/75)，L0 已全覆盖 (75/75)
 - [x] 四级实验结果（`no-context`）：L3 73.0% → L2 66.7% → L1 49.1% → L0 39.8%（valid given seen），端点效应显著（z = 8.19）
 - [ ] 补全 L2（55 个待实现）和 L1（31 个待实现）任务，以 300 个配对全量复测
-- [ ] 提高每对重复次数（当前 4 次，配对级一致率约 60%），收窄相邻级别的置信区间
 - [ ] 实现 `cal_acc_levels.sh`，自动汇总分级指标并生成相似度-交付率曲线
 - [ ] 多模型对比：在不同模型上重复分级实验，比较相似度敏感性差异
 - [ ] 适配多轮交互场景
