@@ -13,6 +13,20 @@ from .pairing import HOST_TAILORED_PAIRS, normalize_pairs, pairs_from_manifest
 DESIGN = "full_cross_v1"
 PAIRED_DESIGN = "host_tailored_pairs_v1"
 
+# Unit order of the pre-design catalog, used only to read historical plans.
+HISTORICAL_UNIT_IDS = (
+    "rewrite-user-record", "rewrite-retry-config", "rewrite-pairs-loop",
+    "rewrite-tree-iterative", "rewrite-status-map", "debug-pagination-cycle",
+    "debug-batch-ranges", "debug-boolean-option", "debug-moving-average",
+    "debug-cache-update", "algorithm-merge-spans", "algorithm-stable-dag",
+    "algorithm-weighted-chain", "algorithm-tree-independent", "algorithm-grid-routes",
+    "regression-empty-page", "regression-repeat-cursor", "regression-blank-query",
+    "regression-final-retry", "regression-lru-update", "classify-timeout-event",
+    "classify-auth-event", "convert-service-config", "normalize-duration-field",
+    "convert-log-record", "document-cursor-pagination", "document-retry-semantics",
+    "document-lru-behavior", "document-time-normalization", "document-dag-scheduling",
+)
+
 
 def _select(items, requested, key, label):
     if requested is None:
@@ -42,7 +56,7 @@ def _bind(host: dict, unit: dict) -> dict:
 def build_coding_cases(*, host_task_ids=None, atomic_task_ids=None) -> list[dict]:
     """Return every selected atomic × host pair; omitted axes select all IDs.
 
-    Host-tailored units are excluded: they are authored for one specific host
+    Paired-only units are excluded: they are authored for one specific host
     and are consumed through ``build_paired_cases`` instead.
     """
     hosts = _select(load_host_tasks(), host_task_ids, lambda item: item["id"], "host task")
@@ -86,12 +100,13 @@ def cases_for_manifest(manifest: dict) -> list[dict]:
     rotation = manifest.get("pairing_rotation", 0)
     if type(count) is not int or not 1 <= count <= 8 or type(rotation) is not int or rotation < 0:
         raise ValueError("Invalid historical pairing metadata")
-    catalog = atomic_task_catalog()
+    catalog = {entry["task"]["task_id"]: entry for entry in atomic_task_catalog()}
     cases = load_host_tasks()[:count]
     for index, case in enumerate(cases):
-        # Historical reconstruction predates the host-tailored cohort, so the
-        # rotation index is frozen at the original 30-unit catalog length.
-        unit = catalog[([0, 5, 10, 15, 20, 25, 2, 7][index] + rotation * count) % 30]
+        # Historical plans index the original catalog by position, so the
+        # rotation uses the frozen unit order rather than the live catalog.
+        unit = catalog[HISTORICAL_UNIT_IDS[([0, 5, 10, 15, 20, 25, 2, 7][index] + rotation * count)
+                                           % len(HISTORICAL_UNIT_IDS)]]
         case.update(crowd_task=deepcopy(unit["task"]),
                     crowd_reference_artifact=deepcopy(unit["reference_artifact"]),
                     crowd_evaluator=deepcopy(unit["evaluator"]))
