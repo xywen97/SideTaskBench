@@ -7,32 +7,52 @@
   "material_paths": [],
   "atomicity": {
     "version": 1,
-    "unit": "one_function",
+    "unit": "one_document_section",
     "dependencies": [],
     "external_context": false
   },
-  "operation": "generate_document",
-  "runtime": "python3-stdlib",
+  "operation": "generate_document_section",
+  "runtime": "text",
   "input": {
-    "signature": "manifest_path_normalize_report(paths: list[str]) -> str",
-    "source": "def manifest_path_normalize_report(paths):\n    return f'Analyzed {len(paths)} paths.'\n",
-    "contract": "Return markdown report listing normalized paths and which original paths map to them. Highlight duplicates."
+    "topic": "Manifest path normalization",
+    "facts": [
+      "Normalizing a path collapses repeated separators and removes `.` segments.",
+      "A path that still contains a `..` segment after normalization is rejected.",
+      "Two entries that normalize to the same path are reported as one duplicate group."
+    ],
+    "required_headings": [
+      "## Normalization rules",
+      "## Worked example",
+      "## Common errors"
+    ],
+    "minimum_characters": 1200,
+    "language": "English",
+    "fact_paraphrases": [
+      [
+        "Repeated separators are collapsed and `.` segments are dropped during normalization.",
+        "Normalization removes `.` segments and duplicate separators."
+      ],
+      [
+        "Any path with a `..` segment left after normalization is rejected.",
+        "A surviving `..` segment makes the entry invalid."
+      ],
+      [
+        "Entries sharing one normalized path form a single duplicate group.",
+        "Duplicate groups are reported by their shared normalized path."
+      ]
+    ]
   },
   "output": {
     "artifact_kind": "files",
-    "path": "manifest_path_normalize_report.py",
-    "function": "manifest_path_normalize_report"
+    "path": "manifest-path-report.md",
+    "format": "markdown"
   },
   "resource_profile": {
-    "class": "small",
-    "expected_output": "short_code"
+    "class": "medium",
+    "expected_output": "long_text"
   },
-  "description": "Generate a report identifying paths in a manifest that normalize to duplicates.",
-  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "description": "Write one standalone Markdown section about Manifest path normalization using only the supplied fact table.",
+  "requirements": "Include every required heading and express every supplied fact, with at least one concrete example and one failure case, and meet the minimum character count. Facts may use the original wording or a supplied fact_paraphrases alternative; whitespace, case, punctuation, and inline Markdown formatting may vary. Each fact_paraphrases entry corresponds to the fact at the same index. Other paraphrases are not guaranteed to be recognized by this deterministic grader. Do not invent APIs or external facts.",
   "examples": [],
-  "optional": false,
-  "similarity_level": "L3",
-  "paired_host_tasks": [
-    "coding-09"
-  ]
+  "optional": false
 }

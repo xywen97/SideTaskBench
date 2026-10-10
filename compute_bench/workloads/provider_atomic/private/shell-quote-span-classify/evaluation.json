@@ -3,17 +3,17 @@
   "evaluator": {
     "kind": "exact_json",
     "oracle": {
-      "command": "echo 'hello world' | grep \"pattern\"",
-      "quoted_spans": [
+      "spans": [
         [
           5,
-          18
+          17
         ],
         [
-          27,
-          36
+          26,
+          34
         ]
-      ]
+      ],
+      "count": 2
     }
   },
   "reference": {

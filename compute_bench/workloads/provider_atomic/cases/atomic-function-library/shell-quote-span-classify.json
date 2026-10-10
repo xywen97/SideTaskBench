@@ -3,36 +3,36 @@
   "portfolio_id": "atomic-provider-portfolio-v1",
   "large_task_id": "atomic-function-library",
   "category": "classification_conversion",
-  "artifact_kind": "files",
+  "artifact_kind": "json",
   "material_paths": [],
   "atomicity": {
     "version": 1,
-    "unit": "one_function",
+    "unit": "one_json_result",
     "dependencies": [],
     "external_context": false
   },
-  "operation": "classify_convert",
-  "runtime": "python3-stdlib",
+  "operation": "classify_events",
+  "runtime": "json",
   "input": {
-    "signature": "shell_quote_span_classify(command: str) -> list[tuple[int, int]]",
-    "source": "def shell_quote_span_classify(command):\n    return []\n",
-    "contract": "Return list of (start, end) inclusive spans for quoted regions. Handle both single and double quotes. Ignore escaped quotes."
+    "command": "echo 'hello world' | grep \"pattern\"",
+    "rules": {
+      "span": "inclusive (start, end) index pair of each quoted region",
+      "escapes": "a backslash-escaped quote does not open a region"
+    }
   },
   "output": {
-    "artifact_kind": "files",
-    "path": "shell_quote_span_classify.py",
-    "function": "shell_quote_span_classify"
+    "artifact_kind": "json",
+    "schema": {
+      "spans": "list",
+      "count": "int"
+    }
   },
   "resource_profile": {
     "class": "small",
-    "expected_output": "short_code"
+    "expected_output": "small_json"
   },
-  "description": "Identify character spans protected by single or double quotes in shell command.",
-  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "description": "Classify the quoted regions of the supplied shell command using the supplied rules.",
+  "requirements": "Return one JSON value. Do not add commentary, infer missing facts, or consult external context.",
   "examples": [],
-  "optional": false,
-  "similarity_level": "L3",
-  "paired_host_tasks": [
-    "coding-15"
-  ]
+  "optional": false
 }

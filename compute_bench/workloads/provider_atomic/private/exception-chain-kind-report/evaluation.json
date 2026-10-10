@@ -1,22 +1,55 @@
 {
   "task_id": "exception-chain-kind-report",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "chain": [
-        {
-          "type": "ValueError",
-          "cause_type": "explicit"
-        },
-        {
-          "type": "KeyError",
-          "cause_type": "implicit_context"
-        }
+    "kind": "document",
+    "path": "exception-chain-report.md",
+    "minimum_characters": 1200,
+    "facts": [
+      "An explicit cause is set when an exception is raised with `raise ... from ...`.",
+      "An implicit context is set when an exception is raised while handling another exception.",
+      "A suppressed context is not reported when `suppress_context` is true."
+    ],
+    "headings": [
+      "## Cause and context",
+      "## Worked example",
+      "## Common errors"
+    ],
+    "fact_paraphrases": [
+      [
+        "Raising with `raise ... from ...` records an explicit `__cause__`.",
+        "The `__cause__` link is explicit when the raise statement uses `from`."
+      ],
+      [
+        "Raising while handling another exception records an implicit `__context__`.",
+        "The `__context__` link is implicit and set during handling of another exception."
+      ],
+      [
+        "When `suppress_context` is true the implicit context is not reported.",
+        "A suppressed context is omitted from the report."
       ]
-    }
+    ],
+    "required_term_groups": [
+      [
+        "example",
+        "examples"
+      ],
+      [
+        "error",
+        "errors",
+        "failure",
+        "failures",
+        "invalid",
+        "reject",
+        "rejects",
+        "rejected",
+        "rejection"
+      ]
+    ]
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "exception-chain-report.md": "reference/exception-chain-report.md"
+    }
   }
 }

@@ -3,19 +3,16 @@
   "evaluator": {
     "kind": "exact_json",
     "oracle": {
-      "paths": [
-        "safe.txt",
-        "../escape",
-        "/absolute",
-        "ok/file"
-      ],
       "safe": [
         "safe.txt",
-        "ok/file"
+        "ok/file",
+        "dir/./note.md"
       ],
       "dangerous": [
         "../escape",
-        "/absolute"
+        "/absolute",
+        "a/../../../etc/passwd",
+        "C:\\windows\\system32"
       ]
     }
   },

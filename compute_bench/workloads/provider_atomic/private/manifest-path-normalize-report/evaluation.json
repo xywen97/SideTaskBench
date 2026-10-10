@@ -1,19 +1,55 @@
 {
   "task_id": "manifest-path-normalize-report",
   "evaluator": {
-    "kind": "exact_json",
-    "oracle": {
-      "paths": [
-        "a/b",
-        "a//b",
-        "a/./b"
+    "kind": "document",
+    "path": "manifest-path-report.md",
+    "minimum_characters": 1200,
+    "facts": [
+      "Normalizing a path collapses repeated separators and removes `.` segments.",
+      "A path that still contains a `..` segment after normalization is rejected.",
+      "Two entries that normalize to the same path are reported as one duplicate group."
+    ],
+    "headings": [
+      "## Normalization rules",
+      "## Worked example",
+      "## Common errors"
+    ],
+    "fact_paraphrases": [
+      [
+        "Repeated separators are collapsed and `.` segments are dropped during normalization.",
+        "Normalization removes `.` segments and duplicate separators."
       ],
-      "normalized": "a/b",
-      "duplicate_count": 3
-    }
+      [
+        "Any path with a `..` segment left after normalization is rejected.",
+        "A surviving `..` segment makes the entry invalid."
+      ],
+      [
+        "Entries sharing one normalized path form a single duplicate group.",
+        "Duplicate groups are reported by their shared normalized path."
+      ]
+    ],
+    "required_term_groups": [
+      [
+        "example",
+        "examples"
+      ],
+      [
+        "error",
+        "errors",
+        "failure",
+        "failures",
+        "invalid",
+        "reject",
+        "rejects",
+        "rejected",
+        "rejection"
+      ]
+    ]
   },
   "reference": {
-    "kind": "json",
-    "path": "reference.json"
+    "kind": "files",
+    "files": {
+      "manifest-path-report.md": "reference/manifest-path-report.md"
+    }
   }
 }

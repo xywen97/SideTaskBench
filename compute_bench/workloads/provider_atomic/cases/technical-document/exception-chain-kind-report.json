@@ -7,32 +7,52 @@
   "material_paths": [],
   "atomicity": {
     "version": 1,
-    "unit": "one_function",
+    "unit": "one_document_section",
     "dependencies": [],
     "external_context": false
   },
-  "operation": "generate_document",
-  "runtime": "python3-stdlib",
+  "operation": "generate_document_section",
+  "runtime": "text",
   "input": {
-    "signature": "exception_chain_kind_report(chain: list[dict]) -> str",
-    "source": "def exception_chain_kind_report(chain):\n    return 'Exception chain report'\n",
-    "contract": "Each dict has 'type' and 'cause_type' ('explicit', 'implicit_context', or 'direct'). Return markdown report explaining the chain."
+    "topic": "Exception chain reporting",
+    "facts": [
+      "An explicit cause is set when an exception is raised with `raise ... from ...`.",
+      "An implicit context is set when an exception is raised while handling another exception.",
+      "A suppressed context is not reported when `suppress_context` is true."
+    ],
+    "required_headings": [
+      "## Cause and context",
+      "## Worked example",
+      "## Common errors"
+    ],
+    "minimum_characters": 1200,
+    "language": "English",
+    "fact_paraphrases": [
+      [
+        "Raising with `raise ... from ...` records an explicit `__cause__`.",
+        "The `__cause__` link is explicit when the raise statement uses `from`."
+      ],
+      [
+        "Raising while handling another exception records an implicit `__context__`.",
+        "The `__context__` link is implicit and set during handling of another exception."
+      ],
+      [
+        "When `suppress_context` is true the implicit context is not reported.",
+        "A suppressed context is omitted from the report."
+      ]
+    ]
   },
   "output": {
     "artifact_kind": "files",
-    "path": "exception_chain_kind_report.py",
-    "function": "exception_chain_kind_report"
+    "path": "exception-chain-report.md",
+    "format": "markdown"
   },
   "resource_profile": {
-    "class": "small",
-    "expected_output": "short_code"
+    "class": "medium",
+    "expected_output": "long_text"
   },
-  "description": "Generate report documenting exception chain types (explicit __cause__, implicit __context__).",
-  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "description": "Write one standalone Markdown section about Exception chain reporting using only the supplied fact table.",
+  "requirements": "Include every required heading and express every supplied fact, with at least one concrete example and one failure case, and meet the minimum character count. Facts may use the original wording or a supplied fact_paraphrases alternative; whitespace, case, punctuation, and inline Markdown formatting may vary. Each fact_paraphrases entry corresponds to the fact at the same index. Other paraphrases are not guaranteed to be recognized by this deterministic grader. Do not invent APIs or external facts.",
   "examples": [],
-  "optional": false,
-  "similarity_level": "L3",
-  "paired_host_tasks": [
-    "coding-17"
-  ]
+  "optional": false
 }

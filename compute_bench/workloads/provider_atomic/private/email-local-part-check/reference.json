@@ -1,12 +1,14 @@
 {
-  "valid_examples": [
+  "valid": [
     "user",
     "user.name",
     "user+tag"
   ],
-  "invalid_examples": [
+  "invalid": [
     ".start",
     "end.",
-    "double..dot"
+    "double..dot",
+    "has space",
+    "a@b"
   ]
 }

@@ -3,36 +3,42 @@
   "portfolio_id": "atomic-provider-portfolio-v1",
   "large_task_id": "event-processing-pipeline",
   "category": "classification_conversion",
-  "artifact_kind": "files",
+  "artifact_kind": "json",
   "material_paths": [],
   "atomicity": {
     "version": 1,
-    "unit": "one_function",
+    "unit": "one_json_result",
     "dependencies": [],
     "external_context": false
   },
-  "operation": "classify_convert",
-  "runtime": "python3-stdlib",
+  "operation": "convert_record",
+  "runtime": "json",
   "input": {
-    "signature": "retry_outcome_trace(max_attempts: int, outcomes: list[str]) -> dict",
-    "source": "def retry_outcome_trace(max_attempts, outcomes):\n    return {'attempts': len(outcomes), 'final': outcomes[-1]}\n",
-    "contract": "Return dict with keys: attempts (count), final (last outcome), status (succeeded_on_attempt_N or failed_after_N)."
+    "max_attempts": 3,
+    "outcomes": [
+      "timeout",
+      "error",
+      "success"
+    ],
+    "rules": {
+      "count_attempts": "stop at the first 'success' or at max_attempts",
+      "status": "'succeeded_on_attempt_N' or 'failed_after_N'"
+    }
   },
   "output": {
-    "artifact_kind": "files",
-    "path": "retry_outcome_trace.py",
-    "function": "retry_outcome_trace"
+    "artifact_kind": "json",
+    "schema": {
+      "attempts": "int",
+      "final": "str",
+      "status": "str"
+    }
   },
   "resource_profile": {
     "class": "small",
-    "expected_output": "short_code"
+    "expected_output": "small_json"
   },
-  "description": "Record the outcome of each retry attempt and return final status summary.",
-  "requirements": "Submit exactly one self-contained Python function file; standard library only; no I/O, network, project imports, or input mutation.",
+  "description": "Convert the supplied attempt outcomes into the retry trace described by the supplied rules.",
+  "requirements": "Return one JSON value. Do not add commentary, infer missing facts, or consult external context.",
   "examples": [],
-  "optional": false,
-  "similarity_level": "L3",
-  "paired_host_tasks": [
-    "coding-04"
-  ]
+  "optional": false
 }
