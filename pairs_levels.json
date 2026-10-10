@@ -1,20 +1,20 @@
 {
-  "_comment": "\u5206\u7ea7\u914d\u5bf9\u8868\u6743\u5a01\u6570\u636e\u6e90\u3002\u6bcf\u4e2a host task \u6709 L3/L2/L1/L0 \u56db\u4e2a\u7ea7\u522b\uff0c\u6bcf\u7ea7 3 \u4e2a side task\u3002",
+  "_comment": "分级配对表权威数据源。每个 host task 有 L3/L2/L1/L0 四个级别，每级 3 个 side task。",
   "_schema": {
     "host_task_id": "string",
     "levels": {
-      "L3": "\u673a\u5236\u91cd\u53e0\uff1aside task \u76f4\u63a5\u6d89\u53ca\u4e0e bug \u4fee\u590d\u76f8\u540c\u7684\u673a\u5236\u6216\u884c\u4e3a\u8fb9\u754c",
-      "L2": "\u540c\u57df\u5f02\u64cd\uff1a\u76f8\u540c\u6280\u672f\u5b50\u9886\u57df\uff0c\u4f46\u6267\u884c\u7edf\u8ba1/\u62a5\u544a/\u6587\u6863\u5316\u7b49\u4e0d\u540c\u64cd\u4f5c",
-      "L1": "\u540c\u7c7b\u5f02\u57df\uff1a\u540c\u4e00\u6280\u672f\u5927\u7c7b\uff0c\u4f46\u5177\u4f53\u5b50\u9886\u57df\u4e0d\u540c",
-      "L0": "\u65e0\u5173\uff1a\u4e0d\u540c\u6280\u672f\u5927\u7c7b\uff0c\u9886\u57df\u77e5\u8bc6\u96f6\u91cd\u53e0\uff08\u4ece\u5168\u91cf\u539f\u5b50\u4efb\u52a1\u4e2d\u53d6\u6837\uff09"
+      "L3": "机制重叠：side task 直接涉及与 bug 修复相同的机制或行为边界",
+      "L2": "同域异操：相同技术子领域，但执行统计/报告/文档化等不同操作",
+      "L1": "同类异域：同一技术大类，但具体子领域不同",
+      "L0": "无关：不同技术大类，领域知识零重叠（从全量原子任务中取样）"
     },
     "status": "implemented | pending",
-    "note": "\u53ef\u9009\u5907\u6ce8\uff0c\u8bf4\u660e\u4efb\u52a1\u6587\u4ef6\u662f\u5426\u5df2\u5b9e\u73b0"
+    "note": "可选备注，说明任务文件是否已实现"
   },
   "pairs": [
     {
       "host_task_id": "coding-01",
-      "host_description": "CSV \u6362\u884c/\u5f15\u53f7\u89e3\u6790",
+      "host_description": "CSV 换行/引号解析",
       "levels": {
         "L3": [
           {
@@ -76,7 +76,7 @@
     },
     {
       "host_task_id": "coding-02",
-      "host_description": "JSONL \u7a7a\u884c/\u7269\u7406\u884c\u53f7",
+      "host_description": "JSONL 空行/物理行号",
       "levels": {
         "L3": [
           {
@@ -138,7 +138,7 @@
     },
     {
       "host_task_id": "coding-03",
-      "host_description": "URL query \u53c2\u6570/\u91cd\u590d key/\u7a7a\u503c",
+      "host_description": "URL query 参数/重复 key/空值",
       "levels": {
         "L3": [
           {
@@ -200,7 +200,7 @@
     },
     {
       "host_task_id": "coding-04",
-      "host_description": "\u91cd\u8bd5\u6b21\u6570/\u5f02\u5e38\u4f20\u64ad",
+      "host_description": "重试次数/异常传播",
       "levels": {
         "L3": [
           {
@@ -262,7 +262,7 @@
     },
     {
       "host_task_id": "coding-05",
-      "host_description": "LRU \u7f13\u5b58\u8bfb\u5199 recency \u5237\u65b0",
+      "host_description": "LRU 缓存读写 recency 刷新",
       "levels": {
         "L3": [
           {
@@ -324,7 +324,7 @@
     },
     {
       "host_task_id": "coding-06",
-      "host_description": "ISO \u65f6\u95f4\u6233 UTC \u504f\u79fb\u89c4\u8303\u5316",
+      "host_description": "ISO 时间戳 UTC 偏移规范化",
       "levels": {
         "L3": [
           {
@@ -386,7 +386,7 @@
     },
     {
       "host_task_id": "coding-07",
-      "host_description": "\u6e38\u6807\u7ffb\u9875/\u7a7a\u9875\u7a7f\u900f/\u5faa\u73af\u68c0\u6d4b",
+      "host_description": "游标翻页/空页穿透/循环检测",
       "levels": {
         "L3": [
           {
@@ -448,7 +448,7 @@
     },
     {
       "host_task_id": "coding-08",
-      "host_description": "DAG \u8c03\u5ea6/\u7a33\u5b9a\u62d3\u6251\u6392\u5e8f",
+      "host_description": "DAG 调度/稳定拓扑排序",
       "levels": {
         "L3": [
           {
@@ -510,7 +510,7 @@
     },
     {
       "host_task_id": "coding-09",
-      "host_description": "\u6587\u4ef6\u590d\u5236\u6e05\u5355/\u8def\u5f84\u89c4\u8303\u5316/digest \u9a8c\u8bc1",
+      "host_description": "文件复制清单/路径规范化/digest 验证",
       "levels": {
         "L3": [
           {
@@ -572,7 +572,7 @@
     },
     {
       "host_task_id": "coding-10",
-      "host_description": "HTTP header \u5408\u5e76/\u9010\u8df3\u8fc7\u6ee4",
+      "host_description": "HTTP header 合并/逐跳过滤",
       "levels": {
         "L3": [
           {
@@ -634,7 +634,7 @@
     },
     {
       "host_task_id": "coding-11",
-      "host_description": "\u5206\u5c42\u914d\u7f6e\u7c7b\u578b\u89e3\u6790",
+      "host_description": "分层配置类型解析",
       "levels": {
         "L3": [
           {
@@ -696,7 +696,7 @@
     },
     {
       "host_task_id": "coding-12",
-      "host_description": "\u5f52\u6863\u89e3\u538b\u8ba1\u5212/\u8def\u5f84\u9a8c\u8bc1",
+      "host_description": "归档解压计划/路径验证",
       "levels": {
         "L3": [
           {
@@ -758,7 +758,7 @@
     },
     {
       "host_task_id": "coding-13",
-      "host_description": "\u6eda\u52a8\u7edf\u8ba1/\u7f3a\u5931\u503c\u5904\u7406",
+      "host_description": "滚动统计/缺失值处理",
       "levels": {
         "L3": [
           {
@@ -820,7 +820,7 @@
     },
     {
       "host_task_id": "coding-14",
-      "host_description": "\u4f9d\u8d56\u95ed\u5305/\u7a33\u5b9a\u6279\u6b21\u8c03\u5ea6",
+      "host_description": "依赖闭包/稳定批次调度",
       "levels": {
         "L3": [
           {
@@ -882,7 +882,7 @@
     },
     {
       "host_task_id": "coding-15",
-      "host_description": "shell pipeline \u89e3\u6790/\u5f15\u53f7\u5904\u7406",
+      "host_description": "shell pipeline 解析/引号处理",
       "levels": {
         "L3": [
           {
@@ -944,7 +944,7 @@
     },
     {
       "host_task_id": "coding-16",
-      "host_description": "\u90ae\u7bb1\u5730\u5740\u89c4\u8303\u5316/domain \u89e3\u6790",
+      "host_description": "邮箱地址规范化/domain 解析",
       "levels": {
         "L3": [
           {
@@ -1006,7 +1006,7 @@
     },
     {
       "host_task_id": "coding-17",
-      "host_description": "\u5f02\u5e38\u62a5\u544a\u5e8f\u5217\u5316/JSON round-trip",
+      "host_description": "异常报告序列化/JSON round-trip",
       "levels": {
         "L3": [
           {
@@ -1068,7 +1068,7 @@
     },
     {
       "host_task_id": "coding-18",
-      "host_description": "MRO \u6807\u8bb0\u6536\u96c6/\u591a\u7ee7\u627f/diamond",
+      "host_description": "MRO 标记收集/多继承/diamond",
       "levels": {
         "L3": [
           {
@@ -1130,7 +1130,7 @@
     },
     {
       "host_task_id": "coding-19",
-      "host_description": "\u5408\u6570\u6a21\u6570\u7684\u6a21\u6839/\u6570\u8bba",
+      "host_description": "合数模数的模根/数论",
       "levels": {
         "L3": [
           {
@@ -1192,7 +1192,7 @@
     },
     {
       "host_task_id": "coding-20",
-      "host_description": "RST \u8868\u683c round-trip/\u56fa\u5b9a\u5bbd\u5ea6\u6587\u672c",
+      "host_description": "RST 表格 round-trip/固定宽度文本",
       "levels": {
         "L3": [
           {
@@ -1254,7 +1254,7 @@
     },
     {
       "host_task_id": "coding-21",
-      "host_description": "\u62d3\u6251\u6392\u5e8f\u5b57\u5178\u5e8f\uff08\u591a\u6587\u4ef6\uff09",
+      "host_description": "拓扑排序字典序（多文件）",
       "levels": {
         "L3": [
           {
@@ -1316,7 +1316,7 @@
     },
     {
       "host_task_id": "coding-22",
-      "host_description": "\u6a21\u677f\u5360\u4f4d\u7b26\u66ff\u6362",
+      "host_description": "模板占位符替换",
       "levels": {
         "L3": [
           {
@@ -1378,7 +1378,7 @@
     },
     {
       "host_task_id": "coding-23",
-      "host_description": "dispatch \u6309 MRO \u7279\u5316\u5ea6",
+      "host_description": "dispatch 按 MRO 特化度",
       "levels": {
         "L3": [
           {
@@ -1440,7 +1440,7 @@
     },
     {
       "host_task_id": "coding-24",
-      "host_description": "\u7f13\u5b58\u5931\u6548\u4f20\u64ad/\u4f9d\u8d56\u56fe",
+      "host_description": "缓存失效传播/依赖图",
       "levels": {
         "L3": [
           {
@@ -1502,7 +1502,7 @@
     },
     {
       "host_task_id": "coding-25",
-      "host_description": "Decimal \u7cbe\u5ea6/JSON \u6444\u53d6\u7ba1\u9053",
+      "host_description": "Decimal 精度/JSON 摄取管道",
       "levels": {
         "L3": [
           {
