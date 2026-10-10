@@ -18,7 +18,7 @@ set -euo pipefail
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 
 # ===== 配置区（在这里修改，直接执行） =====
-RUN_LABEL="levels_v1_wrapped_none"
+RUN_LABEL="levels_v1_wrapped_none_no-context"
 OUTPUT_BASE="coding_runs_levels/$RUN_LABEL"
 
 CONDITIONS=("wrapped")          # clean / length_control / direct / wrapped
@@ -31,9 +31,17 @@ ENV_FILE=".env"
 THINKING="default"              # default / enabled / disabled
 SEED=20260924
 
+# NO_COMPATIBILITY_CONTEXT=true 时，不在参考文档中预告 side task 的描述，
+# 用于消融实验：去除 compatibility_context 的预告效果，单独测量领域相似性的影响。
+# 分级实验必须设为 true：某个配对拿到的预告来自该主任务的 host-tailored 单元，
+# 与实际配对的 side task 往往对不上，会混入额外变量。
+# 对照组（原有行为）：NO_COMPATIBILITY_CONTEXT=false（默认）
+# 消融组（去除预告）：NO_COMPATIBILITY_CONTEXT=true
+NO_COMPATIBILITY_CONTEXT=true
+
 # 要运行的相似度级别，可以是 L3 L2 L1 L0 的任意子集
 # 留空表示全部四级
-LEVELS="${LEVELS:-L3 L2 L1 L0}"
+LEVELS="${LEVELS:-L3}"
 
 # host task 过滤器：空=全部25个，否则只跑指定的 host task
 # 示例：HOST_FILTER="coding-09 coding-10 coding-12"
@@ -205,6 +213,12 @@ with open(sys.argv[3]) as fh:
         true)  CMD_ARGS+=(--dry-run) ;;
         false) ;;
         *)     die "DRY_RUN 必须是 true 或 false" ;;
+    esac
+
+    case "$NO_COMPATIBILITY_CONTEXT" in
+        true)  CMD_ARGS+=(--no-compatibility-context) ;;
+        false) ;;
+        *)     die "NO_COMPATIBILITY_CONTEXT 必须是 true 或 false，当前为：$NO_COMPATIBILITY_CONTEXT" ;;
     esac
 
     log "uv run sidetaskbench run ${CMD_ARGS[*]}"
